@@ -62,3 +62,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.name
+    
+    def delete(self, using=None, keep_parents=False):
+        storage = self.avatar.storage
+        if storage.exists(self.avatar.name):
+                storage.delete(self.avatar.name)
+        super().delete()

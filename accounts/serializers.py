@@ -10,6 +10,7 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 import os
 
 
+
 def create_avatar(image, max_width=350, max_height=400):
     size = (max_width, max_height)
     memory_image = BytesIO(image.read())
@@ -57,11 +58,11 @@ class UserSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         password = check_password(self)
+        if validated_data.get('avatar') is not None:
+            validated_data['avatar'] = create_avatar(validated_data['avatar'])
         user = User(**validated_data)
         user.set_password(password)
         user.save()
-        # if user.avatar:
-        #     create_avatar(user.avatar)
         return user
     
     def update(self, instance, validated_data):
@@ -72,6 +73,9 @@ class UserSerializer(serializers.ModelSerializer):
             instance.save()
         if validated_data.get('avatar') is not None:
             validated_data['avatar'] = create_avatar(validated_data['avatar'])
+            storage = instance.avatar.storage
+            if storage.exists(instance.avatar.name):
+                storage.delete(instance.avatar.name)
         else:
             validated_data.pop('avatar')     
         user = super().update(instance, validated_data)
