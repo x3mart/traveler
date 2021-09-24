@@ -1,0 +1,28 @@
+<svg width="21" height="21" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0)">
+<mask id="mask0" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="27" height="27">
+<circle cx="13.5" cy="13.5" r="13.5" transform="rotate(-180 13.5 13.5)" fill="#C4C4C4"/>
+</mask>
+<g mask="url(#mask0)">
+<path d="M27 27L1.90735e-06 27L2.69415e-06 18L27 18L27 27Z" fill="#FF0000"/>
+</g>
+<mask id="mask1" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="27" height="27">
+<circle cx="13.5" cy="13.5" r="13.5" transform="rotate(-180 13.5 13.5)" fill="#C4C4C4"/>
+</mask>
+<g mask="url(#mask1)">
+<rect x="27" y="18" width="27" height="9" transform="rotate(-180 27 18)" fill="#0D9CEC"/>
+</g>
+<mask id="mask2" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="27" height="27">
+<circle cx="13.5" cy="13.5" r="13.5" transform="rotate(-180 13.5 13.5)" fill="#C4C4C4"/>
+</mask>
+<g mask="url(#mask2)">
+<path d="M27 9L1.90735e-06 9L2.69415e-06 -1.40674e-06L27 9.53674e-07L27 9Z" fill="white"/>
+</g>
+<path d="M13.5 26.5C6.3203 26.5 0.500001 20.6797 0.500001 13.5C0.500002 6.3203 6.3203 0.499999 13.5 0.499999C20.6797 0.5 26.5 6.3203 26.5 13.5C26.5 20.6797 20.6797 26.5 13.5 26.5Z" stroke="black" stroke-opacity="0.1"/>
+</g>
+<defs>
+<clipPath id="clip0">
+<rect width="27" height="27" fill="white" transform="translate(27) rotate(90)"/>
+</clipPath>
+</defs>
+</svg>
