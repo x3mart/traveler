@@ -1,0 +1,29 @@
+.h1 {
+	text-align: center;
+	text-transform: uppercase;
+
+	color: #FFF;
+
+	font-size: 48px;
+	font-weight: 750;
+	font-style: normal;
+	line-height: 59px;
+}
+
+.h2 {
+	color: #000;
+
+	font-size: 20px;
+	font-weight: 600;
+	font-style: normal;
+	line-height: 25px;
+}
+
+.h3 {
+	color: #000;
+
+	font-size: 14px;
+	font-weight: normal;
+	font-style: normal;
+	line-height: 17px;
+}
