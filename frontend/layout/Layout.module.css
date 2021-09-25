@@ -1,18 +1,17 @@
 
-
 .header {
-    
+
 }
 
 .sidebar {
-    
+
 }
 
 .body {
-    
+
 }
 
 .footer {
-    background: var(--grey);
-    color: var(--background);
+	color: var(--background);
+	background: var(--grey);
 }
