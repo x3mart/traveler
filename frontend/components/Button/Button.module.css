@@ -55,7 +55,11 @@
 
 .header_button {
 	position: relative;
-	
+
+	padding-left: 37px;
+
+	letter-spacing: 0.2px;
+
 
 	color: var(--background);
 	border-radius: 4px;
@@ -63,8 +67,6 @@
 
 	font-size: 13px;
 	font-weight: 700;
-	padding-left: 37px;
-	letter-spacing: 0.2px;
 }
 
 .header_button:hover {
@@ -73,8 +75,8 @@
 
 .traveler_suitcase {
 	position: absolute;
+	top: 10px;
 	left: 20px;
-	top: 10px;	
 }
 
 /* end синяя кнопка "Подберите мне тур" */
@@ -83,12 +85,11 @@
 	display: inline-block;
 
 	margin-left: 10px;
-	
 }
 
 .down {
 	transition: all 0.5s;
-	
+
 	/* transform: rotate(90deg); */
 }
 
@@ -96,10 +97,12 @@
 
 .header_button_travel {
 	width: 140px;
-	background: none;
-	font-size: 17px;	
-	
+
 	margin-left: 20px;
+
+	background: none;
+
+	font-size: 17px;
 }
 
 /* end кнопка путешествия */
@@ -108,10 +111,12 @@
 
 .header_button_support {
 	width: 140px;
-	background: none;
-	font-size: 17px;	
-	
+
 	margin-left: 5px;
+
+	background: none;
+
+	font-size: 17px;
 }
 
 .header_button_support svg {
@@ -131,20 +136,20 @@
 .header_button_country {
 	/* position: relative; */
 	width: 70px;
-	background: none;
 	margin-left: 27px;
+
+	background: none;
 }
 
-.header_button_country svg:nth-child(1){ 
+.header_button_country svg:nth-child(1) {
 	position: relative;
 	top: 3px;
-	
 }
-.header_button_country svg:nth-child(2){ 
+
+.header_button_country svg:nth-child(2) {
 	position: relative;
 	top: -3px;
 	left: 11px;
-	
 }
 
 /* .flag {
@@ -159,9 +164,11 @@
 
 .header_button_currency {
 	width: 100px;
-	background: none;
-	font-size: 17px;
 	margin-left: 10px;
+
+	background: none;
+
+	font-size: 17px;
 }
 
 /* end кнопка валюта */
@@ -171,10 +178,11 @@
 .header_button_liked {
 	width: 50px;
 	margin-left: 5px;
+
 	background: none;
 }
 
-.header_button_liked svg{
+.header_button_liked svg {
 	margin-top: 5px;
 }
 
@@ -184,18 +192,25 @@
 
 .header_button_enter {
 	width: 100px;
-	background: none;
-	font-size: 17px;
-	color: var(--blue);
-	font-weight: 700;
 	margin-top: -5px;
 	margin-left: 39.5px;
+
+	color: var(--blue);
+	background: none;
+
+	font-size: 17px;
+	font-weight: 750;
 }
 
 /* end кнопка вход */
 
 /* мобильная адаптация */
 
-@media (min-width: 320px) and (max-width: 460px) {
-	
+@media (min-width: 320px) and (max-width: 800px) {
+	.header_button_enter {
+		margin-top: -10px;
+		margin-left: 95px;
+
+		font-size: 13px;
+	}
 }

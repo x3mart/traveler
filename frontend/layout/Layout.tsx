@@ -3,15 +3,13 @@ import { LayoutProps } from './Layout.props';
 import cn from 'classnames';
 import React, { FunctionComponent } from 'react';
 import { Header } from './Header/Header';
-import { Sidebar } from './Sidebar/Sidebar';
 import { Footer } from './Footer/Footer';
 
 const Layout = ({ children }: LayoutProps): JSX.Element => {    
     return (
         <div>     
                   
-            <Header className={styles.header} />                
-                <Sidebar className={styles.sidebar} />
+            <Header className={styles.header} />   
                 <div className={styles.body}>
                     {children}
                 </div>                
