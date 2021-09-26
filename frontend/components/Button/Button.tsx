@@ -9,6 +9,7 @@ export const Button = ({ appearance, arrow = 'none', traveler_suitcase = 'none',
         <button
             className={ cn(styles.button, className, {
                 [styles.primary]: appearance == 'primary',
+                [styles.button_ghost]: appearance == 'button_ghost',
                 [styles.ghost]: appearance == 'ghost',
                 [styles.header_button]: appearance == 'header_button',
                 [styles.header_button_travel]: appearance == 'header_button_travel',
