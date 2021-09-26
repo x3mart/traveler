@@ -32,7 +32,6 @@
 	box-sizing: border-box;
 	width: 350px;
 	height: 360px;
-	margin-right: 30px;
 
 	border: 1px solid black;
 
@@ -58,7 +57,7 @@
 	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.03);
 }
 
-@media (min-width: 320px) and (max-width: 460px) {
+@media (min-width: 320px) and (max-width: 799px) {
 	.s {
 		width: 100%;
 		margin-right: 0;
@@ -72,6 +71,7 @@
 	.b {
 		width: 100%;
 		margin-right: 0;
+		height: 247px;
 	}
 
 	.l {
