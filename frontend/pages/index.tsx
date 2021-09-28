@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { P, BlockPresentation, BlockViewed } from '../components';
+import { BlockPresentation, BlockViewed, BlockPopularCountry, BlockRecomendation } from '../components';
 import { withLayout } from '../layout/Layout';
 
 
@@ -9,6 +9,8 @@ function Home(): JSX.Element {
     <>       
         <BlockPresentation block_style='presentation_block'/>
         <BlockViewed />
+        <BlockPopularCountry />
+        <BlockRecomendation />
         
     </>
   );

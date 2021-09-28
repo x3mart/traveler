@@ -140,17 +140,17 @@
 	}
 
 	.card_tour_content_guide_info_name_raiting {
-		margin-top: 0px;
+		margin-top: -2px;
 		margin-left: 10px;
 	}
 
 	.card_tour_content_guide_info_cost h3 {
-		margin-top: 0px;
+		margin-top: 2px;
 		letter-spacing: 1.7px;
 	}
 	
 	.card_tour_content_guide_info_cost h4 {		
-		margin-top: 0px;
+		margin-top: -3px;
 	}
 
 	.card_tour_content_guide_info {

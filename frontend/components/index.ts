@@ -12,3 +12,7 @@ export * from './BlockViewed/BlockViewed';
 export * from './InfoBlock/InfoBlock';
 export * from './CardCollection/CardCollection';
 export * from './CardTour/CardTour';
+export * from './BlockPopularCountry/BlockPopularCountry';
+export * from './CardCountryTour/CardCountryTour';
+export * from './BlockRecomendation/BlockRecomendation'; 
+export * from './CardTourLarge/CardTourLarge';
