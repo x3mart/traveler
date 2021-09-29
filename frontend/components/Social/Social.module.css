@@ -1,0 +1,28 @@
+
+.social_wide {
+	display: flex;
+	justify-content: space-between;
+
+	box-sizing: border-box;
+	width: 360px;
+	margin-top: 20px;
+}
+
+@media (min-width: 320px) and (max-width: 460px) {
+	.social_wide {
+		width: 100%;
+		margin-right: 0;
+	}
+
+	.social_wide {
+		position: relative;
+		top: 344px;
+		left: 16px;
+
+		display: flex;
+		justify-content: space-between;
+
+		box-sizing: border-box;
+		width: 280px;
+	}
+}

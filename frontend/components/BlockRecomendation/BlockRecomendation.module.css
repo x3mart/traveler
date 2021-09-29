@@ -1,0 +1,27 @@
+.block_viewed {
+	padding-top: 40px;
+    padding-bottom: 40px;
+    background: var(--background-grey);
+    background-repeat: no-repeat;
+    margin: 0 auto;
+	
+}
+
+.wrapper {
+	width: 1110px;
+	margin: 0 auto;
+	/* padding: 25px 0 25px 0; */
+}
+
+@media (min-width: 320px) and (max-width: 799px) {
+	.wrapper {
+		width: unset;
+	}
+
+	.block_viewed {
+        padding-top: 17px;
+    	padding-bottom: 17px;
+    }
+
+	
+}

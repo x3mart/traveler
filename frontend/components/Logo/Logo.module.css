@@ -1,0 +1,14 @@
+.logo {
+
+}
+
+@media (min-width: 320px) and (max-width: 800px) {
+	.logo {
+		margin-left: 16px;
+	}
+
+	.logo svg {
+		width: 41.16px;
+		height: 20px;
+	}
+}

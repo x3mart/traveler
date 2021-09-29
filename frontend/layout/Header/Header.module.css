@@ -1,0 +1,33 @@
+.wrapper {
+	display: flex;
+
+	width: 1110px;
+	margin: 0 auto;
+	padding: 25px 0 20px 0;
+}
+
+.desktop_header_buttons {
+	display: flex;
+
+	margin-top: -5px;
+	margin-left: 97px;
+}
+
+.mobile_menu {
+	display: none;
+}
+
+@media (min-width: 320px) and (max-width: 799px) {
+	.wrapper {
+		width: unset;
+		padding: 14px 0 4px 16px;
+	}
+
+	.desktop_header_buttons {
+		display: none;
+	}
+
+	.mobile_menu {
+		display: block;
+	}
+}

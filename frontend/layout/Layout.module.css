@@ -1,0 +1,17 @@
+
+.header {
+
+}
+
+.sidebar {
+
+}
+
+.body {
+
+}
+
+.footer {
+	color: var(--background);
+	background: var(--grey);
+}

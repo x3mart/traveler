@@ -1,0 +1,46 @@
+@font-face {
+	font-family: 'AvenirNextCyr-Regular';
+	src: url('../styles//fonts/Avenir/AvenirNextCyr-Regular.otf'); /* IE 9 Compatibility Mode */
+
+	/* src: */
+
+	/* url('../styles//fonts/avenirnextcyr-regular.eot?#iefix') format('embedded-opentype'), /* IE < 9 */
+
+	/* url('../styles//fonts/avenirnextcyr-regular.woff2') format('woff2'), /* Super Modern Browsers */
+
+	/* url('../styles//fonts/avenirnextcyr-regular.woff') format('woff'), /* Firefox >= 3.6, any other modern browser */
+
+	/* url('../styles//fonts/avenirnextcyr-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+
+	/* url('../styles/fonts/avenirnextcyr-regular.svg#avenirnextcyr-regular') format('svg'); /* Chrome < 4, Legacy iOS */
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+
+	font-family: var(--font-family);
+}
+
+a {
+	text-decoration: none;
+
+	color: inherit;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+:root {
+	--background: #FFF;
+	--background-grey: #F6F7F9;
+	--background-pink: #FCF7F4;
+	--blue: #2AA2D6;
+	--blue-hover: #61CDFC;
+	--orange: #EF8F21;
+	--grey: #303030;
+	--grey-light: #AAA;
+	--font-family: 'AvenirNextCyr-Regular';
+}
