@@ -2,7 +2,6 @@ import styles from './BlockPresentation.module.css';
 import { BlockPresentationProps } from './BlockPresentation.props';
 import { Htag, Button, FormGetTour } from '../../components/';
 import cn from 'classnames';
-// import { Button } from '../Button/Button';
 
 export const BlockPresentation = ({ block_style, children, className, ...props }: BlockPresentationProps): JSX.Element => {    
     return (

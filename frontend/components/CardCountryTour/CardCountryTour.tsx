@@ -1,5 +1,5 @@
 import styles from './CardCountryTour.module.css';
-import { CardTourProps } from './CardCountryTour.props';
+import { CardCountryTourProps } from './CardCountryTour.props';
 import cn from 'classnames';
 import { Tag, Htag } from '..';
     
