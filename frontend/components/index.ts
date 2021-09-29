@@ -16,3 +16,5 @@ export * from './BlockPopularCountry/BlockPopularCountry';
 export * from './CardCountryTour/CardCountryTour';
 export * from './BlockRecomendation/BlockRecomendation'; 
 export * from './CardTourLarge/CardTourLarge';
+export * from './BlockAdvantage/BlockAdvantage';
+export * from './BlockNewTour/BlockNewTour';
