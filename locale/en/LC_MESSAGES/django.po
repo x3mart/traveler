@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-23 17:34+0300\n"
+"POT-Creation-Date: 2021-09-29 16:50+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,19 +22,85 @@ msgstr ""
 msgid "Укажите Ваш e-mail"
 msgstr "email required"
 
-#: accounts/models.py:59
+#: accounts/models.py:45
+msgid "Имя"
+msgstr ""
+
+#: accounts/models.py:46
+msgid "Фамилия"
+msgstr ""
+
+#: accounts/models.py:49
+msgid "Сотрудник"
+msgstr ""
+
+#: accounts/models.py:50 accounts/models.py:90
+msgid "Эксперт"
+msgstr ""
+
+#: accounts/models.py:51
+#, fuzzy
+#| msgid "Пользователь"
+msgid "Покупатель"
+msgstr "User"
+
+#: accounts/models.py:52
+msgid "Телефон"
+msgstr ""
+
+#: accounts/models.py:60
 msgid "Пользователь"
 msgstr "User"
 
-#: accounts/models.py:60
+#: accounts/models.py:61
 msgid "Пользователи"
 msgstr "Users"
 
-#: accounts/serializers.py:12
+#: accounts/models.py:78
+msgid "Страна"
+msgstr ""
+
+#: accounts/models.py:79
+msgid "Город"
+msgstr ""
+
+#: accounts/models.py:80
+msgid "Языки"
+msgstr ""
+
+#: accounts/models.py:81
+msgid "Посещенные страны"
+msgstr ""
+
+#: accounts/models.py:82
+msgid "О себе"
+msgstr ""
+
+#: accounts/models.py:83
+msgid "Email подтвержден"
+msgstr ""
+
+#: accounts/models.py:84
+msgid "Телефон подтвержден"
+msgstr ""
+
+#: accounts/models.py:85
+msgid "Документы подтверждены"
+msgstr ""
+
+#: accounts/models.py:86
+msgid "Статус подтвержден"
+msgstr ""
+
+#: accounts/models.py:91
+msgid "Эксперты"
+msgstr ""
+
+#: accounts/serializers.py:36
 msgid "Укажите пароль"
 msgstr "Password required"
 
-#: accounts/serializers.py:14
+#: accounts/serializers.py:38
 msgid "Пароли должны совпадать"
 msgstr "Passwords don't match"
 

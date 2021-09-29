@@ -1,4 +1,4 @@
-from .models import User
+from .models import Expert, User
 from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
 import django.contrib.auth.password_validation as validators
@@ -8,6 +8,7 @@ from PIL import Image as PilImage
 from django.core.files.base import ContentFile
 from django.core.files.uploadedfile import InMemoryUploadedFile
 import os
+from util.translate import get_translatable_fields_source
 
 
 
@@ -46,11 +47,11 @@ class UserSerializer(serializers.ModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super(UserSerializer, self).__init__(*args, **kwargs)
-        self.fields['name'] = serializers.CharField(required=True, source=f"name_{self.context['language']}")  
+        self.fields = get_translatable_fields_source(self) 
 
     class Meta:
         model = User
-        fields = ('id', 'name', 'email', 'password', 'is_staff', 'avatar')
+        fields = ('id', 'first_name', 'email', 'password', 'is_staff', 'avatar', 'phone')
         extra_kwargs = {
             'password': {'write_only': True, 'required': False,},
         }
@@ -77,6 +78,45 @@ class UserSerializer(serializers.ModelSerializer):
             if storage.exists(instance.avatar.name):
                 storage.delete(instance.avatar.name)
         else:
-            validated_data.pop('avatar')     
+            validated_data.pop('avatar', None)     
         user = super().update(instance, validated_data)
         return user
+    
+class ExpertSerializer(UserSerializer):
+
+    def __init__(self, *args, **kwargs):
+        super(ExpertSerializer, self).__init__(*args, **kwargs)
+        self.fields = get_translatable_fields_source(self)
+    class Meta:
+        model = Expert
+        fields = ('id', 'first_name', 'last_name', 'email', 'password', 'is_expert', 'avatar', 'country', 'city', 'languages', 'visited_countries', 'about', 'phone')
+        extra_kwargs = {
+            'password': {'write_only': True, 'required': False,},
+        }
+        
+    
+    def create(self, validated_data):
+        password = check_password(self)
+        validated_data['is_expert'] = True
+        if validated_data.get('avatar') is not None:
+            validated_data['avatar'] = create_avatar(validated_data['avatar'])
+        expert = Expert(**validated_data)
+        expert.set_password(password)
+        expert.save()
+        return expert
+    
+    def update(self, instance, validated_data):
+        validated_data['is_expert'] = True
+        if validated_data.get('password') is not None:
+            check_password(self)
+            password = validated_data.pop('password')
+            instance.set_password(password)
+            instance.save()
+        if validated_data.get('avatar') is not None:
+            validated_data['avatar'] = create_avatar(validated_data['avatar'])
+            storage = instance.avatar.storage
+            if storage.exists(instance.avatar.name):
+                storage.delete(instance.avatar.name)
+        else:
+            validated_data.pop('avatar', None)     
+        return super().update(instance, validated_data)

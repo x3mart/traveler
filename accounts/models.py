@@ -9,7 +9,7 @@ import os
 # Create your models here.
 def user_avatar_path(instance, filename):
     name, extension = os.path.splitext(filename)
-    return 'avatars/{0}/{1}{2}'.format(slugify(unidecode(instance.name)), slugify(unidecode(name)), extension)
+    return 'avatars/{0}/{1}{2}'.format(slugify(unidecode(instance.full_name)), slugify(unidecode(name)), extension)
 
 class AccountManager(BaseUserManager):
     def create_user(self, email, name, password=None, is_staff=False):
@@ -42,13 +42,14 @@ class AccountManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True)
-    name = models.CharField(max_length=255, verbose_name='Полное Имя', null=True, blank=True,)
+    first_name = models.CharField(_('Имя'), max_length=255,  null=True, blank=True,)
+    last_name = models.CharField(_('Фамилия'), max_length=255, null=True, blank=True,)
     avatar = models.ImageField(upload_to=user_avatar_path, null=True, blank=True,)
     is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False, verbose_name='Сотрудник')
-    is_expert = models.BooleanField(default=False, verbose_name='Эксперт')
-    is_customer = models.BooleanField(default=False, verbose_name='Покупатель')
-    phone = PhoneNumberField(null=True, blank=True, verbose_name='Телефон')
+    is_staff = models.BooleanField(_('Сотрудник'), default=False, )
+    is_expert = models.BooleanField(_('Эксперт'), default=False, )
+    is_customer = models.BooleanField(_('Покупатель'), default=False, )
+    phone = PhoneNumberField(_('Телефон'), null=True, blank=True, )
 
     objects = AccountManager()
 
@@ -58,13 +59,37 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = _('Пользователь')
         verbose_name_plural = _('Пользователи')
-        ordering = ['id']
+        ordering = ['-id']
+    
+    @property
+    def full_name(self):
+        return f'{self.first_name} {self.last_name}'
 
     def __str__(self):
-        return self.name
+        return self.full_name
     
     def delete(self, using=None, keep_parents=False):
         storage = self.avatar.storage
         if storage.exists(self.avatar.name):
                 storage.delete(self.avatar.name)
         super().delete()
+    
+class Expert(User):
+    country = models.CharField(_('Страна'), max_length=100, null=True, blank=True)
+    city  = models.CharField(_('Город'), max_length=100, null=True, blank=True)
+    languages = models.CharField(_('Языки'), max_length=255, null=True, blank=True)
+    visited_countries = models.CharField(_('Посещенные страны'), max_length=255, null=True, blank=True)
+    about = models.TextField(_('О себе'), null=True, blank=True)
+    email_confirmed = models.BooleanField(_('Email подтвержден'), default=False)
+    phone_confirmed = models.BooleanField(_('Телефон подтвержден'), default=False)
+    docs_confirmed = models.BooleanField(_('Документы подтверждены'), default=False)
+    status_confirmed = models.BooleanField(_('Статус подтвержден'), default=False)
+
+
+    class Meta:
+        verbose_name = _('Эксперт')
+        verbose_name_plural = _('Эксперты')
+        ordering = ['-id']
+    
+    def __str__(self):
+        return self.full_name
