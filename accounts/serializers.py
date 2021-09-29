@@ -8,7 +8,7 @@ from PIL import Image as PilImage
 from django.core.files.base import ContentFile
 from django.core.files.uploadedfile import InMemoryUploadedFile
 import os
-from util.translate import get_translatable_fields_source
+from utils.translate import get_translatable_fields_source
 
 
 
