@@ -1,7 +1,7 @@
 import styles from './CardCollection.module.css';
 import { CardCollectionProps } from './CardCollection.props';
 import cn from 'classnames';
-import { CardTour, CardCountryTour, CardTourLarge } from '../../components/';
+import { CardTour, CardCountryTour, CardTourLarge, CardTypeTour } from '../../components/';
 import ArrowIconLeft from '/public/left_arrow.svg';
 import ArrowIconRight from '/public/right_arrow.svg';
 
@@ -55,7 +55,19 @@ export const CardCollection = ({name_block, block_style, children, className, ..
         case 'new':
           return <h4 className={styles.h4}>{children}</h4>;
         case 'type':
-          return <h4 className={styles.h4}>{children}</h4>;
+          return <div
+                    className={ cn(styles.card_collection_type, className, {
+                    })}
+                    {...props}
+                >                      
+                    {children}
+                    <CardTypeTour />  
+                    <CardTypeTour /> 
+                    <CardTypeTour /> 
+                    <CardTypeTour /> 
+                    <CardTypeTour /> 
+                    <CardTypeTour />    
+                </div>;
         case 'rating':
           return <h4 className={styles.h4}>{children}</h4>;
         case 'experts':

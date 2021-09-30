@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { BlockPresentation, BlockViewed, BlockPopularCountry, BlockRecomendation, BlockAdvantage, BlockNewTour } from '../components';
+import { BlockPresentation, BlockViewed, BlockPopularCountry, BlockRecomendation, BlockAdvantage, BlockNewTour, BlockChangeCountry, BlockTypeTours, BlockRaitingTours } from '../components';
 import { withLayout } from '../layout/Layout';
 
 
@@ -13,6 +13,9 @@ function Home(): JSX.Element {
         <BlockRecomendation />
         <BlockAdvantage />
         <BlockNewTour />
+        <BlockChangeCountry />
+        <BlockTypeTours />
+        <BlockRaitingTours />
         
     </>
   );
