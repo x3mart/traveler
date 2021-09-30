@@ -3,7 +3,7 @@ import { BlockRecomendationProps } from './BlockRecomendation.props';
 import cn from 'classnames';
 import { InfoBlock, Htag, CardCollection } from '..';
 
-export const BlockRecomendation = ({ name_block, block_style, children, className, ...props }: BlockRecomendationProps): JSX.Element => {    
+export const BlockRecomendation = ({ block_style, children, className, ...props }: BlockRecomendationProps): JSX.Element => {    
     return (
         <div
             className={ cn(styles.block_viewed, className, {
@@ -22,7 +22,7 @@ export const BlockRecomendation = ({ name_block, block_style, children, classNam
                             Мы подобрали туры именно для вас
                         </Htag>
                     </InfoBlock> 
-                    <CardCollection name_block='personal' />
+                    <CardCollection name_block='personal' children={undefined} />
             </div> 
             
         </div>

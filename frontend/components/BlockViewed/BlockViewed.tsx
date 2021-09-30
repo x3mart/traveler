@@ -22,7 +22,7 @@ export const BlockViewed = ({ block_style, children, className, ...props }: Bloc
                             Мы сохранили для вас недавно просмотренные вами туры, возможно вы захотите к ним вернуться и выбрать один из них
                         </Htag>
                     </InfoBlock> 
-                    <CardCollection name_block='viewed' />
+                    <CardCollection name_block='viewed' children={undefined} />
             </div> 
             
         </div>

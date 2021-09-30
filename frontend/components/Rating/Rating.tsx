@@ -3,7 +3,7 @@ import styles from './Rating.module.css';
 import cn from 'classnames';
 import { Htag } from '..';
 
-export const Rating = ({ border_color, children, ...props }: RatingProps): JSX.Element => {
+export const Rating = ({ children, ...props }: RatingProps): JSX.Element => {
   return (
     <div
         className={ cn(styles.rating, className, {

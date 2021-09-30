@@ -14,13 +14,16 @@
 }
 
 .s h4 {
-	font-weight: 750;
-	font-size: 16px;
-	line-height: 20px;
-	text-transform: uppercase;
 	margin-top: 117px;
+
 	letter-spacing: 0.5px;
-	color: #FFFFFF;
+	text-transform: uppercase;
+
+	color: #FFF;
+
+	font-size: 16px;
+	font-weight: 750;
+	line-height: 20px;
 }
 
 .m {
@@ -68,8 +71,6 @@
 	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.03);
 }
 
-
-
 @media (min-width: 320px) and (max-width: 799px) {
 	.s {
 		width: 288px;
@@ -85,8 +86,8 @@
 
 	.b {
 		width: 100%;
-		margin-right: 0;
 		height: 247px;
+		margin-right: 0;
 	}
 
 	.l {

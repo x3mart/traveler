@@ -1,29 +1,30 @@
 .rating {
-    width: 60px;
-    height: 60px;
+	position: relative;
+	top: -22px;
 
-    background: #84BB59;
-    border-radius: 8px 0px;
+	width: 60px;
+	height: 60px;
+	padding: 15px;
 
-    position: relative;
-    top: -22px;
-    padding: 15px;
+	border-radius: 8px 0;
+
+	background: #84BB59;
 }
 
 .rating h3 {
-    color: var(--background);
-    font-weight: 600;
-    font-size: 9px;
-    margin: 0;
+	margin: 0;
+
+	color: var(--background);
+
+	font-size: 9px;
+	font-weight: 600;
 }
 
 .rating h4 {
-    color: var(--background);
-    font-weight: 750;
-    font-size: 20px;
-    margin: 0;
-}
+	margin: 0;
 
-@media (min-width: 320px) and (max-width: 799px) {
-    
+	color: var(--background);
+
+	font-size: 20px;
+	font-weight: 750;
 }

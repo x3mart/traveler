@@ -1,6 +1,5 @@
 import styles from './Layout.module.css';
 import { LayoutProps } from './Layout.props';
-import cn from 'classnames';
 import React, { FunctionComponent } from 'react';
 import { Header } from './Header/Header';
 import { Footer } from './Footer/Footer';
@@ -25,6 +24,6 @@ export const withLayout = <T extends Record<string, unknown>>(Component: Functio
             <Layout>
                 <Component {...props} />
             </Layout>
-        )
-    }
-}
+        );
+    };
+};

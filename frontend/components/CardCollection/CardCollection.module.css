@@ -1,22 +1,26 @@
 .card_collection {
+	position: relative;
+
 	display: flex;
+
 	/* flex-wrap: wrap; */
 	justify-content: space-between;
-	position: relative;	
 }
 
 .card_collection_popular {
+	position: relative;
+
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;
-	position: relative;	
 }
 
 .card_collection_type {
+	position: relative;
+
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;
-	position: relative;	
 }
 
 .popular {
@@ -24,48 +28,52 @@
 }
 
 .card_tour_arrow_left {
+	position: absolute;
+	top: 121px;
+	left: -24px;
+
 	width: 48px;
 	height: 48px;
+
 	border-radius: 50%;
-	background: #FFFFFF;
-	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-	position: absolute;
-	left: -24px;
-	top: 121px;
+	background: #FFF;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.card_tour_arrow_left svg{
-	margin-left: 15px;
+.card_tour_arrow_left svg {
 	margin-top: 13px;
+	margin-left: 15px;
 }
 
 .card_tour_arrow_right {
+	position: absolute;
+	top: 121px;
+	right: -24px;
+
 	width: 48px;
 	height: 48px;
+
 	border-radius: 50%;
-	background: #FFFFFF;
-	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-	position: absolute;
-	right: -24px;
-	top: 121px;
+	background: #FFF;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.card_tour_arrow_right svg{
-	margin-left: 20px;
+.card_tour_arrow_right svg {
 	margin-top: 13px;
+	margin-left: 20px;
 }
 
 @media (min-width: 320px) and (max-width: 799px) {
 	.card_tour_arrow_right {
 		display: none;
 	}
-	
+
 	.card_tour_arrow_left {
 		display: none;
 	}
 
 	.card_collection {
-		overflow: hidden;	
+		overflow: hidden;
 	}
 
 	.card_collection_popular {

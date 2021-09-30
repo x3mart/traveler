@@ -21,7 +21,7 @@ export const CardTour = ({ block_style, children, className, ...props }: CardTou
             <Tag size='b'>
                 <div className={styles.card_tour_image}>
                     <LikeIcon />
-                    <Rating />
+                    <Rating children={undefined} />
                 </div>
                 <div className={styles.card_tour_content}>
                     <div className={styles.card_tour_content_place_info}>

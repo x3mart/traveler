@@ -5,7 +5,7 @@ import { CardTour, CardCountryTour, CardTourLarge, CardTypeTour } from '../../co
 import ArrowIconLeft from '/public/left_arrow.svg';
 import ArrowIconRight from '/public/right_arrow.svg';
 
-export const CardCollection = ({name_block, block_style, children, className, ...props }: CardCollectionProps): JSX.Element => {    
+export const CardCollection = ({name_block, children, className, ...props }: CardCollectionProps): JSX.Element => {    
     switch (name_block) {
         case 'viewed':
           return <div
@@ -46,9 +46,9 @@ export const CardCollection = ({name_block, block_style, children, className, ..
                     })}
                     {...props}
                 >
-                    <div className={styles.card_tour_arrow_left}><ArrowIconLeft /></div>
-                    <div className={styles.card_tour_arrow_right}><ArrowIconRight /></div>  
                     {children}
+                    <div className={styles.card_tour_arrow_left}><ArrowIconLeft /></div>
+                    <div className={styles.card_tour_arrow_right}><ArrowIconRight /></div>                    
                     <CardTourLarge /> 
                     <CardTour />    
                 </div>;
@@ -79,18 +79,4 @@ export const CardCollection = ({name_block, block_style, children, className, ..
           default:
           return <></>;
       }     
-    return (
-        <div
-            className={ cn(styles.card_collection, className, {
-            })}
-            {...props}
-        >
-            <div className={styles.card_tour_arrow_left}><ArrowIconLeft /></div>
-            <div className={styles.card_tour_arrow_right}><ArrowIconRight /></div>  
-            {children}
-            <CardTour />
-            <CardTour /> 
-            <CardTour />    
-        </div>
-    );
 };
