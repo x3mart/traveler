@@ -11,7 +11,7 @@
 	display: flex;
 	justify-content: space-between;
 	margin-top: 80px;
-	overflow: hidden;
+	
 }
 
 .change_country_block_item {
@@ -71,5 +71,7 @@
     	padding-bottom: 0px;
     }
 
-	
+	.change_country_block {
+		overflow: hidden;
+	}
 }
