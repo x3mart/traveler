@@ -1,14 +1,10 @@
 .block_viewed {
 	padding-top: 40px;
-    padding-bottom: 40px;
+    padding-bottom: 10px;
     background: var(--background-grey);
     background-repeat: no-repeat;
     margin: 0 auto;
 	
-}
-
-.rating {
-	display: none;
 }
 
 .wrapper {
@@ -24,7 +20,7 @@
 
 	.block_viewed {
         padding-top: 17px;
-    	padding-bottom: 17px;
+    	padding-bottom: 0px;
     }
 
 	

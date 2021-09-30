@@ -18,3 +18,8 @@ export * from './BlockRecomendation/BlockRecomendation';
 export * from './CardTourLarge/CardTourLarge';
 export * from './BlockAdvantage/BlockAdvantage';
 export * from './BlockNewTour/BlockNewTour';
+export * from './BlockChangeCountry/BlockChangeCountry';
+export * from './BlockTypeTours/BlockTypeTours';
+export * from './CardTypeTour/CardTypeTour';
+export * from './BlockRaitingTours/BlockRaitingTours';
+export * from './Rating/Rating';
