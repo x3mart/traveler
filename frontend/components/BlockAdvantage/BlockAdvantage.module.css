@@ -9,6 +9,7 @@
 
 .advantage_block {
 	display: flex;
+	flex-wrap: wrap;
 	justify-content: space-between;
 }
 
@@ -56,5 +57,16 @@
     	padding-bottom: 0px;
     }
 
+	.advantage_block_item {
+		text-align: center;
+		width: 160px;
+		height: 175px;
+	}
+
+	.advantage_block_item svg {
+		
+		width: 50px;
+		height: 50px;
+	}
 	
 }

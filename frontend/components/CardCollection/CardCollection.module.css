@@ -12,6 +12,13 @@
 	position: relative;	
 }
 
+.card_collection_type {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	position: relative;	
+}
+
 .popular {
 	justify-content: space-evenly;
 }
@@ -68,5 +75,10 @@
 
 	.none {
 		display: none;
+	}
+
+	.card_collection_type {
+		display: block;
+		flex-wrap: unset;
 	}
 }

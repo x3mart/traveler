@@ -1,7 +1,7 @@
 import styles from './CardTour.module.css';
 import { CardTourProps } from './CardTour.props';
 import cn from 'classnames';
-import { Tag, Htag } from '../../components/';
+import { Tag, Htag, Rating } from '../../components/';
 import StarIcon from '/public/Star.svg';
 import LikeIcon from '/public/Like.svg';
     
@@ -21,6 +21,7 @@ export const CardTour = ({ block_style, children, className, ...props }: CardTou
             <Tag size='b'>
                 <div className={styles.card_tour_image}>
                     <LikeIcon />
+                    <Rating />
                 </div>
                 <div className={styles.card_tour_content}>
                     <div className={styles.card_tour_content_place_info}>

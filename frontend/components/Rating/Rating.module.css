@@ -1,0 +1,29 @@
+.rating {
+    width: 60px;
+    height: 60px;
+
+    background: #84BB59;
+    border-radius: 8px 0px;
+
+    position: relative;
+    top: -22px;
+    padding: 15px;
+}
+
+.rating h3 {
+    color: var(--background);
+    font-weight: 600;
+    font-size: 9px;
+    margin: 0;
+}
+
+.rating h4 {
+    color: var(--background);
+    font-weight: 750;
+    font-size: 20px;
+    margin: 0;
+}
+
+@media (min-width: 320px) and (max-width: 799px) {
+    
+}
