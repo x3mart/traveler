@@ -1,7 +1,7 @@
 .block_viewed {
 	margin: 0 auto;
 	padding-top: 40px;
-	padding-bottom: 40px;
+	padding-bottom: 20px;
 
 	background: var(--background);
 	background-repeat: no-repeat;
@@ -16,18 +16,27 @@
 
 .mood_block {
 	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
 	color: #2AA2D6;
 	margin-top: -15px;	
 }
 
 .mood_block_item {
 	color: #2AA2D6;
-	width: 400px;
-	margin-right: 10px;
+	width: 255px;
+	margin-top: 16px;
+	
+	
 }
 
 .mood_block_item h3 {
 	color: #2AA2D6;
+	margin-bottom: 23px;
+	margin-top: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	letter-spacing: 0;
 }
 
 @media (min-width: 320px) and (max-width: 799px) {
