@@ -14,6 +14,7 @@ export const BlockFindTour = ({ block_style, children, className, ...props }: Bl
             
             <div className={styles.wrapper} {...props}>
                 {children}
+                <div className={styles.findtour_block} {...props}>
                     <InfoBlock border_color='white_left_border'>
                         <Htag tag='h2'>
                             Подобрать тур 
@@ -23,7 +24,7 @@ export const BlockFindTour = ({ block_style, children, className, ...props }: Bl
                         </Htag>
                     </InfoBlock>
                     <FormGetTour form_style='second_form_get_tour' children={undefined} />  
-                    
+                </div>
             </div> 
             
         </div>

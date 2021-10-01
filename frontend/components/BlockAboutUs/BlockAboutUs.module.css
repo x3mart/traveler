@@ -1,12 +1,10 @@
 .block_viewed {
 	margin: 0 auto;
 	padding-top: 40px;
-	padding-bottom: 40px;
-	width: 100%; 
-	max-width: 1440px;
-	background: url(../../public/findtour.svg); 
+	padding-bottom: 20px;
+
+	background: var(--background);
 	background-repeat: no-repeat;
-	color: var(--background);
 }
 
 .wrapper {
@@ -14,15 +12,6 @@
 	margin: 0 auto;
 
 	/* padding: 25px 0 25px 0; */
-}
-
-.wrapper h2 {  
-	color: #fff;
-}
-
-.wrapper h4 {  
-	color: #fff;
-	margin-bottom: 0px; 
 }
 
 .mood_block {
