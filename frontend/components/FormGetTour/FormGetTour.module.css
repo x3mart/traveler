@@ -4,6 +4,13 @@
 	margin-top: 100px;
 }
 
+.second_form_get_tour {
+	display: flex;
+    border: 2px solid #ffffff;
+	margin-top: 100px;
+	border-radius: 12px;
+}
+
 @media (min-width: 320px) and (max-width: 799px) {
 	.first_form_get_tour {
 		display: block;

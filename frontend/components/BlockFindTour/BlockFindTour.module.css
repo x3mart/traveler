@@ -1,0 +1,61 @@
+.block_viewed {
+	margin: 0 auto;
+	padding-top: 40px;
+	padding-bottom: 40px;
+	width: 100%; 
+
+	background: url(../../public/findtour.svg); 
+	background-repeat: no-repeat;
+	color: var(--background);
+}
+
+.wrapper {
+	width: 1110px;
+	margin: 0 auto;
+
+	/* padding: 25px 0 25px 0; */
+}
+
+.wrapper h2 {  
+	color: #fff;
+}
+
+.wrapper h4 {  
+	color: #fff;
+}
+
+.mood_block {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	color: #2AA2D6;
+	margin-top: -15px;	
+}
+
+.mood_block_item {
+	color: #2AA2D6;
+	width: 255px;
+	margin-top: 16px;
+	
+	
+}
+
+.mood_block_item h3 {
+	color: #2AA2D6;
+	margin-bottom: 23px;
+	margin-top: 0px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	letter-spacing: 0;
+}
+
+@media (min-width: 320px) and (max-width: 799px) {
+	.wrapper {
+		width: unset;
+	}
+
+	.block_viewed {
+		padding-top: 17px;
+		padding-bottom: 17px;
+	}
+}
