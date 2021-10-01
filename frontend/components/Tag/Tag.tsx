@@ -10,6 +10,8 @@ export const Tag = ({ size, children, href, className, ...props }: TagProps): JS
                 [styles.m]: size == 'm',
                 [styles.b]: size == 'b',
                 [styles.l]: size == 'l',
+                [styles.t]: size == 't',
+                [styles.feedback]: size == 'feedback',
             })}
             {...props}
         >{

@@ -6,11 +6,10 @@
 	height: 175px;
 	margin-bottom: 30px;
 
-	border: 1px solid black;
 
-	/* background: url(david-marcu-VfUN94cUy4o-unsplash.jpg); */
+	
 	border-radius: 8px;
-	background: grey;
+	background: url(../../public/static-img/Rectangle8.png); 
 }
 
 .s h4 {
@@ -34,7 +33,6 @@
 	height: 240px;
 	margin-bottom: 30px;
 
-	border: 1px solid black;
 
 	/* background: url(david-marcu-VfUN94cUy4o-unsplash.jpg); */
 	border-radius: 8px;
@@ -47,7 +45,6 @@
 	width: 350px;
 	height: 360px;
 
-	border: 1px solid black;
 
 	/* background: url(david-marcu-VfUN94cUy4o-unsplash.jpg); */
 	border-radius: 8px;
@@ -62,13 +59,28 @@
 	width: 730px;
 	height: 360px;
 	margin-right: 30px;
-
-	border: 1px solid black;
-
-	/* background: url(david-marcu-VfUN94cUy4o-unsplash.jpg); */
 	border-radius: 8px;
 	background: #FFF;
 	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.03);
+}
+
+.t {
+	width: 255px;
+	height: 337px;
+
+	background: #FFFFFF;
+	box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.03);
+	border-radius: 8px;
+	padding-top: 28px;
+}
+
+.feedback {
+	width: 540px;
+	height: 385px;
+
+	background: #FFFFFF;
+	box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.03);
+	border-radius: 8px;
 }
 
 @media (min-width: 320px) and (max-width: 799px) {

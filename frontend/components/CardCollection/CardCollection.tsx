@@ -1,7 +1,7 @@
 import styles from './CardCollection.module.css';
 import { CardCollectionProps } from './CardCollection.props';
 import cn from 'classnames';
-import { CardTour, CardCountryTour, CardTourLarge, CardTypeTour } from '../../components/';
+import { CardTour, CardCountryTour, CardTourLarge, CardTypeTour, CardExpert, Rating, Sale, CardFeedback } from '../../components/';
 import ArrowIconLeft from '/public/left_arrow.svg';
 import ArrowIconRight from '/public/right_arrow.svg';
 
@@ -69,13 +69,76 @@ export const CardCollection = ({name_block, children, className, ...props }: Car
                     <CardTypeTour />    
                 </div>;
         case 'rating':
-          return <h4 className={styles.h4}>{children}</h4>;
+          return <div
+                    className={ cn(styles.card_collection, className, {
+                    })}
+                    {...props}
+                >
+                    <div className={styles.card_tour_arrow_left}><ArrowIconLeft /></div>
+                    <div className={styles.card_tour_arrow_right}><ArrowIconRight /></div>  
+                    {children}
+                    <CardTour><Rating children={undefined} /></CardTour>
+                    <CardTour><Rating children={undefined} /></CardTour>
+                    <CardTour><Rating children={undefined} /></CardTour>    
+                </div>;
         case 'experts':
-          return <h4 className={styles.h4}>{children}</h4>;
+          return <div
+                      className={ cn(styles.card_collection_experts, className, {
+                      })}
+                      {...props}
+                  >
+                    <div className={styles.card_collection_experts_block}> 
+                          <div className={styles.card_expert_arrow_left}><ArrowIconLeft /></div>
+                          <div className={styles.card_expert_arrow_right}><ArrowIconRight /></div>  
+                          {children}
+                          <CardExpert className={styles.card_collection_expert_card_hidden} />
+                          <CardExpert /> 
+                          <CardExpert />
+                          <CardExpert />
+                          <CardExpert />
+                          <CardExpert className={styles.card_collection_expert_card_hidden} />  
+                    </div>   
+                  </div>;
         case 'sales':
-          return <h4 className={styles.h4}>{children}</h4>;
+          return <div
+                    className={ cn(styles.card_collection, className, {
+                    })}
+                    {...props}
+                >
+                    <div className={styles.card_tour_arrow_left}><ArrowIconLeft /></div>
+                    <div className={styles.card_tour_arrow_right}><ArrowIconRight /></div>  
+                    {children}
+                    <CardTour>
+                      <Sale children={undefined} />
+                      <div className={styles.sale_cost_block}>
+                          <span className={styles.sale_cost}>89.000 <span className={styles.sale_cost_rub}>{'\u20bd'}</span></span>
+                      </div>                      
+                    </CardTour>
+                    <CardTour>
+                      <Sale children={undefined} />
+                      <div className={styles.sale_cost_block}>
+                          <span className={styles.sale_cost}>89.000 <span className={styles.sale_cost_rub}>{'\u20bd'}</span></span>
+                      </div>                      
+                    </CardTour>
+                    <CardTour>
+                      <Sale children={undefined} />
+                      <div className={styles.sale_cost_block}>
+                          <span className={styles.sale_cost}>89.000 <span className={styles.sale_cost_rub}>{'\u20bd'}</span></span>
+                      </div>                      
+                    </CardTour>    
+                </div>; 
         case 'feedback':
-          return <h4 className={styles.h4}>{children}</h4>;
+          return <div
+                    className={ cn(styles.card_feedback, className, {
+                    })}
+                    {...props}
+                >
+                    <div className={styles.card_feedback_arrow_left}><ArrowIconLeft /></div>
+                    <div className={styles.card_feedback_arrow_right}><ArrowIconRight /></div>  
+                    {children}
+                    <CardFeedback />
+                    <CardFeedback />                      
+                </div>;
           default:
           return <></>;
       }     

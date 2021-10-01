@@ -1,6 +1,4 @@
-.card_tour {
 
-}
 
 .card_type_tour_content {
 	width: 100%;
@@ -10,7 +8,7 @@
 
 	color: var(--background);
 	border-radius: 8px;
-	background: var(--grey);
+	background: url(../../public/static-img/Rectangle\ 8\ \(1\).png);
 }
 
 .card_type_tour_content h3 {

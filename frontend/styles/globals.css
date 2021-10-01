@@ -15,6 +15,11 @@
 	/* url('../styles/fonts/avenirnextcyr-regular.svg#avenirnextcyr-regular') format('svg'); /* Chrome < 4, Legacy iOS */
 }
 
+@font-face {
+	font-family: 'SF';
+	src: url('../styles//fonts/sf-ui-text/SFUIText-Regular.ttf');
+}
+
 html,
 body {
 	margin: 0;
@@ -43,4 +48,5 @@ a {
 	--grey: #303030;
 	--grey-light: #AAA;
 	--font-family: 'AvenirNextCyr-Regular';
+	--font-family-rub: 'SF';
 }

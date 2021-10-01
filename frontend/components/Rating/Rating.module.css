@@ -1,6 +1,6 @@
 .rating {
-	position: relative;
-	top: -22px;
+	position: absolute;
+	top: 0px;
 
 	width: 60px;
 	height: 60px;

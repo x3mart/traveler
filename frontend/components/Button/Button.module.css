@@ -113,7 +113,9 @@
 
 	background: none;
 
-	font-size: 17px;
+	font-size: 16.5px;
+
+	margin-top: 0.5px;
 }
 
 /* end кнопка путешествия */
@@ -121,13 +123,17 @@
 /* begin кнопка поддержка */
 
 .header_button_support {
-	width: 140px;
+	width: 158px;
 
 	margin-left: 5px;
+	margin-top: 1px;
 
 	background: none;
 
 	font-size: 17px;
+	border-right: 2px solid #EBEBEB;
+	border-radius: 0;
+	padding-right: 20px;
 }
 
 .header_button_support svg {
@@ -147,7 +153,7 @@
 .header_button_country {
 	/* position: relative; */
 	width: 70px;
-	margin-left: 27px;
+	margin-left: 10px;
 
 	background: none;
 }
@@ -176,10 +182,12 @@
 .header_button_currency {
 	width: 100px;
 	margin-left: 10px;
-
+	font-family: var(--font-family-rub);
 	background: none;
 
 	font-size: 17px;
+	letter-spacing: -0.5px;
+	margin-top: -0.5px;
 }
 
 /* end кнопка валюта */
@@ -187,14 +195,21 @@
 /* begin кнопка избранное */
 
 .header_button_liked {
-	width: 50px;
-	margin-left: 5px;
+	width: 70px;
+	padding-right: 0px;
+	margin-left: 0px;
 
 	background: none;
+	border-right: 2px solid #EBEBEB;
+	border-radius: 0;
+	font-weight: 900;
+	padding:  8px 8px 8px 0px;
+	
 }
 
 .header_button_liked svg {
-	margin-top: 5px;
+	margin-top: 4px;
+	margin-left: -1px;
 }
 
 /* end кнопка избранное */
@@ -203,8 +218,8 @@
 
 .header_button_enter {
 	width: 100px;
-	margin-top: -5px;
-	margin-left: 39.5px;
+	margin-top: -4px;
+	margin-left: 23px;
 
 	color: var(--blue);
 	background: none;

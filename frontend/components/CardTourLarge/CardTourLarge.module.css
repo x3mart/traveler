@@ -3,7 +3,7 @@
 	height: 280px;
 
 	border-radius: 8px 8px 0 0;
-	background: grey;
+	background: url(../../public/static-img/img\ \(3\).png);
 }
 
 .card_tour_image svg {
@@ -98,6 +98,10 @@
 	margin-bottom: 0;
 
 	letter-spacing: -0.6px;
+}
+
+.card_tour_content_guide_info_cost span {
+	font-family: var(--font-family-rub);
 }
 
 @media (min-width: 320px) and (max-width: 799px) {

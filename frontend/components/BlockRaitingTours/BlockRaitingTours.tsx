@@ -22,7 +22,7 @@ export const BlockRaitingTours = ({ block_style, children, className, ...props }
                             Самое популярное среди наших клиентов
                         </Htag>
                     </InfoBlock> 
-                    <CardCollection name_block='viewed' />
+                    <CardCollection name_block='rating' children={undefined} />
             </div> 
             
         </div>
