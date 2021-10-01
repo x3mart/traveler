@@ -16,12 +16,10 @@ export const LogoName = ({ color, children, href, className, ...props }: LogoNam
             href
                 ? <a href={href}>{children}</a>
                 : <>{children}</>
-        }   
-            {color !== 'logo_header' && <span className={cn(styles.arrow, {
-                [styles.down]: color == 'logo_footer'
-            })}>
-                <LogoNameIcon />
-            </span> }
+        }               
+            <span>
+                <LogoNameIcon />    
+            </span> 
             
             
         </div>
