@@ -31,3 +31,4 @@ export * from './BlockFeedback/BlockFeedback';
 export * from './CardFeedback/CardFeedback';
 export * from './BlockMoodTours/BlockMoodTours';
 export * from './BlockFindTour/BlockFindTour';
+export * from './BlockAboutUs/BlockAboutUs';

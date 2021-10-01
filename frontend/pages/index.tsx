@@ -2,7 +2,7 @@
 import React from 'react';
 import { BlockPresentation, BlockViewed, BlockPopularCountry, BlockRecomendation, 
         BlockAdvantage, BlockNewTour, BlockChangeCountry, BlockTypeTours, BlockRaitingTours, 
-        BlockTravelExperts, BlockSaleTours, BlockFeedback, BlockMoodTours, BlockFindTour } from '../components';
+        BlockTravelExperts, BlockSaleTours, BlockFeedback, BlockMoodTours, BlockFindTour, BlockAboutUs } from '../components';
 import { withLayout } from '../layout/Layout';
 
 
@@ -23,6 +23,7 @@ function Home(): JSX.Element {
         <BlockFeedback children={undefined} />
         <BlockMoodTours children={undefined} /> 
         <BlockFindTour children={undefined} />
+        <BlockAboutUs children={undefined} />
         
     </>
   );
