@@ -23,6 +23,7 @@ class UserAdmin(UserAdmin, TranslationAdmin):
             'classes': ('wide',),
             'fields': ('email', 'first_name_ru', 'password1', 'password2', 'avatar', 'is_superuser', 'is_staff', 'is_active'),
         }),
+    fieldsets = ((None, {'fields':('first_name', 'last_name', 'email', 'password', 'phone', 'avatar', 'is_staff', 'is_active')}),)
     ordering = ('-id',)
     list_display = ('email', 'full_name', 'is_staff')
 
