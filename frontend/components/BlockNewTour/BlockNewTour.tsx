@@ -22,7 +22,7 @@ export const BlockNewTour = ({ block_style, children, className, ...props }: Blo
                             Все самое новое от наших тревел-экспертов
                         </Htag>
                     </InfoBlock> 
-                    <CardCollection name_block='viewed' />
+                    <CardCollection name_block='viewed' children={undefined} />
             </div> 
             
         </div>
