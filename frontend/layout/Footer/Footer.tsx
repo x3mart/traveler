@@ -13,8 +13,8 @@ export const Footer = ({ className, ...props }: FooterProps): JSX.Element => {
             <div className={styles.wrapper} {...props}>
                 <div className={styles.col_1} {...props}>
                     <div className={styles.footer_logo_block} {...props}>
-                        <Logo />
-                        <LogoName color="logo_footer" />
+                        <Logo children={undefined} />
+                        <LogoName children={undefined} color="logo_footer" />
                     </div>
                     <P color='p_footer'>Traveler.market — это маркетплейс авторских туров от тревел-экспертов и частных независимых гидов. 
                     Авторские туры — это спонтанные и яркие возможности, предлагающие взять максимум от каждой точки маршрута. 
@@ -36,7 +36,7 @@ export const Footer = ({ className, ...props }: FooterProps): JSX.Element => {
                     <P color='p_footer' link='p_footer_link_col_2'>Связаться с нами</P>
                     <P color='p_footer' link='p_footer_link_col_2'>Организуйте авторский тур</P>
                     <P color='p_footer' link='p_footer_letter_spacing_margin_top'>Мы в социальных сетях</P>
-                    <Social size='social_wide' />
+                    <Social children={undefined} size='social_wide' />
                 </div>
 
                 <div className={styles.col_3} {...props}>

@@ -22,7 +22,7 @@ export const BlockPopularCountry = ({ block_style, children, className, ...props
                             Мы тщательно следим за открытием границ и подбираем проверенные варианты
                         </Htag>
                     </InfoBlock> 
-                    <CardCollection name_block='popular' />
+                    <CardCollection name_block='popular' children={undefined} />
             </div> 
             
         </div>
