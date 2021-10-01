@@ -39,6 +39,7 @@ class ExpertAdmin(UserAdmin, TranslationAdmin):
     list_editable =('is_active', 'email_confirmed', 'phone_confirmed', 'docs_confirmed', 'status_confirmed')
     fieldsets = ((None, {'fields':('first_name', 'last_name', 'email', 'password', 'phone', 'avatar', 'country', 'city', 'is_active', 'email_confirmed', 'phone_confirmed', 'docs_confirmed', 'status_confirmed', 'visited_countries', 'languages', 'about')}),)
     add_fieldsets = ((None, {'fields':('first_name_ru', 'last_name_ru', 'email', 'password1', 'password2', 'phone', 'avatar', 'country_ru', 'city_ru', 'is_active', 'email_confirmed', 'phone_confirmed', 'docs_confirmed', 'status_confirmed', 'visited_countries_ru', 'languages_ru', 'about_ru')}),)
+    list_filter = ('country', 'city', 'is_active', 'email_confirmed', 'phone_confirmed', 'docs_confirmed', 'status_confirmed')
 
     def get_avatar(self, obj):
         if obj.avatar:
