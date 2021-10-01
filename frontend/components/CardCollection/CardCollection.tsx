@@ -47,8 +47,8 @@ export const CardCollection = ({name_block, children, className, ...props }: Car
                     {...props}
                 >
                     {children}
-                    <div className={styles.card_tour_arrow_left}><ArrowIconLeft /></div>
-                    <div className={styles.card_tour_arrow_right}><ArrowIconRight /></div>                    
+                    <div className={styles.card_personal_arrow_left}><ArrowIconLeft /></div>
+                    <div className={styles.card_personal_arrow_right}><ArrowIconRight /></div>                    
                     <CardTourLarge /> 
                     <CardTour />    
                 </div>;

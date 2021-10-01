@@ -1,35 +1,50 @@
-.card_tour {
+.card_feedback {
 	position: relative;
-}
-
-.card_tour_image {
-	width: 100%;
-	height: 200px;
-
-	border-radius: 8px 8px 0 0;
-	background: url(../../public/static-img/img\ \(1\).png);
-}
-
-/* .card_tour_image:nth-child(1) {
-
-	background: url(../../public/static-img/img.png);
-}
-
-.card_tour_image:nth-child(2) {
+	text-align: center;
 	
-	background: url(../../public/static-img/img\ \(1\).png);
 }
 
-.card_tour_image:nth-child(3) {
+.card_feedback h2 {
 
-	background: url(../../public/static-img/img\ \(2\).png);
-} */
+	font-weight: 600;
+	font-size: 16px;
+	line-height: 20px;
+	/* identical to box height */
 
-.card_tour_image svg {
+	text-align: center;
+
+	color: #000000;
+	margin-top: 50px;
+}
+
+.card_feedback h4 {
+
+	font-weight: normal;
+	font-size: 14px;
+	line-height: 17px;
+	text-align: center;
+
+	color: #000000;
+	margin-top: 20px;
+	padding: 0 40px 2px 40px;
+}
+
+.card_feedback_mounticon {
+	position: absolute;
+	top: 70px;
+}
+
+.card_feedback_image {
+	width: 125px;
+	height: 125px;
+	border-radius: 50%;
+	border-radius: 8px 8px 0 0;
+	background: url(../../public/Ellipse\ 14\ \(2\).svg);
+	margin: 0 auto;
 	position: relative;
-	top: 20px;
-	left: 308px;
+    top: 30px;
 }
+
 
 .card_tour_content {
 	padding: 18px;
