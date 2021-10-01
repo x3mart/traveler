@@ -1,0 +1,42 @@
+.block_viewed {
+	margin: 0 auto;
+	padding-top: 40px;
+	padding-bottom: 40px;
+
+	background: var(--background);
+	background-repeat: no-repeat;
+}
+
+.wrapper {
+	width: 1110px;
+	margin: 0 auto;
+
+	/* padding: 25px 0 25px 0; */
+}
+
+.mood_block {
+	display: flex;
+	color: #2AA2D6;
+	margin-top: -15px;	
+}
+
+.mood_block_item {
+	color: #2AA2D6;
+	width: 400px;
+	margin-right: 10px;
+}
+
+.mood_block_item h3 {
+	color: #2AA2D6;
+}
+
+@media (min-width: 320px) and (max-width: 799px) {
+	.wrapper {
+		width: unset;
+	}
+
+	.block_viewed {
+		padding-top: 17px;
+		padding-bottom: 17px;
+	}
+}
