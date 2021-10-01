@@ -12,25 +12,23 @@ def user_avatar_path(instance, filename):
     return 'avatars/{0}/{1}{2}'.format(slugify(unidecode(instance.full_name)), slugify(unidecode(name)), extension)
 
 class AccountManager(BaseUserManager):
-    def create_user(self, email, name, password=None, is_staff=False):
+    def create_user(self, email, password=None, is_staff=False):
         if not email:
             raise ValueError(_('Укажите Ваш e-mail'))
         
         email = self.normalize_email(email)
         user = self.model(
             email=email,
-            name=name,
             is_staff=is_staff
             )
         user.set_password(password)
         user.save()
         return user
 
-    def create_superuser(self, email, name, password):
+    def create_superuser(self, email, password):
         email = self.normalize_email(email)
         user = self.model(
             email=email,
-            name=name,
             is_staff = True,
             is_superuser = True,
             is_active = True

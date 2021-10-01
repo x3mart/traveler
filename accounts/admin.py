@@ -5,7 +5,6 @@ from django.utils.safestring import mark_safe
 from modeltranslation.forms import TranslationModelForm
 from django import forms
 from django.contrib.auth.admin import UserAdmin
-# from django.contrib.auth.forms import UserCreationForm
 
 
 class UserCreationForm(forms.ModelForm):
