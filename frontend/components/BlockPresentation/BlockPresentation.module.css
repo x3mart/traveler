@@ -6,6 +6,8 @@
 	background: url(../../public/img.png);
 	background-position-y: 100%;
 	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center; 
 }
 
 .presentation_block h1 {
@@ -16,7 +18,7 @@
 	letter-spacing: 1.5px;
 }
 
-.wrapper {
+.wrapper {	
 	width: 1110px;
 	margin: 0 auto;
 

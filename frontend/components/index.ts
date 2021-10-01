@@ -29,3 +29,4 @@ export * from './BlockSaleTours/BlockSaleTours';
 export * from './Sale/Sale';
 export * from './BlockFeedback/BlockFeedback';
 export * from './CardFeedback/CardFeedback';
+export * from './BlockMoodTours/BlockMoodTours';
