@@ -1,16 +1,15 @@
 import styles from './CardFeedback.module.css';
 import { CardFeedbackProps } from './CardFeedback.props';
 import cn from 'classnames';
-import { Tag, Htag } from '..';
-import StarIcon from '/public/Star.svg';
-import LikeIcon from '/public/Like.svg';
+import { Tag, Htag, Button } from '..';
+import MountainIcon from '/public/mountain.svg';
     
 
 
 export const CardFeedback = ({ block_style, children, className, ...props }: CardFeedbackProps): JSX.Element => {    
     return (
         <div
-            className={ cn(styles.card_tour, className, {
+            className={ cn(styles.card_feedback, className, {
                 [styles.card_tour]: block_style == 'card_tour',
             })}
             {...props}
@@ -19,7 +18,19 @@ export const CardFeedback = ({ block_style, children, className, ...props }: Car
                   
             {children}
             <Tag size='feedback'>
-                
+                <MountainIcon className={styles.card_feedback_mounticon} />
+                <div className={styles.card_feedback_image}>
+                                        
+                </div>
+                <Htag tag='h2'>
+                    Давид Исмаилов
+                </Htag>
+                <Htag tag='h4'>
+                    Маршрут "Аиды Дивы" построен по уму: день в море сразу после старта, и день в море перед финишем. 
+                    Так как возможных точек старта и финиша было две (Ла-Романа и Монтего-Бэй), то и дней в море, 
+                    соответственно, было четыре ...
+                </Htag>
+                <Button appearance='ghost' children={undefined}>Читать полностью</Button>
             </Tag>     
              
         </div>
