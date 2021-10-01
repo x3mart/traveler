@@ -22,7 +22,7 @@ export const BlockTypeTours = ({ block_style, children, className, ...props }: B
                         Мы разделили туры на типы чтобы вам было удобнее выбрать нужный
                         </Htag>
                     </InfoBlock> 
-                    <CardCollection name_block='type' />
+                    <CardCollection name_block='type' children={undefined} />
             </div> 
             
         </div>

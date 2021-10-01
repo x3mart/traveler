@@ -17,7 +17,7 @@ export const LogoName = ({ color, children, href, className, ...props }: LogoNam
                 ? <a href={href}>{children}</a>
                 : <>{children}</>
         }   
-            {color = 'logo_header' && <span className={cn(styles.arrow, {
+            {color !== 'logo_header' && <span className={cn(styles.arrow, {
                 [styles.down]: color == 'logo_footer'
             })}>
                 <LogoNameIcon />

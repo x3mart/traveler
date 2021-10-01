@@ -16,7 +16,7 @@ export const BlockPresentation = ({ block_style, children, className, ...props }
                 {children}
                 <Htag tag='h1'>traveler market - Маркетплейс авторских туров</Htag>
                 <Button appearance='button_ghost'>Как это работает?</Button>
-                <FormGetTour form_style='first_form_get_tour' />                   
+                <FormGetTour form_style='first_form_get_tour' children={undefined} />                   
             </div> 
             
         </div>

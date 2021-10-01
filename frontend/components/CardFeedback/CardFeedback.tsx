@@ -30,7 +30,7 @@ export const CardFeedback = ({ block_style, children, className, ...props }: Car
                     Так как возможных точек старта и финиша было две (Ла-Романа и Монтего-Бэй), то и дней в море, 
                     соответственно, было четыре ...
                 </Htag>
-                <Button appearance='ghost' children={undefined}>Читать полностью</Button>
+                <Button appearance='ghost'>Читать полностью</Button>
             </Tag>     
              
         </div>
