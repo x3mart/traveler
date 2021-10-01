@@ -22,7 +22,7 @@ export const BlockChangeCountry = ({ block_style, children, className, ...props 
                 {children}
                     <InfoBlock border_color='blue_left_border'>
                         <Htag tag='h2'>
-                            Мир большой, сделайте первый шаг к его покорению
+                            Мир большой, сделайте первый шаг к его покорению 
                         </Htag>
                         <Htag tag='h4'>
                             Континенты и страны у твоих ног

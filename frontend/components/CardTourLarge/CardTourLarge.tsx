@@ -24,8 +24,8 @@ export const CardTourLarge = ({ block_style, children, className, ...props }: Ca
                 </div>
                 <div className={styles.card_tour_content}>
                     <div className={styles.card_tour_content_place_info}>
-                        <Htag tag='h4'>Вьетнам</Htag>
-                        <Htag tag='h3'>Неизведанные места и тропы</Htag>
+                        <Htag tag='h4'>Армения</Htag>
+                        <Htag tag='h3'>По горам на велосипеде</Htag>
                     </div>
                     <div className={styles.card_tour_content_guide_info}>
                         <div className={styles.card_tour_content_guide_info_name}>
@@ -43,7 +43,7 @@ export const CardTourLarge = ({ block_style, children, className, ...props }: Ca
                         </div>
                         <div className={styles.card_tour_content_guide_info_cost}>
                             <Htag tag='h4'>7 дн. (21 - 28 мар)</Htag> 
-                            <Htag tag='h3'>от 80.000 {'\u20bd'}</Htag>
+                            <Htag tag='h3'>от 80.000 <span>{'\u20bd'}</span></Htag>
                         </div>
                     </div>
                 </div>

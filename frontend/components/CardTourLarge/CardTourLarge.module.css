@@ -1,30 +1,29 @@
-.card_tour {
-
-}
-
-.card_tour_image { 
+.card_tour_image {
 	width: 728px;
 	height: 280px;
-	border-radius: 8px 8px 0px 0px;
-	background: grey;
+
+	border-radius: 8px 8px 0 0;
+	background: url(../../public/static-img/img\ \(3\).png);
 }
 
-.card_tour_image svg{ 
+.card_tour_image svg {
 	position: relative;
-    left: 690px;
-    top: 20px;
+	top: 20px;
+	left: 690px;
 }
 
 .card_tour_content {
-	padding: 0px 18px 18px 18px;
 	position: relative;
+
+	padding: 0 18px 18px 18px;
 }
 
 .card_tour_content_place_info {
 	/* border-bottom: 1px solid #EBEBEB;  */
 	position: absolute;
 	top: -80px;
-    padding-bottom: 5px;
+
+	padding-bottom: 5px;
 }
 
 .card_tour_content_guide_info {
@@ -33,20 +32,24 @@
 }
 
 .card_tour_content_place_info h3 {
-	font-weight: 600;
-	font-size: 32px;
-	line-height: 20px;
 	margin-top: 15px;
+
 	color: var(--background);
+
+	font-size: 32px;
+	font-weight: 600;
+	line-height: 20px;
 }
 
 .card_tour_content_place_info h4 {
-	font-weight: 600;
-	font-size: 20px;
-	line-height: 15px;
-	margin-top: 0px;
-	margin-bottom: 0px;	
+	margin-top: 0;
+	margin-bottom: 0;
+
 	color: var(--background);
+
+	font-size: 20px;
+	font-weight: 600;
+	line-height: 15px;
 }
 
 .card_tour_content_guide_info_name {
@@ -56,9 +59,10 @@
 .card_tour_content_guide_info_name_avatar {
 	width: 40px;
 	height: 40px;
+	margin-top: 19px;
+
 	border-radius: 50%;
 	background: grey;
-	margin-top: 19px;
 }
 
 .card_tour_content_guide_info_name_raiting {
@@ -66,20 +70,18 @@
 	margin-left: 10px;
 }
 
-.card_tour_content_guide_info_name_raiting h4{
-	margin: 0px 0px 3px 0px;
+.card_tour_content_guide_info_name_raiting h4 {
+	margin: 0 0 3px 0;
+
 	font-size: 13px;
-	
 }
 
-.card_tour_content_guide_info_name_raiting svg{
-	margin: 0px 5px 0px 0px;
-	
+.card_tour_content_guide_info_name_raiting svg {
+	margin: 0 5px 0 0;
 }
 
-.card_tour_content_guide_info_name_raiting span{
-	margin: 0px 5px 0px 0px;
-	
+.card_tour_content_guide_info_name_raiting span {
+	margin: 0 5px 0 0;
 }
 
 .card_tour_content_guide_info_cost {
@@ -88,17 +90,22 @@
 
 .card_tour_content_guide_info_cost h3 {
 	margin-top: 2px;
+
 	letter-spacing: 1.7px;
 }
 
 .card_tour_content_guide_info_cost h4 {
-	margin-bottom: 0px;
+	margin-bottom: 0;
+
 	letter-spacing: -0.6px;
 }
 
-@media (min-width: 320px) and (max-width: 799px) {
+.card_tour_content_guide_info_cost span {
+	font-family: var(--font-family-rub);
+}
 
-	.card_tour_image { 
+@media (min-width: 320px) and (max-width: 799px) {
+	.card_tour_image {
 		width: 260px;
 		height: 140px;
 	}
@@ -106,49 +113,52 @@
 	.card_tour_content_place_info {
 		/* border-bottom: 1px solid #EBEBEB;  */
 		position: unset;
-		border-bottom: 1px solid #EBEBEB;
+
 		padding-bottom: 5px;
+
+		border-bottom: 1px solid #EBEBEB;
 	}
 
 	.card_tour_content_place_info h3 {
-		font-weight: 600;
-		font-size: 32px;
-		line-height: 20px;
 		margin-top: 15px;
-		color: var(--black);
-	}
-	
-	.card_tour_content_place_info h4 {
-		font-weight: 600;
-		font-size: 20px;
-		line-height: 15px;
-		margin-top: 0px;
-		margin-bottom: 0px;	
-		color: var(--black);
-	}
+		margin-top: -1px;
+		margin-bottom: 3px;
 
-	.card_tour_content_guide_info_name_raiting h4{
-		margin: 0px 0px 3px 0px;
-		font-size: 12px;
-		
-	}
+		color: var(--black);
 
-	.card_tour_content_place_info h3 {
+		font-size: 32px;
 		font-size: 14px;
+		font-weight: 600;
+		line-height: 20px;
 	}
-	
+
 	.card_tour_content_place_info h4 {
+		margin-top: 0;
+		margin-bottom: 0;
+
+		color: var(--black);
+
+		font-size: 20px;
 		font-size: 10px;
+		font-weight: 600;
+		line-height: 15px;
+	}
+
+	.card_tour_content_guide_info_name_raiting h4 {
+		margin: 0 0 3px 0;
+
+		font-size: 12px;
 	}
 
 	.card_tour {
 		margin-left: 15px;
 	}
 
-	.card_tour_image svg{ 
+	.card_tour_image svg {
 		position: relative;
-		left: 234px;
 		top: 9px;
+		left: 234px;
+
 		width: 16px;
 		height: 17px;
 	}
@@ -158,8 +168,7 @@
 	}
 
 	.card_tour_content_place_info h3 {
-		margin-top: -1px;
-		margin-bottom: 3px;
+
 	}
 
 	.card_tour_content_guide_info_name_avatar {
@@ -169,25 +178,22 @@
 	}
 
 	.card_tour_content_guide_info_name_raiting {
-		margin-top: 0px;
+		margin-top: 0;
 		margin-left: 10px;
 	}
 
 	.card_tour_content_guide_info_cost h3 {
-		margin-top: 0px;
+		margin-top: 0;
+
 		letter-spacing: 1.7px;
+		letter-spacing: 0;
 	}
-	
-	.card_tour_content_guide_info_cost h4 {		
-		margin-top: 0px;
+
+	.card_tour_content_guide_info_cost h4 {
+		margin-top: 0;
 	}
 
 	.card_tour_content_guide_info {
 		margin-top: 10px;
-	}
-
-	.card_tour_content_guide_info_cost h3 {
-		
-		letter-spacing: 0px;
 	}
 }
