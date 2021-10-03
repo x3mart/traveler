@@ -53,11 +53,13 @@
 	height: 52px;
 	padding: 17px;
 
+	letter-spacing: 0.4px;
+
 	color: #000;
 	border: 1px solid rgba(0, 0, 0, 0.25);
 	border-radius: 8px;
 	background: none;
-letter-spacing: 0.4px;
+
 	font-size: 14px;
 }
 
@@ -109,13 +111,13 @@ letter-spacing: 0.4px;
 .header_button_travel {
 	width: 140px;
 
+	margin-top: 0.5px;
+
 	margin-left: 20px;
 
 	background: none;
 
 	font-size: 16.5px;
-
-	margin-top: 0.5px;
 }
 
 /* end кнопка путешествия */
@@ -124,16 +126,17 @@ letter-spacing: 0.4px;
 
 .header_button_support {
 	width: 158px;
+	margin-top: 1px;
 
 	margin-left: 5px;
-	margin-top: 1px;
+	padding-right: 20px;
+
+	border-right: 2px solid #EBEBEB;
+	border-radius: 0;
 
 	background: none;
 
 	font-size: 17px;
-	border-right: 2px solid #EBEBEB;
-	border-radius: 0;
-	padding-right: 20px;
 }
 
 .header_button_support svg {
@@ -181,13 +184,16 @@ letter-spacing: 0.4px;
 
 .header_button_currency {
 	width: 100px;
+	margin-top: -0.5px;
 	margin-left: 10px;
-	font-family: var(--font-family-rub);
+
+	letter-spacing: -0.5px;
+
 	background: none;
 
+	font-family: var(--font-family-rub);
+
 	font-size: 17px;
-	letter-spacing: -0.5px;
-	margin-top: -0.5px;
 }
 
 /* end кнопка валюта */
@@ -196,15 +202,16 @@ letter-spacing: 0.4px;
 
 .header_button_liked {
 	width: 70px;
-	padding-right: 0px;
-	margin-left: 0px;
+	margin-left: 0;
+	padding: 8px 8px 8px 0;
+	padding-right: 0;
 
-	background: none;
 	border-right: 2px solid #EBEBEB;
 	border-radius: 0;
+
+	background: none;
+
 	font-weight: 900;
-	padding:  8px 8px 8px 0px;
-	
 }
 
 .header_button_liked svg {
@@ -255,7 +262,6 @@ letter-spacing: 0.4px;
 @media (min-width: 320px) and (max-width: 799px) {
 	.header_button_enter {
 		margin-top: -10px;
-		margin-left: 95px;
 
 		font-size: 13px;
 	}
@@ -278,7 +284,7 @@ letter-spacing: 0.4px;
 	.primary {
 		display: block;
 
-		width: 288px;
+		width: 100%;
 		height: 48px;
 
 		margin: 0 auto;
@@ -288,6 +294,9 @@ letter-spacing: 0.4px;
 		background: #2AA2D6;
 
 		font-size: 15px;
+		border-bottom: 1px solid #FFF;
+		border-left: 1px solid #FFF;
+		border-right: 1px solid #FFF;
 	}
 
 	.primary svg {
@@ -298,5 +307,25 @@ letter-spacing: 0.4px;
 		width: 14px;
 		height: 13.99px;
 		margin-right: 15px;
+	}
+
+	.ghost {
+		width: 230px;
+		height: 40px;
+		padding: 13px;
+		
+		font-size: 12.9px; 
+	}
+}
+
+@media (min-width: 799px) and (max-width: 1436px) {
+	.primary {
+		width: 240px;
+	}
+}
+
+@media (min-width: 1023px) and (max-width: 1110px) {
+	.header_button_enter {
+		margin-left: -10px;
 	}
 }

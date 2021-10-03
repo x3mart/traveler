@@ -1,12 +1,13 @@
 .block_viewed {
+	width: 100%;
+	max-width: 1440px;
 	margin: 0 auto;
 	padding-top: 40px;
 	padding-bottom: 40px;
-	width: 100%; 
-	max-width: 1440px;
-	background: url(../../public/findtour.svg); 
-	background-repeat: no-repeat;
+
 	color: var(--background);
+	background: url(../../public/findtour.svg);
+	background-repeat: no-repeat;
 }
 
 .wrapper {
@@ -16,38 +17,42 @@
 	/* padding: 25px 0 25px 0; */
 }
 
-.wrapper h2 {  
-	color: #fff;
+.wrapper h2 {
+	color: #FFF;
 }
 
-.wrapper h4 {  
-	color: #fff;
-	margin-bottom: 0px; 
+.wrapper h4 {
+	margin-bottom: 0;
+
+	color: #FFF;
 }
 
 .mood_block {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;
+
+	margin-top: -15px;
+
 	color: #2AA2D6;
-	margin-top: -15px;	
 }
 
 .mood_block_item {
-	color: #2AA2D6;
 	width: 255px;
 	margin-top: 16px;
-	
-	
+
+	color: #2AA2D6;
 }
 
 .mood_block_item h3 {
-	color: #2AA2D6;
+	margin-top: 0;
 	margin-bottom: 23px;
-	margin-top: 0px;
-	padding-top: 0px;
-	padding-bottom: 0px;
+	padding-top: 0;
+	padding-bottom: 0;
+
 	letter-spacing: 0;
+
+	color: #2AA2D6;
 }
 
 @media (min-width: 320px) and (max-width: 799px) {

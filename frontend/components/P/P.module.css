@@ -54,3 +54,9 @@
 		top: 350px;
 	}
 }
+@media (min-width: 560px) and (max-width: 799px) {
+	.p_footer_letter_spacing_margin_top {
+		position: relative;
+		top: 20px;
+	}
+}

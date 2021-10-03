@@ -4,7 +4,10 @@
 	width: 1110px;
 	margin: 0 auto;
 	padding: 25px 0 20px 0;
-	
+}
+
+.desktop_header_logo_burger {
+	display: flex;
 }
 
 .desktop_header_buttons {
@@ -18,10 +21,11 @@
 	display: none;
 }
 
-@media (min-width: 320px) and (max-width: 799px) {
+@media (min-width: 320px) and (max-width: 1023px) {
 	.wrapper {
 		width: unset;
 		padding: 14px 0 4px 16px;
+		justify-content: space-between;
 	}
 
 	.desktop_header_buttons {
@@ -30,5 +34,23 @@
 
 	.mobile_menu {
 		display: block;
+	}
+}
+
+@media (min-width: 1023px) and (max-width: 1049px) {
+	.desktop_header_buttons {
+		margin-left: 10px; 
+	}
+}
+
+@media (min-width: 1049px) and (max-width: 1110px) {
+	.desktop_header_buttons {
+		margin-left: 30px; 
+	}
+}
+
+@media (min-width: 1110px) and (max-width: 1160px) {
+	.desktop_header_buttons {
+		margin-left: 60px; 
 	}
 }

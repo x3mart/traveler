@@ -37,36 +37,40 @@
 }
 
 .card_collection_experts {
-	display: flex;
-	margin: 0 auto;
 	position: relative;
-	width: 1440px;
+
+	display: flex;
 	overflow: hidden;
-	
+
+	width: 1440px;
+	margin: 0 auto;
 }
 
 .card_collection_experts_block {
-	display: flex;
-	margin: 0 auto;
 	position: relative;
-	width: 1640px;
+
+	display: flex;
 	justify-content: space-between;
+
+	width: 1640px;
+	margin: 0 auto;
 	margin-left: -120px;
 }
 
 .card_tour_arrow_left {
 	position: absolute;
+	z-index: 1;
 	top: 121px;
 	left: -24px;
 
 	width: 48px;
 	height: 48px;
 
+	cursor: pointer;
+
 	border-radius: 50%;
 	background: #FFF;
 	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-	z-index: 1;
-	cursor: pointer;
 }
 
 .card_tour_arrow_left svg {
@@ -76,17 +80,18 @@
 
 .card_tour_arrow_right {
 	position: absolute;
+	z-index: 1;
 	top: 124px;
 	right: -24px;
 
 	width: 48px;
 	height: 48px;
 
+	cursor: pointer;
+
 	border-radius: 50%;
 	background: #FFF;
 	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-	z-index: 1;
-	cursor: pointer;
 }
 
 .card_tour_arrow_right svg {
@@ -96,17 +101,18 @@
 
 .card_personal_arrow_left {
 	position: absolute;
+	z-index: 1;
 	top: 121px;
 	left: -24px;
 
 	width: 48px;
 	height: 48px;
 
+	cursor: pointer;
+
 	border-radius: 50%;
 	background: #FFF;
 	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-	z-index: 1;
-	cursor: pointer;
 }
 
 .card_personal_arrow_left svg {
@@ -116,17 +122,18 @@
 
 .card_personal_arrow_right {
 	position: absolute;
+	z-index: 1;
 	top: 124px;
 	right: -24px;
 
 	width: 48px;
 	height: 48px;
 
+	cursor: pointer;
+
 	border-radius: 50%;
 	background: #FFF;
 	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-	z-index: 1;
-	cursor: pointer;
 }
 
 .card_personal_arrow_right svg {
@@ -136,17 +143,18 @@
 
 .card_expert_arrow_left {
 	position: absolute;
+	z-index: 1;
 	top: 143px;
 	left: 262px;
 
 	width: 48px;
 	height: 48px;
 
+	cursor: pointer;
+
 	border-radius: 50%;
 	background: #FFF;
 	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-	z-index: 1;
-	cursor: pointer;
 }
 
 .card_expert_arrow_left svg {
@@ -156,17 +164,18 @@
 
 .card_expert_arrow_right {
 	position: absolute;
+	z-index: 1;
 	top: 143px;
 	right: 220px;
 
 	width: 48px;
 	height: 48px;
 
+	cursor: pointer;
+
 	border-radius: 50%;
 	background: #FFF;
 	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-	z-index: 1;
-	cursor: pointer;
 }
 
 .card_expert_arrow_right svg {
@@ -174,20 +183,20 @@
 	margin-left: 20px;
 }
 
-
 .card_feedback_arrow_left {
 	position: absolute;
+	z-index: 1;
 	top: 170px;
 	left: -24px;
 
 	width: 48px;
 	height: 48px;
 
+	cursor: pointer;
+
 	border-radius: 50%;
 	background: #FFF;
 	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-	z-index: 1;
-	cursor: pointer;
 }
 
 .card_feedback_arrow_left svg {
@@ -197,17 +206,18 @@
 
 .card_feedback_arrow_right {
 	position: absolute;
+	z-index: 1;
 	top: 170px;
 	right: -25px;
 
 	width: 48px;
 	height: 48px;
 
+	cursor: pointer;
+
 	border-radius: 50%;
 	background: #FFF;
 	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-	z-index: 1;
-	cursor: pointer;
 }
 
 .card_feedback_arrow_right svg {
@@ -216,35 +226,34 @@
 }
 
 .card_collection_expert_card_hidden {
-	opacity: 0.5; 
+	opacity: 0.5;
 }
 
 .sale_cost_block {
 	position: absolute;
-	bottom: 22px;
 	right: 132px;
+	bottom: 22px;
 }
 
 .sale_cost {
-	font-weight: 600;
-	font-size: 12px;
-	line-height: 15px;
-	/* identical to box height */
-	text-decoration-line: line-through;
-
 	color: rgba(0, 0, 0, 0.25);
 
+	font-size: 12px;
+	font-weight: 600;
+	line-height: 15px;
+
+	/* identical to box height */
+	text-decoration-line: line-through;
 }
 
 .sale_cost_rub {
-	font-weight: 600;
-	font-size: 12px;
-	line-height: 15px;
 	/* identical to box height */
 
-	
-
 	color: rgba(0, 0, 0, 0.25);
+
+	font-size: 12px;
+	font-weight: 600;
+	line-height: 15px;
 }
 
 @media (min-width: 320px) and (max-width: 799px) {
@@ -272,5 +281,127 @@
 	.card_collection_type {
 		display: block;
 		flex-wrap: unset;
+	}
+
+	.card_collection_experts {
+		position: relative;
+	
+		display: flex;
+		overflow: hidden;
+	
+		width: unset;
+		margin: 0 auto;
+	}
+	
+	.card_collection_experts_block {
+		position: relative;
+	
+		display: flex;
+		justify-content: space-between;
+	
+		width: unset;
+		margin: 0 auto;
+		margin-left: 15px;
+	}
+
+	.card_expert_arrow_left {
+		display: none;
+	}
+	
+	
+	.card_expert_arrow_right {
+		display: none;
+	}
+
+	.card_collection_expert_card_hidden {
+		opacity: 1;
+	}
+
+	.card_feedback_arrow_left {
+		display: none;
+	}
+	
+	.card_feedback_arrow_right {
+		display: none;
+	}
+
+	.card_personal_arrow_right {
+		display: none;
+	}
+	
+	.card_personal_arrow_left {
+		display: none;
+	}
+}
+
+@media (min-width: 376px) and (max-width: 799px) {
+	.card_collection_popular {
+		display: flex;
+		flex-wrap: wrap;
+		margin-left: 15px;
+	}
+}
+
+@media (min-width: 440px) and (max-width: 799px) {
+	.card_collection_type {
+		display: flex;
+		flex-wrap: wrap;
+		margin-left: 15px;
+	}
+}
+
+@media (min-width: 560px) and (max-width: 799px) {
+	.card_feedback {
+		display: flex;
+		justify-content: unset;
+	}
+
+	.card_collection {
+		overflow: hidden;
+		display: flex;
+		justify-content: unset;
+	}
+}
+
+@media (min-width: 799px) and (max-width: 1160px) {
+	.card_tour_arrow_right {
+		display: block;
+		right: 0;
+	}
+
+	.card_tour_arrow_left {
+		display: block;
+		left: 0px;
+	}
+
+	.card_expert_arrow_left {
+		display: block;
+		left: 0px;
+	}
+	
+	
+	.card_expert_arrow_right {
+		display: block;
+		right: 0;
+	}
+
+	.card_feedback_arrow_left {
+		display: block;
+		left: 0px;
+	}
+	
+	.card_feedback_arrow_right {
+		display: block;
+		right: 0;
+	}
+
+	.card_personal_arrow_right {
+		display: block;
+		right: 0;
+	}
+	
+	.card_personal_arrow_left {
+		display: block;
+		left: 0px;
 	}
 }

@@ -4,10 +4,10 @@
 	margin: 0 auto;
 
 	background: url(../../public/img.png);
-	background-position-y: 100%;
 	background-repeat: no-repeat;
+	background-position: center;
+	background-position-y: 100%;
 	background-size: cover;
-	background-position: center; 
 }
 
 .presentation_block h1 {
@@ -18,7 +18,7 @@
 	letter-spacing: 1.5px;
 }
 
-.wrapper {	
+.wrapper {
 	width: 1110px;
 	margin: 0 auto;
 
@@ -42,9 +42,28 @@
 
 	.presentation_block h1 {
 		margin-top: 0;
-		margin-bottom: 21px;
+		margin-bottom: 20px;
 		padding-top: 30px;
 
+		letter-spacing: 0.85px;
+	}
+}
+
+@media (min-width: 799px) and (max-width: 1436px) {
+	.presentation_block {
+		width: unset;
+	}
+	.wrapper {
+		width: unset;
+	}
+
+	.presentation_block h1 {
+		margin-top: 0;
+		margin-bottom: 39px;
+		padding-top: 131px;
+	
 		letter-spacing: 1.5px;
+		padding-left: 15px;
+		padding-right: 15px;
 	}
 }
