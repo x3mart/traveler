@@ -6,16 +6,57 @@
 
 .second_form_get_tour {
 	display: flex;
-    border: 2px solid #ffffff;
+
 	margin-top: 100px;
+	margin-top: -3px;
+
+	
 	border-radius: 12px;
-	margin-top: -3px; 
 }
 
 @media (min-width: 320px) and (max-width: 799px) {
 	.first_form_get_tour {
 		display: block;
+		margin-top: 20px !important;
+		width: 90.5%;
+		margin: 0 auto;
+	}
 
-		margin-top: 20px;
+	.second_form_get_tour {
+		display: block;
+		
+		margin-top: 20px !important;
+		width: 90.5%;
+		margin: 0 auto; 
+		border-radius: 6px;
+	}
+}
+
+@media (min-width: 426px) and (max-width: 650px) {
+	.first_form_get_tour {
+		width: 69.5%;
+	}
+
+	.second_form_get_tour {
+		width: 69.5%;
+	}
+}
+
+@media (min-width: 651px) and (max-width: 799px) {
+	.first_form_get_tour {
+		width: 49.5%;
+	}
+
+	.second_form_get_tour {
+		width: 49.5%;
+	}
+}
+
+@media (min-width: 799px) and (max-width: 1436px) {
+	.first_form_get_tour {
+		display: flex;
+		width: 799px;
+		margin: 0 auto;
+		margin-top: 50px;
 	}
 }

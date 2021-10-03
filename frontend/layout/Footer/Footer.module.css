@@ -1,6 +1,6 @@
 .wrapper {
 	display: flex;
-
+	position: relative;
 	width: 1110px;
 	margin: 0 auto;
 }
@@ -67,12 +67,12 @@
 @media (min-width: 320px) and (max-width: 799px) {
 	.wrapper {
 		display: block;
-
+		position: relative;
 		width: unset;
 	}
 
 	.footer {
-		padding: 16px 25px 108px 0;
+		padding: 15px 25px 108px 0;
 	}
 
 	.footer p {
@@ -130,5 +130,14 @@
 		width: 280px;
 		margin-top: 0;
 		margin-bottom: 0;
+	}
+}
+
+@media (min-width: 560px) and (max-width: 799px) {
+	.col_3 {
+		
+		position: absolute;
+		top: 335px;
+    	left: 42%;
 	}
 }

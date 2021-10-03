@@ -1,6 +1,6 @@
 .rating {
 	position: absolute;
-	top: 0px;
+	top: 0;
 
 	width: 60px;
 	height: 60px;
@@ -27,4 +27,34 @@
 
 	font-size: 20px;
 	font-weight: 750;
+}
+
+@media (min-width: 320px) and (max-width: 799px) {
+	.rating {
+		position: absolute;
+		top: 0;
+		width: 49px;
+		height: 49px;
+		padding: 12px 12px 12px 11px;
+		border-radius: 8px 0;
+		background: #84BB59;
+	}
+
+	.rating h3 {
+		margin: 0;
+	
+		color: var(--background);
+	
+		font-size: 7.8px;
+		font-weight: 600; 
+	}
+	
+	.rating h4 {
+		margin: 0;
+	
+		color: var(--background);
+	
+		font-size: 18px;
+		font-weight: 750;
+	}
 }

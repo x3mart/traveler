@@ -1,10 +1,11 @@
 .sale {
 	position: absolute;
-	top: 0px;
+	top: 0;
 
 	width: 60px;
 	height: 60px;
 	padding: 17px 10px 10px 10px;
+
 	text-align: center;
 
 	border-radius: 8px 0;
@@ -28,4 +29,39 @@
 
 	font-size: 18px;
 	font-weight: 750;
+}
+
+@media (min-width: 320px) and (max-width: 799px) {
+	.sale {
+		position: absolute;
+		top: 0;
+	
+		width: 49px;
+		height: 48px;
+		padding: 12px 10px 10px 10px;
+	
+		text-align: center;
+	
+		border-radius: 8px 0;
+	
+		background: var(--orange);
+	}
+
+	.sale h3 {
+		margin: 0;
+	
+		color: var(--background);
+		margin-top: -3px;
+		font-size: 8px;
+		font-weight: 600;
+	}
+	
+	.sale h4 {
+		margin: 0;
+	    
+		color: var(--background);
+	
+		font-size: 13px;
+		font-weight: 750;
+	}
 }

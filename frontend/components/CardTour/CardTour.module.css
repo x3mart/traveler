@@ -7,7 +7,7 @@
 	height: 200px;
 
 	border-radius: 8px 8px 0 0;
-	background: url(../../public/static-img/img\ \(1\).png);
+	background: url(../../public/static-img/img1.png);
 }
 
 /* .card_tour_image:nth-child(1) {
@@ -16,7 +16,7 @@
 }
 
 .card_tour_image:nth-child(2) {
-	
+
 	background: url(../../public/static-img/img\ \(1\).png);
 }
 
@@ -73,7 +73,7 @@
 	margin-top: 19px;
 
 	border-radius: 50%;
-	background: url(../../public/static-img/Ellipse\ 14.png);
+	background: url(../../public/static-img/Ellipse14.png);
 }
 
 .card_tour_content_guide_info_name_raiting {
@@ -106,18 +106,20 @@
 }
 
 .card_tour_content_guide_info_cost h4 {
+	margin-top: 20px;
 	margin-bottom: 5px;
 
-	letter-spacing: -0.6px;
-	font-weight: 450;
-	font-size: 12px;
-	line-height: 15px;
 	/* identical to box height */
 
 	text-align: right;
-	margin-top: 20px;
+
+	letter-spacing: -0.6px;
 
 	color: rgba(0, 0, 0, 0.5);
+
+	font-size: 12px;
+	font-weight: 450;
+	line-height: 15px;
 }
 
 .card_tour_content_guide_info_cost span {
@@ -184,6 +186,7 @@
 
 	.card_tour_content_guide_info_cost h4 {
 		margin-top: 0;
+		margin-bottom: 0;
 	}
 
 	.card_tour_content_guide_info {

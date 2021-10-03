@@ -76,5 +76,56 @@
 
 	.change_country_block {
 		overflow: hidden;
+		margin-top: 41px;
+	}
+
+	.change_country_block_item {
+		width: 115px;
+    	height: 145px;
+		margin-left: 17px;
+		text-align: center;
+	}
+
+	.change_country_block_item_first_block {
+		width: 100%;
+		height: 104px;
+	}
+
+	.europe_icon {
+		margin-top: -10px;
+		width: 100px;
+		height: 100px;
+		margin-left: 9px;
+	}
+
+	.asia_icon {
+		margin-top: -10px;
+		margin-left: 13px;
+		width: 100px;
+		height: 100px;
+	}
+	
+	.africa_icon {
+		margin-top: 2px;
+		width: 100px;
+		height: 79px;
+	}
+	
+	.south_america_icon {
+		margin-top: 9px;
+		width: 100px;
+		height: 80px;
+	}
+	
+	.australia_icon {
+		margin-top: 9px;
+		width: 100px;
+		height: 80px;
+	}
+	
+	.north_america_icon {
+		margin-top: 9px;
+		width: 100px;
+		height: 80px;
 	}
 }

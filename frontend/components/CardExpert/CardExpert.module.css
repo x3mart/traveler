@@ -1,25 +1,27 @@
 .card_expert {
 	width: 255px;
-    height: 337px;	
+	height: 337px;
 	margin-right: 30px;
 }
 
 .card_expert_image {
 	width: 125px;
 	height: 125px;
-	
+	margin: 0 auto;
+
 	border-radius: 50%;
-	background: url(../../public/static-img/Ellipse\ 14\ \(1\).svg);
+	background: url(../../public/static-img/Ellipse14-1.svg);
 	background-repeat: no-repeat;
 	background-size: 100%;
-	margin: 0 auto;
 }
 
 .card_expert_name {
+	margin-top: 20px;
+
 	text-align: center;
+
 	font-size: 16px;
 	font-weight: 600;
-	margin-top: 20px;
 }
 
 .card_tour_image svg {
@@ -29,16 +31,14 @@
 }
 
 .card_expert_content {
-	
-	padding: 7px 20px 8px 20px;
 	display: flex;
 	justify-content: space-between;
+
+	padding: 7px 20px 8px 20px;
 }
 
 .card_expert_content_place_info {
 	padding-bottom: 5px;
-
-	
 }
 
 .card_expert_content_guide_info {
@@ -46,66 +46,80 @@
 }
 
 .card_expert_rating {
-	font-style: normal;
-	font-weight: normal;
-	font-size: 14px;
-	line-height: 17px;
-	padding-bottom: 0px;
 	margin-bottom: 10px;
+	padding-bottom: 0;
+
 	color: rgba(0, 0, 0, 0.5);
+
+	font-size: 14px;
+	font-weight: normal;
+	font-style: normal;
+	line-height: 17px;
 }
 
 .card_expert_feedback {
-	font-style: normal;
-	font-weight: normal;
-	font-size: 14px;
-	line-height: 17px;
-	padding-top: 0px;
-	margin-top: 0px;
-	margin-bottom: 0px;
+	margin-top: 0;
+	margin-bottom: 0;
+	padding-top: 0;
+
 	color: rgba(0, 0, 0, 0.5);
+
+	font-size: 14px;
+	font-weight: normal;
+	font-style: normal;
+	line-height: 17px;
 }
 
 .card_expert_active_tours {
-	font-style: normal;
-	font-weight: normal;
-	font-size: 14px;
-	line-height: 17px;
-	padding-top: 0px;
 	margin-top: 10px;
-	
+	padding-top: 0;
+
 	color: rgba(0, 0, 0, 0.5);
+
+	font-size: 14px;
+	font-weight: normal;
+	font-style: normal;
+	line-height: 17px;
 }
 
 .card_expert_rating_num {
-	font-weight: 600;
-	font-size: 14px;
-	line-height: 17px;
-	text-align: right;
-	color: #84BB59;
 	margin-bottom: 10px;
+
+	text-align: right;
+
+	color: #84BB59;
+
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 17px;
 }
 
 .card_expert_rating_num svg {
-	margin-right: 3px;
 	margin-top: 1px;
+	margin-right: 3px;
 }
 
 .card_expert_feedback_num {
+	margin-top: 0;
+	margin-bottom: 10px;
+
+	text-align: right;
+
+	color: #000;
+
 	font-size: 14px;
 	line-height: 17px;
-	text-align: right;
-	margin-top: 0px;
-	margin-bottom: 10px;
-	color: #000000;
 }
 
 .card_expert_active_tours_num {
+	margin-top: 0;
+
+	text-align: right;
+
+	color: #000;
+
 	font-size: 14px;
 	line-height: 17px;
-	text-align: right;
-	margin-top: 0px;
-	color: #000000;
 }
 
 .card_tour_content_place_info h3 {
@@ -135,7 +149,7 @@
 	margin-top: 19px;
 
 	border-radius: 50%;
-	background: url(../../public/static-img/Ellipse\ 14.png);
+	background: url(../../public/static-img/Ellipse14.png);
 }
 
 .card_tour_content_guide_info_name_raiting {
@@ -178,6 +192,12 @@
 }
 
 @media (min-width: 320px) and (max-width: 799px) {
+	.card_expert {
+		width: 186px;
+		height: 239px;
+		margin-right: 30px;
+	}
+
 	.card_tour_image {
 		width: 260px;
 		height: 140px;
@@ -241,5 +261,95 @@
 
 	.card_tour_content_guide_info {
 		margin-top: 10px;
+	}
+
+	.card_expert_image {
+		width: 80px;
+		height: 80px;
+	}
+
+	.card_expert_name {
+		margin-top: 18px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+	}
+
+	.card_expert_content {
+		display: flex;
+		justify-content: space-between;
+	
+		padding: 0px 10px 8px 10px;
+	}
+
+	.card_expert_rating {
+		margin-bottom: 10px;
+		padding-bottom: 0;
+		color: rgba(0, 0, 0, 0.5);
+		font-size: 13px;
+		font-weight: normal;
+		font-style: normal;
+		line-height: 17px;
+		margin-top: 13px;
+	}
+
+	.card_expert_feedback {
+		margin-top: 0;
+		margin-bottom: 0;
+		padding-top: 0;
+	
+		color: rgba(0, 0, 0, 0.5);
+	
+		font-size: 13px;
+		font-weight: normal;
+		font-style: normal;
+		line-height: 17px;
+	}
+	
+	.card_expert_active_tours {
+		margin-top: 10px;
+		padding-top: 0;
+	
+		color: rgba(0, 0, 0, 0.5);
+	
+		font-size: 12.5px;
+		font-weight: normal;
+		font-style: normal;
+		line-height: 17px;
+	}
+	
+	.card_expert_rating_num {
+		margin-bottom: 8px;
+		margin-top: 13px;
+		text-align: right;
+	
+		color: #84BB59;
+	
+		font-size: 14px;
+		font-weight: 600;
+		line-height: 17px;
+	}
+
+	.card_expert_feedback_num {
+		margin-top: 0;
+		margin-bottom: 10px;
+	
+		text-align: right;
+	
+		color: #000;
+	
+		font-size: 13px;
+		line-height: 17px;
+	}
+	
+	.card_expert_active_tours_num {
+		margin-top: 0;
+	
+		text-align: right;
+	
+		color: #000;
+	
+		font-size: 13px;
+		line-height: 17px;
 	}
 }

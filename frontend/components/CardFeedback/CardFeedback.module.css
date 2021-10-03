@@ -1,32 +1,36 @@
 .card_feedback {
 	position: relative;
+
 	text-align: center;
-	
 }
 
 .card_feedback h2 {
+	margin-top: 50px;
 
-	font-weight: 600;
-	font-size: 16px;
-	line-height: 20px;
 	/* identical to box height */
 
 	text-align: center;
 
-	color: #000000;
-	margin-top: 50px;
+	color: #000;
+
+	font-size: 16px;
+
+	font-weight: 600;
+	line-height: 20px;
 }
 
 .card_feedback h4 {
-
-	font-weight: normal;
-	font-size: 14px;
-	line-height: 17px;
-	text-align: center;
-
-	color: #000000;
 	margin-top: 20px;
 	padding: 0 40px 2px 40px;
+
+	text-align: center;
+
+	color: #000;
+
+	font-size: 14px;
+
+	font-weight: normal;
+	line-height: 17px;
 }
 
 .card_feedback_mounticon {
@@ -35,16 +39,18 @@
 }
 
 .card_feedback_image {
+	position: relative;
+	top: 30px;
+
 	width: 125px;
 	height: 125px;
+	margin: 0 auto;
+
 	border-radius: 50%;
 	border-radius: 8px 8px 0 0;
-	background: url(../../public/Ellipse\ 14\ \(2\).svg);
-	margin: 0 auto;
-	position: relative;
-    top: 30px;
+	background: url(../../public/Ellipse14-2.svg); 
+	background-size: 100%;
 }
-
 
 .card_tour_content {
 	padding: 18px;
@@ -88,7 +94,7 @@
 	margin-top: 19px;
 
 	border-radius: 50%;
-	background: url(../../public/static-img/Ellipse\ 14.png);
+	background: url(../../public/static-img/Ellipse14.png);
 }
 
 .card_tour_content_guide_info_name_raiting {
@@ -121,18 +127,20 @@
 }
 
 .card_tour_content_guide_info_cost h4 {
+	margin-top: 20px;
 	margin-bottom: 5px;
 
-	letter-spacing: -0.6px;
-	font-weight: 450;
-	font-size: 12px;
-	line-height: 15px;
 	/* identical to box height */
 
 	text-align: right;
-	margin-top: 20px;
+
+	letter-spacing: -0.6px;
 
 	color: rgba(0, 0, 0, 0.5);
+
+	font-size: 12px;
+	font-weight: 450;
+	line-height: 15px;
 }
 
 .card_tour_content_guide_info_cost span {
@@ -203,5 +211,46 @@
 
 	.card_tour_content_guide_info {
 		margin-top: 10px;
+	}
+
+	.card_feedback {
+		position: relative;
+	margin-left: 15px;
+		text-align: center;
+	}
+
+	.card_feedback_image {
+		background: url(../../public/Ellipse14-2.svg);
+		width: 80px;
+		height: 80px;
+		margin: 0 auto;
+		background-size: 100%;
+		top: 16px;
+	}
+
+	.card_feedback h2 {
+		margin-top: 30px;
+	margin-bottom: 0px;
+		/* identical to box height */
+	
+		text-align: center;
+	
+		color: #000;
+	
+		font-size: 14px;
+	
+		font-weight: 600;
+		line-height: 20px;
+	}
+	
+	.card_feedback h4 {
+		margin-top: 9px;
+		padding: 0 12px 2px 12px;
+		text-align: center;
+		color: #000;
+		font-size: 13px;
+		font-weight: normal;
+		line-height: 16px;
+		margin-bottom: 13px;
 	}
 }

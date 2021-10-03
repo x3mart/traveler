@@ -2,7 +2,7 @@ import styles from './CardFeedback.module.css';
 import { CardFeedbackProps } from './CardFeedback.props';
 import cn from 'classnames';
 import { Tag, Htag, Button } from '..';
-import MountainIcon from '/public/mountain.svg';
+// import MountainIcon from '/public/mountain.svg';
     
 
 
@@ -18,9 +18,9 @@ export const CardFeedback = ({ block_style, children, className, ...props }: Car
                   
             {children}
             <Tag size='feedback'>
-                <MountainIcon className={styles.card_feedback_mounticon} />
+                
                 <div className={styles.card_feedback_image}>
-                                        
+                    {/* <MountainIcon className={styles.card_feedback_mounticon} /> */}
                 </div>
                 <Htag tag='h2'>
                     Давид Исмаилов
