@@ -141,3 +141,10 @@
     	left: 42%;
 	}
 }
+
+@media (min-width: 799px) and (max-width: 1130px) {
+	.wrapper {
+		width: unset;
+		padding: 0px 10px 0px 10px;
+	}
+}

@@ -59,4 +59,11 @@
 		margin: 0 auto;
 		margin-top: 50px;
 	}
+
+	.second_form_get_tour {
+		display: flex;
+		width: 799px;
+		margin: 0 auto;
+		margin-top: 50px;
+	}
 }
