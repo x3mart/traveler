@@ -92,7 +92,7 @@
 	letter-spacing: -0.6px;
 }
 
-@media (min-width: 320px) and (max-width: 799px) {
+@media (min-width: 320px) and (max-width: 798.999px) {
 	.card_tour_image {
 		width: 260px;
 		height: 140px;
@@ -159,7 +159,7 @@
 	}
 }
 
-@media (min-width: 375px) and (max-width: 799px) {
+@media (min-width: 375px) and (max-width: 798.999px) {
 	.card_tour {
 		margin-left: unset;
 		width: 75%;
@@ -167,7 +167,7 @@
 	}
 }
 
-@media (min-width: 440px) and (max-width: 799px) {
+@media (min-width: 440px) and (max-width: 798.999px) {
 	.card_tour {
 		margin-left: unset;
 		width: 50%;

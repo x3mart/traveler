@@ -64,7 +64,7 @@
 	/* padding: 25px 0 25px 0; */
 }
 
-@media (min-width: 320px) and (max-width: 799px) {
+@media (min-width: 320px) and (max-width: 798.999px) {
 	.wrapper {
 		width: unset;
 	}
@@ -77,6 +77,7 @@
 	.change_country_block {
 		overflow: hidden;
 		margin-top: 41px;
+		overflow-x: auto;
 	}
 
 	.change_country_block_item {

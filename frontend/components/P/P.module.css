@@ -42,7 +42,7 @@
 	letter-spacing: 0.7px;
 }
 
-@media (min-width: 320px) and (max-width: 799px) {
+@media (min-width: 320px) and (max-width: 798.999px) {
 	.p_footer {
 		margin-left: ;
 
@@ -54,7 +54,7 @@
 		top: 350px;
 	}
 }
-@media (min-width: 560px) and (max-width: 799px) {
+@media (min-width: 560px) and (max-width: 798.999px) {
 	.p_footer_letter_spacing_margin_top {
 		position: relative;
 		top: 20px;

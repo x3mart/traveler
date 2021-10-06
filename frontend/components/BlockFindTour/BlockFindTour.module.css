@@ -55,7 +55,7 @@
 	color: #2AA2D6;
 }
 
-@media (min-width: 320px) and (max-width: 799px) {
+@media (min-width: 320px) and (max-width: 798.999px) {
 	.wrapper {
 		width: unset;
 	}
