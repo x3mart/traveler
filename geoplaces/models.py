@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
 class Region(models.Model):
-    name = models.CharField(_('Регион'), max_length=255)
+    name = models.CharField(_('Название'), max_length=255)
 
     def __str__(self):
         return self.name
@@ -13,7 +13,7 @@ class Region(models.Model):
         verbose_name_plural = _('Регионы')
 
 class Country(models.Model):
-    name = models.CharField(_('Страна'), max_length=255)
+    name = models.CharField(_('Название'), max_length=255)
 
     def __str__(self):
         return self.name
@@ -23,8 +23,8 @@ class Country(models.Model):
         verbose_name_plural = _('Страны')
 
 class City(models.Model):
-    name = models.CharField(_('Город'), max_length=255)
-    
+    name = models.CharField(_('Название'), max_length=255)
+
     def __str__(self):
         return self.name
     
