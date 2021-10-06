@@ -11,7 +11,7 @@
 	position: relative;
 
 	display: flex;
-
+	overflow-x: auto;
 	/* flex-wrap: wrap; */
 	justify-content: space-between;
 }
@@ -256,7 +256,7 @@
 	line-height: 15px;
 }
 
-@media (min-width: 320px) and (max-width: 799px) {
+@media (min-width: 320px) and (max-width: 798.999px) {
 	.card_tour_arrow_right {
 		display: none;
 	}
@@ -267,6 +267,7 @@
 
 	.card_collection {
 		overflow: hidden;
+		overflow-x: auto;
 	}
 
 	.card_collection_popular {
@@ -295,13 +296,16 @@
 	
 	.card_collection_experts_block {
 		position: relative;
-	
+		height: 260px;
 		display: flex;
 		justify-content: space-between;
 	
 		width: unset;
 		margin: 0 auto;
 		margin-left: 15px;
+		overflow-x: auto;
+		/* margin-top: 21px;*/
+    	margin-bottom: -20px;
 	}
 
 	.card_expert_arrow_left {
@@ -332,9 +336,13 @@
 	.card_personal_arrow_left {
 		display: none;
 	}
+
+	.sale_cost_block {
+		display: none;
+	}
 }
 
-@media (min-width: 376px) and (max-width: 799px) {
+@media (min-width: 376px) and (max-width: 798.999px) {
 	.card_collection_popular {
 		display: flex;
 		flex-wrap: wrap;
@@ -342,7 +350,7 @@
 	}
 }
 
-@media (min-width: 440px) and (max-width: 799px) {
+@media (min-width: 440px) and (max-width: 798.999px) {
 	.card_collection_type {
 		display: flex;
 		flex-wrap: wrap;
@@ -350,7 +358,7 @@
 	}
 }
 
-@media (min-width: 560px) and (max-width: 799px) {
+@media (min-width: 560px) and (max-width: 798.999px) {
 	.card_feedback {
 		display: flex;
 		justify-content: unset;

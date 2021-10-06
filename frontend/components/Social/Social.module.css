@@ -8,7 +8,7 @@
 	margin-top: 20px;
 }
 
-@media (min-width: 320px) and (max-width: 799px) {
+@media (min-width: 320px) and (max-width: 798.999px) {
 	.social_wide {
 		position: relative;
 		top: 344px;
@@ -23,7 +23,7 @@
 		margin-right: 0;
 	}
 }
-@media (min-width: 560px) and (max-width: 799px) {
+@media (min-width: 560px) and (max-width: 798.999px) {
 	.social_wide {
 		position: relative;
 		top: 40px;

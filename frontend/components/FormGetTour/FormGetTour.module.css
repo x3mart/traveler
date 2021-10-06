@@ -14,7 +14,7 @@
 	border-radius: 12px;
 }
 
-@media (min-width: 320px) and (max-width: 799px) {
+@media (min-width: 320px) and (max-width: 798.999px) {
 	.first_form_get_tour {
 		display: block;
 		margin-top: 20px !important;
@@ -42,7 +42,7 @@
 	}
 }
 
-@media (min-width: 651px) and (max-width: 799px) {
+@media (min-width: 651px) and (max-width: 798.999px) {
 	.first_form_get_tour {
 		width: 49.5%;
 	}

@@ -16,10 +16,10 @@ export const BlockSaleTours = ({ block_style, children, className, ...props }: B
                 {children}
                     <InfoBlock border_color='blue_left_border'>
                         <Htag tag='h2'>
-                            Путешествия на основании оценок и отзывов 
+                            Туры со скидками 
                         </Htag>
                         <Htag tag='h4'>
-                            Самое популярное среди наших клиентов
+                            Только сегодня уникальные предложения по доступным ценам
                         </Htag>
                     </InfoBlock> 
                     <CardCollection name_block='sales' children={undefined} />

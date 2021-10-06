@@ -12,6 +12,7 @@ export const CardTour = ({ block_style, children, className, ...props }: CardTou
         <div
             className={ cn(styles.card_tour, className, {
                 [styles.card_tour]: block_style == 'card_tour',
+                [styles.card_tour_border]: block_style == 'card_tour_border',
             })}
             {...props}
             

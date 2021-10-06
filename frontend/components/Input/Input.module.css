@@ -45,7 +45,7 @@
 	line-height: 22px;
 }
 
-@media (min-width: 320px) and (max-width: 799px) {
+@media (min-width: 320px) and (max-width: 798.999px) {
 	.place {
 		display: block;
 
@@ -63,7 +63,7 @@
 		border-top: 1px solid #FFF;
 		border-left: 1px solid #FFF;
 		border-right: 1px solid #FFF;
-
+		border-bottom: 1px solid #c4c4c4;
 
 		font-size: 13px;
 	}
@@ -82,8 +82,8 @@
 		background-repeat: no-repeat;
 		background-position-x: 16px;
 		background-position-y: 18px;
-		border-left: 1px solid #FFF;
-		border-right: 1px solid #FFF;
+		/* border-left: 1px solid #FFF;
+		border-right: 1px solid #FFF; */
 		font-size: 13px;
 	}
 }

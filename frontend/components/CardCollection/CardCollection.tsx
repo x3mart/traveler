@@ -77,9 +77,9 @@ export const CardCollection = ({name_block, children, className, ...props }: Car
                     <div className={styles.card_tour_arrow_left}><ArrowIconLeft /></div>
                     <div className={styles.card_tour_arrow_right}><ArrowIconRight /></div>  
                     {children}
-                    <CardTour><Rating children={undefined} /></CardTour>
-                    <CardTour><Rating children={undefined} /></CardTour>
-                    <CardTour><Rating children={undefined} /></CardTour>    
+                    <CardTour block_style='card_tour_border'><Rating children={undefined} /></CardTour>
+                    <CardTour block_style='card_tour_border'><Rating children={undefined} /></CardTour>
+                    <CardTour block_style='card_tour_border'><Rating children={undefined} /></CardTour>    
                 </div>;
         case 'experts':
           return <div
@@ -108,19 +108,19 @@ export const CardCollection = ({name_block, children, className, ...props }: Car
                     <div className={styles.card_tour_arrow_left}><ArrowIconLeft /></div>
                     <div className={styles.card_tour_arrow_right}><ArrowIconRight /></div>  
                     {children}
-                    <CardTour>
+                    <CardTour block_style='card_tour_border'>
                       <Sale children={undefined} />
                       <div className={styles.sale_cost_block}>
                           <span className={styles.sale_cost}>89.000 <span className={styles.sale_cost_rub}>{'\u20bd'}</span></span>
                       </div>                      
                     </CardTour>
-                    <CardTour>
+                    <CardTour block_style='card_tour_border'>
                       <Sale children={undefined} />
                       <div className={styles.sale_cost_block}>
                           <span className={styles.sale_cost}>89.000 <span className={styles.sale_cost_rub}>{'\u20bd'}</span></span>
                       </div>                      
                     </CardTour>
-                    <CardTour>
+                    <CardTour block_style='card_tour_border'>
                       <Sale children={undefined} />
                       <div className={styles.sale_cost_block}>
                           <span className={styles.sale_cost}>89.000 <span className={styles.sale_cost_rub}>{'\u20bd'}</span></span>

@@ -1,18 +1,11 @@
 @font-face {
 	font-family: 'AvenirNextCyr-Regular';
-	src: url('../styles//fonts/Avenir/AvenirNextCyr-Regular.otf'); /* IE 9 Compatibility Mode */
+	src: url('../styles//fonts/Avenir/AvenirNextCyr-Regular.otf'); 	
+}
 
-	/* src: */
-
-	/* url('../styles//fonts/avenirnextcyr-regular.eot?#iefix') format('embedded-opentype'), /* IE < 9 */
-
-	/* url('../styles//fonts/avenirnextcyr-regular.woff2') format('woff2'), /* Super Modern Browsers */
-
-	/* url('../styles//fonts/avenirnextcyr-regular.woff') format('woff'), /* Firefox >= 3.6, any other modern browser */
-
-	/* url('../styles//fonts/avenirnextcyr-regular.ttf') format('truetype'), /* Safari, Android, iOS */
-
-	/* url('../styles/fonts/avenirnextcyr-regular.svg#avenirnextcyr-regular') format('svg'); /* Chrome < 4, Legacy iOS */
+@font-face {
+	font-family: 'AvenirNextCyr-Bold';
+	src: url('../styles//fonts/Avenir/AvenirNextCyr-Bold.ttf'); 	
 }
 
 @font-face {
@@ -51,4 +44,5 @@ a {
 	--grey-light: #AAA;
 	--font-family: 'AvenirNextCyr-Regular';
 	--font-family-rub: 'SF';
+	--font-family-bold: 'AvenirNextCyr-Bold';
 }
