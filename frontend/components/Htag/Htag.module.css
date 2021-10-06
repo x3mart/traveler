@@ -5,9 +5,10 @@
 	color: #FFF;
 
 	font-size: 48px;
-	font-weight: 900;
+	/* font-weight: 900; */
 	font-style: normal;
 	line-height: 59px;
+	font-family: var(--font-family-bold);  
 }
 
 .h2 {
@@ -45,7 +46,7 @@
 	line-height: 29px;
 }
 
-@media (min-width: 320px) and (max-width: 799px) {
+@media (min-width: 320px) and (max-width: 798.999px) {
 	.h1 {
 		width: 256px;
 		margin: 0 auto;

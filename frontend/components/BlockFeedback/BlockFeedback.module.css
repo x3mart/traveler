@@ -18,7 +18,7 @@
 	/* padding: 25px 0 25px 0; */
 }
 
-@media (min-width: 320px) and (max-width: 799px) {
+@media (min-width: 320px) and (max-width: 798.999px) {
 	.wrapper {
 		width: unset;
 	}

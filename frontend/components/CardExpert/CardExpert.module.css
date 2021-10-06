@@ -191,7 +191,7 @@
 	font-family: var(--font-family-rub);
 }
 
-@media (min-width: 320px) and (max-width: 799px) {
+@media (min-width: 320px) and (max-width: 798.999px) {
 	.card_expert {
 		width: 186px;
 		height: 239px;

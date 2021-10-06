@@ -29,7 +29,7 @@
 	font-weight: 750;
 }
 
-@media (min-width: 320px) and (max-width: 799px) {
+@media (min-width: 320px) and (max-width: 798.999px) {
 	.rating {
 		position: absolute;
 		top: 0;

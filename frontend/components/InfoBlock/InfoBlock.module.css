@@ -28,14 +28,14 @@
 }
 
 .blue_left_border {
-	border-left: 4px solid #2AA2D6;
+	border-left: 4px solid #2AA2D6;	
 }
 
 .white_left_border {
 	border-left: 4px solid #FFF;
 }
 
-@media (min-width: 320px) and (max-width: 799px) {
+@media (min-width: 320px) and (max-width: 798.999px) {
 	.infoblock {
 		height: unset;
 		margin-bottom: 15px;
