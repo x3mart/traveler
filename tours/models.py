@@ -5,7 +5,7 @@ from unidecode import unidecode
 import os
 
 
-def property_image_path(instance, filename):
+def tour_image_path(instance, filename):
     name, extension = os.path.splitext(filename)
     return 'property/{0}/{1}{2}'.format(slugify(unidecode(instance.tour.name)), slugify(unidecode(name)), extension)
 
@@ -21,16 +21,9 @@ class TourType(models.Model):
         verbose_name_plural = _('Типы туров')
 
 
-class Tour(models.Model):
-    pass
-
-
-class TourImage(models.Model):
-    pass
-
-
 class PropertyType(models.Model):
     name = models.CharField(_('Название'), max_length=255)
+    tours = models.ManyToManyField('Tour', related_name='property_types')
 
     def __str__(self):
         return self.name
@@ -42,13 +35,48 @@ class PropertyType(models.Model):
 
 class PropertyImage(models.Model):
     name = models.CharField(_('Название'), max_length=255, null=True, blank=True)
-    description = models.TextField(_('Название'), null=True, blank=True)
-    image = models.ImageField(_('Фото'), upload_to=property_image_path, max_length=255)
-    tour = models.ForeignKey("Tour", verbose_name=_("Тур"), on_delete=models.CASCADE)
+    description = models.TextField(_('Описание'), null=True, blank=True)
+    image = models.ImageField(_('Фото'), upload_to=tour_image_path, max_length=255)
+    alt =  models.CharField(_('alt текст'), max_length=255, null=True, blank=True)
+    tour = models.ForeignKey("Tour", verbose_name=_("Тур"), on_delete=models.CASCADE, related_name='property_images')
     
     class Meta:
         verbose_name = _('Тип размещения')
         verbose_name_plural = _('Типы размещения')
+
+
+class Tour(models.Model):
+    is_draft = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=False)
+    moderation = models.BooleanField(default=False)
+    name = models.CharField(_('Название'), max_length=255)
+    basic_type = models.ForeignKey("TourType", verbose_name=_("Основной тип"), on_delete=models.CASCADE, related_name='tours_by_basic_type')
+    additional_types = models.ManyToManyField("TourType", verbose_name=_("Основной тип"), related_name='tours_by_additional_types')
+    region =  models.ForeignKey("geolplaces.Region", verbose_name=_("Регион"), on_delete=models.CASCADE, related_name='tours')
+    country =  models.ForeignKey("geolplaces.Country", verbose_name=_("Страна"), on_delete=models.CASCADE, related_name='tours')
+    start_city = models.ForeignKey("geolplaces.City", verbose_name=_("Город начала путешествия"), on_delete=models.CASCADE, related_name='tours_by_start_city')
+    finish_city = models.ForeignKey("geolplaces.City", verbose_name=_("Город завершения путешествия"), on_delete=models.CASCADE, related_name='tours_by_finish_city')
+    start_time = models.TimeField(_('Время прибытия'),)
+    finish_time = models.TimeField(_('Время завершения'),)
+    direct_link = models.BooleanField(_('Доступ по прямой ссылке'), default=False)
+    
+
+
+class TourImage(models.Model):
+    name = models.CharField(_('Название'), max_length=255, null=True, blank=True)
+    description = models.TextField(_('Описание'), null=True, blank=True)
+    image = models.ImageField(_('Фото'), upload_to=tour_image_path, max_length=255)
+    alt =  models.CharField(_('alt текст'), max_length=255, null=True, blank=True)
+    tour = models.ForeignKey("Tour", verbose_name=_("Тур"), on_delete=models.CASCADE, related_name='tour_images')
+
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        verbose_name = _('Фото тура')
+        verbose_name_plural = _('Фотографии туров')
+        ordering =  ['tour', '-id']
+
 
 
 class TourDay(models.Model):
@@ -68,4 +96,8 @@ class TourDay(models.Model):
 
 
 class TourDayImage(models.Model):
-    pass
+    name = models.CharField(_('Название'), max_length=255, null=True, blank=True)
+    description = models.TextField(_('Описание'), null=True, blank=True)
+    image = models.ImageField(_('Фото'), upload_to=tour_image_path, max_length=255)
+    alt =  models.CharField(_('alt текст'), max_length=255, null=True, blank=True)
+    tour_day = models.ForeignKey("TourDay", verbose_name=_("День тура"), on_delete=models.CASCADE)
