@@ -35,8 +35,8 @@ export const BlockMoodTours = ({ block_style, children, className, ...props }: B
                             <Htag tag='h3'>Девичник-туры</Htag>
                             <Htag tag='h3'>Детские лагеря</Htag>
                             <Htag tag='h3'>Джип-туры</Htag>                        
-                        </div>
-                        <div className={styles.mood_block_item} {...props}>          
+                        {/* </div>
+                        <div className={styles.mood_block_item} {...props}>           */}
                             <Htag tag='h3'>Железнодорожные туры</Htag>
                             <Htag tag='h3'>Йога-туры</Htag>
                             <Htag tag='h3'>Конные туры</Htag>
@@ -48,8 +48,8 @@ export const BlockMoodTours = ({ block_style, children, className, ...props }: B
                             <Htag tag='h3'>Обучающие туры</Htag>
                             <Htag tag='h3'>Оздоровительные туры</Htag>
                             <Htag tag='h3'>Паломнические туры</Htag>
-                        </div>
-                        <div className={styles.mood_block_item} {...props}> 
+                        {/* </div>
+                        <div className={styles.mood_block_item} {...props}>  */}
                             <Htag tag='h3'>Сафари-туры</Htag>
                             <Htag tag='h3'>Сёрфинг-туры</Htag>
                             <Htag tag='h3'>Спортивные туры</Htag>
@@ -61,8 +61,8 @@ export const BlockMoodTours = ({ block_style, children, className, ...props }: B
                             <Htag tag='h3'>Туры на море</Htag>
                             <Htag tag='h3'>Туры на полюс</Htag>
                             <Htag tag='h3'>Туры на яхте</Htag>
-                        </div>
-                        <div className={styles.mood_block_item} {...props}> 
+                        {/* </div>
+                        <div className={styles.mood_block_item} {...props}>  */}
                             <Htag tag='h3'>Туры с восхождением в горы</Htag>
                             <Htag tag='h3'>Туры с детьми</Htag>
                             <Htag tag='h3'>Фитнес-туры</Htag>

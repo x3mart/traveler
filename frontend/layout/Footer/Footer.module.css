@@ -53,13 +53,13 @@
 }
 
 .p_footer_block_second p:nth-child(1) {
-	width: 370px;
+	width: 100%;
 	margin-top: 0;
 	margin-bottom: 0;
 }
 
 .p_footer_block_second p:nth-child(2) {
-	width: 370px;
+	width: 100%;
 	margin-top: 0;
 	margin-bottom: 0;
 }
