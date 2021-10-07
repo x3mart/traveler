@@ -45,7 +45,7 @@ class PropertyImage(models.Model):
         verbose_name_plural = _('Типы размещения')
 
 
-class Tour(models.Model):
+class TourBasic(models.Model):
     expert = models.ForeignKey("accounts.Expert", verbose_name=_("Основной тип"), on_delete=models.CASCADE, related_name='tours')
     is_draft = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
@@ -60,13 +60,13 @@ class Tour(models.Model):
     start_city = models.ForeignKey("geolplaces.City", verbose_name=_("Город начала путешествия"), on_delete=models.CASCADE, related_name='tours_by_start_city', null=True, blank=True)
     finish_city = models.ForeignKey("geolplaces.City", verbose_name=_("Город завершения путешествия"), on_delete=models.CASCADE, related_name='tours_by_finish_city', null=True, blank=True)
     direct_link = models.BooleanField(_('Доступ по прямой ссылке'), default=False)
-    
+
     class Meta:
         verbose_name = _('Тур')
         verbose_name_plural = _('Туры')
 
 
-class TourDateAndPrice(models.Model):
+class TourAdvancet(models.Model):
     start_time = models.TimeField(_('Время прибытия'), null=True, blank=True)
     finish_time = models.TimeField(_('Время завершения'), null=True, blank=True)
     instant_booking = models.BooleanField(_('Моментальное бронирование'), default=False)
