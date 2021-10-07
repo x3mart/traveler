@@ -1,9 +1,9 @@
-
 import React from 'react';
 import { BlockPresentation, BlockViewed, BlockPopularCountry, BlockRecomendation, 
         BlockAdvantage, BlockNewTour, BlockChangeCountry, BlockTypeTours, BlockRaitingTours, 
         BlockTravelExperts, BlockSaleTours, BlockFeedback, BlockMoodTours, BlockFindTour, BlockAboutUs } from '../components';
 import { withLayout } from '../layout/Layout';
+import axios from 'axios';
 
 
 function Home(): JSX.Element {   
@@ -30,3 +30,4 @@ function Home(): JSX.Element {
 }
 
 export default withLayout(Home); 
+

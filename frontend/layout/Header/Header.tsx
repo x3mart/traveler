@@ -6,6 +6,7 @@ import FlagIcon from '/public/Flag.svg';
 import ArrowIcon from '/public/polygon.svg';
 import MenuIcon from '/public/menu.svg';
 import cn from 'classnames';
+import Link from 'next/link';
 
 export const Header = ({ className, ...props }: HeaderProps): JSX.Element => {    
     return (
@@ -19,7 +20,11 @@ export const Header = ({ className, ...props }: HeaderProps): JSX.Element => {
             </div>
             <div className={styles.desktop_header_buttons} {...props}>
                 <Button appearance='header_button' traveler_suitcase = 'true'>Подберите мне тур</Button>
-                <Button appearance='header_button_travel' arrow='right'>Путешествия</Button>
+                <Button appearance='header_button_travel' arrow='right'>
+                    <Link href='/frontend/pages/travel/[alias].tsx'>
+                        Путешествия
+                    </Link> 
+                </Button>
                 <Button appearance='header_button_support' arrow='right'>Поддержка</Button>
                 <Button appearance='header_button_country'><FlagIcon className={styles.flag} {...props}/><ArrowIcon /></Button>
                 <Button appearance='header_button_currency' arrow='right'>{'\u20bd'} (Rub)</Button>

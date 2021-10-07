@@ -21,6 +21,7 @@
 @media (min-width: 320px) and (max-width: 798.999px) {
 	.wrapper {
 		width: unset;
+		overflow-x: auto;
 	}
 
 	.block_viewed {
