@@ -46,20 +46,35 @@ class PropertyImage(models.Model):
 
 
 class Tour(models.Model):
+    expert = models.ForeignKey("accounts.Expert", verbose_name=_("Основной тип"), on_delete=models.CASCADE, related_name='tours')
     is_draft = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     moderation = models.BooleanField(default=False)
     name = models.CharField(_('Название'), max_length=255)
-    basic_type = models.ForeignKey("TourType", verbose_name=_("Основной тип"), on_delete=models.CASCADE, related_name='tours_by_basic_type')
+    basic_type = models.ForeignKey("TourType", verbose_name=_("Основной тип"), on_delete=models.CASCADE, related_name='tours_by_basic_type', null=True, blank=True)
     additional_types = models.ManyToManyField("TourType", verbose_name=_("Основной тип"), related_name='tours_by_additional_types')
-    region =  models.ForeignKey("geolplaces.Region", verbose_name=_("Регион"), on_delete=models.CASCADE, related_name='tours')
-    country =  models.ForeignKey("geolplaces.Country", verbose_name=_("Страна"), on_delete=models.CASCADE, related_name='tours')
-    start_city = models.ForeignKey("geolplaces.City", verbose_name=_("Город начала путешествия"), on_delete=models.CASCADE, related_name='tours_by_start_city')
-    finish_city = models.ForeignKey("geolplaces.City", verbose_name=_("Город завершения путешествия"), on_delete=models.CASCADE, related_name='tours_by_finish_city')
-    start_time = models.TimeField(_('Время прибытия'),)
-    finish_time = models.TimeField(_('Время завершения'),)
+    start_region =  models.ForeignKey("geolplaces.Region", verbose_name=_("Регион начала путешествия"), on_delete=models.CASCADE, related_name='tours_by_start_region', null=True, blank=True)
+    finish_region =  models.ForeignKey("geolplaces.Region", verbose_name=_("Регион завершения путешествия"), on_delete=models.CASCADE, related_name='tours_by_finish_region', null=True, blank=True)
+    start_country =  models.ForeignKey("geolplaces.Country", verbose_name=_("Страна начала путешествия"), on_delete=models.CASCADE, related_name='tours_by_start_country', null=True, blank=True)
+    finish_country =  models.ForeignKey("geolplaces.Country", verbose_name=_("Страна завершения путешествия"), on_delete=models.CASCADE, related_name='tours_by_finish_country', null=True, blank=True)
+    start_city = models.ForeignKey("geolplaces.City", verbose_name=_("Город начала путешествия"), on_delete=models.CASCADE, related_name='tours_by_start_city', null=True, blank=True)
+    finish_city = models.ForeignKey("geolplaces.City", verbose_name=_("Город завершения путешествия"), on_delete=models.CASCADE, related_name='tours_by_finish_city', null=True, blank=True)
     direct_link = models.BooleanField(_('Доступ по прямой ссылке'), default=False)
     
+    class Meta:
+        verbose_name = _('Тур')
+        verbose_name_plural = _('Туры')
+
+
+class TourDateAndPrice(models.Model):
+    start_time = models.TimeField(_('Время прибытия'), null=True, blank=True)
+    finish_time = models.TimeField(_('Время завершения'), null=True, blank=True)
+    instant_booking = models.BooleanField(_('Моментальное бронирование'), default=False)
+    members_number = models.PositiveIntegerField(_('Колличество мест'))
+    prepayment = models.PositiveIntegerField(_('Предоплата в %'), default=15)
+    postpayment = models.PositiveIntegerField(_('Дни внесения полной суммы до старта'), null=True, blank=True)
+    week_recurrent = models.BooleanField(_('Повторять еженедельно'), default=False)
+    month_recurrent = models.BooleanField(_('Повторять ежемесячно'), default=False)    
 
 
 class TourImage(models.Model):
