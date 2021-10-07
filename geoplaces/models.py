@@ -14,6 +14,7 @@ class Region(models.Model):
 
 class Country(models.Model):
     name = models.CharField(_('Название'), max_length=255)
+    region = models.ForeignKey('Region', on_delete=models.CASCADE, related_name='countries', verbose_name=_('Регион'),)
 
     def __str__(self):
         return self.name
@@ -24,6 +25,8 @@ class Country(models.Model):
 
 class City(models.Model):
     name = models.CharField(_('Название'), max_length=255)
+    country = models.ForeignKey('Country', on_delete=models.CASCADE, related_name='cities', verbose_name=_('Страна'))
+
 
     def __str__(self):
         return self.name
