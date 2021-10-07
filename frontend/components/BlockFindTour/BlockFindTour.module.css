@@ -1,13 +1,14 @@
 .block_viewed {
 	width: 100%;
-	max-width: 1440px;
+	/* max-width: 1440px; */
 	margin: 0 auto;
 	padding-top: 40px;
 	padding-bottom: 40px;
 
 	color: var(--background);
-	background: url(../../public/findtour.svg);
+	background: url(../../public/findtour.png);
 	background-repeat: no-repeat;
+	background-size: cover; 
 }
 
 .wrapper {
