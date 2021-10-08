@@ -24,10 +24,10 @@ export const BlockTravels = ({ block_style, children, className, ...props }: Blo
                                     Найден 2381 тур
                                 </Htag>
                             </div>            
-                            <Button className={styles.button_travel_filter_popular} {...props} appearance='header_button_travel' arrow='right'>Сначала популярные</Button>
+                            <Button className={styles.button_travel_filter_popular} appearance='header_button_travel' arrow='right'>Сначала популярные</Button>
                         </div>
                     </InfoBlock> 
-                    <CardCollection name_block='tour-page' children={undefined} />
+                    <CardCollection name_block='tour-page' children={undefined} />  
             </div> 
             
         </div>
