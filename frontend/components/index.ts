@@ -32,3 +32,7 @@ export * from './CardFeedback/CardFeedback';
 export * from './BlockMoodTours/BlockMoodTours';
 export * from './BlockFindTour/BlockFindTour';
 export * from './BlockAboutUs/BlockAboutUs';
+export * from './BlockFindTourWhite/BlockFindTourWhite';
+export * from './BlockBreadCrumbs/BlockBreadCrumbs';
+export * from './BlockFilters/BlockFilters';
+export * from './BlockTravels/BlockTravels';

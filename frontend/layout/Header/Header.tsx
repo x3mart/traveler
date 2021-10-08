@@ -12,16 +12,18 @@ export const Header = ({ className, ...props }: HeaderProps): JSX.Element => {
     return (
         <div className={styles.wrapper} {...props}>
             <div className={styles.desktop_header_logo_burger} {...props}>
-                <div className={styles.mobile_menu} {...props}>
-                    <MenuIcon />
-                </div>
-                <Logo children={undefined} />
-                <LogoName color="logo_header" children={undefined} />
+                
+                    <div className={styles.mobile_menu} {...props}>
+                        <MenuIcon />
+                    </div>                    
+                    <Logo children={undefined} /> 
+                    <LogoName color="logo_header" children={undefined} />
+                   
             </div>
             <div className={styles.desktop_header_buttons} {...props}>
                 <Button appearance='header_button' traveler_suitcase = 'true'>Подберите мне тур</Button>
                 <Button appearance='header_button_travel' arrow='right'>
-                    <Link href='/frontend/pages/travel/[alias].tsx'>
+                    <Link href='/tour/'>
                         Путешествия
                     </Link> 
                 </Button>

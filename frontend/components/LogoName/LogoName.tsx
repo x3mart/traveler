@@ -1,6 +1,7 @@
 import styles from './LogoName.module.css';
 import { LogoNameProps } from './LogoName.props';
 import LogoNameIcon from '/public/Logoname.svg';
+import Link from 'next/link';
 
 import cn from 'classnames';
 
@@ -17,9 +18,11 @@ export const LogoName = ({ color, children, href, className, ...props }: LogoNam
                 ? <a href={href}>{children}</a>
                 : <>{children}</>
         }               
-            <span>
-                <LogoNameIcon />    
-            </span> 
+            <Link href='/'>
+                <LogoNameIcon />
+            </Link>
+                    
+            
             
             
         </div>
