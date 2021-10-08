@@ -7,12 +7,14 @@ import LikeIcon from '/public/Like.svg';
     
 
 
-export const CardTour = ({ block_style, children, className, ...props }: CardTourProps): JSX.Element => {    
+export const CardTour = ({ block_style, block_width, children, className, ...props }: CardTourProps): JSX.Element => {    
     return (
         <div
             className={ cn(styles.card_tour, className, {
                 [styles.card_tour]: block_style == 'card_tour',
                 [styles.card_tour_border]: block_style == 'card_tour_border',
+                [styles.block_width_travel_page]: block_width == 'block_width_travel_page',
+                [styles.display_none]: block_width == 'display_none',
             })}
             {...props}
             

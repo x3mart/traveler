@@ -13,7 +13,6 @@
     border-radius: 4px;
     font-size: 12px;
     line-height: 15px;
-    /* identical to box height */
 
     text-align: center;
 
@@ -22,4 +21,13 @@
     margin-right: 8px;
     margin-bottom: 8px;
     cursor: pointer;
+}
+
+@media (min-width: 320px) and (max-width: 798.999px) {
+    .wrapper {
+        width: max-content;
+        flex-wrap: unset;
+        overflow-x: auto;
+        padding-left: 15px;
+    }
 }

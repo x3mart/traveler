@@ -1,0 +1,331 @@
+.button {
+	display: inline;
+
+	box-sizing: border-box;
+	width: 199px;
+	height: 40px;
+
+	cursor: pointer;
+	transition: all 0.5s;
+	text-align: center;
+
+	border: none;
+	border-radius: 4px;
+	background: var(--blue);
+
+	font-size: 18px;
+}
+
+/* begin синяя кнопка "Подобрать тур" */
+
+.primary {
+	width: 254px;
+	height: 80px;
+	padding: 23px 30px 29px 29px;
+	border: 1px solid #fff;
+	/* position: relative;
+    top: 3px; */
+
+	color: var(--background);
+	border-radius: 0 8px 8px 0;
+	background: var(--blue);
+
+	font-weight: 700;
+}
+
+.primary:hover {
+	background: var(--blue-hover);
+}
+
+.primary svg {
+	position: relative;
+	top: 5px;
+
+	margin-right: 15px;
+}
+
+/* end синяя кнопка "Подобрать тур" */
+
+/* begin белая кнопка "Читать полностью" */
+
+.ghost {
+	width: 255px;
+	height: 52px;
+	padding: 17px;
+
+	letter-spacing: 0.4px;
+
+	color: #000;
+	border: 1px solid rgba(0, 0, 0, 0.25);
+	border-radius: 8px;
+	background: none;
+
+	font-size: 14px;
+}
+
+/* end белая кнопка "Читать полностью" */
+
+/* begin синяя кнопка "Подберите мне тур" */
+
+.header_button {
+	position: relative;
+
+	padding-left: 37px;
+
+	letter-spacing: 0.2px;
+
+	color: var(--background);
+	border-radius: 4px;
+	background: var(--blue);
+
+	font-size: 13px;
+	font-weight: 700;
+}
+
+.header_button:hover {
+	background: var(--blue-hover);
+}
+
+.traveler_suitcase {
+	position: absolute;
+	top: 10px;
+	left: 20px;
+}
+
+/* end синяя кнопка "Подберите мне тур" */
+
+.arrow {
+	display: inline-block;
+
+	margin-left: 10px;
+}
+
+.down {
+	transition: all 0.5s;
+
+	/* transform: rotate(90deg); */
+}
+
+/* begin кнопка путешествия */
+
+.header_button_travel {
+	width: 140px;
+
+	margin-top: 0.5px;
+
+	margin-left: 20px;
+
+	background: none;
+
+	font-size: 16.5px;
+}
+
+/* end кнопка путешествия */
+
+/* begin кнопка поддержка */
+
+.header_button_support {
+	width: 158px;
+	margin-top: 1px;
+
+	margin-left: 5px;
+	padding-right: 20px;
+
+	border-right: 2px solid #EBEBEB;
+	border-radius: 0;
+
+	background: none;
+
+	font-size: 17px;
+}
+
+.header_button_support svg {
+	position: relative;
+	left: 2px;
+}
+
+.arr {
+	position: relative;
+	top: -1px;
+}
+
+/* end кнопка поддержка */
+
+/* begin кнопка страна */
+
+.header_button_country {
+	/* position: relative; */
+	width: 70px;
+	margin-left: 10px;
+
+	background: none;
+}
+
+.header_button_country svg:nth-child(1) {
+	position: relative;
+	top: 3px;
+}
+
+.header_button_country svg:nth-child(2) {
+	position: relative;
+	top: -3px;
+	left: 11px;
+}
+
+/* .flag {
+	position: relative;
+	top: 5px;
+} */
+
+
+/* end кнопка страна */
+
+/* begin кнопка валюта */
+
+.header_button_currency {
+	width: 100px;
+	margin-top: -0.5px;
+	margin-left: 10px;
+
+	letter-spacing: -0.5px;
+
+	background: none;
+
+	font-family: var(--font-family-rub);
+
+	font-size: 17px;
+}
+
+/* end кнопка валюта */
+
+/* begin кнопка избранное */
+
+.header_button_liked {
+	width: 70px;
+	margin-left: 0;
+	padding: 8px 8px 8px 0;
+	padding-right: 0;
+
+	border-right: 2px solid #EBEBEB;
+	border-radius: 0;
+
+	background: none;
+
+	font-weight: 900;
+}
+
+.header_button_liked svg {
+	margin-top: 4px;
+	margin-left: -1px;
+}
+
+/* end кнопка избранное */
+
+/* begin кнопка вход */
+
+.header_button_enter {
+	width: 100px;
+	margin-top: -4px;
+	margin-left: 23px;
+
+	color: var(--blue);
+	background: none;
+
+	font-size: 17px;
+	font-weight: 750;
+}
+
+/* end кнопка вход */
+
+/* Кнопка "Как это работае?" */
+
+.button_ghost {
+	display: block;
+
+	box-sizing: border-box;
+	width: 255px;
+	height: 52px;
+	margin: 0 auto;
+
+	color: var(--background);
+	border: 1px solid #FFF;
+	border-radius: 8px;
+
+	background: rgba(255, 255, 255, 0.1);
+
+	font-size: 16px;
+	font-weight: 750;
+}
+
+/* мобильная адаптация */
+
+@media (min-width: 320px) and (max-width: 798.999px) {
+	.header_button_enter {
+		margin-top: -10px;
+
+		font-size: 13px;
+	}
+
+	.button_ghost {
+		box-sizing: border-box;
+		width: 180px;
+		height: 40px;
+
+		border: 1px solid #FFF;
+		border-radius: 8px;
+
+		background: rgba(255, 255, 255, 0.1);
+
+		font-size: 13px;
+		font-weight: 750;
+		line-height: 16px;
+	}
+
+	.primary {
+		display: block;
+
+		width: 100%;
+		height: 48px;
+
+		margin: 0 auto;
+		padding: 16px 30px 29px 23px;
+
+		border-radius: 0 0 8px 8px;
+		background: #2AA2D6;
+
+		font-size: 15px;
+		border-bottom: 1px solid #FFF;
+		border-left: 1px solid #FFF;
+		border-right: 1px solid #FFF;
+	}
+
+	.primary svg {
+		position: relative;
+		top: 2px;
+		left: 5px;
+
+		width: 14px;
+		height: 13.99px;
+		margin-right: 15px;
+	}
+
+	.ghost {
+		width: 230px;
+		height: 40px;
+		padding: 13px;
+		
+		font-size: 12.9px; 
+	}
+}
+
+@media (min-width: 799px) and (max-width: 1436px) {
+	.primary {
+		width: 240px;
+	}
+}
+
+@media (min-width: 1023px) and (max-width: 1110px) {
+	.header_button_enter {
+		margin-left: -10px;
+	}
+}
