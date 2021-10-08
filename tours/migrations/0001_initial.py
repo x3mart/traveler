@@ -75,7 +75,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(blank=True, max_length=255, null=True, verbose_name='Название')),
                 ('description', models.TextField(blank=True, null=True, verbose_name='Название')),
-                ('image', models.ImageField(max_length=255, upload_to=tours.models.property_image_path, verbose_name='Фото')),
+                ('image', models.ImageField(max_length=255, upload_to=tours.models.tour_image_path, verbose_name='Фото')),
                 ('tour', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='tours.tour', verbose_name='Тур')),
             ],
             options={
