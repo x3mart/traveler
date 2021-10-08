@@ -146,21 +146,21 @@ export const CardCollection = ({name_block, children, className, ...props }: Car
                       {...props}
                   >
 
-                      <CardTour block_width="block_width_travel_page" block_style='card_tour_border' className={styles.tour_page_card} {...props} />
-                      <CardTour block_width="block_width_travel_page" block_style='card_tour_border' className={styles.tour_page_card} {...props} /> 
-                      <CardTour block_width="block_width_travel_page" block_style='card_tour_border' className={styles.tour_page_card} {...props} />     
-                      <CardTour block_width="block_width_travel_page" block_style='card_tour_border' className={styles.tour_page_card} {...props} />
-                      <CardTour block_width="block_width_travel_page" block_style='card_tour_border' className={styles.tour_page_card} {...props} /> 
-                      <CardTour block_width="block_width_travel_page" block_style='card_tour_border' className={styles.tour_page_card} {...props} /> 
-                      <CardTour block_width="block_width_travel_page" block_style='card_tour_border' className={styles.tour_page_card} {...props} />
-                      <CardTour block_width="block_width_travel_page" block_style='card_tour_border' className={styles.tour_page_card} {...props} /> 
-                      <CardTour block_width="block_width_travel_page" block_style='card_tour_border' className={styles.tour_page_card} {...props} /> 
-                      <CardTour block_width="block_width_travel_page" block_style='card_tour_border' className={styles.tour_page_card} {...props} />
-                      <CardTour block_width="display_none" block_style='card_tour_border' className={styles.tour_page_card} {...props} /> 
-                      <CardTour block_width="display_none" block_style='card_tour_border' className={styles.tour_page_card} {...props} /> 
-                      <CardTour block_width="display_none" block_style='card_tour_border' className={styles.tour_page_card} {...props} />
-                      <CardTour block_width="display_none" block_style='card_tour_border' className={styles.tour_page_card} {...props} /> 
-                      <CardTour block_width="display_none" block_style='card_tour_border' className={styles.tour_page_card} {...props} />                  
+                      <CardTour block_width="block_width_travel_page" block_style='card_tour_border' className={styles.tour_page_card} />
+                      <CardTour block_width="block_width_travel_page" block_style='card_tour_border' className={styles.tour_page_card} /> 
+                      <CardTour block_width="block_width_travel_page" block_style='card_tour_border' className={styles.tour_page_card} />     
+                      <CardTour block_width="block_width_travel_page" block_style='card_tour_border' className={styles.tour_page_card} />
+                      <CardTour block_width="block_width_travel_page" block_style='card_tour_border' className={styles.tour_page_card} /> 
+                      <CardTour block_width="block_width_travel_page" block_style='card_tour_border' className={styles.tour_page_card} /> 
+                      <CardTour block_width="block_width_travel_page" block_style='card_tour_border' className={styles.tour_page_card} />
+                      <CardTour block_width="block_width_travel_page" block_style='card_tour_border' className={styles.tour_page_card} /> 
+                      <CardTour block_width="block_width_travel_page" block_style='card_tour_border' className={styles.tour_page_card} /> 
+                      <CardTour block_width="block_width_travel_page" block_style='card_tour_border' className={styles.tour_page_card} />
+                      <CardTour block_width="display_none" block_style='card_tour_border' className={styles.tour_page_card} /> 
+                      <CardTour block_width="display_none" block_style='card_tour_border' className={styles.tour_page_card} /> 
+                      <CardTour block_width="display_none" block_style='card_tour_border' className={styles.tour_page_card} />
+                      <CardTour block_width="display_none" block_style='card_tour_border' className={styles.tour_page_card} /> 
+                      <CardTour block_width="display_none" block_style='card_tour_border' className={styles.tour_page_card} />                  
                   </div>;
           default:
           return <></>;
