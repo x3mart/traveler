@@ -9,7 +9,8 @@ export const FormGetTour = ({ form_style, className, children, ...props }: FormG
         <div
             className={ cn(styles.FormGetTour, className, {
                 [styles.first_form_get_tour]: form_style == 'first_form_get_tour',
-                [styles.second_form_get_tour]: form_style == 'second_form_get_tour'
+                [styles.second_form_get_tour]: form_style == 'second_form_get_tour',
+                [styles.third_form_get_tour]: form_style == 'third_form_get_tour'
             })}
             {...props}
         >

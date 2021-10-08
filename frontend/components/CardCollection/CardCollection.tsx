@@ -139,6 +139,28 @@ export const CardCollection = ({name_block, children, className, ...props }: Car
                     <CardFeedback />
                     <CardFeedback />                      
                 </div>;
+          case 'tour-page':
+            return <div
+                      className={ cn(styles.tour_page, className, {
+                      })}
+                      {...props}
+                  >
+                      <CardTour className={styles.tour_page_card} {...props} />
+                      <CardTour className={styles.tour_page_card} {...props} /> 
+                      <CardTour className={styles.tour_page_card} {...props} />     
+                      <CardTour className={styles.tour_page_card} {...props} />
+                      <CardTour className={styles.tour_page_card} {...props} /> 
+                      <CardTour className={styles.tour_page_card} {...props} /> 
+                      <CardTour className={styles.tour_page_card} {...props} />
+                      <CardTour className={styles.tour_page_card} {...props} /> 
+                      <CardTour className={styles.tour_page_card} {...props} /> 
+                      <CardTour className={styles.tour_page_card} {...props} />
+                      <CardTour className={styles.tour_page_card} {...props} /> 
+                      <CardTour className={styles.tour_page_card} {...props} /> 
+                      <CardTour className={styles.tour_page_card} {...props} />
+                      <CardTour className={styles.tour_page_card} {...props} /> 
+                      <CardTour className={styles.tour_page_card} {...props} />                  
+                  </div>;
           default:
           return <></>;
       }     

@@ -3,11 +3,12 @@
 	fill: #000;
 
 	margin-left: 10px;
+	cursor: pointer;
 }
 
 .logo_footer {
 	fill: #FFF;
-
+	cursor: pointer;
 	margin-left: 10px;
 }
 

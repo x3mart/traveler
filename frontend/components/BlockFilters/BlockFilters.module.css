@@ -1,0 +1,25 @@
+.wrapper {
+	width: 1110px;
+	margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;	
+    margin-bottom: 0px;
+}
+
+.filter_item {
+    background: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    border-radius: 4px;
+    font-size: 12px;
+    line-height: 15px;
+    /* identical to box height */
+
+    text-align: center;
+
+    color: #000000;
+    padding: 9px 20px 7px 20px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
