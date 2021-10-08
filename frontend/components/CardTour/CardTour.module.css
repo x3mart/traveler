@@ -134,9 +134,13 @@
 	font-family: var(--font-family-rub);
 }
 
+.block_width_travel_page {
+
+}
+
 @media (min-width: 320px) and (max-width: 798.999px) {
 	.card_tour_image {
-		width: 260px;
+		width: 100%;
 		height: 140px;
 	}
 
@@ -199,5 +203,14 @@
 
 	.card_tour_content_guide_info {
 		margin-top: 10px;
+	}
+
+	.block_width_travel_page {
+		width: 90%;
+		margin-bottom: 13px;
+	}
+
+	.display_none {
+		display: none;
 	}
 }

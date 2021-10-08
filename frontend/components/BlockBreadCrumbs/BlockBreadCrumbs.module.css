@@ -20,3 +20,18 @@
     text-decoration-line: underline;
     
 } 
+
+@media (min-width: 320px) and (max-width: 798.999px) {
+    .wrapper {
+        width: unset;
+        
+        margin-top: 15px;
+        margin-bottom: 15px;
+        
+    }
+
+    .breadcrumb_main {
+        padding-left: 15px;
+        
+    } 
+}
