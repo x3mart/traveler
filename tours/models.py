@@ -44,14 +44,14 @@ class TourBasic(models.Model):
 
 
 class TourAdvanced(models.Model):
-    basic_tour = models.ForeignKey("TourBasic", verbose_name=_("Тур основа"), on_delete=models.CASCADE, related_name='advanced_tours')
+    basic_tour = models.ForeignKey("TourBasic", verbose_name=_("Тур основа"), on_delete=models.CASCADE, related_name='advanced_tours', null=True, blank=True)
     start_time = models.TimeField(_('Время прибытия'), null=True, blank=True)
     finish_time = models.TimeField(_('Время завершения'), null=True, blank=True)
     instant_booking = models.BooleanField(_('Моментальное бронирование'), default=False)
     members_number = models.PositiveIntegerField(_('Колличество мест'))
     prepayment = models.PositiveIntegerField(_('Предоплата в %'), default=15)
     postpayment = models.PositiveIntegerField(_('Дни внесения полной суммы до старта'), null=True, blank=True)
-    team_member = models.ForeignKey('accounts.TeamMember', )
+    team_member = models.ForeignKey('accounts.TeamMember', verbose_name=_("Гид"), on_delete=models.CASCADE, related_name='advanced_tours', null=True, blank=True)
     
 
 
