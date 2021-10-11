@@ -22,7 +22,7 @@ class TourType(models.Model):
 
 
 class TourBasic(models.Model):
-    expert = models.ForeignKey("accounts.Expert", verbose_name=_("Основной тип"), on_delete=models.CASCADE, related_name='tours')
+    expert = models.ForeignKey("accounts.Expert", verbose_name=_('Эксперт'), on_delete=models.CASCADE, related_name='tours')
     is_draft = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     moderation = models.BooleanField(default=False)
@@ -36,21 +36,23 @@ class TourBasic(models.Model):
     start_city = models.ForeignKey("geoplaces.City", verbose_name=_("Город начала путешествия"), on_delete=models.CASCADE, related_name='tours_by_start_city', null=True, blank=True)
     finish_city = models.ForeignKey("geoplaces.City", verbose_name=_("Город завершения путешествия"), on_delete=models.CASCADE, related_name='tours_by_finish_city', null=True, blank=True)
     direct_link = models.BooleanField(_('Доступ по прямой ссылке'), default=False)
-
+    week_recurrent = models.BooleanField(_('Повторять еженедельно'), default=False)
+    month_recurrent = models.BooleanField(_('Повторять ежемесячно'), default=False)
     class Meta:
         verbose_name = _('Тур')
         verbose_name_plural = _('Туры')
 
 
 class TourAdvanced(models.Model):
+    basic_tour = models.ForeignKey("TourBasic", verbose_name=_("Тур основа"), on_delete=models.CASCADE, related_name='advanced_tours')
     start_time = models.TimeField(_('Время прибытия'), null=True, blank=True)
     finish_time = models.TimeField(_('Время завершения'), null=True, blank=True)
     instant_booking = models.BooleanField(_('Моментальное бронирование'), default=False)
     members_number = models.PositiveIntegerField(_('Колличество мест'))
     prepayment = models.PositiveIntegerField(_('Предоплата в %'), default=15)
     postpayment = models.PositiveIntegerField(_('Дни внесения полной суммы до старта'), null=True, blank=True)
-    week_recurrent = models.BooleanField(_('Повторять еженедельно'), default=False)
-    month_recurrent = models.BooleanField(_('Повторять ежемесячно'), default=False)
+    team_member = models.ForeignKey('accounts.TeamMember', )
+    
 
 
 class PropertyType(models.Model):

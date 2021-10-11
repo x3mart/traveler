@@ -83,11 +83,31 @@ class Expert(User):
     docs_confirmed = models.BooleanField(_('Документы подтверждены'), default=False)
     status_confirmed = models.BooleanField(_('Статус подтвержден'), default=False)
 
-
     class Meta:
         verbose_name = _('Эксперт')
         verbose_name_plural = _('Эксперты')
         ordering = ['-id']
+    
+    def __str__(self):
+        return self.full_name
+
+
+class TeamMember(models.Model):
+    first_name = models.CharField(_('Имя'), max_length=255,  null=True, blank=True,)
+    last_name = models.CharField(_('Фамилия'), max_length=255, null=True, blank=True,)
+    avatar = models.ImageField(upload_to=user_avatar_path, null=True, blank=True,)
+    languages = models.CharField(_('Языки'), max_length=255, null=True, blank=True)
+    about = models.TextField(_('О себе'), null=True, blank=True)
+    expert = models.ForeignKey('Expert', on_delete=models.CASCADE, null=True, blank=True, verbose_name=_('Эксперт'), related_name='team_members')
+
+    class Meta:
+        verbose_name = _('Член команды')
+        verbose_name_plural = _('Члены команды')
+        ordering = ['expert' ,'-id']
+    
+    @property
+    def full_name(self):
+        return f'{self.first_name} {self.last_name}'
     
     def __str__(self):
         return self.full_name
