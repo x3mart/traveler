@@ -1,0 +1,529 @@
+.block_viewed {
+	margin: 0 auto;
+	/* padding-top: 40px;
+	padding-bottom: 40px; */
+
+	/* background: var(--background-grey); */
+	background-repeat: no-repeat;
+}
+
+
+.wrapper {
+	width: 1110px;
+	margin: 0 auto;
+    margin-top: 20px;
+	padding-right: 25%;
+	/* padding: 25px 0 25px 0; */
+}
+
+.wrapper h2 {
+	font-weight: 450;
+	font-size: 24px;
+	line-height: 29px;
+	letter-spacing: 0.2px;
+	color: #000000;
+	margin-bottom: 0px;
+}
+
+.wrapper p {
+	margin-top: 10px;
+	margin-bottom: 18px;
+}
+
+.impression_block {
+	width: 687px;
+	columns: 2;
+	column-gap: 74px;
+}
+
+.impression_block_item {
+	display: flex;
+	font-weight: normal;
+	font-size: 14px;
+	line-height: 17px;
+
+	color: #000000;
+	margin-bottom: 20px;
+}
+
+.impression_block_item svg{
+	margin-right: 10px;
+}
+
+.overview_video_block {
+	background: url(../../public/Rectangle18.png);
+	width: 730px;
+	height: 400px;
+
+	border-radius: 8px;
+	margin-bottom: 24px;
+}
+
+.overview_video_block svg{
+	margin-left: 45.6%;
+	margin-top: 23.5%;
+	cursor: pointer;
+}
+
+.overview_photo_block_1 {
+	background: url(../../public/Rectangle19.png);
+	width: 730px;
+	height: 400px;
+
+	border-radius: 8px;
+	margin-bottom: 24px;
+}
+
+.overview_photo_block_2 {
+	background: url(../../public/Rectangle20.png);
+	width: 730px;
+	height: 400px;
+
+	border-radius: 8px;
+	margin-bottom: 22px;
+}
+
+.overview_photo_block_3 {
+	background: url(../../public/Rectangle21.png);
+	width: 730px;
+	height: 400px;
+
+	border-radius: 8px;
+	margin-bottom: 22px;
+}
+
+.overview_photo_block_4 {
+	background: url(../../public/Rectangle22.png);
+	width: 730px;
+	height: 400px;
+
+	border-radius: 8px;
+	margin-bottom: 20px;
+}
+
+.overview_photo_gallery {
+	margin-top: 35px;
+}
+
+.overview_photo_gallery_items {
+	display: flex;
+	flex-wrap: wrap;
+	width: 760px;
+	margin-top: 20px;
+}
+
+.overview_photo_gallery_item {
+	width: 350px;
+	height: 240px;
+	border-radius: 8px;
+	margin-top: 0px;
+	margin-bottom: 30px;
+	margin-right: 30px;
+	background: url(../../public/Rectangle2.png);
+}
+
+.rout_travel_block {
+	margin-top: 0px;
+}
+
+.rout_travel_block h2{
+	margin-top: 10px;
+}
+
+.rout_travel_block_item {
+	background: url(../../public/routtravel.png);
+	width: 730px;
+	height: 400px;
+	margin-top: 20px;
+}
+
+.rout_travel_block_info {
+	display: flex;
+	justify-content: space-between;
+}
+
+.rout_travel_block_info {
+	margin-top: 20px;
+}
+
+.rout_travel_block_info_start {
+	margin-right: 30px; 
+}
+
+.rout_travel_block_info_start_head {
+	font-weight: normal;
+	font-size: 14px;
+	line-height: 17px;
+
+	color: #000000;
+}
+
+.rout_travel_block_info_start_foot {
+	font-weight: 900;
+	font-size: 15.5px;
+	line-height: 17px;
+	letter-spacing: 0.5px;
+	color: #000000;
+}
+
+.rout_travels_day_block {
+	margin-top: 20px;
+}
+
+.rout_travels_day_block_question {
+	margin-top: 40px;
+	margin-bottom: 40px;
+}
+
+.rout_travels_day_block_question h2 {
+	margin-bottom: 18px;
+}
+
+.rout_travels_day_main_card {
+	width: 730px;
+	height: 620px;
+
+	background: #FFFFFF;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	box-sizing: border-box;
+	border-radius: 8px;
+	margin-bottom: 10px;
+}
+
+.rout_travels_day_main_card_question {
+	width: 730px;
+	height: 188px;
+
+	background: #FFFFFF;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	box-sizing: border-box;
+	border-radius: 8px;
+	margin-bottom: 10px;
+}
+
+.rout_travels_day_main_card_image {
+	width: 728px;
+	height: 400px;
+
+	background: url(../../public/Rectangle24.png);
+	border-radius: 8px 8px 0px 0px;
+}
+
+.rout_travels_day_main_card_info_header {
+	display: flex;
+	justify-content: space-between;
+	padding: 8px 18px 0px 19px;	
+}
+
+.rout_travels_day_main_card_info_header h2 {
+	font-weight: 750;
+	font-size: 16px;
+	line-height: 20px;
+	letter-spacing: 0.1px;
+	/* identical to box height */
+
+
+	color: #000000;
+}
+
+.rout_travels_day_main_card_info_header svg {
+	margin-top: 16px;
+}
+
+
+.rout_travels_day_main_card_info_text {
+	padding: 0px 50px 0px 19px;	
+}
+
+.rout_travels_day_main_card_info_text_pink {
+	padding: 12px 0px 40px 20px;
+	width: 690px;
+	height: 108px;
+	margin: 0 auto;
+
+
+	background: #FCF7F4;
+	border-radius: 8px;
+}
+
+.rout_travels_day_card {
+	width: 730px;
+	height: 60px;
+	
+	background: #FFFFFF;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	box-sizing: border-box;
+	border-radius: 8px;
+	margin-bottom: 10px;
+}
+
+.type_hotel_room {
+	margin-top: 42px;
+}
+
+.type_hotel_room h2 {
+	margin-bottom: 10px;
+}
+
+.type_hotel_room P {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	padding-left: 20px;
+}
+
+.gallery_hotel_room_items {
+	display: flex;
+	flex-wrap: wrap;
+	margin-top: 20px;
+	width: 760px;
+}
+
+.gallery_hotel_room_item {
+	width: 350px;
+	height: 240px;
+	border-radius: 8px;
+	margin-top: 0px;
+	margin-bottom: 30px;
+	margin-right: 30px;
+	background: url(../../public/Rectangle25.png);
+}
+
+.include_block {
+
+}
+
+.include_block h2 {
+	margin-top: 12px;
+}
+
+.items_canceled_block {
+	margin-top: 40px;
+}
+
+.items_included_block {
+	margin-top: 16px;
+}
+
+.items_included_block_cancel {
+	margin-top: 17px;
+}
+
+.items_included_block_item {
+	font-size: 14px;
+	line-height: 17px;
+	display: flex;
+	color: #000000;
+	margin-bottom: 17.4px;
+}
+
+.items_included_block_item svg {
+	margin-top: 2px;
+}
+
+.items_included_block_item p {
+	margin-top: 3px;
+	margin-left: 10px;
+	margin-bottom: 0px;
+}
+
+.aviasales_block {
+	width: 730px;
+	height: 196px;
+	margin-top: 39px;
+	background: url(../../public/Rectangle23.png);
+}
+
+.travel_expert_block {
+	margin-top: 41px;
+}
+
+.travel_expert_block_main {
+	width: 730px;
+	height: 277px;
+
+	background: #FFFFFF;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	box-sizing: border-box;
+	border-radius: 8px;
+	margin-top: 20px;
+}
+
+.card_expert_content_guide_name {
+	display: flex;
+	justify-content: space-between;
+	width: 690px;
+	margin: 0 auto;
+}
+
+.card_expert_content_guide_name h2{
+	font-weight: 600;
+	font-size: 16px;
+	line-height: 20px;
+	margin-top: 18px;
+	/* identical to box height */
+
+
+	color: #000000;
+}
+
+.card_expert_content_guide_info_block {
+	display: flex;
+	justify-content: space-between;
+    width: 708px;
+}
+
+.card_expert_content {
+	margin-top: 10px;
+	display: flex;
+	justify-content: space-between;
+
+	padding: 7px 20px 8px 20px;
+}
+
+.card_expert_content_place_info {
+	padding-bottom: 5px;
+
+}
+
+.card_expert_content_guide_info {
+	display: block;
+	margin-left: 20px;
+}
+
+.card_expert_rating {
+	margin-bottom: 10px;
+	padding-bottom: 0;
+
+	color: rgba(0, 0, 0, 0.5);
+
+	font-size: 14px;
+	font-weight: normal;
+	font-style: normal;
+	line-height: 17px;
+}
+
+.card_expert_feedback {
+	margin-top: 0;
+	margin-bottom: 0;
+	padding-top: 0;
+
+	color: rgba(0, 0, 0, 0.5);
+
+	font-size: 14px;
+	font-weight: normal;
+	font-style: normal;
+	line-height: 17px;
+}
+
+.card_expert_active_tours {
+	margin-top: 10px;
+	padding-top: 0;
+
+	color: rgba(0, 0, 0, 0.5);
+
+	font-size: 14px;
+	font-weight: normal;
+	font-style: normal;
+	line-height: 17px;
+}
+
+.card_expert_rating_num {
+	margin-bottom: 10px;
+
+	text-align: right;
+
+	color: #84BB59;
+
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 17px;
+}
+
+.card_expert_rating_num svg {
+	margin-top: 1px;
+	margin-right: 3px;
+}
+
+.card_expert_feedback_num {
+	margin-top: 0;
+	margin-bottom: 10px;
+
+	text-align: right;
+
+	color: #000;
+
+	font-size: 14px;
+	line-height: 17px;
+}
+
+.card_expert_active_tours_num {
+	margin-top: 0;
+
+	text-align: right;
+
+	color: #000;
+
+	font-size: 14px;
+	line-height: 17px;
+}
+
+.card_tour_content_place_info h3 {
+	margin-top: 5px;
+
+	font-size: 16px;
+	font-weight: 600;
+	line-height: 20px;
+}
+
+.card_tour_content_place_info h4 {
+	margin-top: 0;
+	margin-bottom: 0;
+
+	font-size: 12px;
+	font-weight: 750;
+	line-height: 15px;
+}
+
+.card_expert_content_guide_name_img {
+	background: url(../../public/ava.png);
+    width: 510px;
+    height: 125px;
+    margin-top: 18px;
+    margin-right: 16px;
+    background-repeat: no-repeat;
+}
+
+.card_expert_content_guide_button {
+	width: 270px;
+	height: 52px;
+	padding-top: 17px;
+	font-weight: 600;
+	font-size: 16px;
+	line-height: 20px;
+	/* identical to box height */
+	margin-top: 42px;
+
+	text-align: center;
+	
+	color: #FFFFFF;
+
+	background: #EF8F21;
+	border-radius: 8px;
+}
+@media (min-width: 320px) and (max-width: 798.999px) {
+	.wrapper {
+		width: unset;
+	}
+
+	.block_viewed {
+		padding-top: 17px;
+		padding-bottom: 15px;
+	}
+}
+
+@media (min-width: 799px) and (max-width: 1130px) {
+	.wrapper {
+		width: unset;
+		padding: 0px 10px 0px 10px;
+	}
+}

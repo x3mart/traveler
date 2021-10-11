@@ -4,6 +4,7 @@ import cn from 'classnames';
 import { CardTour, CardCountryTour, CardTourLarge, CardTypeTour, CardExpert, Rating, Sale, CardFeedback } from '../../components/';
 import ArrowIconLeft from '/public/left_arrow.svg';
 import ArrowIconRight from '/public/right_arrow.svg';
+import Link from 'next/link';
 
 export const CardCollection = ({name_block, children, className, ...props }: CardCollectionProps): JSX.Element => {    
     switch (name_block) {
@@ -145,8 +146,9 @@ export const CardCollection = ({name_block, children, className, ...props }: Car
                       })}
                       {...props}
                   >
-
-                      <CardTour block_width="block_width_travel_page" block_style='card_tour_border' className={styles.tour_page_card} />
+                      <Link href='/tour/detail-tour/'>
+                        <CardTour block_width="block_width_travel_page" block_style='card_tour_border' className={styles.tour_page_card} />
+                      </Link>
                       <CardTour block_width="block_width_travel_page" block_style='card_tour_border' className={styles.tour_page_card} /> 
                       <CardTour block_width="block_width_travel_page" block_style='card_tour_border' className={styles.tour_page_card} />     
                       <CardTour block_width="block_width_travel_page" block_style='card_tour_border' className={styles.tour_page_card} />
