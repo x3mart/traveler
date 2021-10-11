@@ -18,7 +18,7 @@ export const BlockBreadCrumbs = ({ block_style, children, margin, className, ...
                 {children}
                     {/* <div className={styles.breadcrumb_main} {...props}>Главная </div>
                     <div>&nbsp;-&nbsp;Путешествия</div> */}
-                    <Breadcrumbs useDefaultStyle rootLabel="Главная" replaceCharacterList="[{ from: '-', to: '-' }]" />
+                    <Breadcrumbs useDefaultStyle rootLabel="Главная" />
 
             </div> 
             
