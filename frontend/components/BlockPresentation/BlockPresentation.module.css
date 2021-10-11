@@ -18,6 +18,31 @@
 	/* letter-spacing: 1.5px; */
 }
 
+.presentation_block_another {
+	width: 100%;
+	height: 400px;
+	margin: 0 auto;
+
+	background: url(../../public/img-mount.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-position-y: 100%;
+	background-size: cover;
+	margin-top: -1px;
+}
+
+.presentation_block_another h1{
+	display: none;
+}
+
+.presentation_block_another button{
+	display: none;
+}
+
+.presentation_block_another div {
+	display: none;
+}
+
 .wrapper {
 	width: 1110px;
 	margin: 0 auto;
@@ -46,6 +71,11 @@
 		padding-top: 30px;
 
 		/* letter-spacing: 0.85px; */
+	}
+
+	.presentation_block_another {
+		width: unset;
+		height: 360px;
 	}
 }
 

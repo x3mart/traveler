@@ -1,0 +1,34 @@
+.wrapper {
+	width: 1110px;
+	margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;	
+    margin-bottom: 0px;
+    margin-top: 5px;
+}
+
+.filter_item {
+    background: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    border-radius: 4px;
+    font-size: 12px;
+    line-height: 15px;
+
+    text-align: center;
+
+    color: #000000;
+    padding: 9px 20px 7px 20px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+
+@media (min-width: 320px) and (max-width: 798.999px) {
+    .wrapper {
+        width: max-content;
+        flex-wrap: unset;
+        overflow-x: auto;
+        padding-left: 15px;
+    }
+}
