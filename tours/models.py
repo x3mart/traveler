@@ -3,6 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from django.template.defaultfilters import slugify
 from unidecode import unidecode
 import os
+from ckeditor_uploader.fields import RichTextUploadingField
 
 
 def tour_image_path(instance, filename):
@@ -27,8 +28,8 @@ class TourBasic(models.Model):
     is_active = models.BooleanField(default=False)
     moderation = models.BooleanField(default=False)
     name = models.CharField(_('Название'), max_length=255)
-    basic_type = models.ForeignKey("TourType", verbose_name=_("Основной тип"), on_delete=models.CASCADE, related_name='tours_by_basic_type', null=True, blank=True)
-    additional_types = models.ManyToManyField("TourType", verbose_name=_("Основной тип"), related_name='tours_by_additional_types')
+    basic_type = models.ForeignKey("TourType", verbose_name=_("Основной тип тура"), on_delete=models.CASCADE, related_name='tours_by_basic_type', null=True, blank=True)
+    additional_types = models.ManyToManyField("TourType", verbose_name=_("Дополнительные типы тура"), related_name='tours_by_additional_types', null=True, blank=True)
     start_region =  models.ForeignKey("geoplaces.Region", verbose_name=_("Регион начала путешествия"), on_delete=models.CASCADE, related_name='tours_by_start_region', null=True, blank=True)
     finish_region =  models.ForeignKey("geoplaces.Region", verbose_name=_("Регион завершения путешествия"), on_delete=models.CASCADE, related_name='tours_by_finish_region', null=True, blank=True)
     start_country =  models.ForeignKey("geoplaces.Country", verbose_name=_("Страна начала путешествия"), on_delete=models.CASCADE, related_name='tours_by_start_country', null=True, blank=True)
@@ -39,20 +40,31 @@ class TourBasic(models.Model):
     week_recurrent = models.BooleanField(_('Повторять еженедельно'), default=False)
     month_recurrent = models.BooleanField(_('Повторять ежемесячно'), default=False)
     class Meta:
-        verbose_name = _('Тур')
-        verbose_name_plural = _('Туры')
+        verbose_name = _('Тур основа')
+        verbose_name_plural = _('Туры основа')
 
 
 class TourAdvanced(models.Model):
-    basic_tour = models.ForeignKey("TourBasic", verbose_name=_("Тур основа"), on_delete=models.CASCADE, related_name='advanced_tours', null=True, blank=True)
-    start_time = models.TimeField(_('Время прибытия'), null=True, blank=True)
+    basic_tour = models.ForeignKey("TourBasic", verbose_name=_("Тур основа"), on_delete=models.CASCADE, related_name='advanced_tours')
+    start_date = models.TimeField(_('Дата начала'), null=True, blank=True)
+    finish_date = models.TimeField(_('Дата завершения'), null=True, blank=True)
+    start_time = models.TimeField(_('Время старта'), null=True, blank=True)
     finish_time = models.TimeField(_('Время завершения'), null=True, blank=True)
     instant_booking = models.BooleanField(_('Моментальное бронирование'), default=False)
     members_number = models.PositiveIntegerField(_('Колличество мест'))
     prepayment = models.PositiveIntegerField(_('Предоплата в %'), default=15)
     postpayment = models.PositiveIntegerField(_('Дни внесения полной суммы до старта'), null=True, blank=True)
     team_member = models.ForeignKey('accounts.TeamMember', verbose_name=_("Гид"), on_delete=models.CASCADE, related_name='advanced_tours', null=True, blank=True)
+    currency = models.ForeignKey('currencies.Currency', verbose_name=_("Влюта"), on_delete=models.CASCADE, related_name='advanced_tours', null=True, blank=True)
+    cost = models.DecimalField(_('Цена'), max_digits=12, decimal_places=2, null=True, blank=True)
     
+
+    def __str__(self):
+        return f'{self.basic_tour.name} {self.start_date} - {self.finish_date}'
+    
+    class Meta:
+        verbose_name = _('Тур доп сведения')
+        verbose_name_plural = _('Туры доп сведения')    
 
 
 class PropertyType(models.Model):
@@ -119,3 +131,7 @@ class TourDayImage(models.Model):
     image = models.ImageField(_('Фото'), upload_to=tour_image_path, max_length=255, null=True, blank=True)
     alt =  models.CharField(_('alt текст'), max_length=255, null=True, blank=True)
     tour_day = models.ForeignKey("TourDay", verbose_name=_("День тура"), on_delete=models.CASCADE, max_length=255, null=True, blank=True)
+
+    class Meta:
+        verbose_name = _('Фото дня тура')
+        verbose_name_plural = _('Фото дней туров')

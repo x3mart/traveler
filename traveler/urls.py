@@ -24,11 +24,13 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from django.conf.urls.i18n import i18n_patterns
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('i18n/', include('django.conf.urls.i18n')),
     path('api-auth/', include('rest_framework.urls')),
-    path('auth/', include('djoser.urls'))
+    path('auth/', include('djoser.urls')),
+    path('ckeditor/', include('ckeditor_uploader.urls')),
 ]
 
 urlpatterns += i18n_patterns(path('api/', include('accounts.urls')))

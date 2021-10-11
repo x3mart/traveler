@@ -5,6 +5,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 from django.template.defaultfilters import slugify
 from unidecode import unidecode
 import os
+from ckeditor.fields import RichTextField
 
 # Create your models here.
 def user_avatar_path(instance, filename):
@@ -77,7 +78,7 @@ class Expert(User):
     city  = models.CharField(_('Город'), max_length=100, null=True, blank=True)
     languages = models.CharField(_('Языки'), max_length=255, null=True, blank=True)
     visited_countries = models.CharField(_('Посещенные страны'), max_length=255, null=True, blank=True)
-    about = models.TextField(_('О себе'), null=True, blank=True)
+    about = RichTextField(_('О себе'), null=True, blank=True)
     email_confirmed = models.BooleanField(_('Email подтвержден'), default=False)
     phone_confirmed = models.BooleanField(_('Телефон подтвержден'), default=False)
     docs_confirmed = models.BooleanField(_('Документы подтверждены'), default=False)
