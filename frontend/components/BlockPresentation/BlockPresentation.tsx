@@ -8,10 +8,11 @@ export const BlockPresentation = ({ block_style, children, className, ...props }
         <div
             className={ cn(styles.BlockPresentation, className, {
                 [styles.presentation_block]: block_style == 'presentation_block',
+                [styles.presentation_block_another]: block_style == 'presentation_block_another',
             })}
             {...props}
         >
-            
+        
             <div className={styles.wrapper} {...props}>
                 {children}
                 <Htag tag='h1'>traveler market - Маркетплейс авторских туров</Htag>

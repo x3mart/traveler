@@ -33,6 +33,37 @@ a {
 	box-sizing: border-box;
 }
 
+ol {
+	display: flex;
+	list-style-type: none;
+	padding-left: 0;
+}
+
+ol li:before {
+    content:  "—";
+    position: relative;
+    left:     -5px;
+}
+
+ol li:nth-child(1):before {
+    content:  "";
+    position: relative;
+    left:     -5px;
+}
+
+li {
+	margin-right: 10px;
+	font-size: 12px;
+    line-height: 15px;
+	/* text-decoration: underline; */
+    /* identical to box height */
+
+    
+
+    color: rgba(0, 0, 0, 0.5);
+    letter-spacing: 0.3px;
+}
+
 :root {
 	--background: #FFF;
 	--background-grey: #F6F7F9;
