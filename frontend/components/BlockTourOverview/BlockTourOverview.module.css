@@ -16,6 +16,14 @@
 	/* padding: 25px 0 25px 0; */
 }
 
+.wrapper_custom {
+	width: 1110px;
+	margin: 0 auto;
+    margin-top: 20px;
+	padding-right: 25%;
+	/* padding: 25px 0 25px 0; */
+}
+
 .wrapper h2 {
 	font-weight: 450;
 	font-size: 24px;
@@ -140,11 +148,9 @@
 .rout_travel_block_info {
 	display: flex;
 	justify-content: space-between;
-}
-
-.rout_travel_block_info {
 	margin-top: 20px;
 }
+
 
 .rout_travel_block_info_start {
 	margin-right: 30px; 
@@ -512,18 +518,362 @@
 }
 @media (min-width: 320px) and (max-width: 798.999px) {
 	.wrapper {
-		width: unset;
+		width: 90%;
+		margin-top: 10px;
+		padding-right: 0px;
+	}
+
+	.wrapper_custom {
+		width: 100%;
+		margin-top: 10px;
+		padding-right: 0px;
 	}
 
 	.block_viewed {
-		padding-top: 17px;
-		padding-bottom: 15px;
+		padding-top: 0px;
+		padding-bottom: 0px;
 	}
+
+	.wrapper h2 {
+		font-size: 16px;
+		margin-top: 12px;
+	}
+
+	.wrapper p {
+		margin-top: 6px;
+		margin-bottom: 16px;
+		font-size: 13px;
+		line-height: 16px;
+	}
+
+	.overview_video_block {
+		width: 100%;
+		background-size: cover;
+		background-repeat: no-repeat;
+		height: 200px;
+		margin-bottom: 11px;
+		border-radius: 0px;
+	}
+
+	.overview_video_block svg{
+		margin-left: 43%;
+		margin-top: 21.5%;
+		cursor: pointer;
+		width: 40px;
+		
+	}
+
+	.overview_photo_block_1 {
+		width: 100%;
+		height: 200px;
+		border-radius: 4px;
+		margin-bottom: 16px;
+		background-size: cover;
+	}
+
+	.overview_photo_block_2 {
+		width: 100%;
+		height: 200px;
+		border-radius: 4px;
+		margin-bottom: 16px;
+		background-size: cover;
+	}
+	
+	.overview_photo_block_3 {
+		width: 100%;
+		height: 200px;
+		border-radius: 4px;
+		margin-bottom: 16px;
+		background-size: cover;
+	}
+	
+	.overview_photo_block_4 {
+		width: 100%;
+		height: 200px;
+		border-radius: 4px;
+		margin-bottom: 16px;
+		background-size: cover;
+	}
+
+	.overview_photo_gallery {
+		margin-top: -4px;
+	}
+
+	.overview_photo_gallery_items {
+		width: unset;
+		margin-top: 11px;
+	}
+
+	.overview_photo_gallery_item {
+		width: 159px;
+		height: 120px;
+		border-radius: 0px;
+		background-size: cover;
+		margin-right: 0;
+    	margin-bottom: 0;
+	}
+
+	.overview_photo_gallery_item:nth-child(9) {
+		display: none;
+	}
+
+	.rout_travel_block_item {
+		
+		width: 100%;
+		height: 200px;
+		margin-top: 20px;
+		background-size: cover;
+	}
+
+	
+	.rout_travel_block_info {
+		display: block;
+	}
+	
+	.rout_travel_block_info_start_head {
+		
+		font-size: 12px;
+	}
+	
+	.rout_travel_block_info_start_foot {
+	
+		font-size: 12px;
+	}
+
+	.rout_travel_block_info_start {
+		margin-right: 0px; 
+	}
+
+	.rout_travels_day_main_card_image {
+		width: 100%;
+		height: 200px;
+		background-size: cover;
+		border-radius: 0px;
+	}
+
+	.rout_travels_day_main_card {
+		width: 100%;
+		height: 517px;
+		border-radius: 0px;
+		margin-bottom: 0px;
+	}
+
+	.rout_travels_day_block {
+		margin-top: 14px;
+	}
+
+	.rout_travels_day_main_card_info_header {
+		padding: 5px 13px 14px 15px;
+	}
+
+	.rout_travels_day_main_card_info_header svg {
+		margin-top: 12px;
+		width: 16!important;
+	}
+
+	.rout_travels_day_main_card_info_header h2 {
+		font-weight: 750;
+		font-size: 13px;
+		line-height: 17px;
+		letter-spacing: 0.1px;
+		margin-bottom: 0px;
+		/* identical to box height */
+	
+	
+		color: #000000;
+	}
+
+	.rout_travels_day_main_card_info_text {
+		padding: 0px 8px 0px 14px;
+	}
+
+	.rout_travels_day_main_card_info_text p {
+		font-size: 12px;
+		margin-top: 8px;
+		line-height: 16px;
+	}
+
+	.rout_travels_day_card {
+		width: 100%;
+		margin-bottom: 0px;
+		height: unset;
+		border-radius: 0px;
+	}
+
+	.type_hotel_room {
+		margin-top: 0px;
+	}
+
+	.type_hotel_room h2 {
+		margin-bottom: 0px;
+	}
+
+	.type_hotel_room_text {
+		margin-top: 5px;
+	}
+
+	.type_hotel_room_text p{
+		margin-bottom: 0px;
+		margin-top: 0px;
+	}
+
+	.gallery_hotel_room_item {
+		width: 159px;
+		height: 120px;
+		border-radius: 0px;
+		margin-top: 0px;
+		margin-bottom: 0px;
+		margin-right: 0px;
+		background-size: cover;
+	}
+
+	.gallery_hotel_room_items {
+		margin-top: 13px;
+		width: unset;
+	}
+
+	.items_included_block {
+		margin-top: 9px;
+	}
+
+	.items_included_block_item {
+		font-size: 14px;
+		line-height: 17px;
+		display: flex;
+		color: #000000;
+		margin-bottom: 14px;
+	}
+	
+	.items_included_block_item svg {
+		margin-top: 2px;
+	}
+	
+	.items_included_block_item p {
+		margin-top: 3px;
+		margin-left: 10px;
+		margin-bottom: 0px;
+	}
+
+	.items_canceled_block {
+		margin-top: 10px;
+	}
+
+	.items_canceled_block h2 {
+		margin-top: -1px;
+	}
+
+	.items_included_block_cancel {
+		margin-top: 7px;
+	}
+
+	.aviasales_block {
+		width: 288px;
+		height: 358.99px;	
+		margin-top: 14px;
+		background: url(../../public/avisalesmob.png);
+	}
+
+	.travel_expert_block {
+		margin-top: 9px;
+	}
+
+	.travel_expert_block_main {
+		width: unset;
+		height: 447px;
+    	margin-top: 11px;
+	}
+
+	.card_expert_content_guide_name {
+		display: block;
+		width: unset;
+	}
+
+	.card_expert_content_guide_name_img {
+		background: url(../../public/avasmall.png);
+		width: 80px;
+		height: 80px;
+		margin: 0 auto;
+		margin-top: 15px;
+		background-repeat: no-repeat;
+	}
+
+	.card_expert_content_guide_name_about h2 {
+		font-size: 14px;
+		text-align: center;
+	}
+
+	.card_expert_content_guide_name_about p {
+		padding-left: 15px;
+		padding-right: 9px;
+		margin-top: 8px;
+	}
+
+	.card_expert_content_guide_info_block {
+		display: block;
+		width: unset;
+	}
+
+	.card_expert_content {
+		margin-top: 0px;
+		display: flex;
+		border-top: 1px solid #EBEBEB;
+		padding: 0px 16px 1px 14px;
+	}
+
+	.card_expert_rating {
+		margin-top: 15px;
+		
+		line-height: 10px;
+	}
+	
+	.card_expert_rating_num {
+		margin-top: 11px;
+		
+		line-height: 10px;
+	}
+
+	.card_expert_content_guide_button {
+		width: 256px;
+		height: 40px;
+		margin: 0 auto;
+		margin-top: -9px;
+		font-size: 14px;
+		padding-top: 11px;
+	}
+
+	.rout_travels_day_block_question {
+		margin-top: 0px;
+		margin-bottom: 40px;
+	}
+
+	.rout_travels_day_block_question h2 {
+		margin-left: 17px;
+		margin-top: 18px;
+	}
+
+	.rout_travels_day_main_card_question {
+		width: 100%;
+    	border-radius: 0px;
+	}
+
+	.rout_travels_day_main_card_info_text_pink {
+		padding: 12px 0px 40px 20px;
+		width: unset;
+		height: unset;
+		margin: 0 auto;
+		background: #FCF7F4;
+		border-radius: 0px;
+	}
+
+	.rout_travels_day_main_card_info_text_pink p{
+		font-size: 12px;
+	}
+	
 }
 
 @media (min-width: 799px) and (max-width: 1130px) {
 	.wrapper {
-		width: unset;
+		width: 90%;
 		padding: 0px 10px 0px 10px;
 	}
 }

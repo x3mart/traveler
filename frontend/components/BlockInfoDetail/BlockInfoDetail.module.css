@@ -26,7 +26,7 @@
 
 .detail_tour_block_info {
 	width: 80%;
-	/* margin-right: 50px; */
+	
 }
 
 .detail_tour_block_info h2 {
@@ -55,10 +55,12 @@
 	width: 20%;
 	text-align: center;
 	margin-top: -2px;
+	position: relative;
 }
 
 .detail_tour_block_raiting_num span{
 	margin-left: 10px;
+	
 }
 
 .raiting_star {
@@ -84,12 +86,62 @@
 
 @media (min-width: 320px) and (max-width: 798.999px) {
 	.wrapper {
-		width: unset;
+		width: 90%;
 	}
 
 	.block_viewed {
-		padding-top: 17px;
-		padding-bottom: 15px;
+		padding-top: 0px;
+		padding-bottom: 0px;
+	}
+
+	.detail_tour_block {
+		margin-top: 8px;
+		width: unset;
+		display: block;
+	}
+
+	.detail_tour_block_info h2 {
+		
+		font-size: 16px;
+		line-height: 20px;
+    	margin-top: 17px;
+		
+	}
+
+	.detail_tour_block_info h3 {
+		font-size: 13px;
+    	margin-top: 7px;
+		margin-bottom: 0px;
+	}
+
+	.detail_tour_block_info {
+		width: 100%;
+		
+	}
+
+	.detail_tour_block_raiting {
+		width: 100%;
+    	display: flex;
+	}
+
+	.raiting_star {
+		font-size: 13px;
+	}
+
+	.raiting_star_feedback {
+		font-size: 13px;
+		margin-left: 28px;
+	}
+
+	.detail_tour_block_raiting_num svg{
+		width: 14px;
+		position: absolute;
+		left: 26px;
+		top: 6px;
+	}
+
+	.detail_tour_block_raiting_num span{
+		margin-left: 0px;
 	}
 }
 
@@ -98,4 +150,5 @@
 		width: unset;
 		padding: 0px 10px 0px 10px;
 	}
+	
 }

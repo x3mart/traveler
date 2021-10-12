@@ -26,9 +26,16 @@
 
 @media (min-width: 320px) and (max-width: 798.999px) {
     .wrapper {
-        width: max-content;
-        flex-wrap: unset;
+        width: unset;
+        flex-wrap: wrap;
+        display: flex;
         overflow-x: auto;
         padding-left: 15px;
+        margin-top: 4px;
+    }
+
+    .filter_item {
+        padding: 9px 15px 7px 15px;
+        
     }
 }

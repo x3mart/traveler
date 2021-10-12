@@ -67,12 +67,45 @@
 
 @media (min-width: 320px) and (max-width: 798.999px) {
 	.wrapper {
-		width: unset;
+		width: 90%;
 	}
 
 	.block_viewed {
-		padding-top: 17px;
-		padding-bottom: 15px;
+		padding-top: 0px;
+		padding-bottom: 0px;
+	}
+
+	.comfort_block {
+		display: flex;
+		flex-wrap: wrap;
+		width: unset;
+		justify-content: space-between;
+		margin-top: 10px;
+	}
+
+	.comfort_block_item {
+		width: 139px;
+		height: 60px;
+		margin-bottom: 10px;
+	}
+
+	.comfort_block_item h3 {
+		font-size: 16px;
+		margin-top: 5px;
+	}
+
+	.comfort_block_item h4 {
+		margin-top: 1px;
+	}
+
+	.comfort_block_item_level {
+		margin-top: 15px;
+    	margin-bottom: 9px;
+	}
+
+	.comfort_block_item svg {
+		width: 22px;
+    	margin-top: 5px;
 	}
 }
 
