@@ -28,11 +28,16 @@
 
 @media (min-width: 320px) and (max-width: 798.999px) {
     .wrapper {
-        width: unset;
+        width: 90%;
         
-        margin-top: 15px;
-        margin-bottom: 15px;
+        margin-top: 6px;
+        margin-bottom: 0px;
         
+    }
+
+    .margin_second {
+        margin-top: 0px;
+        margin-bottom: 0px;
     }
 
     .breadcrumb_main {

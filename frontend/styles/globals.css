@@ -77,3 +77,9 @@ li {
 	--font-family-rub: 'SF';
 	--font-family-bold: 'AvenirNextCyr-Bold';
 }
+
+@media (min-width: 320px) and (max-width: 798.999px) {
+	ol {
+		margin-bottom: 0;
+	}
+}
