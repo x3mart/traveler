@@ -43,3 +43,4 @@ export * from './BlockBookmarks/BlockBookmarks';
 export * from './BlockImpression/BlockImpression';
 export * from './BlockTourOverview/BlockTourOverview';
 export * from './CardOnTop/CardOnTop';
+export * from './BlockExpertDetail/BlockExpertDetail';
