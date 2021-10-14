@@ -11,9 +11,15 @@ def tour_image_path(instance, filename):
     name, extension = os.path.splitext(filename)
     return 'property/{0}/{1}{2}'.format(slugify(unidecode(instance.tour.name)), slugify(unidecode(name)), extension)
 
+def tour_types_path(instance, filename):
+    name, extension = os.path.splitext(filename)
+    return 'tourtypespath/{0}/{1}{2}'.format(slugify(unidecode(instance.name)), slugify(unidecode(name)), extension)
+
 
 class TourType(models.Model):
     name = models.CharField(_('Название'), max_length=255)
+    image = models.ImageField(_("Фото"), upload_to=tour_types_path, max_length=255, null=True, blank=True)
+    alt =  models.CharField(_('alt текст'), max_length=255, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -25,9 +31,9 @@ class TourType(models.Model):
 
 class TourBasic(models.Model):
     expert = models.ForeignKey("accounts.Expert", verbose_name=_('Эксперт'), on_delete=models.CASCADE, related_name='tours')
-    is_draft = models.BooleanField(default=True)
+    is_draft = models.BooleanField(_('Черновик'), default=True)
     is_active = models.BooleanField(default=False)
-    moderation = models.BooleanField(default=False)
+    on_moderation = models.BooleanField(_('На модерации'), default=False)
     name = models.CharField(_('Название'), max_length=255)
     basic_type = models.ForeignKey("TourType", verbose_name=_("Основной тип тура"), on_delete=models.CASCADE, related_name='tours_by_basic_type', null=True, blank=True)
     additional_types = models.ManyToManyField("TourType", verbose_name=_("Дополнительные типы тура"), related_name='tours_by_additional_types', blank=True)
