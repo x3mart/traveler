@@ -42,6 +42,7 @@ class TourBasic(models.Model):
     month_recurrent = models.BooleanField(_('Повторять ежемесячно'), default=False)
     description = RichTextField(_('Описание тура'), null=True, blank=True)
     plan = RichTextUploadingField(_('Чем займемся'), null=True, blank=True)
+
     class Meta:
         verbose_name = _('Тур основа')
         verbose_name_plural = _('Туры основа')
@@ -70,9 +71,9 @@ class TourAdvanced(models.Model):
         verbose_name_plural = _('Туры доп сведения')    
 
 
-class PropertyType(models.Model):
+class TourPropertyType(models.Model):
     name = models.CharField(_('Название'), max_length=255)
-    tours = models.ManyToManyField('TourBasic', related_name='property_types')
+    tours = models.ManyToManyField('TourBasic', related_name='tour_property_types')
 
     def __str__(self):
         return self.name
@@ -82,12 +83,12 @@ class PropertyType(models.Model):
         verbose_name_plural = _('Типы размещения')
 
 
-class PropertyImage(models.Model):
+class TourPropertyImage(models.Model):
     name = models.CharField(_('Название'), max_length=255, null=True, blank=True)
     description = models.TextField(_('Описание'), null=True, blank=True)
     image = models.ImageField(_('Фото'), upload_to=tour_image_path, max_length=255)
     alt =  models.CharField(_('alt текст'), max_length=255, null=True, blank=True)
-    tour = models.ForeignKey("TourBasic", verbose_name=_("Тур"), on_delete=models.CASCADE, related_name='property_images')
+    tour = models.ForeignKey("TourBasic", verbose_name=_("Тур"), on_delete=models.CASCADE, related_name='tour_property_images')
 
     
     class Meta:
@@ -111,13 +112,12 @@ class TourImage(models.Model):
         ordering =  ['tour', '-id']
 
 
-
 class TourDay(models.Model):
     number = models.PositiveIntegerField(_('Номер'))
     name = models.CharField(_('Название'), max_length=255)
     location =  models.CharField(_('Локация'), max_length=255, null=True, blank=True)
     description =  RichTextField(_('Описание'))
-    tour = models.ForeignKey('TourBasic', on_delete=models.CASCADE, related_name='tour_days')
+    tour = models.ForeignKey('TourBasic', on_delete=models.CASCADE, related_name='tour_days', verbose_name=_('Тур'))
 
     def __str__(self):
         return self.name
@@ -134,8 +134,35 @@ class TourDayImage(models.Model):
     description = models.TextField(_('Описание'), null=True, blank=True)
     image = models.ImageField(_('Фото'), upload_to=tour_image_path, max_length=255, null=True, blank=True)
     alt =  models.CharField(_('alt текст'), max_length=255, null=True, blank=True)
-    tour_day = models.ForeignKey("TourDay", verbose_name=_("День тура"), on_delete=models.CASCADE, max_length=255, null=True, blank=True)
+    tour_day = models.OneToOneField("TourDay", verbose_name=_("День тура"), on_delete=models.CASCADE, max_length=255, null=True, blank=True, related_name='tour_day_image')
 
     class Meta:
         verbose_name = _('Фото дня тура')
         verbose_name_plural = _('Фото дней туров')
+
+
+class TourImpression(models.Model):
+    name = models.CharField(_('Название'), max_length=150)
+    tour = models.ForeignKey('TourBasic', on_delete=models.CASCADE, related_name='tour_impressions', verbose_name=_('Тур'))
+
+    class Meta:
+        verbose_name = _('Главное впечатление')
+        verbose_name_plural = _('Главные впечатления')
+
+
+class TourIncludedService(models.Model):
+    name = models.CharField(_('Название'), max_length=150)
+    tour = models.ForeignKey('TourBasic', on_delete=models.CASCADE, related_name='tour_included_services', verbose_name=_('Тур'))
+
+    class Meta:
+        verbose_name = _('Входит в стоимость')
+        verbose_name_plural = _('Входит в стоимость')
+
+
+class TourExcludedService(models.Model):
+    name = models.CharField(_('Название'), max_length=150)
+    tour = models.ForeignKey('TourBasic', on_delete=models.CASCADE, related_name='tour_excluded_services', verbose_name=_('Тур'))
+
+    class Meta:
+        verbose_name = _('Входит в стоимость')
+        verbose_name_plural = _('Входит в стоимость')
