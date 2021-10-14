@@ -13,6 +13,7 @@ def geo_path(instance, filename):
 class Region(models.Model):
     name = models.CharField(_('Название'), max_length=255)
     image = models.ImageField(_("Фото"), upload_to=geo_path, max_length=255, null=True, blank=True)
+    alt =  models.CharField(_('alt текст'), max_length=255, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -25,7 +26,7 @@ class Country(models.Model):
     name = models.CharField(_('Название'), max_length=255)
     region = models.ForeignKey('Region', on_delete=models.CASCADE, related_name='countries', verbose_name=_('Регион'),)
     image = models.ImageField(_("Фото"), upload_to=geo_path, max_length=255, null=True, blank=True)
-
+    alt =  models.CharField(_('alt текст'), max_length=255, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -38,8 +39,7 @@ class City(models.Model):
     name = models.CharField(_('Название'), max_length=255)
     country = models.ForeignKey('Country', on_delete=models.CASCADE, related_name='cities', verbose_name=_('Страна'))
     image = models.ImageField(_("Фото"), upload_to=geo_path, max_length=255, null=True, blank=True)
-
-
+    alt =  models.CharField(_('alt текст'), max_length=255, null=True, blank=True)
 
     def __str__(self):
         return self.name
