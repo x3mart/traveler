@@ -59,7 +59,7 @@ class TourAdvanced(models.Model):
     prepayment = models.PositiveIntegerField(_('Предоплата в %'), default=15)
     postpayment = models.PositiveIntegerField(_('Дни внесения полной суммы до старта'), null=True, blank=True)
     team_member = models.ForeignKey('accounts.TeamMember', verbose_name=_("Гид"), on_delete=models.CASCADE, related_name='advanced_tours', null=True, blank=True)
-    currency = models.ForeignKey('currencies.Currency', verbose_name=_("Влюта"), on_delete=models.CASCADE, related_name='advanced_tours', null=True, blank=True)
+    currency = models.ForeignKey('currencies.Currency', verbose_name=_("Валюта"), on_delete=models.CASCADE, related_name='advanced_tours', null=True, blank=True)
     cost = models.DecimalField(_('Цена'), max_digits=12, decimal_places=2, null=True, blank=True)
     
 
@@ -92,8 +92,8 @@ class TourPropertyImage(models.Model):
 
     
     class Meta:
-        verbose_name = _('Тип размещения')
-        verbose_name_plural = _('Типы размещения')
+        verbose_name = _('Фото размещения')
+        verbose_name_plural = _('Фотографии размещений')
 
 
 class TourImage(models.Model):
