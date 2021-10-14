@@ -1,0 +1,162 @@
+.calendar_block {
+	position: absolute;
+	width: 428px;
+	height: 549px;
+
+	background: #FFFFFF;
+	box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+	border-radius: 0px 0px 8px 8px;
+	left: 38.55%;
+	top: 81px;
+	z-index: 1000;
+	padding-top: 30px;
+}
+
+.calendar_block_month {
+	width: 368px;
+	height: 52px;
+	margin: 0 auto;
+
+	background: #F6F7F9;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	box-sizing: border-box;
+	border-radius: 8px;
+	display: flex;
+	justify-content: space-between;
+}
+
+.calendar_block_month_button {
+	width: 52px;
+	height: 52px;
+
+	background: #FFFFFF;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	box-sizing: border-box;
+	border-radius: 8px;
+	margin-top: -1px;
+}
+
+.calendar_block_month_button svg{
+	margin: 15px 0px 15px 20px;
+	width: 10px;
+}
+
+.calendar_block_month_text {
+	font-weight: 450;
+	font-size: 16px;
+	line-height: 20px;
+	/* identical to box height */
+
+	text-align: center;
+
+	color: #000000;
+	margin-top: 15px;
+}
+
+.calendar_block_week {
+	width: 368px;
+	margin: 0 auto;
+	margin-top: 15px;
+	display: flex;
+	justify-content: space-between;
+}
+
+.calendar_block_week_day {
+	width: 44px;
+	height: 16px;
+	font-weight: 450;
+	font-size: 13px;
+	line-height: 16px;
+	/* identical to box height */
+
+	text-align: center;
+
+	color: rgba(0, 0, 0, 0.25);
+}
+
+.calendar_block_days {
+	width: 370px;
+	margin: 0 auto;
+	margin-top: 15px;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+}
+
+.calendar_block_day {
+	width: 44px;
+	height: 44px;
+
+	background: #FFFFFF;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	box-sizing: border-box;
+	border-radius: 50%;
+	text-align: center;
+	padding-top: 11px;
+	/* margin-left: 15px; */
+	margin-right: 3px;
+	margin-bottom: 10px;
+	/* padding: 12px 15px 10px 12px; */
+}
+
+.calendar_block_day:nth-child(1) {
+	background: #F6F7F9;
+}
+
+.calendar_block_day:nth-child(2) {
+	background: #F6F7F9;
+}
+
+.calendar_block_day:nth-child(33) {
+	background: #F6F7F9;
+}
+
+.calendar_block_day:nth-child(34) {
+	background: #F6F7F9;
+}
+
+.calendar_block_day:nth-child(35) {
+	background: #F6F7F9;
+}
+
+.calendar_block_submit {
+	width: 368px;
+	height: 52px;
+
+	background: #2AA2D6;
+	border-radius: 8px;
+	font-weight: 750;
+	font-size: 16px;
+	line-height: 20px;
+	/* identical to box height */
+
+	text-align: center;
+	text-transform: uppercase;
+
+	color: #FFFFFF;
+	margin: 0 auto;
+	padding-top: 17px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+.calendar_block_cancel {
+	font-weight: normal;
+	font-size: 13px;
+	line-height: 16px;
+	/* identical to box height */
+
+	text-align: center;
+
+	color: #9B9B9B;
+	width: 368px;
+	height: 52px;
+
+	border-top: 1px solid #9B9B9B;
+	margin: 0 auto;
+	padding-top: 20px;
+}
+
+@media (min-width: 320px) and (max-width: 798.999px) {
+	
+}

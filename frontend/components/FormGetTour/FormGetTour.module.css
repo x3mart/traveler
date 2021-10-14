@@ -1,6 +1,6 @@
 .first_form_get_tour {
 	display: flex;
-
+	position: relative;
 	margin-top: 100px;
 }
 
@@ -23,6 +23,10 @@
 	/* border: 1px solid #fff; */
 	border-radius: 12px; 
 	box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.05);
+}
+
+.FormGetTour {
+	position: relative;
 }
 
 @media (min-width: 320px) and (max-width: 798.999px) { 
