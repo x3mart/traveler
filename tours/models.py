@@ -37,11 +37,14 @@ class TourBasic(models.Model):
     finish_country =  models.ForeignKey("geoplaces.Country", verbose_name=_("Страна завершения путешествия"), on_delete=models.CASCADE, related_name='tours_by_finish_country', null=True, blank=True)
     start_city = models.ForeignKey("geoplaces.City", verbose_name=_("Город начала путешествия"), on_delete=models.CASCADE, related_name='tours_by_start_city', null=True, blank=True)
     finish_city = models.ForeignKey("geoplaces.City", verbose_name=_("Город завершения путешествия"), on_delete=models.CASCADE, related_name='tours_by_finish_city', null=True, blank=True)
-    direct_link = models.BooleanField(_('Доступ по прямой ссылке'), default=False)
     week_recurrent = models.BooleanField(_('Повторять еженедельно'), default=False)
     month_recurrent = models.BooleanField(_('Повторять ежемесячно'), default=False)
     description = RichTextField(_('Описание тура'), null=True, blank=True)
     plan = RichTextUploadingField(_('Чем займемся'), null=True, blank=True)
+    cancellation_terms = RichTextField(_('Условия отмены'), null=True, blank=True)
+    difficulty_level = models.PositiveIntegerField(_('Уровень сложности'), default=1)
+    difficulty_description = RichTextField(_('Описание сложностей'), null=True, blank=True)
+    comfort_level = models.PositiveIntegerField(_('Уровень комфорта'), default=3)
 
     class Meta:
         verbose_name = _('Тур основа')
@@ -54,6 +57,7 @@ class TourAdvanced(models.Model):
     finish_date = models.TimeField(_('Дата завершения'), null=True, blank=True)
     start_time = models.TimeField(_('Время старта'), null=True, blank=True)
     finish_time = models.TimeField(_('Время завершения'), null=True, blank=True)
+    direct_link = models.BooleanField(_('Доступ по прямой ссылке'), default=False)
     instant_booking = models.BooleanField(_('Моментальное бронирование'), default=False)
     members_number = models.PositiveIntegerField(_('Колличество мест'))
     prepayment = models.PositiveIntegerField(_('Предоплата в %'), default=15)
@@ -61,9 +65,11 @@ class TourAdvanced(models.Model):
     team_member = models.ForeignKey('accounts.TeamMember', verbose_name=_("Гид"), on_delete=models.CASCADE, related_name='advanced_tours', null=True, blank=True)
     currency = models.ForeignKey('currencies.Currency', verbose_name=_("Валюта"), on_delete=models.CASCADE, related_name='advanced_tours', null=True, blank=True)
     cost = models.DecimalField(_('Цена'), max_digits=12, decimal_places=2, null=True, blank=True)
-    language = models.ForeignKey('languages.Language', verbose_name=_('Язык тура'), on_delete=models.CASCADE, related_name='advanced_tours', null=True, blank=True)
+    languages = models.ManyToManyField('languages.Language', verbose_name=_('Языки тура'), related_name='advanced_tours', blank=True)
+    is_guaranteed = models.BooleanField(_('Тур гарантирован'), default=False)
+    flight_included = models.BooleanField(_('Перелет включен'), default=False)
+    scouting = models.BooleanField(_('Разведка'), default=False)
     
-
     def __str__(self):
         return f'{self.basic_tour.name} {self.start_date} - {self.finish_date}'
     
@@ -117,7 +123,7 @@ class TourDay(models.Model):
     number = models.PositiveIntegerField(_('Номер'))
     name = models.CharField(_('Название'), max_length=255)
     location =  models.CharField(_('Локация'), max_length=255, null=True, blank=True)
-    description =  RichTextField(_('Описание'))
+    description = RichTextField(_('Описание'))
     tour = models.ForeignKey('TourBasic', on_delete=models.CASCADE, related_name='tour_days', verbose_name=_('Тур'))
 
     def __str__(self):
@@ -167,3 +173,15 @@ class TourExcludedService(models.Model):
     class Meta:
         verbose_name = _('Входит в стоимость')
         verbose_name_plural = _('Входит в стоимость')
+
+
+class TourAddetionalService(models.Model):
+    name = models.CharField(_('Название'), max_length=150)
+    description = RichTextField(_('Описание'))
+    currency = models.ForeignKey('currencies.Currency', verbose_name=_("Валюта"), on_delete=models.CASCADE, related_name='tour_addetional_service', null=True, blank=True)
+    cost = models.DecimalField(_('Цена'), max_digits=12, decimal_places=2, null=True, blank=True)
+    tour = models.ForeignKey('TourBasic', on_delete=models.CASCADE, related_name='tour_addetional_services', verbose_name=_('Тур'))
+
+    class Meta:
+        verbose_name = _('Дополнительная услуга')
+        verbose_name_plural = _('Дополнительнае услуги')
