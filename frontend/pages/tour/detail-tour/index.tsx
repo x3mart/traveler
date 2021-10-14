@@ -2,6 +2,7 @@ import React from 'react';
 import { BlockFindTour, BlockFeedback, BlockViewed, BlockNewTour, BlockPresentation, BlockBreadCrumbs, BlockInfoDetail, BlockFiltersTypeTour,
         BlockDetailComfortLevel, BlockBookmarks, BlockImpression, BlockTourOverview, CardOnTop } from '../../../components';
 import { withLayout } from '../../../layout/Layout';
+import { Sidebar } from '../../../layout/Sidebar/Sidebar';
 import Head from 'next/head';
 
 Home.title='Детализация'; 
@@ -19,7 +20,7 @@ function Home(): JSX.Element {
         <BlockDetailComfortLevel children={undefined} />
         <BlockBookmarks children={undefined} />
         <BlockImpression children={undefined} />
-        <CardOnTop />
+        <Sidebar />
         <BlockTourOverview children={undefined} />
 
         <BlockFeedback children={undefined} />
