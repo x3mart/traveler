@@ -1,0 +1,33 @@
+.block_viewed {
+	margin: 0 auto;
+	padding-top: 40px;
+	padding-bottom: 40px;
+
+	background: var(--background-grey);
+	background-repeat: no-repeat;
+}
+
+.wrapper {
+	width: 1110px;
+	margin: 0 auto;
+	position: relative;
+	/* padding: 25px 0 25px 0; */
+}
+
+@media (min-width: 320px) and (max-width: 798.999px) {
+	.wrapper {
+		width: unset;
+	}
+
+	.block_viewed {
+		padding-top: 17px;
+		padding-bottom: 15px;
+	}
+}
+
+@media (min-width: 799px) and (max-width: 1130px) {
+	.wrapper {
+		width: unset;
+		padding: 0px 10px 0px 10px;
+	}
+}

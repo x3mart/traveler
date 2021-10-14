@@ -9,6 +9,7 @@
 .expert_detail_block {
     display: flex;
     margin-top: 18px;
+    margin-bottom: 40px;
 }
 
 .expert_detail_block_content {

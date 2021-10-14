@@ -1,5 +1,5 @@
 import React from 'react';
-import { BlockFindTourWhite, BlockBreadCrumbs, BlockFindTour, BlockAboutUs, BlockViewed, BlockExpertDetail } from '../../components';
+import { BlockFindTourWhite, BlockBreadCrumbs, BlockFindTour, BlockAboutUs, BlockViewed, BlockExpertDetail, BlockTeam } from '../../components';
 import { withLayout } from '../../layout/Layout';
 import Head from 'next/head';
 
@@ -13,7 +13,8 @@ function Home(): JSX.Element {
         </Head>  
         <BlockFindTourWhite children={undefined} />
         <BlockBreadCrumbs block_style="viewed_block" margin="margin_first" children={undefined} />
-        <BlockExpertDetail children={undefined} />        
+        <BlockExpertDetail children={undefined} />
+        <BlockTeam children={undefined} />        
         <BlockViewed children={undefined} />
         <BlockFindTour children={undefined} />
         <BlockAboutUs children={undefined} />
