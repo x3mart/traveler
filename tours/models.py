@@ -61,6 +61,7 @@ class TourAdvanced(models.Model):
     team_member = models.ForeignKey('accounts.TeamMember', verbose_name=_("Гид"), on_delete=models.CASCADE, related_name='advanced_tours', null=True, blank=True)
     currency = models.ForeignKey('currencies.Currency', verbose_name=_("Валюта"), on_delete=models.CASCADE, related_name='advanced_tours', null=True, blank=True)
     cost = models.DecimalField(_('Цена'), max_digits=12, decimal_places=2, null=True, blank=True)
+    language = models.ForeignKey('languages.Language', verbose_name=_('Язык тура'), on_delete=models.CASCADE, related_name='advanced_tours', null=True, blank=True)
     
 
     def __str__(self):
