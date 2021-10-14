@@ -1,0 +1,124 @@
+.block_viewed {
+	margin: 0 auto;
+	padding-top: 40px;
+	padding-bottom: 20px;
+
+	background: var(--background-grey);
+	background-repeat: no-repeat;
+}
+
+.wrapper {
+	width: 1110px;
+	margin: 0 auto;
+
+	/* padding: 25px 0 25px 0; */
+}
+
+.feedback_experts_block {
+	width: 1110px;
+
+	background: #FFFFFF;
+	box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.03);
+	border-radius: 8px;
+	padding-top: 32px;
+	padding-bottom: 30px;
+	margin-bottom: 20px;
+	position: relative;
+}
+
+.feedback_experts_block_person {
+	display: flex;
+	margin-left: 30px;
+	
+}
+
+.feedback_experts_block_person_ava {
+	background: url(../../public/feedbackava.png);
+	width: 65px;
+	height: 65px;
+	border-radius: 50%;
+	margin-right: 20px;
+}
+
+.feedback_experts_block_person_name {
+	font-weight: 600;
+	font-size: 14px;
+	line-height: 17px;
+
+	color: #000000;
+	margin-top: 15px;
+}
+
+.feedback_experts_block_person_name span {
+	font-weight: normal;
+	font-size: 12px;
+	line-height: 15px;
+	/* identical to box height */
+
+
+	color: rgba(0, 0, 0, 0.5);
+}
+
+.feedback_experts_block_text {
+	margin-top: 20px;
+	margin-left: 30px;
+}
+
+.feedback_experts_block_text_main {
+	font-weight: 600;
+	font-size: 16px;
+	line-height: 20px;
+
+	color: #000000;
+	letter-spacing: 0.15px;
+}
+
+.feedback_experts_block_text_contetnt {
+	font-weight: normal;
+	font-size: 14px;
+	line-height: 17px;
+
+	color: #000000;
+	margin-top: 10px;
+	padding-right: 30px;
+}
+
+.feedback_experts_block_more {
+	font-weight: 600;
+	font-size: 14px;
+	line-height: 17px;
+	text-align: center;
+
+	color: #000000;
+	width: 1110px;
+	height: 52px;
+
+	background: #FFFFFF;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	box-sizing: border-box;
+	border-radius: 8px;
+	margin-top: 40px;
+	padding-top: 15px;
+	letter-spacing: 0.2px;
+	margin-bottom: 20px;
+}
+
+@media (min-width: 320px) and (max-width: 798.999px) {
+	.wrapper {
+		width: unset;
+	}
+
+	.block_viewed {
+		padding-top: 17px;
+		padding-bottom: 0px;
+	}
+
+	
+}
+
+@media (min-width: 799px) and (max-width: 1130px) {
+	.wrapper {
+		width: unset;
+		padding: 0px 10px 0px 10px;
+	}
+}

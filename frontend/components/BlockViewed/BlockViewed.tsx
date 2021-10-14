@@ -8,6 +8,7 @@ export const BlockViewed = ({ block_style, children, className, ...props }: Bloc
         <div
             className={ cn(styles.block_viewed, className, {
                 [styles.viewed_block]: block_style == 'viewed_block',
+                [styles.white]: block_style == 'white',
             })}
             {...props}
         >

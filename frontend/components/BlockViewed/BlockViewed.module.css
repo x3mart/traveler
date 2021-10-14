@@ -7,6 +7,15 @@
 	background-repeat: no-repeat;
 }
 
+.white {
+	margin: 0 auto;
+	padding-top: 40px;
+	padding-bottom: 40px;
+
+	background: #ffffff;
+	background-repeat: no-repeat;
+}
+
 .rating {
 	display: none;
 }
