@@ -45,6 +45,10 @@
 	line-height: 22px;
 }
 
+.input {
+	position: relative;
+}
+
 @media (min-width: 320px) and (max-width: 798.999px) {
 	.place {
 		display: block;
