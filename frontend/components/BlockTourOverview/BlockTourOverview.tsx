@@ -47,30 +47,50 @@ export const BlockTourOverview = ({ block_style, children, className, ...props }
                             Чем мы займемся в туре
                         </Htag>  
                         <P>Мы пустимся в весёлые приключения на джипах по Дагестану!</P>
-                        <div className={styles.overview_video_block} {...props}>
+            </div>
+            <div className={styles.wrapper_custom} {...props}>
+                        <div className={styles.overview_video_block} {...props}>            
                             <PlayButtonIcon />
                         </div>
+            </div>
+            <div className={styles.wrapper} {...props}>
                         <P>
                             Будем открывать чарующе красивые и труднодоступные уголки с первозданной природой! Наш путь проложен по старинным живописным дорогам, а иногда и бездорожью, 
                             и все для того, чтобы добраться туда, где Вам не будет мешать толпа туристов. 
                         </P>
+            </div>
+            <div className={styles.wrapper_custom} {...props}>
                         <div className={styles.overview_photo_block_1} {...props}></div>
+            </div>
+            <div className={styles.wrapper} {...props}>
                         <P>
                             На протяжении всего путешествия вас ждут сотни локаций для исключительных фотографий, которые удивят ваших друзей и близких, 
                             а возможно и вдохновят на увлекательное путешествие по Дагестану
                         </P>
+            </div>
+            <div className={styles.wrapper_custom} {...props}>
                         <div className={styles.overview_photo_block_2} {...props}></div>
+            </div>
+            <div className={styles.wrapper} {...props}>
                         <P>
                             Вы увидите Сулакский каньон под другим углом, прикоснётесь к уникальным старинным сооружениям , 
                             почувствуете силу времени, ступив на земли древних заброшенные сел-призраков, ощутите мощь горных рек и водопадов.
                         </P>
+            </div>
+            <div className={styles.wrapper_custom} {...props}>
                         <div className={styles.overview_photo_block_3} {...props}></div>
+            </div>
+            <div className={styles.wrapper} {...props}>
                         <P>
                             А еще мы уверены, что "путь к Сердцу Дагестана  лежит через желудок". Национальная кухня заслуживает 
                             чуть ли не главное место в нашем туре! Свежайшее мясо и блюда из них, молоко, сметана, хлеб.
                         </P>
                         <P>Вы удивитесь, насколько другой вкус у действительно натуральных продуктов</P>
+            </div>
+            <div className={styles.wrapper_custom} {...props}>
                         <div className={styles.overview_photo_block_4} {...props}></div>
+            </div>
+            <div className={styles.wrapper} {...props}>
                         <P>
                             Данный тур разработан таким образом, что участники практически не ограничены в передвижении по локациям, мы даем свободу,чтобы вы могли насладиться моментом : 
                         </P>
@@ -88,6 +108,9 @@ export const BlockTourOverview = ({ block_style, children, className, ...props }
                             <Htag tag='h2'>
                                 Галерея
                             </Htag>
+                        </div>
+            </div>
+            <div className={styles.wrapper_custom} {...props}>
                             <div className={styles.overview_photo_gallery_items} {...props}>
                                 <div className={styles.overview_photo_gallery_item} {...props}></div>
                                 <div className={styles.overview_photo_gallery_item} {...props}></div>
@@ -98,15 +121,20 @@ export const BlockTourOverview = ({ block_style, children, className, ...props }
                                 <div className={styles.overview_photo_gallery_item} {...props}></div>
                                 <div className={styles.overview_photo_gallery_item} {...props}></div>
                                 <div className={styles.overview_photo_gallery_item} {...props}></div>
-                            </div> 
-                        </div>
-
+                            </div>
+            </div>
+            
+            <div className={styles.wrapper} {...props}>
                         <div className={styles.rout_travel_block} {...props}>
                             <Htag tag='h2'>
                                 Маршрут
                             </Htag>
-                            <div className={styles.rout_travel_block_item} {...props}>                           
-                            </div>
+                        </div>    
+            </div>
+            <div className={styles.wrapper_custom} {...props}>
+                            <div className={styles.rout_travel_block_item} {...props}></div>  
+            </div>                       
+            <div className={styles.wrapper} {...props}>           
                             <div className={styles.rout_travel_block_info} {...props}>
                                 <div className={styles.rout_travel_block_info_start} {...props}>
                                     <span className={styles.rout_travel_block_info_start_head} {...props}>Старт</span><br />
@@ -117,8 +145,8 @@ export const BlockTourOverview = ({ block_style, children, className, ...props }
                                     <span className={styles.rout_travel_block_info_start_foot} {...props}>16 апреля, Махачкала, 20:00 по местному времени</span>
                                 </div>                            
                             </div>
-                        </div>
-
+            </div>
+            <div className={styles.wrapper_custom} {...props}>
                         <div className={styles.rout_travels_day_block} {...props}>                            
                             <div className={styles.rout_travels_day_main_card} {...props}>
                                 <div className={styles.rout_travels_day_main_card_image} {...props}></div>
@@ -177,7 +205,8 @@ export const BlockTourOverview = ({ block_style, children, className, ...props }
                                 <div className={styles.rout_travels_day_main_card_info_text} {...props}></div>
                             </div>
                         </div>
-
+            </div>
+            <div className={styles.wrapper} {...props}> 
                         <div className={styles.type_hotel_room} {...props}>
                             <Htag tag='h2'>
                                 Тип размещения
@@ -187,21 +216,26 @@ export const BlockTourOverview = ({ block_style, children, className, ...props }
                                 <P>Гостиницы 3*</P>
                             </div> 
                         </div>
+            
 
                         <div className={styles.gallery_hotel_room} {...props}>
                             <Htag tag='h2'>
                                 Фото мест проживания
                             </Htag>
-                            <div className={styles.gallery_hotel_room_items} {...props}>
-                                <div className={styles.gallery_hotel_room_item} {...props}></div>
-                                <div className={styles.gallery_hotel_room_item} {...props}></div>
-                                <div className={styles.gallery_hotel_room_item} {...props}></div>
-                                <div className={styles.gallery_hotel_room_item} {...props}></div>
-                                <div className={styles.gallery_hotel_room_item} {...props}></div>
-                                <div className={styles.gallery_hotel_room_item} {...props}></div>
-                            </div> 
+            
                         </div>
-
+            </div>
+            <div className={styles.wrapper_custom} {...props}>
+                        <div className={styles.gallery_hotel_room_items} {...props}>
+                            <div className={styles.gallery_hotel_room_item} {...props}></div>
+                            <div className={styles.gallery_hotel_room_item} {...props}></div>
+                            <div className={styles.gallery_hotel_room_item} {...props}></div>
+                            <div className={styles.gallery_hotel_room_item} {...props}></div>
+                            <div className={styles.gallery_hotel_room_item} {...props}></div>
+                            <div className={styles.gallery_hotel_room_item} {...props}></div>
+                        </div> 
+            </div>
+            <div className={styles.wrapper} {...props}> 
                         <div className={styles.include_block} {...props}>
                             <Htag tag='h2'>
                                 В стоимость включено:
@@ -278,8 +312,8 @@ export const BlockTourOverview = ({ block_style, children, className, ...props }
                         </div>
 
 
-
-
+                </div> 
+                    <div className={styles.wrapper_custom} {...props}>
                         <div className={styles.rout_travels_day_block_question} {...props}> 
                                 <Htag tag='h2'>
                                     Вопросы по туру
@@ -330,7 +364,8 @@ export const BlockTourOverview = ({ block_style, children, className, ...props }
                             </div>
                            
                         </div>
-            </div> 
+                    </div>
+            
             
         </div>
     );

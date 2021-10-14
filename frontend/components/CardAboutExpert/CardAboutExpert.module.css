@@ -1,0 +1,45 @@
+.card_about_expert_image {
+	width: 125px;
+	height: 125px;
+	border-radius: 50%;
+	margin: 0 auto;
+	background: url(../../public/about_expert.png);
+}
+.card_about_expert_name {
+	font-weight: 600;
+	font-size: 16px;
+	line-height: 20px;
+	/* identical to box height */
+
+	text-align: center;
+	margin-top: 20px;
+
+	color: #000000;
+}
+
+.card_about_expert_text {
+	font-style: normal;
+	font-weight: normal;
+	font-size: 14px;
+	line-height: 17px;
+	padding-top: 40px;
+	padding-right: 10px;
+	padding-left: 25px;
+	padding-bottom: 15px;
+
+	color: rgba(0, 0, 0, 0.5);
+}
+
+.card_about_expert_more {
+	font-weight: 450;
+	font-size: 14px;
+	line-height: 17px;
+
+	color: #2AA2D6;
+	margin-left: 25px;
+	margin-top: -2px;
+}
+
+@media (min-width: 320px) and (max-width: 798.999px) {
+	
+}

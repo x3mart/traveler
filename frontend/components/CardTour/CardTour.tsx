@@ -4,6 +4,7 @@ import cn from 'classnames';
 import { Tag, Htag } from '../../components/';
 import StarIcon from '/public/Star.svg';
 import LikeIcon from '/public/Like.svg';
+import Link from 'next/link';
     
 
 
@@ -32,9 +33,11 @@ export const CardTour = ({ block_style, block_width, children, className, ...pro
                     </div>
                     <div className={styles.card_tour_content_guide_info}>
                         <div className={styles.card_tour_content_guide_info_name}>
+                        <Link href='/expert/'>
                             <div className={styles.card_tour_content_guide_info_name_avatar}>
 
                             </div>
+                        </Link>
                             <div className={styles.card_tour_content_guide_info_name_raiting}>
                                 <Htag tag='h4'>Мария</Htag>
                                 <Htag tag='h4'>

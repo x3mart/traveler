@@ -268,6 +268,19 @@
 	margin-bottom: 30px;
 }
 
+.about_expert {
+	padding-top: 32px;
+}
+
+.about_expert_block {
+	display: flex;
+	justify-content: space-between;
+	width: 1800px;
+	margin-left: -110px;
+	margin-top: 40px;
+	position: relative;
+}
+
 @media (min-width: 320px) and (max-width: 798.999px) {
 	.card_tour_arrow_right {
 		display: none;
