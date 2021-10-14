@@ -411,7 +411,7 @@
 		position: relative;
 		height: 260px;
 		display: flex;
-		justify-content: space-evenly;
+		/* justify-content: space-evenly; */
 	
 		width: unset;
 		margin: 0 auto;
@@ -451,6 +451,22 @@
 	}
 
 	.sale_cost_block {
+		display: none;
+	}
+
+	.card_collection_expert_card_hidden_expert_left {
+		display: none;
+	}
+
+	.card_collection_expert_card_hidden_expert_right {
+		display: none;
+	}
+
+	.card_collection_expert_card_hidden_left {
+		display: none;
+	}
+
+	.card_collection_expert_card_hidden_right {
 		display: none;
 	}
 }
