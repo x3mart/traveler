@@ -3,10 +3,12 @@ import styles from './Rating.module.css';
 import cn from 'classnames';
 import { Htag } from '..';
 
-export const Rating = ({ children, ...props }: RatingProps): JSX.Element => {
+export const Rating = ({ position, children, ...props }: RatingProps): JSX.Element => {
   return (
     <div
         className={ cn(styles.rating, className, {
+          [styles.left]: position == 'left',
+          [styles.right]: position == 'right',
         })}
         {...props}
     >  

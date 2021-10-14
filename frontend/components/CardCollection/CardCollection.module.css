@@ -42,7 +42,7 @@
 	display: flex;
 	overflow: hidden;
 
-	width: 1440px;
+	width: 1640px;
 	margin: 0 auto;
 }
 
@@ -54,7 +54,7 @@
 
 	width: 1640px;
 	margin: 0 auto;
-	margin-left: -120px;
+	margin-left: -80px;
 }
 
 .card_tour_arrow_left {
@@ -225,8 +225,31 @@
 	margin-left: 20px;
 }
 
-.card_collection_expert_card_hidden {
-	opacity: 0.5;
+.card_collection_expert_card_hidden {	 
+	opacity: 1;
+}
+
+.card_collection_expert_card_hidden_expert_left {
+	position: absolute;
+	left: 0;
+	width: 255px;
+	height: 337px;
+	background: linear-gradient(to left, #FFFFFF, rgb(238, 238, 238) 50%);
+	opacity: 0.9;
+	border-radius: 8px;
+	z-index: 1000;
+	/* background: rgb(246, 247, 249, 0.5); */
+}
+
+.card_collection_expert_card_hidden_expert_right {
+	position: absolute;
+	right: -48px;
+	width: 255px;
+	height: 337px;
+	background: linear-gradient(to right, #FFFFFF, rgb(238, 238, 238) 50%);
+    opacity: 0.9;
+	border-radius: 8px;
+	z-index: 1000;
 }
 
 .sale_cost_block {
@@ -275,10 +298,75 @@
 .about_expert_block {
 	display: flex;
 	justify-content: space-between;
-	width: 1800px;
-	margin-left: -110px;
+	width: 1650px;
+	margin-left: -70px;
 	margin-top: 40px;
 	position: relative;
+}
+
+.card_about_expert_arrow_left {
+	position: absolute;
+	z-index: 1;
+	top: 143px;
+	left: 255px;
+
+	width: 48px;
+	height: 48px;
+
+	cursor: pointer;
+
+	border-radius: 50%;
+	background: #FFF;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card_about_expert_arrow_left svg {
+	margin-top: 14px;
+	margin-left: 15px;
+}
+
+.card_about_expert_arrow_right {
+	position: absolute;
+	z-index: 1;
+	top: 143px;
+	right: 255px;
+
+	width: 48px;
+	height: 48px;
+
+	cursor: pointer;
+
+	border-radius: 50%;
+	background: #FFF;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card_about_expert_arrow_right svg {
+	margin-top: 14px;
+	margin-left: 20px;
+}
+
+.card_collection_expert_card_hidden_left {
+	position: absolute;
+	left: 0;
+	width: 255px;
+	height: 368px;
+	background: linear-gradient(to left, #FFFFFF, rgb(238, 238, 238) 50%);
+	opacity: 0.9;
+	border-radius: 8px;
+	z-index: 1000;
+	/* background: rgb(246, 247, 249, 0.5); */
+}
+
+.card_collection_expert_card_hidden_right {
+	position: absolute;
+	right: 0;
+	width: 255px;
+	height: 368px;
+	background: linear-gradient(to right, #FFFFFF, rgb(238, 238, 238) 50%);
+    opacity: 0.9;
+	border-radius: 8px;
+	z-index: 1000;
 }
 
 @media (min-width: 320px) and (max-width: 798.999px) {

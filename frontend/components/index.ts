@@ -46,3 +46,4 @@ export * from './CardOnTop/CardOnTop';
 export * from './BlockExpertDetail/BlockExpertDetail';
 export * from './CardAboutExpert/CardAboutExpert'; 
 export * from './BlockTeam/BlockTeam';
+export * from './BlockExpertsFeedback/BlockExpertsFeedback';

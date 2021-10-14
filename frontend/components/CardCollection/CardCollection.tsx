@@ -92,12 +92,14 @@ export const CardCollection = ({name_block, children, className, ...props }: Car
                           <div className={styles.card_expert_arrow_left}><ArrowIconLeft /></div>
                           <div className={styles.card_expert_arrow_right}><ArrowIconRight /></div>  
                           {children}
+                          <div className={styles.card_collection_expert_card_hidden_expert_left}></div>
                           <CardExpert className={styles.card_collection_expert_card_hidden} />
                           <CardExpert /> 
                           <CardExpert />
                           <CardExpert />
                           <CardExpert />
-                          <CardExpert className={styles.card_collection_expert_card_hidden} />  
+                          <CardExpert className={styles.card_collection_expert_card_hidden} />
+                          <div className={styles.card_collection_expert_card_hidden_expert_right}></div>  
                     </div>   
                   </div>;
         case 'sales':
@@ -170,15 +172,17 @@ export const CardCollection = ({name_block, children, className, ...props }: Car
                       })}
                       {...props}
                   >
-                      <div className={styles.card_expert_arrow_left}><ArrowIconLeft /></div>
-                      <div className={styles.card_expert_arrow_right}><ArrowIconRight /></div>  
+                      <div className={styles.card_about_expert_arrow_left}><ArrowIconLeft /></div>
+                      <div className={styles.card_about_expert_arrow_right}><ArrowIconRight /></div>  
                       {children}
+                      <div className={styles.card_collection_expert_card_hidden_left}></div>
                       <CardAboutExpert className={styles.card_collection_expert_card_hidden} />
                       <CardAboutExpert /> 
                       <CardAboutExpert />
                       <CardAboutExpert />
                       <CardAboutExpert />
-                      <CardAboutExpert className={styles.card_collection_expert_card_hidden} />   
+                      <CardAboutExpert className={styles.card_collection_expert_card_hidden} />
+                      <div className={styles.card_collection_expert_card_hidden_right}></div>   
                   </div>;
           default:
           return <></>;
