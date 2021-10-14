@@ -126,6 +126,7 @@ class TourDay(models.Model):
         verbose_name = _('День тура')
         verbose_name_plural = _('Дни туров')
         ordering = ['number', 'tour']
+        unique_together = ['number', 'tour']
 
 
 class TourDayImage(models.Model):
