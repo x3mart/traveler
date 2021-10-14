@@ -1,7 +1,7 @@
 import styles from './CardCollection.module.css';
 import { CardCollectionProps } from './CardCollection.props';
 import cn from 'classnames';
-import { CardTour, CardCountryTour, CardTourLarge, CardTypeTour, CardExpert, Rating, Sale, CardFeedback } from '../../components/';
+import { CardTour, CardCountryTour, CardTourLarge, CardTypeTour, CardExpert, Rating, Sale, CardFeedback, CardAboutExpert } from '../../components/';
 import ArrowIconLeft from '/public/left_arrow.svg';
 import ArrowIconRight from '/public/right_arrow.svg';
 import Link from 'next/link';
@@ -163,6 +163,22 @@ export const CardCollection = ({name_block, children, className, ...props }: Car
                       <CardTour block_width="display_none" block_style='card_tour_border' className={styles.tour_page_card} />
                       <CardTour block_width="display_none" block_style='card_tour_border' className={styles.tour_page_card} /> 
                       <CardTour block_width="display_none" block_style='card_tour_border' className={styles.tour_page_card} />                  
+                  </div>;
+          case 'about_expert':
+            return <div
+                      className={ cn(styles.about_expert_block, className, {
+                      })}
+                      {...props}
+                  >
+                      <div className={styles.card_expert_arrow_left}><ArrowIconLeft /></div>
+                      <div className={styles.card_expert_arrow_right}><ArrowIconRight /></div>  
+                      {children}
+                      <CardAboutExpert className={styles.card_collection_expert_card_hidden} />
+                      <CardAboutExpert /> 
+                      <CardAboutExpert />
+                      <CardAboutExpert />
+                      <CardAboutExpert />
+                      <CardAboutExpert className={styles.card_collection_expert_card_hidden} />   
                   </div>;
           default:
           return <></>;

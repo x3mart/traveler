@@ -1,7 +1,7 @@
 import styles from './BlockExpertDetail.module.css';
 import { BlockExpertDetailProps } from './BlockExpertDetail.props';
 import cn from 'classnames';
-import { Htag, P } from '../../components/';
+import { Htag, P, CardCollection } from '../../components/';
 import ClockIcon from '../../public/clock_big.svg';
 import ChatIcon from '../../public/chat.svg';
 import DocIcon from '../../public/doc.svg';
@@ -79,7 +79,7 @@ export const BlockExpertDetail = ({ block_style, children, className, ...props }
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>                
             </div> 
             
         </div>
