@@ -25,16 +25,16 @@ class TourType(models.Model):
 
 class TourBasic(models.Model):
     expert = models.ForeignKey("accounts.Expert", verbose_name=_('Эксперт'), on_delete=models.CASCADE, related_name='tours')
-    is_draft = models.BooleanField(default=False)
+    is_draft = models.BooleanField(default=True)
     is_active = models.BooleanField(default=False)
     moderation = models.BooleanField(default=False)
     name = models.CharField(_('Название'), max_length=255)
     basic_type = models.ForeignKey("TourType", verbose_name=_("Основной тип тура"), on_delete=models.CASCADE, related_name='tours_by_basic_type', null=True, blank=True)
-    additional_types = models.ManyToManyField("TourType", verbose_name=_("Дополнительные типы тура"), related_name='tours_by_additional_types', null=True, blank=True)
-    start_region =  models.ForeignKey("geoplaces.Region", verbose_name=_("Регион начала путешествия"), on_delete=models.CASCADE, related_name='tours_by_start_region', null=True, blank=True)
-    finish_region =  models.ForeignKey("geoplaces.Region", verbose_name=_("Регион завершения путешествия"), on_delete=models.CASCADE, related_name='tours_by_finish_region', null=True, blank=True)
-    start_country =  models.ForeignKey("geoplaces.Country", verbose_name=_("Страна начала путешествия"), on_delete=models.CASCADE, related_name='tours_by_start_country', null=True, blank=True)
-    finish_country =  models.ForeignKey("geoplaces.Country", verbose_name=_("Страна завершения путешествия"), on_delete=models.CASCADE, related_name='tours_by_finish_country', null=True, blank=True)
+    additional_types = models.ManyToManyField("TourType", verbose_name=_("Дополнительные типы тура"), related_name='tours_by_additional_types', blank=True)
+    start_region = models.ForeignKey("geoplaces.Region", verbose_name=_("Регион начала путешествия"), on_delete=models.CASCADE, related_name='tours_by_start_region', null=True, blank=True)
+    finish_region = models.ForeignKey("geoplaces.Region", verbose_name=_("Регион завершения путешествия"), on_delete=models.CASCADE, related_name='tours_by_finish_region', null=True, blank=True)
+    start_country = models.ForeignKey("geoplaces.Country", verbose_name=_("Страна начала путешествия"), on_delete=models.CASCADE, related_name='tours_by_start_country', null=True, blank=True)
+    finish_country = models.ForeignKey("geoplaces.Country", verbose_name=_("Страна завершения путешествия"), on_delete=models.CASCADE, related_name='tours_by_finish_country', null=True, blank=True)
     start_city = models.ForeignKey("geoplaces.City", verbose_name=_("Город начала путешествия"), on_delete=models.CASCADE, related_name='tours_by_start_city', null=True, blank=True)
     finish_city = models.ForeignKey("geoplaces.City", verbose_name=_("Город завершения путешествия"), on_delete=models.CASCADE, related_name='tours_by_finish_city', null=True, blank=True)
     week_recurrent = models.BooleanField(_('Повторять еженедельно'), default=False)
@@ -45,6 +45,8 @@ class TourBasic(models.Model):
     difficulty_level = models.PositiveIntegerField(_('Уровень сложности'), default=1)
     difficulty_description = RichTextField(_('Описание сложностей'), null=True, blank=True)
     comfort_level = models.PositiveIntegerField(_('Уровень комфорта'), default=3)
+    babies_alowed = models.BooleanField(_('Можно с маленькими детьми'), default=False)
+    animals_not_exploited = models.BooleanField(_('Животные не эксплуатируются'), default=False)
 
     class Meta:
         verbose_name = _('Тур основа')
