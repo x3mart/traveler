@@ -179,8 +179,8 @@ class TourExcludedService(models.Model):
     tour = models.ForeignKey('TourBasic', on_delete=models.CASCADE, related_name='tour_excluded_services', verbose_name=_('Тур'))
 
     class Meta:
-        verbose_name = _('Входит в стоимость')
-        verbose_name_plural = _('Входит в стоимость')
+        verbose_name = _('Не входит в стоимость')
+        verbose_name_plural = _('Не входит в стоимость')
 
 
 class TourAddetionalService(models.Model):
