@@ -4,6 +4,7 @@ from django.template.defaultfilters import slugify
 from unidecode import unidecode
 import os
 from ckeditor_uploader.fields import RichTextUploadingField
+from ckeditor.fields import RichTextField
 
 
 def tour_image_path(instance, filename):
@@ -39,6 +40,8 @@ class TourBasic(models.Model):
     direct_link = models.BooleanField(_('Доступ по прямой ссылке'), default=False)
     week_recurrent = models.BooleanField(_('Повторять еженедельно'), default=False)
     month_recurrent = models.BooleanField(_('Повторять ежемесячно'), default=False)
+    description = RichTextField(_('Описание тура'), null=True, blank=True)
+    plan = RichTextUploadingField(_('Чем займемся'), null=True, blank=True)
     class Meta:
         verbose_name = _('Тур основа')
         verbose_name_plural = _('Туры основа')
@@ -113,7 +116,7 @@ class TourDay(models.Model):
     number = models.PositiveIntegerField(_('Номер'))
     name = models.CharField(_('Название'), max_length=255)
     location =  models.CharField(_('Локация'), max_length=255, null=True, blank=True)
-    description =  models.CharField(_('Описание'), max_length=255)
+    description =  RichTextField(_('Описание'))
     tour = models.ForeignKey('TourBasic', on_delete=models.CASCADE, related_name='tour_days')
 
     def __str__(self):
