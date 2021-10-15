@@ -1,6 +1,6 @@
 import styles from './FormGetTour.module.css';
 import { FormGetTourProps } from './FormGetTour.props';
-import { Input, Button, BlockCalendar } from '../../components';
+import { Input, Button, BlockCalendar, BlockChangePlace } from '../../components';
 import MagnifierIcon from '/public/magnifier.svg';
 import cn from 'classnames';
 
@@ -16,6 +16,7 @@ export const FormGetTour = ({ form_style, className, children, ...props }: FormG
         >
             {children}
             <Input choice="place" placeholder="Страна, регион или город" />
+            <BlockChangePlace children={undefined} /> 
             <Input choice="calendar" placeholder="Выберите даты" />
             <BlockCalendar children={undefined} />
             <Button appearance='primary'><MagnifierIcon />Подобрать тур</Button>  
