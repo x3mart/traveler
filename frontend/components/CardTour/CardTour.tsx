@@ -37,7 +37,7 @@ export const CardTour = ({ block_style, block_width, children, className, ...pro
                     </div>
                     <div className={styles.card_tour_content_guide_info}>
                         <div className={styles.card_tour_content_guide_info_name}>
-                        <Link className={styles.link_pointer} href='/expert/'>
+                        <Link href='/expert/'>
                             <div className={styles.card_tour_content_guide_info_name_avatar}>
 
                             </div>
