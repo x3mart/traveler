@@ -23,23 +23,27 @@ export const CardTour = ({ block_style, block_width, children, className, ...pro
                   
             {children}
             <Tag size='b'>
-                <div className={styles.card_tour_image}>
-                    <LikeIcon />                    
-                </div>
+                <Link href='/tour/detail-tour/'>
+                    <div className={styles.card_tour_image}>
+                        <LikeIcon />                    
+                    </div>
+                </Link>
                 <div className={styles.card_tour_content}>
                     <div className={styles.card_tour_content_place_info}>
                         <Htag tag='h4'>Вьетнам</Htag>
-                        <Htag tag='h3'>Неизведанные места и тропы</Htag>
+                        <Link href='/tour/detail-tour/'>
+                            <Htag className={styles.link_pointer} tag='h3'>Неизведанные места и тропы</Htag>
+                        </Link>
                     </div>
                     <div className={styles.card_tour_content_guide_info}>
                         <div className={styles.card_tour_content_guide_info_name}>
-                        <Link href='/expert/'>
+                        <Link className={styles.link_pointer} href='/expert/'>
                             <div className={styles.card_tour_content_guide_info_name_avatar}>
 
                             </div>
                         </Link>
-                            <div className={styles.card_tour_content_guide_info_name_raiting}>
-                                <Htag tag='h4'>Мария</Htag>
+                            <div className={styles.card_tour_content_guide_info_name_raiting}>                                
+                                <Htag tag='h4'><Link href='/expert/'>Мария</Link></Htag>                                
                                 <Htag tag='h4'>
                                     <StarIcon />
                                     <span className={styles.raiting_star}>4.9</span>
