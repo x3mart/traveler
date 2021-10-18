@@ -1,0 +1,7 @@
+.section_flex {
+	width: 1110px;
+    margin: 0 auto;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: flex;
+}

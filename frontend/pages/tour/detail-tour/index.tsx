@@ -4,41 +4,44 @@ import { BlockFindTour, BlockFeedback, BlockViewed, BlockNewTour, BlockPresentat
 import { withLayout } from '../../../layout/Layout';
 // import { Sidebar } from '../../../layout/Sidebar/Sidebar';
 import Head from 'next/head';
+import { SectionFlex } from '../../../components/SectionFlex/SectionFlex';
+import { SectionBlock } from '../../../components/SectionBlock/SectionBlock';
 
 
-Home.title='Детализация'; 
-function Home(): JSX.Element {   
+DetailTour.title='Детали тура'; 
+function DetailTour(): JSX.Element {   
   return ( 
     <>       
         <Head>
-          <title>{Home.title}</title>
+          <title>{DetailTour.title}</title>
         </Head> 
         <BlockPresentation block_style='presentation_block_another' children={undefined} />
+        <SectionBlock>
+        <BlockBreadCrumbs block_style="viewed_block" margin="margin_second" children={undefined} />
+        </SectionBlock>
 
-        <section>
-          <main>
-            <BlockBreadCrumbs block_style="viewed_block" margin="margin_second" children={undefined} />
+        <SectionFlex>
+        <main>
             <BlockInfoDetail children={undefined} />
             <BlockFiltersTypeTour children={undefined} />
             <BlockDetailComfortLevel children={undefined} />
             <BlockBookmarks children={undefined} />
             <BlockImpression children={undefined} />
             <BlockTourOverview children={undefined} />
-            <BlockFeedback children={undefined} />
-            <BlockViewed children={undefined} />
-            <BlockNewTour children={undefined} />  
-            <BlockFindTour children={undefined} />
           </main>     
           <aside>
             <CardOnTop />
-          </aside> 
-        </section>
-            
-        
-        
+          </aside>
+        </SectionFlex>
+        <SectionBlock>
+        <BlockFeedback children={undefined} />
+            <BlockViewed children={undefined} />
+            <BlockNewTour children={undefined} />  
+            <BlockFindTour children={undefined} />
+        </SectionBlock>
     </>
   );
 }
 
-export default withLayout(Home);  
+export default withLayout(DetailTour); 
 

@@ -9,15 +9,15 @@
 
 
 .wrapper {
-	width: 1110px;
-	margin: 0 auto;
+	/* width: 1110px;
+	margin: 0 auto; */
 
 	/* padding: 25px 0 25px 0; */
 }
 
 .bookmarks_block {
 	display: flex;
-	width: 687px;
+	/* width: 687px; */
 	justify-content: space-between;
 	margin-top: 40px;
 	margin-bottom: 15px;
@@ -39,6 +39,11 @@
 
 .bookmarks_block_item:hover {
 	border-bottom: 3px solid #2AA2D6;
+}
+
+.bookmarks_block_item_active {
+	border-bottom: 3px solid #2AA2D6;
+	margin-bottom: -2px;
 }
 
 

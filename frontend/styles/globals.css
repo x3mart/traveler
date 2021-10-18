@@ -33,18 +33,13 @@ a {
 	box-sizing: border-box;
 }
 
-section {
-	width: 1110px;
-	margin: 0 auto;
-	display: flex;
-}
-
 main {
-	width: 75%;
+	width: 68.5%;
+	padding-right: 30px;
 }
 
 aside {
-	width: 25%;
+	width: 31.5%;
 }
 
 ol {
