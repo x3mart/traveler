@@ -13,6 +13,12 @@
 	src: url('../styles//fonts/sf-ui-text/SFUIText-Regular.ttf');
 }
 
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
 html,
 body {
 	overflow-x: hidden;
@@ -23,21 +29,38 @@ body {
 	font-family: var(--font-family);
 }
 
-header {
+.body {
 	display: grid;
+	
+	grid-template-columns: 1fr 2fr 1fr;
+	grid-template-rows: 80px auto 482px;
+	grid-template-areas: "post-1 post-1 post-1"  
+                         "post-2 post-3 post-5"
+						 "post-6 post-6 post-6"; 
+	
+	grid-gap: 20px;
 	justify-content: center;
-	height: 80px;
+}
+
+.header {
+	grid-area: post-1;
+	display: flex;
+	justify-content: center;
+	/* height: 80px; */
 
 	background: #FFFFFF;
 	box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.05);
 }
 
-main {
+.main {
+	grid-area: post-3;
 	display: grid;
+	justify-content: center;
 }
 
-footer {
-    display: grid;
+.footer {
+	grid-area: post-6;
+	display: grid;
 	background: #303030;
 	padding-top: 43px;
 }
@@ -47,12 +70,6 @@ a {
 	cursor: pointer;
 	color: inherit;
 }
-
-* {
-	box-sizing: border-box;
-}
-
-
 
 aside {
 	width: 31.5%;
@@ -136,9 +153,7 @@ li {
 }
 
 .buttons_block {
-	/* width: 846px; */
 	display: flex;
-	/* justify-content: right; */
 
 }
 
@@ -201,7 +216,6 @@ li {
 	font-weight: 450;
 	font-size: 16px;
 	line-height: 20px;
-	/* identical to box height */
 	background-image: url(./img/polygon.svg);
 	background-repeat: no-repeat;
 	background-position-x: 60px;
@@ -221,7 +235,6 @@ li {
 	height: 40px;
 	font-weight: 450;
 	line-height: 20px;
-	/* identical to box height */
 	background-image: url(./img/polygon.svg);
 	background-repeat: no-repeat;
 	background-position-x: 78px;
@@ -254,10 +267,6 @@ li {
 	line-height: 20px;
 	text-align: center;
 	padding: 12px 30px;
-	
-	/* identical to box height */
-
-
 	color: #2AA2D6;
 }
 
