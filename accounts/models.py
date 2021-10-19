@@ -6,11 +6,12 @@ from django.template.defaultfilters import slugify
 from unidecode import unidecode
 import os
 from ckeditor.fields import RichTextField
+from utils.images import get_tmb_path
 
 # Create your models here.
 def user_avatar_path(instance, filename):
     name, extension = os.path.splitext(filename)
-    return 'avatars/{0}/{1}{2}'.format(slugify(unidecode(instance.full_name)), slugify(unidecode(name)), extension)
+    return 'avatars/{0}/{1}{2}'.format(slugify(unidecode(instance.full_name)), slugify(unidecode(name)), '.jpg')
 
 class AccountManager(BaseUserManager):
     def create_user(self, email, password=None, is_staff=False):
@@ -63,6 +64,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def full_name(self):
         return f'{self.first_name} {self.last_name}'
+    
+    @property
+    def tmb_avatar(self):
+        if self.avatar:
+            tmb_path = get_tmb_path(self.avatar.url)
+            return tmb_path
+        return None
 
     def __str__(self):
         return self.full_name
