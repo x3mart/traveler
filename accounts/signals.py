@@ -1,44 +1,42 @@
 from django.dispatch import receiver
-from django.db.models.signals import post_init, post_save
+from django.db.models.signals import post_delete, post_init, post_save
 from .models import Expert, TeamMember, User
-from utils.images import crop_image, make_tmb
-import os
+from utils.images import delete_image, image_processing
 from traveler.settings import BASE_DIR
-
-def avatar_processing(instance):
-    crop_image(instance.avatar.path, 255, 355)
-    make_tmb(instance.avatar.path)
-    if instance._current_avatar != instance.avatar:
-        storage = instance._current_avatar.storage
-        if storage.exists(instance._current_avatar.name):
-            storage.delete(instance._current_avatar.name)
-        if os.path.exists(f'{BASE_DIR}{instance._current_tmb_avatar}'):
-            os.remove(f'{BASE_DIR}{instance._current_tmb_avatar}')
-
+        
 
 @receiver(post_init, sender=User)
-def backup_image_path(instance, **kwargs):
+def user_post_init(instance, **kwargs):
     instance._current_avatar = instance.avatar
-    instance._current_tmb_avatar = instance.tmb_avatar
 
 @receiver(post_save, sender=User)
-def expert_post_save(instance, **kwargs):
-    avatar_processing(instance)
+def user_post_save(instance, **kwargs):
+    image_processing(instance.avatar, instance._current_avatar, 255, 355, 200, 200)
+
+@receiver(post_delete, sender=User)
+def user_post_delete(instance, **kwargs):
+    delete_image(instance._current_avatar)
 
 @receiver(post_init, sender=Expert)
-def backup_image_path(instance, **kwargs):
+def expert_post_init(instance, **kwargs):
     instance._current_avatar = instance.avatar
-    instance._current_tmb_avatar = instance.tmb_avatar
 
 @receiver(post_save, sender=Expert)
 def expert_post_save(instance, **kwargs):
-    avatar_processing(instance)
+    image_processing(instance.avatar, instance._current_avatar, 255, 355, 200, 200)
+
+@receiver(post_delete, sender=Expert)
+def expert_post_delete(instance, **kwargs):
+    delete_image(instance._current_avatar)
 
 @receiver(post_init, sender=TeamMember)
-def backup_image_path(instance, **kwargs):
+def team_member_post_init(instance, **kwargs):
     instance._current_avatar = instance.avatar
-    instance._current_tmb_avatar = instance.tmb_avatar
 
 @receiver(post_save, sender=TeamMember)
-def expert_post_save(instance, **kwargs):
-    avatar_processing(instance)
+def team_member_post_save(instance, **kwargs):
+    image_processing(instance.avatar, instance._current_avatar, 255, 355, 200, 200)
+
+@receiver(post_delete, sender=TeamMember)
+def team_member_post_delete(instance, **kwargs):
+    delete_image(instance._current_avatar)

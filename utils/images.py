@@ -68,3 +68,21 @@ def get_tmb_path(main_path):
     tmb_path = '/'.join(path) + extension
     tmb_path = tmb_path.replace(str(BASE_DIR), '')
     return tmb_path
+
+def delete_image(image):
+    storage = image.storage
+    if storage.exists(image.name):
+        storage.delete(image.name)
+    delete_tmb(image)
+
+def delete_tmb(image):
+    tmb_path = get_tmb_path(image.path)
+    if os.path.exists(f'{BASE_DIR}{tmb_path}'):
+            os.remove(f'{BASE_DIR}{tmb_path}')
+
+def image_processing(img, current_img=None, crop_width=1067, crop_height=800, tmb_width=350, tmb_height=270):
+    if img and "/" not in img:
+        crop_image(img.path, crop_width, crop_height)
+        make_tmb(img.path, tmb_width, tmb_height)
+        if current_img and current_img != img:
+            delete_image(current_img)

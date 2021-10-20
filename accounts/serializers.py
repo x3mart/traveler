@@ -66,8 +66,10 @@ class ExpertSerializer(UserSerializer):
         }
     
     def get_tmb_avatar(self, obj):
-        request = self.context.get('request')
-        return request.build_absolute_uri(obj.tmb_avatar)    
+        if obj.tmb_avatar:
+            request = self.context.get('request')
+            return request.build_absolute_uri(obj.tmb_avatar) 
+        return None   
     
     def create(self, validated_data):
         password = check_password(self)
