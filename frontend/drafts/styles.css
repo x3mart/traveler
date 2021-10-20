@@ -1,3 +1,132 @@
+@font-face {
+	font-family: 'AvenirNextCyr-Regular';
+	src: url('../styles//fonts/Avenir/AvenirNextCyr-Regular.otf'); 	
+}
+
+@font-face {
+	font-family: 'AvenirNextCyr-Bold';
+	src: url('../styles//fonts/Avenir/AvenirNextCyr-Bold.ttf'); 	
+}
+
+@font-face {
+	font-family: 'SF';
+	src: url('../styles//fonts/sf-ui-text/SFUIText-Regular.ttf');
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+html,
+body {
+	overflow-x: hidden;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+
+	font-family: var(--font-family);
+}
+
+.body {
+	display: grid;
+	
+	grid-template-columns: 1fr 2fr 1fr;
+	grid-template-rows: 80px auto 482px;
+	grid-template-areas: "post-1 post-1 post-1"  
+                         "post-2 post-3 post-5"
+						 "post-6 post-6 post-6"; 
+	
+	grid-gap: 20px;
+	justify-content: center;
+}
+
+.header {
+	grid-area: post-1;
+	display: flex;
+	justify-content: center;
+	/* height: 80px; */
+
+	background: #FFFFFF;
+	box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.05);
+}
+
+.main {
+	grid-area: post-3;
+	display: grid;
+	justify-content: center;
+}
+
+.footer {
+	grid-area: post-6;
+	display: grid;
+	background: #303030;
+	padding-top: 43px;
+}
+
+a {
+	text-decoration: none;
+	cursor: pointer;
+	color: inherit;
+}
+
+aside {
+	width: 31.5%;
+}
+
+ol {
+	display: flex;
+	list-style-type: none;
+	padding-left: 0;
+}
+
+ol li:before {
+    content:  "—";
+    position: relative;
+    left:     -5px;
+}
+
+ol li:nth-child(1):before {
+    content:  "";
+    position: relative;
+    left:     -5px;
+}
+
+li {
+	margin-right: 10px;
+	font-size: 12px;
+    line-height: 15px;
+	/* text-decoration: underline; */
+    /* identical to box height */
+
+    
+
+    color: rgba(0, 0, 0, 0.5);
+    letter-spacing: 0.3px;
+}
+
+:root {
+	--background: #FFF;
+	--background-grey: #F6F7F9;
+	--background-pink: #FCF7F4;
+	--blue: #2AA2D6;
+	--blue-hover: #61CDFC;
+	--orange: #EF8F21;
+	--grey: #303030;
+	--grey-light: #AAA;
+	--font-family: 'AvenirNextCyr-Regular';
+	--font-family-rub: 'SF';
+	--font-family-bold: 'AvenirNextCyr-Bold';
+}
+
+@media (min-width: 320px) and (max-width: 798.999px) {
+	ol {
+		margin-bottom: 0;
+	}
+}
+
+
 .wrapper {
 	width: 1110px;
 	display: flex;
@@ -14,7 +143,7 @@
 	/* width: 70px; */
 }
 
-.header_logo_block_second_icon:nth-last-child(1) {
+.header_logo_block_second_icon img:nth-last-child(2) {
 	fill: #ffffff;
 	margin-bottom: 10px;
 }
@@ -24,9 +153,7 @@
 }
 
 .buttons_block {
-	/* width: 846px; */
 	display: flex;
-	/* justify-content: right; */
 
 }
 
@@ -37,7 +164,7 @@
 	margin-left: 96px;
 
 	background: #2AA2D6;
-	background-image: url(../../public/traveler.svg);
+	background-image: url(./img/traveler.svg);
 	background-position-x: 21px;
     background-position-y: 9px;
 	background-repeat: no-repeat;
@@ -57,7 +184,7 @@
 	font-size: 16px;
 	line-height: 20px;
 	/* identical to box height */
-	background-image: url(../../public/polygon.svg);
+	background-image: url(./img/polygon.svg);
 	background-repeat: no-repeat;
 	background-position-x: 144px;
     background-position-y: 19px;
@@ -73,7 +200,7 @@
 	font-size: 16px;
 	line-height: 20px;
 	/* identical to box height */
-	background-image: url(../../public/polygon.svg);
+	background-image: url(./img/polygon.svg);
 	background-repeat: no-repeat;
 	background-position-x: 124px;
     background-position-y: 19px;
@@ -89,8 +216,7 @@
 	font-weight: 450;
 	font-size: 16px;
 	line-height: 20px;
-	/* identical to box height */
-	background-image: url(../../public/polygon.svg);
+	background-image: url(./img/polygon.svg);
 	background-repeat: no-repeat;
 	background-position-x: 60px;
     background-position-y: 19px;
@@ -109,8 +235,7 @@
 	height: 40px;
 	font-weight: 450;
 	line-height: 20px;
-	/* identical to box height */
-	background-image: url(../../public/polygon.svg);
+	background-image: url(./img/polygon.svg);
 	background-repeat: no-repeat;
 	background-position-x: 78px;
     background-position-y: 19px;
@@ -125,7 +250,7 @@
 .buttons_block_liked {
 	width: 80px;
 	height: 40px;
-	background-image: url(../../public/black-like.svg);
+	background-image: url(./img/black-like.svg);
 	background-position-y: 12px;
 	background-position-x: 28px;
 	background-repeat: no-repeat;
@@ -142,10 +267,6 @@
 	line-height: 20px;
 	text-align: center;
 	padding: 12px 30px;
-	
-	/* identical to box height */
-
-
 	color: #2AA2D6;
 }
 
@@ -187,7 +308,7 @@
 	
 }
 
-.social_wide svg{
+.social_wide img{
 	margin-right: 10px;
 	margin-bottom: 10px;
 	
