@@ -11,17 +11,13 @@ def resize_with_aspectratio(main_path, max_width=350, max_height=400):
     pil_image = PilImage.open(main_path)
 
     if pil_image.width > max_width or pil_image.height > max_height:
-        resized_img = pil_image.thumbnail(size)
-        resized_img.save(main_path)
+        pil_image.thumbnail(size)
+        pil_image.save(main_path)
 
 def crop_image(main_path, crop_width=1920, crop_heigth=640, tmb=False):
     relation = crop_width/crop_heigth
     img = PilImage.open(main_path)
     width, height = img.size
-    # if width/height > 1:
-    #     crop_width = crop_heigth
-    #     crop_heigth = int(crop_width * relation)
-    #     relation = 1/relation
     if round(height * relation) > width:
         h = round(width / relation)
         left = 0

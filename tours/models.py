@@ -10,7 +10,14 @@ from utils.images import get_tmb_path
 
 def tour_image_path(instance, filename):
     name, extension = os.path.splitext(filename)
-    return 'property/{0}/{1}{2}'.format(slugify(unidecode(instance.tour.name)), slugify(unidecode(name)), extension)
+    class_name = instance.__class__.__name__
+    if class_name == 'Tour':
+        folder = f'{slugify(unidecode(instance.name))}/wallpaper'
+    elif class_name == 'TourDayImage':
+        folder = f'{slugify(unidecode(instance.tour_day.tour.name))}/day-{instance.tour_day.number}'
+    else:
+        folder = f'{slugify(unidecode(instance.tour.name))}/{slugify(unidecode(instance.__class__.__name__))}/{slugify(unidecode(instance.name))}'
+    return 'tours/{0}/{1}{2}'.format(folder, slugify(unidecode(name)), extension)
 
 def tour_types_path(instance, filename):
     name, extension = os.path.splitext(filename)
@@ -137,9 +144,6 @@ class TourImage(models.Model):
     image = models.ImageField(_('Фото'), upload_to=tour_image_path, max_length=255, null=True, blank=True)
     alt =  models.CharField(_('alt текст'), max_length=255, null=True, blank=True)
     tour = models.ForeignKey("TourBasic", verbose_name=_("Тур"), on_delete=models.CASCADE, related_name='tour_images', max_length=255, null=True, blank=True)
-
-    def __str__(self):
-        return self.name
     
     class Meta:
         verbose_name = _('Фото тура')
@@ -162,7 +166,7 @@ class TourDay(models.Model):
     tour = models.ForeignKey('TourBasic', on_delete=models.CASCADE, related_name='tour_days', verbose_name=_('Тур'))
 
     def __str__(self):
-        return self.name
+        return f'#{self.number} {self.tour.name} {self.name}'
     
     class Meta:
         verbose_name = _('День тура')
