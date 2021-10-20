@@ -76,13 +76,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.full_name
     
-    # def delete(self, using=None, keep_parents=False):
-    #     storage = self.avatar.storage
-    #     if storage.exists(self.avatar.name):
-    #             storage.delete(self.avatar.name)
-    #     if os.path.exists(f'{BASE_DIR}{self.tmb_avatar}'):
-    #         os.remove(f'{BASE_DIR}{self.tmb_avatar}')
-    #     super().delete()
     
 class Expert(User):
     country = models.CharField(_('Страна'), max_length=100, null=True, blank=True)
@@ -122,6 +115,13 @@ class TeamMember(models.Model):
     @property
     def full_name(self):
         return f'{self.first_name} {self.last_name}'
+    
+    @property
+    def tmb_avatar(self):
+        if self.avatar:
+            tmb_path = get_tmb_path(self.avatar.url)
+            return tmb_path
+        return None
     
     def __str__(self):
         return self.full_name

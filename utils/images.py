@@ -6,21 +6,13 @@ import os
 from traveler.settings import BASE_DIR
 
 
-def create_avatar(image, max_width=350, max_height=400):
+def resize_with_aspectratio(main_path, max_width=350, max_height=400):
     size = (max_width, max_height)
-    memory_image = BytesIO(image.read())
-    pil_image = PilImage.open(memory_image)
-    img_format = os.path.splitext(image.name)[1][1:].upper()
-    img_format = 'JPEG' if img_format == 'JPG' else img_format
+    pil_image = PilImage.open(main_path)
 
     if pil_image.width > max_width or pil_image.height > max_height:
-        pil_image.thumbnail(size)
-
-    new_image = BytesIO()
-    pil_image.save(new_image, format=img_format)
-
-    new_image = ContentFile(new_image.getvalue())
-    return InMemoryUploadedFile(new_image, None, image.name, image.content_type, None, None)
+        resized_img = pil_image.thumbnail(size)
+        resized_img.save(main_path)
 
 def crop_image(main_path, crop_width=1920, crop_heigth=640, tmb=False):
     relation = crop_width/crop_heigth
@@ -80,9 +72,13 @@ def delete_tmb(image):
     if os.path.exists(f'{BASE_DIR}{tmb_path}'):
             os.remove(f'{BASE_DIR}{tmb_path}')
 
-def image_processing(img, current_img=None, crop_width=1067, crop_height=800, tmb_width=350, tmb_height=270):
+def image_processing(img, current_img=None, crop_width=None, crop_height=None, tmb_width=None, tmb_height=None, aspectratio=None):
     if img and "/" not in img:
-        crop_image(img.path, crop_width, crop_height)
-        make_tmb(img.path, tmb_width, tmb_height)
+        if crop_width and crop_height and not aspectratio:
+            crop_image(img.path, crop_width, crop_height)
+        if crop_width and crop_height and aspectratio:
+            resize_with_aspectratio(img.path, crop_width, crop_height)
+        if tmb_width and tmb_height:
+            make_tmb(img.path, tmb_width, tmb_height)
         if current_img and current_img != img:
             delete_image(current_img)

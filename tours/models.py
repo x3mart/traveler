@@ -5,6 +5,7 @@ from unidecode import unidecode
 import os
 from ckeditor_uploader.fields import RichTextUploadingField
 from ckeditor.fields import RichTextField
+from utils.images import get_tmb_path
 
 
 def tour_image_path(instance, filename):
@@ -13,7 +14,7 @@ def tour_image_path(instance, filename):
 
 def tour_types_path(instance, filename):
     name, extension = os.path.splitext(filename)
-    return 'tourtypespath/{0}/{1}{2}'.format(slugify(unidecode(instance.name)), slugify(unidecode(name)), extension)
+    return 'tourtypes/{0}/{1}{2}'.format(slugify(unidecode(instance.name)), slugify(unidecode(name)), extension)
 
 
 class TourType(models.Model):
@@ -29,12 +30,14 @@ class TourType(models.Model):
         verbose_name_plural = _('Типы туров')
 
 
+
 class TourBasic(models.Model):
     expert = models.ForeignKey("accounts.Expert", verbose_name=_('Эксперт'), on_delete=models.CASCADE, related_name='tours')
     is_draft = models.BooleanField(_('Черновик'), default=True)
     is_active = models.BooleanField(default=False)
     on_moderation = models.BooleanField(_('На модерации'), default=False)
     name = models.CharField(_('Название'), max_length=255)
+    wallpaper = models.ImageField(_('Главное фото'), max_length=255, upload_to=tour_image_path, null=True, blank=True)
     basic_type = models.ForeignKey("TourType", verbose_name=_("Основной тип тура"), on_delete=models.CASCADE, related_name='tours_by_basic_type', null=True, blank=True)
     additional_types = models.ManyToManyField("TourType", verbose_name=_("Дополнительные типы тура"), related_name='tours_by_additional_types', blank=True)
     start_region = models.ForeignKey("geoplaces.Region", verbose_name=_("Регион начала путешествия"), on_delete=models.CASCADE, related_name='tours_by_start_region', null=True, blank=True)
@@ -57,6 +60,16 @@ class TourBasic(models.Model):
     class Meta:
         verbose_name = _('Тур основа')
         verbose_name_plural = _('Туры основа')
+    
+    def __str__(self):
+        return self.name
+   
+    @property
+    def tmb_wallpaper(self):
+        if self.wallpaper:
+            tmb_path = get_tmb_path(self.wallpaper.url)
+            return tmb_path
+        return None
 
 
 class TourAdvanced(models.Model):
@@ -109,6 +122,13 @@ class TourPropertyImage(models.Model):
     class Meta:
         verbose_name = _('Фото размещения')
         verbose_name_plural = _('Фотографии размещений')
+    
+    @property
+    def tmb_image(self):
+        if self.image:
+            tmb_path = get_tmb_path(self.image.url)
+            return tmb_path
+        return None
 
 
 class TourImage(models.Model):
@@ -125,6 +145,13 @@ class TourImage(models.Model):
         verbose_name = _('Фото тура')
         verbose_name_plural = _('Фотографии туров')
         ordering =  ['tour', '-id']
+    
+    @property
+    def tmb_image(self):
+        if self.image:
+            tmb_path = get_tmb_path(self.image.url)
+            return tmb_path
+        return None
 
 
 class TourDay(models.Model):
@@ -154,6 +181,13 @@ class TourDayImage(models.Model):
     class Meta:
         verbose_name = _('Фото дня тура')
         verbose_name_plural = _('Фото дней туров')
+    
+    @property
+    def tmb_image(self):
+        if self.image:
+            tmb_path = get_tmb_path(self.image.url)
+            return tmb_path
+        return None
 
 
 class TourImpression(models.Model):
