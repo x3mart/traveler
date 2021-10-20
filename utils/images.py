@@ -56,14 +56,9 @@ def crop_image(main_path, crop_width=1920, crop_heigth=640, tmb=False):
 
 def make_tmb(main_path, width=200, height=200):
     tmb = crop_image(main_path, width, height, True)
-    path, extension = os.path.splitext(main_path)
-    path = path.split('/')
-    filename = path.pop()
-    path.append('tmb__' + filename)
-    tmb_path = '/'.join(path) + extension
+    tmb_path = get_tmb_path(main_path)
+    tmb_path = f'{BASE_DIR}/{tmb_path}'
     tmb.save(tmb_path)
-    tmb_path = tmb_path.replace(str(BASE_DIR), '')
-
 
 def get_tmb_path(main_path):
     path, extension = os.path.splitext(main_path)

@@ -47,13 +47,7 @@ class UserSerializer(serializers.ModelSerializer):
             check_password(self)
             password = validated_data.pop('password')
             instance.set_password(password)
-            instance.save()
-        if validated_data.get('avatar') is not None:
-            storage = instance.avatar.storage
-            if storage.exists(instance.avatar.name):
-                storage.delete(instance.avatar.name)
-        else:
-            validated_data.pop('avatar', None)     
+            instance.save()  
         user = super().update(instance, validated_data)
         return user
     
@@ -63,14 +57,17 @@ class ExpertSerializer(UserSerializer):
         super(ExpertSerializer, self).__init__(*args, **kwargs)
         self.fields = get_translatable_fields_source(self)
     
-    tmb_avatar = serializers.URLField(read_only=True)
+    tmb_avatar = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Expert
         fields = ('id', 'first_name', 'last_name', 'full_name', 'email', 'password', 'is_expert', 'avatar', 'tmb_avatar', 'country', 'city', 'languages', 'visited_countries', 'about', 'phone')
         extra_kwargs = {
             'password': {'write_only': True, 'required': False,},
         }
-        
+    
+    def get_tmb_avatar(self, obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.tmb_avatar)    
     
     def create(self, validated_data):
         password = check_password(self)
@@ -86,9 +83,5 @@ class ExpertSerializer(UserSerializer):
             check_password(self)
             password = validated_data.pop('password')
             instance.set_password(password)
-            instance.save()
-        if validated_data.get('avatar') is not None:
-            pass
-        else:
-            validated_data.pop('avatar', None)     
+            instance.save()    
         return super().update(instance, validated_data)

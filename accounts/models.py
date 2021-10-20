@@ -75,11 +75,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.full_name
     
-    def delete(self, using=None, keep_parents=False):
-        storage = self.avatar.storage
-        if storage.exists(self.avatar.name):
-                storage.delete(self.avatar.name)
-        super().delete()
+    # def delete(self, using=None, keep_parents=False):
+    #     storage = self.avatar.storage
+    #     if storage.exists(self.avatar.name):
+    #             storage.delete(self.avatar.name)
+    #     super().delete()
     
 class Expert(User):
     country = models.CharField(_('Страна'), max_length=100, null=True, blank=True)
