@@ -5,6 +5,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 from django.template.defaultfilters import slugify
 from unidecode import unidecode
 import os
+from traveler.settings import BASE_DIR
 from ckeditor.fields import RichTextField
 from utils.images import get_tmb_path
 
@@ -79,6 +80,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         storage = self.avatar.storage
         if storage.exists(self.avatar.name):
                 storage.delete(self.avatar.name)
+        if os.path.exists(f'{BASE_DIR}{self.tmb_avatar}'):
+            os.remove(f'{BASE_DIR}{self.tmb_avatar}')
         super().delete()
     
 class Expert(User):

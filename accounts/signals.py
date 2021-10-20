@@ -1,6 +1,6 @@
 from django.dispatch import receiver
 from django.db.models.signals import post_init, post_save
-from .models import Expert, User
+from .models import Expert, TeamMember, User
 from utils.images import crop_image, make_tmb
 import os
 from traveler.settings import BASE_DIR
@@ -31,5 +31,14 @@ def backup_image_path(instance, **kwargs):
     instance._current_tmb_avatar = instance.tmb_avatar
 
 @receiver(post_save, sender=Expert)
+def expert_post_save(instance, **kwargs):
+    avatar_processing(instance)
+
+@receiver(post_init, sender=TeamMember)
+def backup_image_path(instance, **kwargs):
+    instance._current_avatar = instance.avatar
+    instance._current_tmb_avatar = instance.tmb_avatar
+
+@receiver(post_save, sender=TeamMember)
 def expert_post_save(instance, **kwargs):
     avatar_processing(instance)
