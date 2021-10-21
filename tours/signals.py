@@ -2,7 +2,6 @@ from django.dispatch import receiver
 from django.db.models.signals import post_delete, post_init, post_save
 from tours.models import TourBasic, TourDayImage, TourImage, TourPropertyImage, TourType
 from utils.images import delete_image, image_processing
-from traveler.settings import BASE_DIR
         
 
 @receiver(post_init, sender=TourType)
