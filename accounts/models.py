@@ -125,3 +125,9 @@ class TeamMember(models.Model):
     
     def __str__(self):
         return self.full_name
+
+
+class Customer(User):
+    class Meta:
+        verbose_name = _('Путешественник')
+        verbose_name_plural = _('Путешественники')
