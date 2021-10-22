@@ -6,11 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Type Tour</title>
     <link rel="stylesheet" type="text/css" href="./styles.css"/>
+    <script src="./script.js"></script>
 </head>
 <body class="body">
     <header class="header">
         <div class='wrapper'>
             <div class="header_content">
+                <div class="mobile_menu" onclick="showMenu('mob_menu')"></div>
+                <div class="mobile_menu_hidden" id="mob_menu">
+                    <a href="">Подберите мне тур</a>
+                    <a href="">Путешествия</a>
+                    <a href="">Поддержка</a>
+                    <a href="">Выбрать язык</a>
+                    <a href="">Выбрать валюту</a>
+                    <a href="">Избранное</a>
+                </div>
                 <div class='header_logo_block'>
                     <div class='header_logo_block_main_icon'>
                         
@@ -173,8 +183,8 @@
 
             <section>
                 <div class="wrapper">
-                    <div class="info_block orange_border">
-                        <div class="info_block_text">
+                    <div class="info_block">
+                        <div class="info_block_text orange_border">
                             <div class="info_block_main_text">Traveler.market</div>
                             <div class="info_block_second_text">Немного о нас и наших услугах</div>
                         </div>
@@ -320,3 +330,4 @@
     </footer>
 </body>
 </html>
+
