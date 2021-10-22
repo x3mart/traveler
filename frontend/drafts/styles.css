@@ -224,7 +224,7 @@ li {
 .buttons_block_travel {
 	width: 160px;
 	height: 40px;
-	font-weight: 450;
+	font-weight: 600;
 	font-size: 16px;
 	line-height: 20px;
 	/* identical to box height */
@@ -241,7 +241,7 @@ li {
 .buttons_block_support {
 	width: 165px;
 	height: 40px;
-	font-weight: 450;
+	font-weight: 600;
 	font-size: 16px;
 	line-height: 20px;
 	/* identical to box height */
@@ -259,7 +259,7 @@ li {
 .buttons_block_country {
 	width: 90px;
 	height: 40px;
-	font-weight: 450;
+	font-weight: 600;
 	font-size: 16px;
 	line-height: 20px;
 	background-image: url(./img/polygon.svg);
@@ -281,7 +281,7 @@ li {
 .buttons_block_currency {
 	width: 90px;
 	height: 40px;
-	font-weight: 450;
+	font-weight: 600;
 	line-height: 20px;
 	background-image: url(./img/polygon.svg);
 	background-repeat: no-repeat;
@@ -290,7 +290,7 @@ li {
 	padding: 12px 15px 9px 10px;
 
 	color: #000000;
-	font-family: var(--font-family-rub);
+	font-family: 'SF';
 
 	font-size: 17px;
 	cursor: pointer;
@@ -377,10 +377,6 @@ li {
 .p_footer_block_second p:nth-child(2) {
 	font-size: 13px;
 	line-height: 16px;
-	/* identical to box height */
-
-	/* text-decoration-line: underline; */
-
 	color: #FFFFFF;
 
 	opacity: 0.5;
@@ -409,9 +405,7 @@ li {
 
 .paragraph_content_underline {
 	font-size: 13px;
-	/* line-height: 16px; */
 	margin-top: 20px;
-	/* identical to box height */
 
 	text-decoration-line: underline;
 
@@ -422,9 +416,7 @@ li {
 
 .paragraph_content_underline:nth-child(2) {
 	font-size: 13px;
-	/* line-height: 16px; */
 	margin-top: 10px;
-	/* identical to box height */
 
 	text-decoration-line: underline;
 
@@ -465,7 +457,7 @@ li {
 	background-position-y: 28px;
 
 	/* identical to box height */
-	font-family: var(--font-family);
+	font-family: 'AvenirNextCyr-Regular';
 	font-size: 18px;
 	font-weight: 450;
 	line-height: 22px;
@@ -489,7 +481,7 @@ li {
 	background-position-y: 28px;
 
 	/* identical to box height */
-	font-family: var(--font-family);
+	font-family: 'AvenirNextCyr-Regular';
 	font-size: 18px;
 	font-weight: 450;
 	line-height: 22px;
@@ -832,12 +824,33 @@ li {
 		border-radius: 0px 0px 8px 8px;
 	}
 
+	.filter_item {
+		padding: 5px 5px 5px 5px;
+	}
+
+	.info_block {
+		position: relative;
+	}
+
+	.info_block_text {
+		padding-left: 5px;
+	}
+
 	.info_block_main_text {
-		font-size: 16px;
+		font-size: 14px;
+	}
+
+	.info_block_second_text {
+		font-size: 12px;
 	}
 
 	.info_block_filter {
-		width: unset;
+		width: 265px;
+		position: absolute;
+		font-size: 14px;
+		top: 11px;
+		right: -13px;
+		padding-top: 10px;
 	}
 
 	.type_block_cards {
@@ -846,7 +859,11 @@ li {
 	}
 
 	.type_block_cards_item {
-		width: 290px;
+		width: 288px;
+		height: 160px;
+		padding: 105px 15px 20px 20px;
+		background-size: contain;
+		background-repeat: round;
 	}
 
 	.col_2 {
@@ -937,8 +954,21 @@ li {
 		font-size: 16px;
 	}
 
+	.info_block {
+		position: relative;
+	}
+
+	.filter_item {
+		padding: 5px 5px 5px 5px;
+	}
+
 	.info_block_filter {
-		width: unset;
+		width: 265px;
+		position: absolute;
+		font-size: 14px;
+		top: 11px;
+		right: -13px;
+		padding-top: 10px;
 	}
 
 	.type_block_cards {
