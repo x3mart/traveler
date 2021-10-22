@@ -50,6 +50,7 @@ body {
 	display: flex;
 	align-items: center;
     height: 80px;
+	position: relative;
 }
 
 .main {
@@ -145,19 +146,42 @@ li {
 	--font-family-bold: 'AvenirNextCyr-Bold';
 }
 
-@media (min-width: 320px) and (max-width: 798.999px) {
-	ol {
-		margin-bottom: 0;
-	}
+.mobile_menu {
+	display: none;
+	background-image: url(./img/menu.svg);
+	background-repeat: no-repeat;
+	width: 20px;
+	height: 20px;
 }
 
+.mobile_menu_hidden {
+	display: none;
+	padding: 15px;
+	background: #ffffff;
+	box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.05);
+	z-index: 1;
+	position: absolute;
+	top: 81px;
+	border-radius: 0px 0px 8px 8px;
+	transition: 1s;
+}
 
+.mobile_menu_hidden a{
+	display: block;
+	cursor: pointer;
+	color: #2AA2D6;
+	margin-top: 10px;
+}
 
+.mobile {
+
+}
 
 .header_logo_block {
 	display: flex;
 	justify-content: space-between;
 	width: 160px;
+	cursor: pointer;
 }
 
 .header_logo_block_main_icon {
@@ -194,6 +218,7 @@ li {
 	padding: 12px 15px 9px 50px;
 	letter-spacing: 0.5px;
 	color: #FFFFFF;
+	cursor: pointer;
 }
 
 .buttons_block_travel {
@@ -210,6 +235,7 @@ li {
 	padding: 12px 15px 9px 30px;
 
 	color: #000000;
+	cursor: pointer;
 }
 
 .buttons_block_support {
@@ -227,6 +253,7 @@ li {
 
 	color: #000000;
 	border-right: 2px solid #EBEBEB;
+	cursor: pointer;
 }
 
 .buttons_block_country {
@@ -243,10 +270,12 @@ li {
 
 	color: #000000;
 	text-align: center;
+	cursor: pointer;
 }
 
 .buttons_block_country svg{
 	margin-top: -1px;
+	cursor: pointer;
 }
 
 .buttons_block_currency {
@@ -264,6 +293,7 @@ li {
 	font-family: var(--font-family-rub);
 
 	font-size: 17px;
+	cursor: pointer;
 }
 
 .buttons_block_liked {
@@ -275,6 +305,7 @@ li {
 	background-repeat: no-repeat;
 	padding: 12px 15px 9px 10px;
 	border-right: 2px solid #EBEBEB;
+	cursor: pointer;
 	
 }
 
@@ -287,6 +318,7 @@ li {
 	text-align: center;
 	padding: 12px 30px;
 	color: #2AA2D6;
+	cursor: pointer;
 }
 
 
@@ -437,6 +469,7 @@ li {
 	font-size: 18px;
 	font-weight: 450;
 	line-height: 22px;
+	cursor: pointer;
 }
 
 .find-tour-block-calendar {
@@ -460,6 +493,7 @@ li {
 	font-size: 18px;
 	font-weight: 450;
 	line-height: 22px;
+	cursor: pointer;
 }
 
 .find-tour-block-button {
@@ -481,10 +515,12 @@ li {
 	background-repeat: no-repeat;
 	background-position-x: 28px;
 	background-position-y: 28px;
+	cursor: pointer;
 }
 
 .input {
 	position: relative;
+	cursor: pointer;
 }
 
 .breadcrumbs {
@@ -502,6 +538,7 @@ li {
 	text-decoration-line: underline;
 
 	color: rgba(0, 0, 0, 0.5);
+	cursor: pointer;
 }
 
 .filter_block {
@@ -565,6 +602,7 @@ li {
 	text-align: right;
 	color: #000000;
 	font-family: 'AvenirNextCyr-Bold';
+	cursor: pointer;
 }
 
 .type_block_cards {
@@ -583,6 +621,7 @@ li {
 	border-radius: 8px;
 	margin-bottom: 30px;
 	padding: 180px 15px 20px 20px;
+	cursor: pointer;
 }
 
 .one {
@@ -683,8 +722,8 @@ li {
 	color: #ffffff;
 }
 
-.orange_text {
-	color: #EF8F21;
+.orange_border {
+	border-left: 4px solid #EF8F21;
 }
 
 .about_us_block {
@@ -726,5 +765,203 @@ li {
 }
 
 @media (min-width: 320px) and (max-width: 798.999px) {
-	
+	ol {
+		margin-bottom: 0;
+	}
+
+	.body {
+		display: block;
+	}
+
+	.wrapper {
+		width: unset;
+		margin: unset;
+		padding-left: 20px;
+    	padding-right: 20px;
+	}
+
+	.wrapper_footer {
+		width: unset;
+		margin: unset;
+		display: block;
+		padding-left: 20px;
+    	padding-right: 20px;
+	}
+
+	.header_content {
+		justify-content: space-between;
+		
+	}
+
+	.mobile_menu {
+		display: block;
+	}
+
+	.buttons_block {
+		display: none;
+	}
+
+	.find-tour-block {
+		display: block;
+		width: 95%;
+		margin: 0 auto;
+		margin-top: 30px;
+		margin-bottom: 30px;
+	}
+
+	.find-tour-block-location {
+		display: block;
+		width: 100%;
+		border-radius: 8px 8px 0px 0px;
+		font-size: 16px;
+		background-position-x: 10px;
+    	padding-left: 50px;
+	}
+
+	.find-tour-block-calendar {
+		display: block;
+		width: 100%;
+		font-size: 16px;
+		background-position-x: 10px;
+    	padding-left: 50px;
+	}
+
+	.find-tour-block-button {
+		display: block;
+		width: 100%;
+		border-radius: 0px 0px 8px 8px;
+	}
+
+	.info_block_main_text {
+		font-size: 16px;
+	}
+
+	.info_block_filter {
+		width: unset;
+	}
+
+	.type_block_cards {
+		justify-content: space-around;
+		
+	}
+
+	.type_block_cards_item {
+		width: 290px;
+	}
+
+	.col_2 {
+		padding-left: 0px;
+		margin-top: 15px;
+	}
+
+	.col_3 {
+		padding-left: 0px;
+		margin-top: 15px;
+	}
+
+	.col_4 {
+		padding-left: 0px;
+		margin-top: 15px;
+	}
+}
+
+@media (min-width: 799px) and (max-width: 1109.999px) {
+	ol {
+		margin-bottom: 0;
+	}
+
+	.body {
+		display: block;
+	}
+
+	.wrapper {
+		width: unset;
+		margin: unset;
+		padding-left: 20px;
+    	padding-right: 20px;
+	}
+
+	.wrapper_footer {
+		width: unset;
+		margin: unset;
+		display: block;
+		padding-left: 20px;
+    	padding-right: 20px;
+	}
+
+	.header_content {
+		justify-content: space-between;
+		
+	}
+
+	.mobile_menu {
+		display: block;
+	}
+
+	.buttons_block {
+		display: none;
+	}
+
+	.find-tour-block {
+		display: block;
+		width: 95%;
+		margin: 0 auto;
+		margin-top: 30px;
+		margin-bottom: 30px;
+	}
+
+	.find-tour-block-location {
+		display: block;
+		width: 100%;
+		border-radius: 8px 8px 0px 0px;
+		font-size: 16px;
+		background-position-x: 10px;
+    	padding-left: 50px;
+	}
+
+	.find-tour-block-calendar {
+		display: block;
+		width: 100%;
+		font-size: 16px;
+		background-position-x: 10px;
+    	padding-left: 50px;
+	}
+
+	.find-tour-block-button {
+		display: block;
+		width: 100%;
+		border-radius: 0px 0px 8px 8px;
+	}
+
+	.info_block_main_text {
+		font-size: 16px;
+	}
+
+	.info_block_filter {
+		width: unset;
+	}
+
+	.type_block_cards {
+		justify-content: space-around;
+		
+	}
+
+	.type_block_cards_item {
+		width: 290px;
+	}
+
+	.col_2 {
+		padding-left: 0px;
+		margin-top: 15px;
+	}
+
+	.col_3 {
+		padding-left: 0px;
+		margin-top: 15px;
+	}
+
+	.col_4 {
+		padding-left: 0px;
+		margin-top: 15px;
+	}
 }
