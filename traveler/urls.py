@@ -23,6 +23,7 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from django.conf.urls.i18n import i18n_patterns
+import debug_toolbar
 
 
 urlpatterns = [
@@ -33,7 +34,8 @@ urlpatterns = [
     path('ckeditor/', include('ckeditor_uploader.urls')),
 ]
 
-urlpatterns += i18n_patterns(path('api/', include('accounts.urls')))
+urlpatterns += i18n_patterns(path('api/', include('accounts.urls')),
+                            path('api/', include('tours.urls')),)
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
@@ -53,5 +55,6 @@ if settings.DEBUG:
         url(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
         url(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
         url(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+        path('__debug__/', include(debug_toolbar.urls)),
     ]
 # urlpatterns += [re_path(r'^.*', TemplateView.as_view(template_name='index.html'))]

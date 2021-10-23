@@ -58,9 +58,11 @@ class ExpertSerializer(UserSerializer):
         self.fields = get_translatable_fields_source(self)
     
     tmb_avatar = serializers.SerializerMethodField(read_only=True)
+    tours_count = serializers.IntegerField(read_only=True,)
+    tours_avg_rating = serializers.DecimalField(read_only=True, max_digits=2, decimal_places=1)
     class Meta:
         model = Expert
-        fields = ('id', 'first_name', 'last_name', 'full_name', 'email', 'password', 'is_expert', 'avatar', 'tmb_avatar', 'country', 'city', 'languages', 'visited_countries', 'about', 'phone')
+        fields = "__all__"
         extra_kwargs = {
             'password': {'write_only': True, 'required': False,},
         }

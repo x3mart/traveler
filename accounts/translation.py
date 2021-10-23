@@ -1,5 +1,5 @@
 from modeltranslation.translator import register, TranslationOptions
-from .models import Expert, User
+from .models import Customer, Expert, User
 
 
 @register(User)
@@ -12,3 +12,7 @@ class UserTranslationOptions(TranslationOptions):
 class ExpertTranslationOptions(TranslationOptions):
     fields = ('country', 'city', 'languages', 'visited_countries','about')
 
+
+@register(Customer)
+class CustomerTranslationOptions(TranslationOptions):
+    pass

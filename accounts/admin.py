@@ -1,4 +1,4 @@
-from accounts.models import Expert, TeamMember, User
+from accounts.models import Customer, Expert, TeamMember, User
 from django.contrib import admin
 from modeltranslation.admin import TranslationAdmin
 from django.utils.safestring import mark_safe
@@ -49,6 +49,10 @@ class ExpertAdmin(UserAdmin, TranslationAdmin):
     
     get_avatar.short_description = 'Аватар'
 
+class CustomerAdmin(UserAdmin, TranslationAdmin):
+    pass
+
 admin.site.register(User, UserAdmin)
 admin.site.register(Expert, ExpertAdmin)
 admin.site.register(TeamMember)
+admin.site.register(Customer, CustomerAdmin)
