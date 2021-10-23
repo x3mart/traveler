@@ -862,8 +862,9 @@ li {
 		width: 288px;
 		height: 160px;
 		padding: 105px 15px 20px 20px;
-		background-size: contain;
-		background-repeat: round;
+		background-size: cover;
+		background-repeat: no-repeat;
+		background-position: center;
 	}
 
 	.col_2 {
