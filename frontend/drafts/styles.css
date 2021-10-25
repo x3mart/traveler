@@ -227,7 +227,6 @@ li {
 	font-weight: 600;
 	font-size: 16px;
 	line-height: 20px;
-	/* identical to box height */
 	background-image: url(./img/polygon.svg);
 	background-repeat: no-repeat;
 	background-position-x: 144px;
@@ -597,7 +596,7 @@ li {
 	cursor: pointer;
 }
 
-.type_block_cards {
+.block_cards {
 	display: flex;
 	flex-wrap: wrap;
 	margin-top: 35px;
@@ -608,8 +607,6 @@ li {
 .type_block_cards_item {
 	width: 350px;
 	height: 240px;
-	left: 165px;
-	top: 517px;
 	border-radius: 8px;
 	margin-bottom: 30px;
 	padding: 180px 15px 20px 20px;
@@ -716,6 +713,8 @@ li {
 
 .orange_border {
 	border-left: 4px solid #EF8F21;
+	margin-top: 35px;
+	margin-bottom: 35px;
 }
 
 .about_us_block {
@@ -756,6 +755,278 @@ li {
 	margin-bottom: 10px;
 }
 
+/*близжайшие туры*/
+
+.nearest_block_cards_item {
+	width: 350px;
+	height: 360px;
+	
+	background: #FFFFFF;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	box-sizing: border-box;
+	border-radius: 8px;
+	cursor: pointer;
+	margin-bottom: 30px;
+}
+
+.nearest_block_cards_item_img {
+	width: 349px;
+	height: 200px;
+	border-radius: 8px 8px 0px 0px;
+	background-size: cover;
+	background-position: center;
+}
+
+.near-one {
+	background: url(./img/img.png);
+}
+
+.near-two {
+	background: url(./img/img\ \(1\).png);
+}
+
+.near-three {
+	background: url(./img/img\ \(2\).png);
+}
+
+.near-four {
+	background: url(./img/img\ \(3\).png);
+}
+
+.near-five {
+	background: url(./img/img\ \(4\).png);
+}
+
+.near-six {
+	background: url(./img/img\ \(5\).png);
+}
+
+.near-seven {
+	background: url(./img/img\ \(6\).png);
+}
+
+.near-eight {
+	background: url(./img/img\ \(11\).png);
+}
+
+.near-nine {
+	background: url(./img/img\ \(7\).png);
+}
+
+.near-ten {
+	background: url(./img/img\ \(8\).png);
+}
+
+.near-eleven {
+	background: url(./img/img\ \(9\).png);
+}
+
+.near-twelve {
+	background: url(./img/img\ \(10\).png);
+}
+
+.nearest_block_cards_item_name {
+	margin: 20px;
+	padding-bottom: 20px;
+	border-bottom: 1px solid #EBEBEB;
+}
+
+.nearest_block_cards_item_name_country {
+	font-style: normal;
+	font-weight: 750;
+	font-size: 12px;
+	line-height: 15px;
+	/* identical to box height */
+
+
+	color: rgba(0, 0, 0, 0.5);
+}
+
+.nearest_block_cards_item_name_info {
+	font-style: normal;
+	font-weight: 600;
+	font-size: 16px;
+	line-height: 20px;
+	/* identical to box height */
+
+
+	color: #000000;
+}
+
+.nearest_block_cards_item_guide {
+	display: flex;
+	justify-content: space-between;
+	padding: 0px 20px 20px 20px;
+}
+
+.nearest_block_cards_item_guide_left {
+	display: flex;
+}
+
+.nearest_block_cards_item_guide_name_img {
+	width: 40px;
+	height: 40px;
+	background: url(./img/Ellipse\ 14.png);
+}
+
+.nearest_block_cards_item_guide_name_raiting {
+	margin-left: 10px;
+	margin-top: 5px;
+}
+
+.nearest_block_cards_item_guide_name_raiting_name {
+	font-weight: 600;
+	font-size: 13px;
+	line-height: 16px;
+	/* identical to box height */
+
+
+	color: #000000;
+}
+
+.nearest_block_cards_item_guide_name_raiting_stars {
+	background: url(./img/greenstar.svg);
+	background-repeat: no-repeat;
+	background-position-y: 7px;
+	padding-left: 13px;
+}
+
+.raiting_stars {
+	font-weight: 600;
+	font-size: 12px;
+	line-height: 15px;
+	/* identical to box height */
+	
+	
+	color: #84BB59;
+}
+
+.quantity_feedbacks {
+	font-weight: normal;
+	font-size: 12px;
+	line-height: 15px;
+	/* identical to box height */
+	
+	
+	color: rgba(0, 0, 0, 0.5);
+}
+
+.nearest_block_cards_item_guide_period {
+	font-style: normal;
+	font-weight: 450;
+	font-size: 12px;
+	line-height: 15px;
+	/* identical to box height */
+
+	text-align: right;
+	margin-top: 5px;
+	color: rgba(0, 0, 0, 0.5)
+}
+
+.nearest_block_cards_item_guide_cost {
+	font-weight: 600;
+	font-size: 18px;
+	line-height: 22px;
+	/* identical to box height */
+
+	text-align: right;
+	font-family: 'SF';
+	color: #000000;
+}
+
+.block_cards_inline {
+	display: flex;
+	justify-content: space-between;
+	position: relative;
+	
+}
+
+.arrow-left {
+	width: 48px;
+	height: 48px;
+
+	background: #FFFFFF;
+	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+	background-image: url(./img/left_arrow.svg);
+	/* background-size: cover; */
+	background-repeat: no-repeat;
+	background-position: center;
+	border-radius: 50%;
+	position: absolute;
+	left: -25px;
+	top: 130px;
+}
+
+.arrow-right {
+	width: 48px;
+	height: 48px;
+	
+	background: #FFFFFF;
+	box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+	background-image: url(./img/right_arrow.svg);
+	/* background-size: cover; */
+	background-repeat: no-repeat;
+	background-position: center;
+	border-radius: 50%;
+	position: absolute;
+	right: -25px;
+	top: 150px;
+}
+
+.box_shadow {
+	box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.03);
+	border: none;
+}
+
+.large_block_cards_item {
+	width: 730px;
+	height: 360px;
+
+	background: #FFFFFF;
+	box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.03);
+	border-radius: 8px;
+}
+
+.large-img {
+	width: 100%;
+	height: 280px;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+}
+
+.inblock_name {
+	border-bottom: none;
+	padding-top: 200px;
+	margin: 0 20px 20px 20px;
+}
+
+.inblock_country {
+	font-weight: 600;
+	font-size: 20px;
+	line-height: 25px;
+	/* identical to box height */
+	
+	
+	color: #FFFFFF;
+}
+
+.inblock_info {
+	font-weight: 600;
+	font-size: 32px;
+	line-height: 39px;
+
+	color: #FFFFFF;
+}
+
+.large_block_item_guide {
+	padding-top: 18px;
+}
+
+.desktop-hide {
+	display: none;
+}
+
 @media (min-width: 320px) and (max-width: 798.999px) {
 	ol {
 		margin-bottom: 0;
@@ -783,6 +1054,10 @@ li {
 	.header_content {
 		justify-content: space-between;
 		
+	}
+
+	.main {
+		display: block;
 	}
 
 	.mobile_menu {
@@ -853,7 +1128,7 @@ li {
 		padding-top: 10px;
 	}
 
-	.type_block_cards {
+	.block_cards {
 		justify-content: space-around;
 		
 	}
@@ -880,6 +1155,104 @@ li {
 	.col_4 {
 		padding-left: 0px;
 		margin-top: 15px;
+	}
+
+	/*близжайшие туры мобилка*/
+
+	.nearest_block_cards_item {
+		width: 288px;
+		height: 246px;
+
+		background: #FFFFFF;
+		border: 1px solid rgba(0, 0, 0, 0.1);
+	}
+
+	.nearest_block_cards_item_img {
+		width: 288px;
+		height: 140px;
+		background-size: cover;
+		background-position: center;
+	}
+
+	.nearest_block_cards_item_name {
+		margin: 10px;
+		padding-bottom: 10px;
+		border-bottom: 1px solid #EBEBEB;
+	}
+
+	.nearest_block_cards_item_guide {
+		padding: 0px 10px 10px 10px;
+	}
+	
+	.nearest_block_cards_item_name_country {		
+		font-size: 10px;		
+	}
+
+	.nearest_block_cards_item_name_info {
+		font-size: 14px;		
+	}
+
+	.nearest_block_cards_item_guide_name_img {
+		width: 32px;
+		height: 32px;
+		background-size: contain;
+	}
+
+	.nearest_block_cards_item_guide_name_raiting_name {
+		font-size: 12px;
+	}
+	
+	.nearest_block_cards_item_guide_name_raiting {
+		
+		margin-top: 0px;
+	}
+
+	.nearest_block_cards_item_guide_period {
+		font-size: 11px;
+		margin-top: 0px;
+	}
+	
+	.nearest_block_cards_item_guide_cost {
+		font-size: 15px;
+	}
+
+	.desktop-hide {
+		display: block;
+	}
+
+	.mobile-hide {
+		display: none;
+	}
+
+	.large_block_cards_item {
+		width: 260px;
+		height: 246px;
+		margin-right: 10px;
+	}
+
+	.large-img {
+		width: 259px;
+	}
+
+	.arrow-left {
+		display: none;
+	}
+
+	.arrow-right {
+		display: none;
+	}
+
+	.block_cards_inline {
+		overflow: hidden;
+		overflow-x: auto;
+		justify-content: space-between;
+	}
+}
+
+@media (min-width: 600px) and (max-width: 1109.99px) {
+	.block_cards_inline {
+		
+		justify-content: space-around;
 	}
 }
 
@@ -972,7 +1345,7 @@ li {
 		padding-top: 10px;
 	}
 
-	.type_block_cards {
+	.block_cards {
 		justify-content: space-around;
 		
 	}
@@ -994,5 +1367,32 @@ li {
 	.col_4 {
 		padding-left: 0px;
 		margin-top: 15px;
+	}
+
+	.large_block_cards_item {
+		width: 260px;
+		height: 246px;
+		margin-right: 10px;
+	}
+	.block_cards_inline {
+		overflow: hidden;
+		overflow-x: auto;
+		justify-content: space-around;
+	}
+
+	.arrow-left {
+		display: none;
+	}
+
+	.arrow-right {
+		display: none;
+	}
+
+	.desktop-hide {
+		display: block;
+	}
+
+	.mobile-hide {
+		display: none;
 	}
 }

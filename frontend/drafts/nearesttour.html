@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Type Tour</title>
+    <link rel="stylesheet" type="text/css" href="./styles.css"/>
+    <script src="./script.js"></script>
+</head>
+<body class="body">
+    <header class="header">
+        <div class='wrapper'>
+            <div class="header_content">
+                <div class="mobile_menu" onclick="showMenu('mob_menu')"></div>
+                <div class="mobile_menu_hidden" id="mob_menu">
+                    <a href="">Подберите мне тур</a>
+                    <a href="">Путешествия</a>
+                    <a href="">Поддержка</a>
+                    <a href="">Выбрать язык</a>
+                    <a href="">Выбрать валюту</a>
+                    <a href="">Избранное</a>
+                </div>
+                <div class='header_logo_block'>
+                    <div class='header_logo_block_main_icon'>
+                        
+                            <img src="./img/TM.svg" alt="">
+                        
+                    </div>
+                    <div class='header_logo_block_second_icon'>
+                        
+                            <img src="./img/Logoname.svg" alt="">
+                        
+                    </div>
+                </div>
+
+                <div class='buttons_block'>
+                    <div class='buttons_block_find_tour'>Подберите мне тур</div>
+                    <div class='buttons_block_travel'>Путешествия</div>
+                    <div class='buttons_block_support'>Поддержка</div>
+                    <div class='buttons_block_country'>
+                        <img src="./img/Flag.svg" alt="">
+                    </div>
+                    <div class='buttons_block_currency'>&#8381; (Rub)</div>
+                    <div class='buttons_block_liked'></div>
+                </div>
+
+                <div class='login_block'>
+                    Вход
+                </div>
+            </div>
+        </div>
+    </header>
+    <main class="main">
+        
+
+            <section class="background-grey">
+                <div class='wrapper'>
+                    <div class="find-tour-block">
+                        <input class="find-tour-block-location" placeholder="Страна, регион или город">
+                        <input class="find-tour-block-calendar" placeholder="Выберите даты">
+                        <button class="find-tour-block-button">Подобрать тур</button>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <div class='wrapper'>
+                    <div class="breadcrumbs"><span>Главная</span> - <span>Типы туров</span></div>                    
+                </div>
+            </section>
+                
+            <section>
+                <div class="wrapper">
+                    <div class="filter_block">
+                        <div class="filter_item">Тип тура</div>
+                        <div class="filter_item">Язык тура</div>
+                        <div class="filter_item">Цена</div>
+                        <div class="filter_item">Туры с кешбеком</div>
+                        <div class="filter_item">Туры с кешбеком</div>
+                        <div class="filter_item">Средний возраст группы</div>
+                        <div class="filter_item">Длительность (дни)</div>
+                        <div class="filter_item">Осталось мест</div>
+                        <div class="filter_item">Проживание</div>
+                        <div class="filter_item">Активность</div>
+                        <div class="filter_item">Рейтинг</div>
+                        <div class="filter_item">Гарантированные даты</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="background-grey">
+                <div class="wrapper">
+                    <div class="info_block">
+                        <div class="info_block_text orange_border">
+                            <div class="info_block_main_text">Персональные рекомендации ближайших туров</div>
+                            <div class="info_block_second_text">Мы подобрали туры иименно для вас</div>
+                        </div>
+                        <!-- <div class="info_block_filter">
+                                Сначала популярные
+                        </div>  -->
+                    </div>
+
+                    <div class="block_cards_inline">
+                        <div class="arrow-left"></div>
+                        <div class="arrow-right"></div>
+                        <div class="large_block_cards_item">
+                            <div class="nearest_block_cards_item_img large-img near-one">
+                                <div class="nearest_block_cards_item_name inblock_name mobile-hide">
+                                    <div class="nearest_block_cards_item_name_country inblock_country">Вьетнам</div>
+                                    <div class="nearest_block_cards_item_name_info inblock_info">Все красоты страны за неделю</div>
+                                </div>
+                            </div>
+
+                            <div class="nearest_block_cards_item_name desktop-hide">
+                                <div class="nearest_block_cards_item_name_country">Вьетнам</div>
+                                <div class="nearest_block_cards_item_name_info">Все красоты страны за неделю</div>
+                            </div>
+                            
+                            <div class="nearest_block_cards_item_guide large_block_item_guide">
+
+                                <div class="nearest_block_cards_item_guide_left">
+                                    <div class="nearest_block_cards_item_guide_name_img"></div>
+                                    <div class="nearest_block_cards_item_guide_name_raiting">
+                                        <div class="nearest_block_cards_item_guide_name_raiting_name">Кристина</div>
+                                        <div class="nearest_block_cards_item_guide_name_raiting_stars">
+                                            <span class="raiting_stars">4.9</span> <span class="quantity_feedbacks">(137)</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="nearest_block_cards_item_guide_right">
+                                    <div class="nearest_block_cards_item_guide_period">7 дн. (21 – 28 мая)</div>
+                                    <div class="nearest_block_cards_item_guide_cost">от 25.000 ₽</div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="nearest_block_cards_item box_shadow">
+                            <div class="nearest_block_cards_item_img near-one"></div>
+                            <div class="nearest_block_cards_item_name">
+                                <div class="nearest_block_cards_item_name_country">Вьетнам</div>
+                                <div class="nearest_block_cards_item_name_info">Все красоты страны за неделю</div>
+                            </div>
+                            <div class="nearest_block_cards_item_guide">
+
+                                <div class="nearest_block_cards_item_guide_left">
+                                    <div class="nearest_block_cards_item_guide_name_img"></div>
+                                    <div class="nearest_block_cards_item_guide_name_raiting">
+                                        <div class="nearest_block_cards_item_guide_name_raiting_name">Кристина</div>
+                                        <div class="nearest_block_cards_item_guide_name_raiting_stars">
+                                            <span class="raiting_stars">4.9</span> <span class="quantity_feedbacks">(137)</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="nearest_block_cards_item_guide_right">
+                                    <div class="nearest_block_cards_item_guide_period">7 дн. (21 – 28 мая)</div>
+                                    <div class="nearest_block_cards_item_guide_cost">от 25.000 ₽</div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <div class="wrapper">
+                    <div class="info_block">
+                        <div class="info_block_text">
+                            <div class="info_block_main_text">Близжайшие туры</div>
+                            <div class="info_block_second_text">Найдено 135 туров</div>
+                        </div>
+                        <div class="info_block_filter">
+                                Сначала популярные
+                        </div> 
+                    </div>
+                    <div class="block_cards">
+                        <div class="nearest_block_cards_item">
+                            <div class="nearest_block_cards_item_img near-one"></div>
+                            <div class="nearest_block_cards_item_name">
+                                <div class="nearest_block_cards_item_name_country">Вьетнам</div>
+                                <div class="nearest_block_cards_item_name_info">Все красоты страны за неделю</div>
+                            </div>
+                            <div class="nearest_block_cards_item_guide">
+
+                                <div class="nearest_block_cards_item_guide_left">
+                                    <div class="nearest_block_cards_item_guide_name_img"></div>
+                                    <div class="nearest_block_cards_item_guide_name_raiting">
+                                        <div class="nearest_block_cards_item_guide_name_raiting_name">Кристина</div>
+                                        <div class="nearest_block_cards_item_guide_name_raiting_stars">
+                                            <span class="raiting_stars">4.9</span> <span class="quantity_feedbacks">(137)</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="nearest_block_cards_item_guide_right">
+                                    <div class="nearest_block_cards_item_guide_period">7 дн. (21 – 28 мая)</div>
+                                    <div class="nearest_block_cards_item_guide_cost">от 25.000 ₽</div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="nearest_block_cards_item">
+                            <div class="nearest_block_cards_item_img near-two"></div>
+                            <div class="nearest_block_cards_item_name">
+                                <div class="nearest_block_cards_item_name_country">Вьетнам</div>
+                                <div class="nearest_block_cards_item_name_info">Все красоты страны за неделю</div>
+                            </div>
+                            <div class="nearest_block_cards_item_guide">
+
+                                <div class="nearest_block_cards_item_guide_left">
+                                    <div class="nearest_block_cards_item_guide_name_img"></div>
+                                    <div class="nearest_block_cards_item_guide_name_raiting">
+                                        <div class="nearest_block_cards_item_guide_name_raiting_name">Кристина</div>
+                                        <div class="nearest_block_cards_item_guide_name_raiting_stars">
+                                            <span class="raiting_stars">4.9</span> <span class="quantity_feedbacks">(137)</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="nearest_block_cards_item_guide_right">
+                                    <div class="nearest_block_cards_item_guide_period">7 дн. (21 – 28 мая)</div>
+                                    <div class="nearest_block_cards_item_guide_cost">от 25.000 ₽</div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="nearest_block_cards_item">
+                            <div class="nearest_block_cards_item_img near-three"></div>
+                            <div class="nearest_block_cards_item_name">
+                                <div class="nearest_block_cards_item_name_country">Вьетнам</div>
+                                <div class="nearest_block_cards_item_name_info">Все красоты страны за неделю</div>
+                            </div>
+                            <div class="nearest_block_cards_item_guide">
+
+                                <div class="nearest_block_cards_item_guide_left">
+                                    <div class="nearest_block_cards_item_guide_name_img"></div>
+                                    <div class="nearest_block_cards_item_guide_name_raiting">
+                                        <div class="nearest_block_cards_item_guide_name_raiting_name">Кристина</div>
+                                        <div class="nearest_block_cards_item_guide_name_raiting_stars">
+                                            <span class="raiting_stars">4.9</span> <span class="quantity_feedbacks">(137)</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="nearest_block_cards_item_guide_right">
+                                    <div class="nearest_block_cards_item_guide_period">7 дн. (21 – 28 мая)</div>
+                                    <div class="nearest_block_cards_item_guide_cost">от 25.000 ₽</div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="nearest_block_cards_item">
+                            <div class="nearest_block_cards_item_img near-four"></div>
+                            <div class="nearest_block_cards_item_name">
+                                <div class="nearest_block_cards_item_name_country">Вьетнам</div>
+                                <div class="nearest_block_cards_item_name_info">Все красоты страны за неделю</div>
+                            </div>
+                            <div class="nearest_block_cards_item_guide">
+
+                                <div class="nearest_block_cards_item_guide_left">
+                                    <div class="nearest_block_cards_item_guide_name_img"></div>
+                                    <div class="nearest_block_cards_item_guide_name_raiting">
+                                        <div class="nearest_block_cards_item_guide_name_raiting_name">Кристина</div>
+                                        <div class="nearest_block_cards_item_guide_name_raiting_stars">
+                                            <span class="raiting_stars">4.9</span> <span class="quantity_feedbacks">(137)</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="nearest_block_cards_item_guide_right">
+                                    <div class="nearest_block_cards_item_guide_period">7 дн. (21 – 28 мая)</div>
+                                    <div class="nearest_block_cards_item_guide_cost">от 25.000 ₽</div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="nearest_block_cards_item">
+                            <div class="nearest_block_cards_item_img near-five"></div>
+                            <div class="nearest_block_cards_item_name">
+                                <div class="nearest_block_cards_item_name_country">Вьетнам</div>
+                                <div class="nearest_block_cards_item_name_info">Все красоты страны за неделю</div>
+                            </div>
+                            <div class="nearest_block_cards_item_guide">
+
+                                <div class="nearest_block_cards_item_guide_left">
+                                    <div class="nearest_block_cards_item_guide_name_img"></div>
+                                    <div class="nearest_block_cards_item_guide_name_raiting">
+                                        <div class="nearest_block_cards_item_guide_name_raiting_name">Кристина</div>
+                                        <div class="nearest_block_cards_item_guide_name_raiting_stars">
+                                            <span class="raiting_stars">4.9</span> <span class="quantity_feedbacks">(137)</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="nearest_block_cards_item_guide_right">
+                                    <div class="nearest_block_cards_item_guide_period">7 дн. (21 – 28 мая)</div>
+                                    <div class="nearest_block_cards_item_guide_cost">от 25.000 ₽</div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="nearest_block_cards_item">
+                            <div class="nearest_block_cards_item_img near-six"></div>
+                            <div class="nearest_block_cards_item_name">
+                                <div class="nearest_block_cards_item_name_country">Вьетнам</div>
+                                <div class="nearest_block_cards_item_name_info">Все красоты страны за неделю</div>
+                            </div>
+                            <div class="nearest_block_cards_item_guide">
+
+                                <div class="nearest_block_cards_item_guide_left">
+                                    <div class="nearest_block_cards_item_guide_name_img"></div>
+                                    <div class="nearest_block_cards_item_guide_name_raiting">
+                                        <div class="nearest_block_cards_item_guide_name_raiting_name">Кристина</div>
+                                        <div class="nearest_block_cards_item_guide_name_raiting_stars">
+                                            <span class="raiting_stars">4.9</span> <span class="quantity_feedbacks">(137)</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="nearest_block_cards_item_guide_right">
+                                    <div class="nearest_block_cards_item_guide_period">7 дн. (21 – 28 мая)</div>
+                                    <div class="nearest_block_cards_item_guide_cost">от 25.000 ₽</div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="nearest_block_cards_item">
+                            <div class="nearest_block_cards_item_img near-seven"></div>
+                            <div class="nearest_block_cards_item_name">
+                                <div class="nearest_block_cards_item_name_country">Вьетнам</div>
+                                <div class="nearest_block_cards_item_name_info">Все красоты страны за неделю</div>
+                            </div>
+                            <div class="nearest_block_cards_item_guide">
+
+                                <div class="nearest_block_cards_item_guide_left">
+                                    <div class="nearest_block_cards_item_guide_name_img"></div>
+                                    <div class="nearest_block_cards_item_guide_name_raiting">
+                                        <div class="nearest_block_cards_item_guide_name_raiting_name">Кристина</div>
+                                        <div class="nearest_block_cards_item_guide_name_raiting_stars">
+                                            <span class="raiting_stars">4.9</span> <span class="quantity_feedbacks">(137)</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="nearest_block_cards_item_guide_right">
+                                    <div class="nearest_block_cards_item_guide_period">7 дн. (21 – 28 мая)</div>
+                                    <div class="nearest_block_cards_item_guide_cost">от 25.000 ₽</div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="nearest_block_cards_item">
+                            <div class="nearest_block_cards_item_img near-eight"></div>
+                            <div class="nearest_block_cards_item_name">
+                                <div class="nearest_block_cards_item_name_country">Вьетнам</div>
+                                <div class="nearest_block_cards_item_name_info">Все красоты страны за неделю</div>
+                            </div>
+                            <div class="nearest_block_cards_item_guide">
+
+                                <div class="nearest_block_cards_item_guide_left">
+                                    <div class="nearest_block_cards_item_guide_name_img"></div>
+                                    <div class="nearest_block_cards_item_guide_name_raiting">
+                                        <div class="nearest_block_cards_item_guide_name_raiting_name">Кристина</div>
+                                        <div class="nearest_block_cards_item_guide_name_raiting_stars">
+                                            <span class="raiting_stars">4.9</span> <span class="quantity_feedbacks">(137)</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="nearest_block_cards_item_guide_right">
+                                    <div class="nearest_block_cards_item_guide_period">7 дн. (21 – 28 мая)</div>
+                                    <div class="nearest_block_cards_item_guide_cost">от 25.000 ₽</div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="nearest_block_cards_item">
+                            <div class="nearest_block_cards_item_img near-nine"></div>
+                            <div class="nearest_block_cards_item_name">
+                                <div class="nearest_block_cards_item_name_country">Вьетнам</div>
+                                <div class="nearest_block_cards_item_name_info">Все красоты страны за неделю</div>
+                            </div>
+                            <div class="nearest_block_cards_item_guide">
+
+                                <div class="nearest_block_cards_item_guide_left">
+                                    <div class="nearest_block_cards_item_guide_name_img"></div>
+                                    <div class="nearest_block_cards_item_guide_name_raiting">
+                                        <div class="nearest_block_cards_item_guide_name_raiting_name">Кристина</div>
+                                        <div class="nearest_block_cards_item_guide_name_raiting_stars">
+                                            <span class="raiting_stars">4.9</span> <span class="quantity_feedbacks">(137)</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="nearest_block_cards_item_guide_right">
+                                    <div class="nearest_block_cards_item_guide_period">7 дн. (21 – 28 мая)</div>
+                                    <div class="nearest_block_cards_item_guide_cost">от 25.000 ₽</div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="nearest_block_cards_item">
+                            <div class="nearest_block_cards_item_img near-ten"></div>
+                            <div class="nearest_block_cards_item_name">
+                                <div class="nearest_block_cards_item_name_country">Вьетнам</div>
+                                <div class="nearest_block_cards_item_name_info">Все красоты страны за неделю</div>
+                            </div>
+                            <div class="nearest_block_cards_item_guide">
+
+                                <div class="nearest_block_cards_item_guide_left">
+                                    <div class="nearest_block_cards_item_guide_name_img"></div>
+                                    <div class="nearest_block_cards_item_guide_name_raiting">
+                                        <div class="nearest_block_cards_item_guide_name_raiting_name">Кристина</div>
+                                        <div class="nearest_block_cards_item_guide_name_raiting_stars">
+                                            <span class="raiting_stars">4.9</span> <span class="quantity_feedbacks">(137)</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="nearest_block_cards_item_guide_right">
+                                    <div class="nearest_block_cards_item_guide_period">7 дн. (21 – 28 мая)</div>
+                                    <div class="nearest_block_cards_item_guide_cost">от 25.000 ₽</div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="nearest_block_cards_item">
+                            <div class="nearest_block_cards_item_img near-eleven"></div>
+                            <div class="nearest_block_cards_item_name">
+                                <div class="nearest_block_cards_item_name_country">Вьетнам</div>
+                                <div class="nearest_block_cards_item_name_info">Все красоты страны за неделю</div>
+                            </div>
+                            <div class="nearest_block_cards_item_guide">
+
+                                <div class="nearest_block_cards_item_guide_left">
+                                    <div class="nearest_block_cards_item_guide_name_img"></div>
+                                    <div class="nearest_block_cards_item_guide_name_raiting">
+                                        <div class="nearest_block_cards_item_guide_name_raiting_name">Кристина</div>
+                                        <div class="nearest_block_cards_item_guide_name_raiting_stars">
+                                            <span class="raiting_stars">4.9</span> <span class="quantity_feedbacks">(137)</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="nearest_block_cards_item_guide_right">
+                                    <div class="nearest_block_cards_item_guide_period">7 дн. (21 – 28 мая)</div>
+                                    <div class="nearest_block_cards_item_guide_cost">от 25.000 ₽</div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="nearest_block_cards_item">
+                            <div class="nearest_block_cards_item_img near-twelve"></div>
+                            <div class="nearest_block_cards_item_name">
+                                <div class="nearest_block_cards_item_name_country">Вьетнам</div>
+                                <div class="nearest_block_cards_item_name_info">Все красоты страны за неделю</div>
+                            </div>
+                            <div class="nearest_block_cards_item_guide">
+
+                                <div class="nearest_block_cards_item_guide_left">
+                                    <div class="nearest_block_cards_item_guide_name_img"></div>
+                                    <div class="nearest_block_cards_item_guide_name_raiting">
+                                        <div class="nearest_block_cards_item_guide_name_raiting_name">Кристина</div>
+                                        <div class="nearest_block_cards_item_guide_name_raiting_stars">
+                                            <span class="raiting_stars">4.9</span> <span class="quantity_feedbacks">(137)</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="nearest_block_cards_item_guide_right">
+                                    <div class="nearest_block_cards_item_guide_period">7 дн. (21 – 28 мая)</div>
+                                    <div class="nearest_block_cards_item_guide_cost">от 25.000 ₽</div>
+                                </div>
+
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </section>
+
+            <section class="section_find_tour">
+                <div class="wrapper">
+                    <div class="info_block">
+                        <div class="info_block_text white_border">
+                            <div class="info_block_main_text white_text">Подобрать тур</div>
+                            <div class="info_block_second_text white_text">Мы подберем только лучшее</div>
+                        </div>
+                    </div>
+                    <div class="find-tour-block">
+                        <input class="find-tour-block-location" placeholder="Страна, регион или город">
+                        <input class="find-tour-block-calendar" placeholder="Выберите даты">
+                        <button class="find-tour-block-button">Подобрать тур</button>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <div class="wrapper">
+                    <div class="info_block">
+                        <div class="info_block_text orange_border">
+                            <div class="info_block_main_text">Traveler.market</div>
+                            <div class="info_block_second_text">Немного о нас и наших услугах</div>
+                        </div>
+                    </div>
+                    <div class="about_us_block">
+                        <h2 class="h2">
+                            Отдых в России — активные туры по большой стране
+                        </h2>
+                        <h3 class="h3">
+                            Туры по России — все туристические направления страны
+                        </h3>
+                        <p class="p">
+                            Большая Страна – самая полная база путешествий по России от прямых организаторов без комиссий и наценок для Вас.
+                        </p>
+                        <p class="p"></p>
+                            Мы помогаем Вам найти варианты активного отдыха согласно вашим предпочтениям. 
+                            На нашем сайте размещена самая полная база туров от Крыма до Камчатки и от Кавказа до Северного полюса.
+                        </p>
+                        <p class="p">    
+                            Куда бы Вы не собирались – Байкал, Алтай, Карелия, Якутия, Урал – с помощью Большой Страны Вы найдете подходящий вид отдыха 
+                            с учетом индивидуальных пожеланий, бюджета и уровня физической подготовки. Просто настройте фильтры поиска, даты поездки, 
+                            виды отдыха и подберите свой активный тур!
+                            Активный отдых на любой вкус
+                        </p>
+                        <p class="p">   
+                            Варианты туров по России многочисленны и разнообразны. Если Вас манят горы, совершите восхождение на Эльбрус или отправляйтесь 
+                            в конный поход по Алтаю. Вам нравится водный туризм? Выберете сплав по Уралу, Кавказу или Карелии, или проведите отпуск 
+                            на берегах Байкала. Любите движение и скорость? Отправляйтесь в велотур по Крыму летом или сафари на снегоходах зимой. 
+                            Ищете спокойный отдых? Пройдите по треккинговым тропам Сибири, Адыгеи и Урала или отправьтесь в круиз по Волге. 
+                            Познакомьтесь с традициями народов России в этнотурах по Бурятии, Хакасии, Алтаю и Дальнему Востоку.
+                        </p>
+                        <p class="p"> 
+                            А для тех, кто хочет почувствовать себя первооткрывателем, Большая Страна поможет найти экспедиции в самые удаленные уголки 
+                            России – Северный полюс, Курильские острова, Сахалин, Камчатку и плато Путорана.
+                        </p>
+                        <p class="p">  
+                            Для желающих попробовать все и сразу существуют комбинированные туры, сочетающие в себе сплавы, конные походы, восхождения, 
+                            велотуры и многое другое. 
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+
+
+
+
+
+
+            
+        </div>                
+    </main>
+    
+    <footer class="footer">
+        <div class='wrapper_footer'>
+                <div class='col_1' >
+                    <div class='header_logo_block'>
+                        <div class='header_logo_block_main_icon'>
+                            <img src="./img/TM.svg" alt="">
+                        </div>
+                        <div class='header_logo_block_second_icon'>
+                            <img src="./img/Logonamewhite.svg" alt="">
+                        </div>
+                    </div>    
+                    <p class='paragraph_content' >Traveler.market — это маркетплейс авторских туров от тревел-экспертов и частных независимых гидов. 
+                        Авторские туры — это спонтанные и яркие возможности, предлагающие взять максимум от каждой точки маршрута. 
+                        Мы за непринужденный подход к групповым путешествиям, который больше похож на встречу со старыми друзьями.</p>
+                    <p class='paragraph_content_underline' >© 2020 . Traveler.market</p>
+                    <p class='paragraph_content_underline' >Политика конфиденциальности</p>
+                    <p class='paragraph_content_underline' >Публичная оферта</p>
+                    <p class='paragraph_content_underline' >Согласие на обработку персональных данных</p>
+                </div>
+
+                <div class=col_2 >
+                    <p class=name_paragraph >Информация</p>
+                    <p class='paragraph_content_underline' >Как устроен сервис Traveler.market</p>
+                    <p class='paragraph_content_underline' >Подход сообщества Traveler.market</p>
+                    <p class='paragraph_content_underline' >Журнал о путешествиях</p>
+                    <p class='paragraph_content_underline' >Об авторских турах</p>
+                    <p class='paragraph_content_underline' >Отзывы путешественников</p>
+                    <p class='paragraph_content_underline' >Центр помощи</p>
+                    <p class='paragraph_content_underline' >Связаться с нами</p>
+                    <p class='paragraph_content_underline' >Организуйте авторский тур</p>
+                    
+                </div>
+
+                <div class='col_3' >
+                    <p class='name_paragraph' >Мы заботимся о вас</p>
+                    <div class='p_footer_block' >
+                        <div class='p_footer_block_first' >
+                            <img src="./img/lock-orange.svg" alt="">
+                        </div>
+                        <div class='p_footer_block_second' >
+                            <p>Безопасная оплата</p>
+                            <p>Бронируйте туры через нашу надежную платежную систему</p>
+                        </div>
+                    </div>
+
+                    <div class='p_footer_block' >
+                        <div class='p_footer_block_first' >
+                            <img src="./img/smile-orange.svg" alt="">
+                        </div>
+                        <div class='p_footer_block_second' >
+                            <p>Продуманная спонтанность</p>
+                            <p>Маршруты могут адаптироваться под пожелания группы</p>
+                        </div>
+                    </div>
+
+                    <div class='p_footer_block' >
+                        <div class='p_footer_block_first' >
+                            <img src="./img/user-orange.svg" alt="">
+                        </div>
+                        <div class='p_footer_block_second' >
+                            <p>Проверенные тревел-эксперты</p>
+                            <p>В нашей базе 3 452 гида, которые прошли тщательный отбор</p>
+                        </div>
+                    </div>
+
+                    <div class='p_footer_block' >
+                        <div class='p_footer_block_first' >
+                            <img src="./img/defender-orange.svg" alt="">
+                        </div>
+                        <div class='p_footer_block_second' >
+                            <p>Проверенные тревел-эксперты</p>
+                            <p>В нашей базе 3 452 гида, которые прошли тщательный отбор</p>
+                        </div>
+                    </div>
+
+                
+                </div>
+
+                <div class='col_4' >
+                    <p class='name_paragraph' >Мы в социальных сетях</p>
+                    <div class='social_wide' > 
+                        <img src="./img/14.svg" alt="">
+                        <img src="./img/15.svg" alt="">
+                        <img src="./img/16.svg" alt="">
+                        <img src="./img/17.svg" alt="">
+                        <img src="./img/18.svg" alt="">
+                    </div>
+                </div>
+        </div>                
+    </footer>
+</body>
+</html>
+
