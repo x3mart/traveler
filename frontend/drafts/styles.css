@@ -601,7 +601,7 @@ li {
 	flex-wrap: wrap;
 	margin-top: 35px;
 	justify-content: space-between;
-	
+	position: relative;
 }
 
 .type_block_cards_item {
@@ -714,7 +714,7 @@ li {
 .orange_border {
 	border-left: 4px solid #EF8F21;
 	margin-top: 35px;
-	margin-bottom: 35px;
+	/* margin-bottom: 35px; */
 }
 
 .about_us_block {
@@ -938,7 +938,8 @@ li {
 	display: flex;
 	justify-content: space-between;
 	position: relative;
-	
+	margin-top: 35px;
+	flex-wrap: unset;
 }
 
 .arrow-left {
@@ -954,7 +955,7 @@ li {
 	border-radius: 50%;
 	position: absolute;
 	left: -25px;
-	top: 130px;
+	top: 150px;
 }
 
 .arrow-right {
@@ -1247,6 +1248,10 @@ li {
 		overflow-x: auto;
 		justify-content: space-between;
 	}
+
+	.margin-right {
+		margin-right: 10px;
+	}
 }
 
 @media (min-width: 600px) and (max-width: 1109.99px) {
@@ -1370,7 +1375,7 @@ li {
 	}
 
 	.large_block_cards_item {
-		width: 260px;
+		width: 460px;
 		height: 246px;
 		margin-right: 10px;
 	}
@@ -1389,10 +1394,11 @@ li {
 	}
 
 	.desktop-hide {
-		display: block;
+		display: none;
 	}
 
 	.mobile-hide {
-		display: none;
+		display: block;
+		padding-top: 165px;
 	}
 }
