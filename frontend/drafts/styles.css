@@ -1042,7 +1042,7 @@ li {
 .login_page_block {
 	display: flex;
 	width: 920px;
-	height: 586px;
+	/* height: 586px; */
 	background: #FFFFFF;
 	box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.1);
 	border-radius: 8px;
@@ -1064,8 +1064,31 @@ li {
 	font-size: 32px;
 	line-height: 39px;
 	text-transform: uppercase;
+	border-radius: 0px 8px 8px 0px;
+	background-repeat: no-repeat;
+	color: #FFFFFF;
+}
+
+.login_block_right p {
+	font-weight: 750;
+	font-size: 14px;
+	line-height: 17px;
+	display: flex;
+	align-items: flex-end;
+	text-transform: uppercase;
 
 	color: #FFFFFF;
+}
+
+.login_block_right_registration_guide {
+	background: url(./img/Rectangle_guide.png);
+	background-size: cover;
+	background-repeat: no-repeat;
+	padding-top: 680px;
+}
+
+.login_block_right_registration_guide p {
+	margin-top: 20px;
 }
 
 .info_block_text_login {
@@ -1147,6 +1170,54 @@ li {
 	background-position-y: 15px;
 }
 
+.auth_name {
+	display: block;
+	width: 100%;
+	height: 60px;
+
+	background: #F6F7F9;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	box-sizing: border-box;
+	border-radius: 8px;
+	margin-bottom: 25px;
+	font-weight: 450;
+	font-size: 18px;
+	line-height: 22px;
+	/* identical to box height */
+
+
+	color: rgba(0, 0, 0, 0.25);
+	padding-left: 65px;
+	background-image: url(./img/avatar_form.svg);
+	background-repeat: no-repeat;
+	background-position-x: 25px;
+	background-position-y: 18px;
+}
+
+.auth_tel {
+	display: block;
+	width: 100%;
+	height: 60px;
+
+	background: #F6F7F9;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	box-sizing: border-box;
+	border-radius: 8px;
+	margin-bottom: 25px;
+	font-weight: 450;
+	font-size: 18px;
+	line-height: 22px;
+	/* identical to box height */
+
+
+	color: rgba(0, 0, 0, 0.25);
+	padding-left: 65px;
+	background-image: url(./img/smartphone_form.svg);
+	background-repeat: no-repeat;
+	background-position-x: 25px;
+	background-position-y: 18px;
+}
+
 .remember_checkbox {
 	position: absolute;
 	z-index: -1;
@@ -1200,6 +1271,8 @@ li {
 	color: #FFFFFF;
 	border: none;
 }
+
+
 
 .title_social {
 	font-weight: normal;
@@ -1292,6 +1365,57 @@ li {
 
 	color: #2AA2D6;
 }
+
+.social_links_block_info_registration {
+	margin-bottom: 25px;
+}
+
+/*registrations pages and recover*/
+
+.change_type_block {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 25px;
+}
+
+.change_type_block_left {
+	width: 190px;
+	height: 60px;
+	
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	box-sizing: border-box;
+	border-radius: 8px;
+	padding: 20px;
+	font-weight: 450;
+	font-size: 16px;
+	line-height: 20px;
+	/* identical to box height */
+
+	text-align: center;
+
+	color: #000000;
+	cursor: pointer;
+}
+
+.change_type_block_right {
+	width: 190px;
+	height: 60px;
+	
+	background: #EF8F21;
+	border-radius: 8px;
+
+	font-weight: 600;
+	font-size: 16px;
+	line-height: 20px;
+	/* identical to box height */
+
+	text-align: center;
+	padding: 20px;
+
+	color: #FFFFFF;
+	cursor: pointer;
+}
+
 @media (min-width: 320px) and (max-width: 798.999px) {
 	ol {
 		margin-bottom: 0;
@@ -1407,6 +1531,11 @@ li {
 		background-position: center;
 	}
 
+	.col_1 {
+		grid-area: col-1;
+		padding: 0px 0px 0px 0px;
+	}
+
 	.col_2 {
 		padding-left: 0px;
 		margin-top: 15px;
@@ -1517,6 +1646,8 @@ li {
 		margin-right: 10px;
 	}
 
+	/*мобилка страницы авторизации*/
+
 	.login_page_block {
 		width: 100%;
 		height: unset;
@@ -1554,6 +1685,44 @@ li {
 	.social_links_block_item {
 		width: 52px;
 		height: 52px;
+	}
+
+	.auth_mail {
+		font-size: 13px;
+	}
+	
+	.auth_password {
+		font-size: 13px;
+		
+	}
+
+	/*мобилка регистрации*/
+
+	.change_type_block {
+		justify-content: space-evenly;
+	}
+
+	.change_type_block_left {
+		width: 123px;
+		height: 40px;
+		font-size: 12px;
+		padding: 8px;
+	}
+
+	.change_type_block_right {
+		width: 123px;
+		height: 40px;
+		font-size: 12px;
+		padding: 8px;
+	}
+
+	.auth_name {
+		font-size: 13px;
+	}
+	
+	.auth_tel {
+		font-size: 13px;
+		
 	}
 }
 
