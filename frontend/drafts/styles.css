@@ -63,7 +63,6 @@ body {
 	display: grid;
 	background: #303030;
 	
-	
 }
 
 .wrapper {
@@ -79,6 +78,7 @@ body {
 	grid-template-areas: "col-1 col-2 col-3"  
                          "col-1 col-4 col-4"; 
 	grid-template-columns: 33% 33% 33%;
+	grid-template-rows: 71% 29%;
 	padding-top: 30px;
 }
 
@@ -1034,6 +1034,11 @@ li {
 
 /*auth*/
 
+.wrapper_center {
+	display: flex;
+	justify-content: center;
+}
+
 .login_page_block {
 	display: flex;
 	width: 920px;
@@ -1041,6 +1046,7 @@ li {
 	background: #FFFFFF;
 	box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.1);
 	border-radius: 8px;
+	margin-bottom: 35px;
 }
 
 .login_block_left {
@@ -1096,7 +1102,7 @@ li {
 
 .auth_mail {
 	display: block;
-	width: 400px;
+	width: 100%;
 	height: 60px;
 
 	background: #F6F7F9;
@@ -1120,7 +1126,7 @@ li {
 
 .auth_password {
 	display: block;
-	width: 400px;
+	width: 100%;
 	height: 60px;
 
 	background: #F6F7F9;
@@ -1145,14 +1151,6 @@ li {
 	position: absolute;
 	z-index: -1;
 	opacity: 0;
-	
-	/* display: block; */
-	/* width: 24px;
-	height: 24px;
-
-	background: #2AA2D6;
-	border-radius: 4px;
-	margin-bottom: 25px; */
 }
 
 .remember_checkbox+label {
@@ -1185,7 +1183,7 @@ li {
 
 .enter_site {
 	display: block;
-	width: 400px;
+	width: 100%;
 	height: 60px;
 	left: 290px;
 	top: 464px;
@@ -1257,18 +1255,26 @@ li {
 
 .apple {
 	background: url(./img/1.svg);
+	background-size: cover;
+    background-position: center;
 }
 
 .vk {
 	background: url(./img/2.svg);
+	background-size: cover;
+    background-position: center;
 }
 
 .fb {
 	background: url(./img/3.svg);
+	background-size: cover;
+    background-position: center;
 }
 
 .google {
 	background: url(./img/4.svg);
+	background-size: cover;
+    background-position: center;
 }
 
 .social_links_block_info {
@@ -1509,6 +1515,45 @@ li {
 
 	.margin-right {
 		margin-right: 10px;
+	}
+
+	.login_page_block {
+		width: 100%;
+		height: unset;
+	}
+
+	.login_block_left {
+		width: 100%;
+	}
+
+	.login_block_right {
+		display: none;
+	}
+
+	.info_block_text_left {
+		font-size: 13px;
+		padding-left: 5px;
+	}
+
+	.title_social {
+		font-size: 13px;
+	}
+
+	.social_links_block_info {
+		font-size: 13px;
+	}
+
+	.social_links_block_info span {
+		font-size: 13px;
+	}
+
+	.login_block_left {
+		padding: 10px;
+	}
+
+	.social_links_block_item {
+		width: 52px;
+		height: 52px;
 	}
 }
 
