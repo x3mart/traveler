@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Type Tour</title>
+    <link rel="stylesheet" type="text/css" href="./styles.css"/>
+    <script src="./script.js"></script>
+</head>
+<body class="body">
+    <header class="header">
+        <div class='wrapper'>
+            <div class="header_content">
+                <div class="mobile_menu" onclick="showMenu('mob_menu')"></div>
+                <div class="mobile_menu_hidden" id="mob_menu">
+                    <a href="">Подберите мне тур</a>
+                    <a href="">Путешествия</a>
+                    <a href="">Поддержка</a>
+                    <a href="">Выбрать язык</a>
+                    <a href="">Выбрать валюту</a>
+                    <a href="">Избранное</a>
+                </div>
+                <div class='header_logo_block'>
+                    <div class='header_logo_block_main_icon'>
+                        
+                            <img src="./img/TM.svg" alt="">
+                        
+                    </div>
+                    <div class='header_logo_block_second_icon'>
+                        
+                            <img src="./img/Logoname.svg" alt="">
+                        
+                    </div>
+                </div>
+
+                <div class='buttons_block'>
+                    <div class='buttons_block_find_tour'>Подберите мне тур</div>
+                    <div class='buttons_block_travel'>Путешествия</div>
+                    <div class='buttons_block_support'>Поддержка</div>
+                    <div class='buttons_block_country'>
+                        <img src="./img/Flag.svg" alt="">
+                    </div>
+                    <div class='buttons_block_currency'>&#8381; (Rub)</div>
+                    <div class='buttons_block_liked'></div>
+                </div>
+
+                <div class='login_block'>
+                    Вход
+                </div>
+            </div>
+        </div>
+    </header>
+    <main class="main">
+
+            <section>
+                <div class='wrapper'>
+                    <div class="breadcrumbs breadcrumbs_margin"><span>Главная</span> - <span>Типы туров</span></div>                    
+                </div>
+            </section>
+                
+            <section>
+                <div class="wrapper wrapper_center">
+                    <div class="login_page_block">
+                        <div class="login_block_left">                            
+                            <div class="info_block_text_login">
+                                <div class="info_block_text_left">Регистрация</div>
+                                <div class="info_block_text_right">Войти на сайт</div>
+                            </div>  
+                            
+                            <div class="auth_form">
+                                <div class="change_type_block">
+                                    <div class="change_type_block_left" id="guide">Я путешественник</div>
+                                    <div class="change_type_block_right" id="traveler">Я тревел-эксперт</div>
+                                </div>
+                                <input type="text" class="auth_name" placeholder="Имя и фамилия">
+                                <input type="text" class="auth_mail" placeholder="Адрес эл. почты">
+                                <input type="text" class="auth_tel" placeholder="+7">
+                                <input type="text" class="auth_password" placeholder="Пароль">
+                                <input type="text" class="auth_password" placeholder="Подтверждение пароля">
+                                <div class="social_links_block_info social_links_block_info_registration">
+                                    Отправляя форму вы соглашаетесь с <span>условиями публичной оферты</span> и выражаете свое согласие на обработку <span>персональных данных.</span>  
+                                </div>
+                                
+                                <button class="enter_site enter_site_registration">Согласиться и продолжить</button>
+                            </div>
+
+                            <div class="title_social">или зарегистрируйтесь через соц. сети</div> 
+                            <div class="social_links_block">
+                                <div class="social_links_block_item apple"></div>
+                                <div class="social_links_block_item vk"></div>
+                                <div class="social_links_block_item fb"></div>
+                                <div class="social_links_block_item google"></div>
+                            </div>
+                            
+
+                        </div>
+                        <div class="login_block_right login_block_right_registration_guide">
+                            Стань частью тревел-комьюнити
+                            <p>Присоединяйся к сообществу из 10 000 путешественников зарегистрированных на платформе.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+             
+    </main>
+    
+    <footer class="footer">
+        <div class='wrapper_footer'>
+                <div class='col_1' >
+                    <div class='header_logo_block'>
+                        <div class='header_logo_block_main_icon'>
+                            <img src="./img/TM.svg" alt="">
+                        </div>
+                        <div class='header_logo_block_second_icon'>
+                            <img src="./img/Logonamewhite.svg" alt="">
+                        </div>
+                    </div>    
+                    <p class='paragraph_content' >Traveler.market — это маркетплейс авторских туров от тревел-экспертов и частных независимых гидов. 
+                        Авторские туры — это спонтанные и яркие возможности, предлагающие взять максимум от каждой точки маршрута. 
+                        Мы за непринужденный подход к групповым путешествиям, который больше похож на встречу со старыми друзьями.</p>
+                    <p class='paragraph_content_underline' >© 2020 . Traveler.market</p>
+                    <p class='paragraph_content_underline' >Политика конфиденциальности</p>
+                    <p class='paragraph_content_underline' >Публичная оферта</p>
+                    <p class='paragraph_content_underline' >Согласие на обработку персональных данных</p>
+                </div>
+
+                <div class=col_2 >
+                    <p class=name_paragraph >Информация</p>
+                    <p class='paragraph_content_underline' >Как устроен сервис Traveler.market</p>
+                    <p class='paragraph_content_underline' >Подход сообщества Traveler.market</p>
+                    <p class='paragraph_content_underline' >Журнал о путешествиях</p>
+                    <p class='paragraph_content_underline' >Об авторских турах</p>
+                    <p class='paragraph_content_underline' >Отзывы путешественников</p>
+                    <p class='paragraph_content_underline' >Центр помощи</p>
+                    <p class='paragraph_content_underline' >Связаться с нами</p>
+                    <p class='paragraph_content_underline' >Организуйте авторский тур</p>
+                    
+                </div>
+
+                <div class='col_3' >
+                    <p class='name_paragraph' >Мы заботимся о вас</p>
+                    <div class='p_footer_block' >
+                        <div class='p_footer_block_first' >
+                            <img src="./img/lock-orange.svg" alt="">
+                        </div>
+                        <div class='p_footer_block_second' >
+                            <p>Безопасная оплата</p>
+                            <p>Бронируйте туры через нашу надежную платежную систему</p>
+                        </div>
+                    </div>
+
+                    <div class='p_footer_block' >
+                        <div class='p_footer_block_first' >
+                            <img src="./img/smile-orange.svg" alt="">
+                        </div>
+                        <div class='p_footer_block_second' >
+                            <p>Продуманная спонтанность</p>
+                            <p>Маршруты могут адаптироваться под пожелания группы</p>
+                        </div>
+                    </div>
+
+                    <div class='p_footer_block' >
+                        <div class='p_footer_block_first' >
+                            <img src="./img/user-orange.svg" alt="">
+                        </div>
+                        <div class='p_footer_block_second' >
+                            <p>Проверенные тревел-эксперты</p>
+                            <p>В нашей базе 3 452 гида, которые прошли тщательный отбор</p>
+                        </div>
+                    </div>
+
+                    <div class='p_footer_block' >
+                        <div class='p_footer_block_first' >
+                            <img src="./img/defender-orange.svg" alt="">
+                        </div>
+                        <div class='p_footer_block_second' >
+                            <p>Проверенные тревел-эксперты</p>
+                            <p>В нашей базе 3 452 гида, которые прошли тщательный отбор</p>
+                        </div>
+                    </div>
+
+                
+                </div>
+
+                <div class='col_4' >
+                    <p class='name_paragraph' >Мы в социальных сетях</p>
+                    <div class='social_wide' > 
+                        <img src="./img/14.svg" alt="">
+                        <img src="./img/15.svg" alt="">
+                        <img src="./img/16.svg" alt="">
+                        <img src="./img/17.svg" alt="">
+                        <img src="./img/18.svg" alt="">
+                    </div>
+                </div>
+        </div>                
+    </footer>
+</body>
+</html>
+
