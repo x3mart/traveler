@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Type Tour</title>
+    <link rel="stylesheet" type="text/css" href="./styles.css"/>
+    <script src="./script.js"></script>
+</head>
+<body class="body">
+    <header class="header">
+        <div class='wrapper'>
+            <div class="header_content">
+                <div class="mobile_menu" onclick="showMenu('mob_menu')"></div>
+                <div class="mobile_menu_hidden" id="mob_menu">
+                    <a href="">Подберите мне тур</a>
+                    <a href="">Путешествия</a>
+                    <a href="">Поддержка</a>
+                    <a href="">Выбрать язык</a>
+                    <a href="">Выбрать валюту</a>
+                    <a href="">Избранное</a>
+                </div>
+                <div class='header_logo_block'>
+                    <div class='header_logo_block_main_icon'>
+                        
+                            <img src="./img/TM.svg" alt="">
+                        
+                    </div>
+                    <div class='header_logo_block_second_icon'>
+                        
+                            <img src="./img/Logoname.svg" alt="">
+                        
+                    </div>
+                </div>
+
+                <div class='buttons_block'>
+                    <div class='buttons_block_find_tour'>Подберите мне тур</div>
+                    <div class='buttons_block_travel'>Путешествия</div>
+                    <div class='buttons_block_support'>Поддержка</div>
+                    <div class='buttons_block_country'>
+                        <img src="./img/Flag.svg" alt="">
+                    </div>
+                    <div class='buttons_block_currency'>&#8381; (Rub)</div>
+                    <div class='buttons_block_liked'></div>
+                </div>
+
+                <div class='login_block'>
+                    <div class="message"></div>
+                    <div class="account">И</div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main class="main">
+
+            <section>
+                <div class='wrapper'>
+                    <div class="breadcrumbs breadcrumbs_margin"><span>Главная</span> - <span>Личный кабинет</span></div>                    
+                </div>
+            </section>
+                
+            <section>
+                <div class='wrapper'>
+                    <div class="account_block">
+                        <aside class="aside">
+                            <nav class="navigation">
+                                <ul>
+                                    <li class="accont_icon">Аккаунт</li>
+                                    <li class="my_tours_icon">Мои туры</li>
+                                    <li class="chat_icon">Чат</li>
+                                    <li class="my_profile_icon">Мой профиль</li>
+                                    <li class="order_icon">Заказы</li>
+                                    <li class="settings_icon">Настройка</li>
+                                    <li class="requisites_icon">Реквизиты</li>
+                                    <li class="request_icon">Запросы на проверку</li>
+                                    <li class="my_team_icon">Моя команда</li>
+                                </ul>
+                            </nav>
+                            <div class="stock_block">
+                                <p>
+                                    ПРИГЛАСИ ДРУЗЕЙ НА TRAVELER.MARKET И ПОЛУЧИ СКИДКУ НА ЛЮБОЙ ТУР
+                                </p>
+                                    <div class="stock_block_info">
+                                        <p>у вас: 0 баллов</p>
+                                        <p>1 балл = 1 RUB</p>
+                                    </div>
+                                <p>
+                                    Отправьте друзьям электронное письмо 
+                                    (сообщение в мессенджер) с приглашением на 
+                                    Traveler.market.me или поделитесь пригласительной 
+                                    ссылкой в социальных сетях. Друзья получат скидку 
+                                    до 2 200р. на первое бронирование, а вы — 1 000р. 
+                                    за каждого, кто совершит поездку по условиям акции. 
+                                    Доступный бонус появится на странице оплаты. Подробнее
+                                </p>
+                                <p>
+                                    Ваша ссылка: 
+                                </p>
+                                <div class="stock_block_info_link_block">
+                                    <input class="stock_block_info_link_block_input" placeholder="https://traveler.market/i..." type="text">
+                                    <button class="stock_block_info_link_block_button"></button>
+                                </div>
+                            </div>
+                            <div class="social_block">
+                                <div class="social_block_head">
+                                    <h3>Социальные сети</h3>
+                                    <h4>В сообществе Traveler.market открытость и 
+                                    прозрачность имеют большое значение. 
+                                    Повысьте доверие пользователей к себе – 
+                                    привяжите ваши аккаунты социальных сетей к профилю YouTravel.me. 
+                                    Мы обязуемся не раскрывать ваши контакты.</h4>
+                                </div>
+                                <div class="social_block_item">
+                                    <div class="social_block_item_icon">
+                                        <img src="./img/fb.png" alt="fb">
+                                        <img class="fi" src="./img/fi.png" alt="fi">
+                                    </div>
+                                    <div class="social_block_item_text">
+                                        <h3>Facebook</h3>
+                                        <h4>Подключить</h4>
+                                    </div>
+                                    
+                                </div>
+                                <div class="social_block_item">
+                                    <div class="social_block_item_icon">
+                                        <img src="./img/vk.png" alt="vk">
+                                        <img class="vi" src="./img/vi.png" alt="vi">
+                                    </div>
+                                    <div class="social_block_item_text">
+                                        <h3>Vkontakte</h3>
+                                        <h4>Подключить</h4>
+                                    </div>                                    
+                                </div>
+                                <div class="social_block_item">
+                                    <div class="social_block_item_icon">
+                                        <img src="./img/ins.png" alt="fb">
+                                        <img class="ii" src="./img/ii.png" alt="fi">
+                                    </div>
+                                    <div class="social_block_item_text">
+                                        <h3>Instagram</h3>
+                                        <h4>Подключить</h4>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </aside>
+                        <div class="account_block_right">
+                            <div class="account_block_right_head">
+                                <div class="account">И</div>
+                                <div class="account_name">
+                                    <h3>Смирнов Иван</h3>
+                                    <h4>username@gmail.com</h4>
+                                </div>
+                                <img class="get_out" src="./img/get_out.svg" alt="get out">
+                            </div>
+                            <div class="account_block_right_main">
+
+                                <div class="account_block_right_main_items">
+                                    <div class="account_block_right_main_item">
+                                        <p>7</p>
+                                        <p>Опубликованных туров</p>
+                                    </div>
+                                    <div class="account_block_right_main_item">
+                                        <p>1</p>
+                                        <p>Заявок на бронирование</p>
+                                    </div>
+                                    <div class="account_block_right_main_item">
+                                        <p>4</p>
+                                        <p>Оплаченных заказов</p>
+                                    </div>
+                                    <div class="account_block_right_main_item">
+                                        <p>2</p>
+                                        <p>Туров в черновиках</p>
+                                    </div>
+                                </div>
+
+                                <div class="account_block_right_main_items account_block_right_main_items_custom">
+                                    <div class="account_block_right_main_item_base">
+                                        <div class="account_block_right_main_item_base_left"></div>
+                                        <div class="account_block_right_main_item_base_right">
+                                            <img class="close_icon" src="./img/close.svg" alt="close">
+                                            <h3>Начало работы на Traveler.market</h3>
+                                            <h4>Прочитайте статьи по работе с сервисом и узнайте, 
+                                                как YouTravel.me может помочь вам собирать полные 
+                                                группы на каждое путешествие.</h4>
+                                            <div class="button_expierense">
+                                                Перейти в базу знаний
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="account_block_right_main_items">
+                                    <div class="account_block_right_main_items_block">
+                                        <img src="./img/done_green.svg" alt="">
+                                        <h3>Заполнить профиль</h3>
+                                        <h4>Предоставьте личные и контактные данные, 
+                                            чтобы размещать авторские туры на площадке.
+                                        </h4>
+                                    </div>
+                                    <div class="account_block_right_main_items_block">
+                                        <img src="./img/done_green.svg" alt="">
+                                        <h3>Опубликовать свой тур</h3>
+                                        <h4>Добавьте все свои туры в выдачу сервиса, 
+                                            так вы повысите шансы на продажу
+                                        </h4>
+                                    </div>
+                                    <div class="account_block_right_main_items_block">
+                                        <img src="./img/close_red.svg" alt="">
+                                        <h3>Стать проверенным тревел-экспертов</h3>
+                                        <h4>Предоставьте личные и контактные данные, 
+                                            чтобы размещать авторские туры на площадке.
+                                        </h4>
+                                    </div>
+                                    <div class="account_block_right_main_items_block">
+                                        <img src="./img/close_red.svg" alt="">
+                                        <h3>Привязать мессенджеры</h3>
+                                        <h4>Подключите удобный канал получения уведомлений. 
+                                            Уведомления приходят когда клиент написал в чат
+                                        </h4>
+                                    </div>
+                                    <div class="account_block_right_main_items_block">
+                                        <img src="./img/close_red.svg" alt="">
+                                        <h3>Внесите реквизиты для выплаты</h3>
+                                        <h4>Укажите ваши реквизиты, чтобы получать выплаты при бронировании
+                                        </h4>
+                                    </div>
+                                    <div class="account_block_right_main_items_block">
+                                        <img src="./img/done_green.svg" alt="">
+                                        <h3>Добавить отзывы</h3>
+                                        <h4>Отправьте нам на feedback@traveler.market отзывы 
+                                            от предыдуших клиентов в формате “ссылка на тур - 
+                                            ссылка на отзыв - текст отзыва - имя клиента - 
+                                            ссылка клиента на профиль в соц. сетях”. 
+                                            Добавим в течении 2-3 рабочих дней
+                                        </h4>
+                                    </div>
+                                    <div class="account_block_right_main_items_block">
+                                        <img src="./img/done_green.svg" alt="">
+                                        <h3>Ознакомиться с правилами работы на площадке</h3>
+                                        <h4>Прочитать условия работы
+                                        </h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </section>
+             
+    </main>
+    
+    <footer class="footer">
+        <div class='wrapper_footer'>
+                <div class='col_1' >
+                    <div class='header_logo_block'>
+                        <div class='header_logo_block_main_icon'>
+                            <img src="./img/TM.svg" alt="">
+                        </div>
+                        <div class='header_logo_block_second_icon'>
+                            <img src="./img/Logonamewhite.svg" alt="">
+                        </div>
+                    </div>    
+                    <p class='paragraph_content' >Traveler.market — это маркетплейс авторских туров от тревел-экспертов и частных независимых гидов. 
+                        Авторские туры — это спонтанные и яркие возможности, предлагающие взять максимум от каждой точки маршрута. 
+                        Мы за непринужденный подход к групповым путешествиям, который больше похож на встречу со старыми друзьями.</p>
+                    <p class='paragraph_content_underline' >© 2020 . Traveler.market</p>
+                    <p class='paragraph_content_underline' >Политика конфиденциальности</p>
+                    <p class='paragraph_content_underline' >Публичная оферта</p>
+                    <p class='paragraph_content_underline' >Согласие на обработку персональных данных</p>
+                </div>
+
+                <div class=col_2 >
+                    <p class=name_paragraph >Информация</p>
+                    <p class='paragraph_content_underline' >Как устроен сервис Traveler.market</p>
+                    <p class='paragraph_content_underline' >Подход сообщества Traveler.market</p>
+                    <p class='paragraph_content_underline' >Журнал о путешествиях</p>
+                    <p class='paragraph_content_underline' >Об авторских турах</p>
+                    <p class='paragraph_content_underline' >Отзывы путешественников</p>
+                    <p class='paragraph_content_underline' >Центр помощи</p>
+                    <p class='paragraph_content_underline' >Связаться с нами</p>
+                    <p class='paragraph_content_underline' >Организуйте авторский тур</p>
+                    
+                </div>
+
+                <div class='col_3' >
+                    <p class='name_paragraph' >Мы заботимся о вас</p>
+                    <div class='p_footer_block' >
+                        <div class='p_footer_block_first' >
+                            <img src="./img/lock-orange.svg" alt="">
+                        </div>
+                        <div class='p_footer_block_second' >
+                            <p>Безопасная оплата</p>
+                            <p>Бронируйте туры через нашу надежную платежную систему</p>
+                        </div>
+                    </div>
+
+                    <div class='p_footer_block' >
+                        <div class='p_footer_block_first' >
+                            <img src="./img/smile-orange.svg" alt="">
+                        </div>
+                        <div class='p_footer_block_second' >
+                            <p>Продуманная спонтанность</p>
+                            <p>Маршруты могут адаптироваться под пожелания группы</p>
+                        </div>
+                    </div>
+
+                    <div class='p_footer_block' >
+                        <div class='p_footer_block_first' >
+                            <img src="./img/user-orange.svg" alt="">
+                        </div>
+                        <div class='p_footer_block_second' >
+                            <p>Проверенные тревел-эксперты</p>
+                            <p>В нашей базе 3 452 гида, которые прошли тщательный отбор</p>
+                        </div>
+                    </div>
+
+                    <div class='p_footer_block' >
+                        <div class='p_footer_block_first' >
+                            <img src="./img/defender-orange.svg" alt="">
+                        </div>
+                        <div class='p_footer_block_second' >
+                            <p>Проверенные тревел-эксперты</p>
+                            <p>В нашей базе 3 452 гида, которые прошли тщательный отбор</p>
+                        </div>
+                    </div>
+
+                
+                </div>
+
+                <div class='col_4' >
+                    <p class='name_paragraph' >Мы в социальных сетях</p>
+                    <div class='social_wide' > 
+                        <img src="./img/14.svg" alt="">
+                        <img src="./img/15.svg" alt="">
+                        <img src="./img/16.svg" alt="">
+                        <img src="./img/17.svg" alt="">
+                        <img src="./img/18.svg" alt="">
+                    </div>
+                </div>
+        </div>                
+    </footer>
+</body>
+</html>
+
