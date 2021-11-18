@@ -11,7 +11,7 @@ from utils.images import get_tmb_path
 def tour_image_path(instance, filename):
     name, extension = os.path.splitext(filename)
     class_name = instance.__class__.__name__
-    if class_name == 'Tour':
+    if class_name == 'TourBasic':
         folder = f'{slugify(unidecode(instance.name))}/wallpaper'
     elif class_name == 'TourDayImage':
         folder = f'{slugify(unidecode(instance.tour_day.tour.name))}/day-{instance.tour_day.number}'
@@ -43,6 +43,7 @@ class TourBasic(models.Model):
     is_draft = models.BooleanField(_('Черновик'), default=True)
     is_active = models.BooleanField(default=False)
     on_moderation = models.BooleanField(_('На модерации'), default=False)
+    rating = models.DecimalField(_('Рейтинг'), decimal_places=1, max_digits=2, default=0)
     name = models.CharField(_('Название'), max_length=255)
     wallpaper = models.ImageField(_('Главное фото'), max_length=255, upload_to=tour_image_path, null=True, blank=True)
     basic_type = models.ForeignKey("TourType", verbose_name=_("Основной тип тура"), on_delete=models.CASCADE, related_name='tours_by_basic_type', null=True, blank=True)
@@ -81,8 +82,8 @@ class TourBasic(models.Model):
 
 class TourAdvanced(models.Model):
     basic_tour = models.ForeignKey("TourBasic", verbose_name=_("Тур основа"), on_delete=models.CASCADE, related_name='advanced_tours')
-    start_date = models.TimeField(_('Дата начала'), null=True, blank=True)
-    finish_date = models.TimeField(_('Дата завершения'), null=True, blank=True)
+    start_date = models.DateField(_('Дата начала'), null=True, blank=True)
+    finish_date = models.DateField(_('Дата завершения'), null=True, blank=True)
     start_time = models.TimeField(_('Время старта'), null=True, blank=True)
     finish_time = models.TimeField(_('Время завершения'), null=True, blank=True)
     direct_link = models.BooleanField(_('Доступ по прямой ссылке'), default=False)

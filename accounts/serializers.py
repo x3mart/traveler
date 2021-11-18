@@ -51,7 +51,7 @@ class UserSerializer(serializers.ModelSerializer):
         user = super().update(instance, validated_data)
         return user
     
-class ExpertSerializer(UserSerializer):
+class ExpertSerializer(serializers.ModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super(ExpertSerializer, self).__init__(*args, **kwargs)
@@ -59,7 +59,7 @@ class ExpertSerializer(UserSerializer):
     
     tmb_avatar = serializers.SerializerMethodField(read_only=True)
     tours_count = serializers.IntegerField(read_only=True,)
-    tours_avg_rating = serializers.DecimalField(read_only=True, max_digits=2, decimal_places=1)
+    
     class Meta:
         model = Expert
         fields = "__all__"
