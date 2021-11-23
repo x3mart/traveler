@@ -34,10 +34,11 @@ class TourSerializer(TranslatedModelSerializer):
     property_types = serializers.StringRelatedField(many=True, source='basic_tour.tour_property_types')
     property_images = PropertyImageSerializer(many=True, source='basic_tour.tour_property_images')
     languages = serializers.StringRelatedField(many=True,)
-    
+    currency = serializers.StringRelatedField(many=False, source='currency.short_name')
+
     class Meta:
         model = TourAdvanced
-        fields = ('rating', 'name', 'wallpaper', 'basic_type', 'additional_types', 'start_region', 'finish_region', 'start_country', 'finish_country', 'start_city', 'finish_city', 'description', 'plan', 'cancellation_terms', 'difficulty_level', 'property_types', 'difficulty_description', 'comfort_level', 'babies_alowed', 'animals_not_exploited', 'property_images', 'start_date', 'finish_date', 'start_time', 'finish_time', 'direct_link', 'instant_booking', 'members_number', 'prepayment', 'postpayment', 'team_member', 'currency', 'cost', 'languages', 'is_guaranteed', 'flight_included', 'scouting',)
+        fields = ('id', 'rating', 'name', 'wallpaper', 'basic_type', 'additional_types', 'start_region', 'finish_region', 'start_country', 'finish_country', 'start_city', 'finish_city', 'description', 'plan', 'cancellation_terms', 'difficulty_level', 'property_types', 'difficulty_description', 'comfort_level', 'babies_alowed', 'animals_not_exploited', 'property_images', 'start_date', 'finish_date', 'start_time', 'finish_time', 'direct_link', 'instant_booking', 'members_number', 'prepayment', 'postpayment', 'team_member', 'currency', 'cost', 'languages', 'is_guaranteed', 'flight_included', 'scouting',)
 
 
 class TourBasicListSerializer(serializers.ModelSerializer):
