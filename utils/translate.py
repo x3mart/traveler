@@ -4,7 +4,6 @@ from modeltranslation.utils import get_language
 
 
 def get_translatable_fields_source(self):
-    print(get_translatable_fields_for_model(self.Meta.model))
     if get_translatable_fields_for_model(self.Meta.model):
         actualy_translatable_fields = list(set(get_translatable_fields_for_model(self.Meta.model)).intersection(self.fields))
         for field in actualy_translatable_fields:
