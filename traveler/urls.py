@@ -31,6 +31,7 @@ urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
     path('api-auth/', include('rest_framework.urls')),
     path('auth/', include('djoser.urls')),
+    path('auth/', include('djoser.urls.jwt')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
 ]
 

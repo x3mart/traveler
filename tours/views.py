@@ -7,14 +7,14 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models.aggregates import Avg
 from django.db.models import Count
 from tours.filters import TourFilter
-from tours.models import TourBasic
+from tours.models import TourAdvanced, TourBasic
 from accounts.models import Expert
-from tours.serializers import TourBasicListSerializer, TourBasicSerializer
+from tours.serializers import TourBasicListSerializer, TourSerializer
 
 # Create your views here.
-class TourBasicViewSet(viewsets.ModelViewSet):
-    queryset = TourBasic.objects.all()
-    serializer_class = TourBasicSerializer
+class TourViewSet(viewsets.ModelViewSet):
+    queryset = TourAdvanced.objects.all()
+    serializer_class = TourSerializer
     permission_classes = [AllowAny]
     filter_backends = [filters.OrderingFilter, DjangoFilterBackend]
     ordering_fields = ['rating', 'id']
@@ -23,18 +23,15 @@ class TourBasicViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         experts = Expert.objects.annotate(expert_tours_count=Count('tours')).only('first_name', 'last_name', 'rating', 'avatar')
         prefetched_expert = Prefetch('expert', experts)
-        qs = TourBasic.objects.prefetch_related(prefetched_expert, 'start_country', 'start_city')
+        basic_tour = TourBasic.objects.prefetch_related(prefetched_expert, 'start_country', 'start_city',)
+        prefetched_basic_tour = Prefetch('basic_tour', basic_tour)
+        qs = TourAdvanced.objects.prefetch_related(prefetched_basic_tour, 'languages', 'currency')
         return qs
     
     def get_serializer_class(self):
-        if self.action == 'list':
-            return TourBasicListSerializer
+        # if self.action == 'list':
+        #     return TourBasicListSerializer
         return super().get_serializer_class()
-    
-    def get_serializer_context(self):
-        context = super(TourBasicViewSet, self).get_serializer_context()
-        context.update({"language": get_language()})
-        return context
 
 
 # class TourAdvancedViewSet(viewsets.ModelViewSet):

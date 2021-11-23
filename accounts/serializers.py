@@ -3,7 +3,7 @@ from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
 import django.contrib.auth.password_validation as validators
 from django.core import exceptions
-from utils.translate import get_translatable_fields_source
+from utils.translate import TranslatedModelSerializer
 
 
 def check_password(self):
@@ -21,12 +21,7 @@ def check_password(self):
     return password
         
 
-class UserSerializer(serializers.ModelSerializer):
-
-    def __init__(self, *args, **kwargs):
-        super(UserSerializer, self).__init__(*args, **kwargs)
-        self.fields = get_translatable_fields_source(self) 
-
+class UserSerializer(TranslatedModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'first_name', 'email', 'password', 'is_staff', 'avatar', 'phone')
@@ -51,21 +46,27 @@ class UserSerializer(serializers.ModelSerializer):
         user = super().update(instance, validated_data)
         return user
     
-class ExpertSerializer(serializers.ModelSerializer):
-
+class ExpertSerializer(TranslatedModelSerializer):
     def __init__(self, *args, **kwargs):
-        super(ExpertSerializer, self).__init__(*args, **kwargs)
-        self.fields = get_translatable_fields_source(self)
-    
+        super().__init__(*args, **kwargs)
+        request = self.context.get('request')
+        action = self.context['view'].action
+        if action == 'list':
+            [self.fields.pop(field) for field in self.Meta.list_hiden_fields]
+        if action == 'retrieve' and (not request.auth or (request.user.id != self.instance.id and not request.user.is_staff)):
+            [self.fields.pop(field) for field in self.Meta.retrieve_hiden_fields]
+
     tmb_avatar = serializers.SerializerMethodField(read_only=True)
     tours_count = serializers.IntegerField(read_only=True,)
     
     class Meta:
         model = Expert
-        fields = "__all__"
+        fields = ('id','email', 'first_name', 'last_name', 'avatar', 'phone', 'tmb_avatar', 'tours_count', 'tours_rating', 'country', 'city', 'languages', 'visited_countries', 'about', 'email_confirmed', 'phone_confirmed', 'docs_confirmed', 'status_confirmed', 'rating',)
         extra_kwargs = {
             'password': {'write_only': True, 'required': False,},
         }
+        list_hiden_fields = ['email', 'phone', 'country', 'city', 'languages', 'visited_countries', 'about', 'email_confirmed', 'phone_confirmed', 'docs_confirmed', 'status_confirmed',]
+        retrieve_hiden_fields = ['email', 'phone',]
     
     def get_tmb_avatar(self, obj):
         if obj.tmb_avatar:

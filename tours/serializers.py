@@ -1,12 +1,14 @@
 from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
-from .models import TourBasic
+
+from utils.translate import TranslatedModelSerializer
+from .models import TourAdvanced, TourBasic
 
 
-class TourBasicSerializer(serializers.ModelSerializer):
+class TourSerializer(TranslatedModelSerializer):
 
     class Meta:
-        model = TourBasic
+        model = TourAdvanced
         fields = '__all__'
 
 class TourBasicListSerializer(serializers.ModelSerializer):
