@@ -17,13 +17,13 @@ class TourViewSet(viewsets.ModelViewSet):
     serializer_class = TourSerializer
     permission_classes = [AllowAny]
     filter_backends = [filters.OrderingFilter, DjangoFilterBackend]
-    ordering_fields = ['rating', 'id']
+    ordering_fields = ['basic_tour__rating', 'id']
     filterset_class = TourFilter
 
     def get_queryset(self):
         experts = Expert.objects.annotate(expert_tours_count=Count('tours')).only('first_name', 'last_name', 'rating', 'avatar')
         prefetched_expert = Prefetch('expert', experts)
-        basic_tour = TourBasic.objects.prefetch_related(prefetched_expert, 'start_country', 'start_city',)
+        basic_tour = TourBasic.objects.prefetch_related(prefetched_expert, 'start_country', 'start_city', 'start_region', 'finish_country', 'finish_city', 'finish_region', 'basic_type', 'additional_types', 'tour_property_types', 'tour_property_images')
         prefetched_basic_tour = Prefetch('basic_tour', basic_tour)
         qs = TourAdvanced.objects.prefetch_related(prefetched_basic_tour, 'languages', 'currency')
         return qs
