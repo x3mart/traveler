@@ -21,11 +21,11 @@ class TourViewSet(viewsets.ModelViewSet):
     filterset_class = TourFilter
 
     def get_queryset(self):
-        experts = Expert.objects.annotate(expert_tours_count=Count('tours')).only('first_name', 'last_name', 'rating', 'avatar')
-        prefetched_expert = Prefetch('expert', experts)
-        basic_tour = TourBasic.objects.prefetch_related(prefetched_expert, 'start_country', 'start_city', 'start_region', 'finish_country', 'finish_city', 'finish_region', 'basic_type', 'additional_types', 'tour_property_types', 'tour_property_images')
+        expert = Expert.objects.only('id', 'first_name', 'last_name', 'about', 'rating', 'tours_count', 'tours_rating', 'reviews_count', 'tour_reviews_count', 'avatar')
+        prefetched_expert = Prefetch('expert', expert)
+        basic_tour = TourBasic.objects.prefetch_related(prefetched_expert, 'start_country', 'start_city', 'start_region', 'finish_country', 'finish_city', 'finish_region', 'basic_type', 'additional_types', 'tour_property_types', 'tour_property_images', 'tour_images', 'tour_days', 'tour_impressions', 'tour_included_services', 'tour_excluded_services',)
         prefetched_basic_tour = Prefetch('basic_tour', basic_tour)
-        qs = TourAdvanced.objects.prefetch_related(prefetched_basic_tour, 'languages', 'currency')
+        qs = TourAdvanced.objects.prefetch_related(prefetched_basic_tour, 'languages', 'currency').filter(basic_tour__is_active=True)
         return qs
     
     def get_serializer_class(self):

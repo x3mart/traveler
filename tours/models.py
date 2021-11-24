@@ -13,8 +13,8 @@ def tour_image_path(instance, filename):
     class_name = instance.__class__.__name__
     if class_name == 'TourBasic':
         folder = f'{slugify(unidecode(instance.name))}/wallpaper'
-    elif class_name == 'TourDayImage':
-        folder = f'{slugify(unidecode(instance.tour_day.tour.name))}/day-{instance.tour_day.number}'
+    elif class_name == 'TourDay':
+        folder = f'{slugify(unidecode(instance.tour.name))}/day-{instance.number}'
     else:
         folder = f'{slugify(unidecode(instance.tour.name))}/{slugify(unidecode(instance.__class__.__name__))}/{slugify(unidecode(instance.name))}'
     return 'tours/{0}/{1}{2}'.format(folder, slugify(unidecode(name)), extension)
@@ -44,6 +44,7 @@ class TourBasic(models.Model):
     is_active = models.BooleanField(default=False)
     on_moderation = models.BooleanField(_('На модерации'), default=False)
     rating = models.DecimalField(_('Рейтинг'), decimal_places=1, max_digits=2, default=0)
+    reviews_count = models.IntegerField(_('Кол-во отзывов'), default=0)
     name = models.CharField(_('Название'), max_length=255)
     wallpaper = models.ImageField(_('Главное фото'), max_length=255, upload_to=tour_image_path, null=True, blank=True)
     basic_type = models.ForeignKey("TourType", verbose_name=_("Основной тип тура"), on_delete=models.CASCADE, related_name='tours_by_basic_type', null=True, blank=True)
@@ -165,6 +166,7 @@ class TourDay(models.Model):
     location =  models.CharField(_('Локация'), max_length=255, null=True, blank=True)
     description = RichTextField(_('Описание'))
     tour = models.ForeignKey('TourBasic', on_delete=models.CASCADE, related_name='tour_days', verbose_name=_('Тур'))
+    image = models.ImageField(_('Фото'), upload_to=tour_image_path, max_length=255, null=True, blank=True)
 
     def __str__(self):
         return f'#{self.number} {self.tour.name} {self.name}'
@@ -174,6 +176,13 @@ class TourDay(models.Model):
         verbose_name_plural = _('Дни туров')
         ordering = ['number', 'tour']
         unique_together = ['number', 'tour']
+    
+    @property
+    def tmb_image(self):
+        if self.image:
+            tmb_path = get_tmb_path(self.image.url)
+            return tmb_path
+        return None
 
 
 class TourDayImage(models.Model):

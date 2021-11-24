@@ -57,11 +57,10 @@ class ExpertSerializer(TranslatedModelSerializer):
             [self.fields.pop(field) for field in self.Meta.retrieve_hiden_fields]
 
     tmb_avatar = serializers.SerializerMethodField(read_only=True)
-    tours_count = serializers.IntegerField(read_only=True,)
     
     class Meta:
         model = Expert
-        fields = ('id','email', 'first_name', 'last_name', 'avatar', 'phone', 'tmb_avatar', 'tours_count', 'tours_rating', 'country', 'city', 'languages', 'visited_countries', 'about', 'email_confirmed', 'phone_confirmed', 'docs_confirmed', 'status_confirmed', 'rating',)
+        fields = ('id','email', 'first_name', 'last_name', 'avatar', 'phone', 'tmb_avatar', 'country', 'city', 'languages', 'visited_countries', 'about', 'email_confirmed', 'phone_confirmed', 'docs_confirmed', 'status_confirmed', 'rating', 'tours_count', 'tours_rating', 'reviews_count', 'tour_reviews_count',)
         extra_kwargs = {
             'password': {'write_only': True, 'required': False,},
         }

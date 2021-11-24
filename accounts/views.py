@@ -27,6 +27,6 @@ class ExpertViewSet(viewsets.ModelViewSet):
     filterset_fields = ['first_name', 'last_name']
 
     def get_queryset(self):
-        qs = Expert.objects.annotate(tours_count=Count('tours'))
+        qs = Expert.objects.all()
         return qs
 

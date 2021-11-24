@@ -88,7 +88,10 @@ class Expert(User):
     docs_confirmed = models.BooleanField(_('Документы подтверждены'), default=False)
     status_confirmed = models.BooleanField(_('Статус подтвержден'), default=False)
     rating = models.DecimalField(_('Рейтинг'), decimal_places=1, max_digits=2, default=0)
-    tours_rating = models.DecimalField(_('Рейтинг'), decimal_places=1, max_digits=2, default=0)
+    tours_count = models.IntegerField(_('Кол-во туров'), default=0)
+    tours_rating = models.DecimalField(_('Рейтинг туров'), decimal_places=1, max_digits=2, default=0)
+    reviews_count = models.IntegerField(_('Кол-во отзывов'), default=0)
+    tour_reviews_count = models.IntegerField(_('Кол-во отзывов о турах'), default=0)
 
     class Meta:
         verbose_name = _('Эксперт')
