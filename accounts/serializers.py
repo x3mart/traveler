@@ -3,7 +3,6 @@ from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
 import django.contrib.auth.password_validation as validators
 from django.core import exceptions
-from utils.translate import TranslatedModelSerializer
 
 
 def check_password(self):
@@ -21,7 +20,7 @@ def check_password(self):
     return password
         
 
-class UserSerializer(TranslatedModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'first_name', 'email', 'password', 'is_staff', 'avatar', 'phone')
@@ -46,7 +45,7 @@ class UserSerializer(TranslatedModelSerializer):
         user = super().update(instance, validated_data)
         return user
     
-class ExpertSerializer(TranslatedModelSerializer):
+class ExpertSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         request = self.context.get('request')
