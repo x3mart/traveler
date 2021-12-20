@@ -54,7 +54,7 @@ class TourSerializer(serializers.ModelSerializer):
     languages = serializers.StringRelatedField(many=True,)
     currency = serializers.StringRelatedField(many=False, source='currency.short_name')
     expert = TourExpertSerializer(many=False, source='basic_tour.expert')
-    tour_days = TourExpertSerializer(many=True, source='basic_tour.tour_days')
+    tour_days = TourDaySerializer(many=True, source='basic_tour.tour_days')
     tour_impressions = serializers.StringRelatedField(many=True, source='basic_tour.tour_impressions')
     tour_included_services = serializers.StringRelatedField(many=True, source='basic_tour.tour_included_services')
     tour_excluded_services = serializers.StringRelatedField(many=True, source='basic_tour.tour_excluded_services')
