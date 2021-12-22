@@ -1,4 +1,4 @@
-from .models import Expert, User
+from .models import Customer, Expert, User
 from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
 import django.contrib.auth.password_validation as validators
@@ -82,9 +82,42 @@ class ExpertSerializer(serializers.ModelSerializer):
     
     def update(self, instance, validated_data):
         validated_data['is_expert'] = True
+        
         if validated_data.get('password') is not None:
             check_password(self)
             password = validated_data.pop('password')
             instance.set_password(password)
             instance.save()    
         return super().update(instance, validated_data)
+
+
+class CustomerMeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Customer
+        fields = ('id', 'first_name', 'last_name', 'email', 'password', 'avatar', 'phone')
+        extra_kwargs = {
+            'password': {'write_only': True, 'required': False,},
+        }
+        
+    
+    def create(self, validated_data):
+        password = check_password(self)
+        validated_data['is_customer'] = True
+        user = Customer(**validated_data)
+        user.set_password(password)
+        user.save()
+        return user
+    
+    def update(self, instance, validated_data):
+        if validated_data.get('password') is not None:
+            check_password(self)
+            password = validated_data.pop('password')
+            instance.set_password(password)
+            instance.save()  
+        user = super().update(instance, validated_data)
+        return user
+
+class CustomerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Customer
+        fields = ('id', 'first_name', 'last_name', 'avatar')
