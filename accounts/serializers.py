@@ -18,7 +18,13 @@ def check_password(self):
     except exceptions.ValidationError as exc:
         raise serializers.ValidationError(str(exc))
     return password
-        
+
+
+def get_tmb_avatar_uri(self, obj):
+        if obj.tmb_avatar:
+            request = self.context.get('request')
+            return request.build_absolute_uri(obj.tmb_avatar) 
+        return None         
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -44,33 +50,38 @@ class UserSerializer(serializers.ModelSerializer):
             instance.save()  
         user = super().update(instance, validated_data)
         return user
-    
-class ExpertSerializer(serializers.ModelSerializer):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        request = self.context.get('request')
-        action = self.context['view'].action
-        if action == 'list':
-            [self.fields.pop(field) for field in self.Meta.list_hiden_fields]
-        if action == 'retrieve' and (not request.auth or (request.user.id != self.instance.id and not request.user.is_staff)):
-            [self.fields.pop(field) for field in self.Meta.retrieve_hiden_fields]
 
+
+class ExpertListSerializer(serializers.ModelSerializer):
     tmb_avatar = serializers.SerializerMethodField(read_only=True)
+    class Meta:
+        model = Expert
+        fields = ('id', 'first_name', 'last_name', 'tmb_avatar', 'rating', 'tours_count', 'tours_rating', 'reviews_count', 'tour_reviews_count',)
+            
+    def get_tmb_avatar(self, obj): 
+        return get_tmb_avatar_uri(self, obj) 
+
+
+class ExpertSerializer(serializers.ModelSerializer):
+    tmb_avatar = serializers.SerializerMethodField(read_only=True)
+    class Meta:
+        model = Expert
+        fields = ('id', 'first_name', 'last_name', 'avatar', 'tmb_avatar', 'country', 'city', 'languages', 'visited_countries', 'about', 'email_confirmed', 'phone_confirmed', 'docs_confirmed', 'status_confirmed', 'rating', 'tours_count', 'tours_rating', 'reviews_count', 'tour_reviews_count',)
+            
+    def get_tmb_avatar(self, obj): 
+        return get_tmb_avatar_uri(self, obj) 
     
+class ExpertMeSerializer(serializers.ModelSerializer):
+    tmb_avatar = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Expert
         fields = ('id','email', 'first_name', 'last_name', 'avatar', 'phone', 'tmb_avatar', 'country', 'city', 'languages', 'visited_countries', 'about', 'email_confirmed', 'phone_confirmed', 'docs_confirmed', 'status_confirmed', 'rating', 'tours_count', 'tours_rating', 'reviews_count', 'tour_reviews_count',)
         extra_kwargs = {
             'password': {'write_only': True, 'required': False,},
         }
-        list_hiden_fields = ['email', 'phone', 'country', 'city', 'languages', 'visited_countries', 'about', 'email_confirmed', 'phone_confirmed', 'docs_confirmed', 'status_confirmed',]
-        retrieve_hiden_fields = ['email', 'phone',]
-    
-    def get_tmb_avatar(self, obj):
-        if obj.tmb_avatar:
-            request = self.context.get('request')
-            return request.build_absolute_uri(obj.tmb_avatar) 
-        return None   
+            
+    def get_tmb_avatar(self, obj): 
+        return get_tmb_avatar_uri(self, obj)   
     
     def create(self, validated_data):
         password = check_password(self)
@@ -118,6 +129,10 @@ class CustomerMeSerializer(serializers.ModelSerializer):
         return user
 
 class CustomerSerializer(serializers.ModelSerializer):
+    tmb_avatar = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Customer
-        fields = ('id', 'first_name', 'last_name', 'avatar')
+        fields = ('id', 'first_name', 'last_name', 'avatar', 'tmb_avatar')
+    
+    def get_tmb_avatar(self, obj): 
+        return get_tmb_avatar_uri(self, obj)

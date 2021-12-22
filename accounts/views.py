@@ -1,6 +1,6 @@
 from rest_framework.decorators import action
 from accounts.permissions import UserPermission, CustomerPermission, ExpertPermission
-from accounts.serializers import CustomerMeSerializer, ExpertSerializer, UserSerializer, CustomerSerializer
+from accounts.serializers import CustomerMeSerializer, ExpertListSerializer, ExpertMeSerializer, ExpertSerializer, UserSerializer, CustomerSerializer
 from rest_framework import viewsets
 from accounts.models import Expert, User, Customer
 from rest_framework import filters
@@ -45,6 +45,14 @@ class ExpertViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         qs = Expert.objects.all()
         return qs
+    
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return ExpertListSerializer
+        is_staff = self.request.auth and self.request.user.is_staff
+        if self.action == 'me' or is_staff:
+            return ExpertMeSerializer
+        return super().get_serializer_class()
 
 
 class CustomerViewSet(viewsets.ModelViewSet):
