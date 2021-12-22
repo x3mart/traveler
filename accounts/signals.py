@@ -1,7 +1,7 @@
 from django.dispatch import receiver
-from django.db.models.signals import post_delete, post_init, post_save
+from django.db.models.signals import post_delete, post_init, post_save, pre_save
 from .models import Expert, TeamMember, User, Customer
-from utils.images import delete_image, image_processing
+from utils.images import delete_image, get_tmb_path, image_processing
 from traveler.settings import BASE_DIR
         
 

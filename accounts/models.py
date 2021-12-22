@@ -46,6 +46,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(_('Имя'), max_length=255,  null=True, blank=True,)
     last_name = models.CharField(_('Фамилия'), max_length=255, null=True, blank=True,)
     avatar = models.ImageField(upload_to=user_avatar_path, null=True, blank=True,)
+    # tmb_avatar = models.ImageField(upload_to=user_avatar_path, null=True, blank=True,)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(_('Сотрудник'), default=False, )
     is_expert = models.BooleanField(_('Эксперт'), default=False, )
