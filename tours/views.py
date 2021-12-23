@@ -23,7 +23,7 @@ class TourViewSet(viewsets.ModelViewSet):
         if self.action == 'list':
             basic_tour = TourBasic.objects.prefetch_related(prefetched_expert, 'start_country',).only('rating', 'reviews_count', 'name', 'start_country', 'expert', 'wallpaper')
             prefetched_basic_tour = Prefetch('basic_tour', basic_tour)
-            qs = TourAdvanced.objects.prefetch_related(prefetched_basic_tour, 'currency').filter(basic_tour__is_active=True).only('id', 'start_date', 'finish_date', 'basic_tour', 'currency')
+            qs = TourAdvanced.objects.prefetch_related(prefetched_basic_tour, 'currency').filter(basic_tour__is_active=True).only('id', 'start_date', 'finish_date', 'basic_tour', 'currency', 'cost', 'price', 'discount')
             return qs
         basic_tour = TourBasic.objects.prefetch_related(prefetched_expert, 'start_country', 'start_city', 'start_region', 'finish_country', 'finish_city', 'finish_region', 'basic_type', 'additional_types', 'tour_property_types', 'tour_property_images', 'tour_images', 'tour_days', 'tour_impressions', 'tour_included_services', 'tour_excluded_services',)
         prefetched_basic_tour = Prefetch('basic_tour', basic_tour)

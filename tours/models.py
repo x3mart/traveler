@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django.template.defaultfilters import slugify
+from django.template.defaultfilters import default, slugify
 from unidecode import unidecode
 import os
 from ckeditor_uploader.fields import RichTextUploadingField
@@ -84,17 +84,21 @@ class TourBasic(models.Model):
 class TourAdvanced(models.Model):
     basic_tour = models.ForeignKey("TourBasic", verbose_name=_("Тур основа"), on_delete=models.CASCADE, related_name='advanced_tours')
     start_date = models.DateField(_('Дата начала'), null=True, blank=True)
+    duration = models.PositiveIntegerField(_("Продолжительность тура в днях"), null=True, blank=True)
     finish_date = models.DateField(_('Дата завершения'), null=True, blank=True)
     start_time = models.TimeField(_('Время старта'), null=True, blank=True)
     finish_time = models.TimeField(_('Время завершения'), null=True, blank=True)
     direct_link = models.BooleanField(_('Доступ по прямой ссылке'), default=False)
     instant_booking = models.BooleanField(_('Моментальное бронирование'), default=False)
-    members_number = models.PositiveIntegerField(_('Колличество мест'))
+    members_number = models.PositiveIntegerField(_('Колличество мест'), default=0)
+    vacants_number = models.PositiveIntegerField(_('Колличество свободных мест'), default=0)
     prepayment = models.PositiveIntegerField(_('Предоплата в %'), default=15)
     postpayment = models.PositiveIntegerField(_('Дни внесения полной суммы до старта'), null=True, blank=True)
     team_member = models.ForeignKey('accounts.TeamMember', verbose_name=_("Гид"), on_delete=models.CASCADE, related_name='advanced_tours', null=True, blank=True)
     currency = models.ForeignKey('currencies.Currency', verbose_name=_("Валюта"), on_delete=models.CASCADE, related_name='advanced_tours', null=True, blank=True)
-    cost = models.DecimalField(_('Цена'), max_digits=12, decimal_places=2, null=True, blank=True)
+    cost = models.IntegerField(_('Стоимость со скидкой'), null=True, blank=True)
+    price = models.IntegerField(_('Цена'), null=True, blank=True)
+    discount = models.IntegerField(_('Скидка'), null=True, blank=True)
     languages = models.ManyToManyField('languages.Language', verbose_name=_('Языки тура'), related_name='advanced_tours', blank=True)
     is_guaranteed = models.BooleanField(_('Тур гарантирован'), default=False)
     flight_included = models.BooleanField(_('Перелет включен'), default=False)
@@ -235,7 +239,7 @@ class TourAddetionalService(models.Model):
     name = models.CharField(_('Название'), max_length=150)
     description = RichTextField(_('Описание'))
     currency = models.ForeignKey('currencies.Currency', verbose_name=_("Валюта"), on_delete=models.CASCADE, related_name='tour_addetional_service', null=True, blank=True)
-    cost = models.DecimalField(_('Цена'), max_digits=12, decimal_places=2, null=True, blank=True)
+    price = models.IntegerField(_('Цена'), null=True, blank=True)
     tour = models.ForeignKey('TourBasic', on_delete=models.CASCADE, related_name='tour_addetional_services', verbose_name=_('Тур'))
 
     class Meta:
