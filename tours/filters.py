@@ -19,10 +19,12 @@ class TourFilter(filters.FilterSet):
     duration_min = NumberFilter(field_name='duration', lookup_expr='gte')
     duration_max = NumberFilter(field_name='duration', lookup_expr='lte')
     vacants_number = NumberFilter(field_name='vacants_number', lookup_expr='gte')
+    rating = NumberFilter(field_name='basic_tour__rating', lookup_expr='gte')
+    difficulty = NumberFilter(field_name='basic_tour__difficulty_level', lookup_expr='gte')
 
     class Meta:
         model = TourAdvanced
-        fields = ['start_date', 'countries', 'regions', 'types', 'languages', 'cost_min', 'cost_max', 'discount', 'duration_min', 'duration_max', 'vacants_number']
+        fields = ['start_date', 'countries', 'regions', 'types', 'languages', 'cost_min', 'cost_max', 'discount', 'duration_min', 'duration_max', 'vacants_number', 'rating', 'difficulty']
     
     def types_filter(self, queryset, name, value):
         return TourAdvanced.objects.filter(Q(basic_tour__basic_type__in=value) | Q(basic_tour__additional_types__in=value)).distinct()
