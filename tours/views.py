@@ -6,10 +6,10 @@ from django_filters.rest_framework import DjangoFilterBackend
 from tours.filters import TourFilter
 from tours.models import TourAdvanced, TourBasic
 from accounts.models import Expert
-from tours.serializers import TourListSerializer, TourSerializer
+from tours.serializers import TourBasicSerializer, TourListSerializer, TourSerializer
 
 # Create your views here.
-class TourViewSet(viewsets.ModelViewSet):
+class TourViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = TourAdvanced.objects.all()
     serializer_class = TourSerializer
     permission_classes = [AllowAny]
@@ -36,26 +36,27 @@ class TourViewSet(viewsets.ModelViewSet):
         return super().get_serializer_class()
 
 
-# class TourAdvancedViewSet(viewsets.ModelViewSet):
-#     queryset = TourBasic.objects.all()
-#     serializer_class = TourBasicSerializer
-#     permission_classes = [AllowAny]
-#     filter_backends = [filters.OrderingFilter, DjangoFilterBackend]
-#     ordering_fields = ['rating', 'id']
-#     filterset_class = TourFilter
+class TourBasicViewSet(viewsets.ModelViewSet):
+    queryset = TourBasic.objects.all()
+    serializer_class = TourBasicSerializer
+    permission_classes = [AllowAny]
+    filter_backends = [filters.OrderingFilter, DjangoFilterBackend]
+    ordering_fields = ['rating', 'id']
+    # filterset_class = TourFilter
 
-#     def get_queryset(self):
-#         experts = Expert.objects.annotate(expert_tours_count=Count('tours')).only('first_name', 'last_name', 'rating', 'avatar')
-#         prefetched_expert = Prefetch('expert', experts)
-#         basic = TourBasic.objects.prefetch_related(prefetched_expert, 'start_country', 'start_city')
-#         return qs
+    def get_queryset(self):
+        expert = Expert.objects.only('first_name', 'last_name', 'rating', 'avatar')
+        prefetched_expert = Prefetch('expert', expert)
+        qs = TourBasic.objects.prefetch_related(prefetched_expert, 'start_country', 'start_city')
+        return qs
+
     
-#     def get_serializer_class(self):
-#         if self.action == 'list':
-#             return TourBasicListSerializer
-#         return super().get_serializer_class()
+    # def get_serializer_class(self):
+    #     if self.action == 'list':
+    #         return TourBasicListSerializer
+    #     return super().get_serializer_class()
     
-#     def get_serializer_context(self):
-#         context = super(TourBasicViewSet, self).get_serializer_context()
-#         context.update({"language": get_language()})
-#         return context
+    # def get_serializer_context(self):
+    #     context = super(TourBasicViewSet, self).get_serializer_context()
+    #     context.update({"language": get_language()})
+    #     return context

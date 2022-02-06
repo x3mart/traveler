@@ -1,3 +1,4 @@
+from dataclasses import fields
 from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
 from accounts.models import Expert
@@ -69,3 +70,16 @@ class TourListSerializer(serializers.ModelSerializer):
     class Meta:
         model = TourAdvanced
         fields = ['id', 'rating', 'reviews_count', 'name', 'tmb_wallpaper', 'start_date', 'finish_date', 'start_country',  'expert', 'price', 'cost', 'discount']
+
+class TourBasicSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = TourBasic
+        fields ='__all__'
+        extra_kwargs = {
+            'expert': {'required': False,},
+        }
+    
+    def create(self, validated_data):
+        validated_data['expert_id'] = self.context['request'].user.id
+        return super().create(validated_data)
