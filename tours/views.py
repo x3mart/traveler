@@ -1,3 +1,4 @@
+from posixpath import split
 from django.db.models.query import Prefetch
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
@@ -46,9 +47,15 @@ class TourBasicViewSet(viewsets.ModelViewSet):
     ordering_fields = ['rating', 'id']
     # filterset_class = TourFilter
 
-    def set_additional_types(self, request):
-        additional_types = request.data.get('additional_types')
-
+    def set_additional_types(self, request, instance=None):
+        if instance and instance.additional_types.exists():
+            instance.additional_types.clear()
+        additional_types = []
+        additional_type_ids = request.data.get('additional_types').split(',')
+        for additional_type_id in additional_type_ids:
+            additional_types.append(TourType.objects.get(pk=additional_type_id))
+        instance.additional_types.add(*tuple(additional_types))
+        
     def get_basic_type(self, request):
         if request.data.get('basic_type'):
             return get_object_or_404(TourType, pk=request.data.get('basic_type'))
@@ -67,13 +74,20 @@ class TourBasicViewSet(viewsets.ModelViewSet):
             data = serializer.validated_data
         else:
             return Response(serializer.errors, status=400)
+        data['is_draft'] = True
         tour_basic = TourBasic.objects.create(expert=self.get_expert(request), basic_type = self.get_basic_type(request), **data)
         if request.data.get('additional_types'):
-            self.set_additional_types(request)
-        # tour_basic.save()
+            self.set_additional_types(request, tour_basic)
+            # tour_basic.save()
         return Response(TourBasicSerializer(tour_basic).data, status=201)
     
     def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if request.data.get('additional_types'):
+            self.set_additional_types(request, instance)
+        if self.get_basic_type(request):
+            instance.basic_type = self.get_basic_type(request)
+            instance.save()
         return super().update(request, *args, **kwargs)
 
 class TourTypeViewSet(viewsets.ModelViewSet):
