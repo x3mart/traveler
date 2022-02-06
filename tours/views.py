@@ -2,11 +2,13 @@ from django.db.models.query import Prefetch
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
 from rest_framework import filters
+from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
+from django.shortcuts import get_object_or_404
 from tours.filters import TourFilter
-from tours.models import TourAdvanced, TourBasic
+from tours.models import TourAdvanced, TourBasic, TourType
 from accounts.models import Expert
-from tours.serializers import TourBasicSerializer, TourListSerializer, TourSerializer
+from tours.serializers import TourBasicSerializer, TourListSerializer, TourSerializer, TourTypeSerializer
 
 # Create your views here.
 class TourViewSet(viewsets.ReadOnlyModelViewSet):
@@ -44,19 +46,37 @@ class TourBasicViewSet(viewsets.ModelViewSet):
     ordering_fields = ['rating', 'id']
     # filterset_class = TourFilter
 
-    def get_queryset(self):
-        expert = Expert.objects.only('first_name', 'last_name', 'rating', 'avatar')
-        prefetched_expert = Prefetch('expert', expert)
-        qs = TourBasic.objects.prefetch_related(prefetched_expert, 'start_country', 'start_city')
-        return qs
+    def set_additional_types(self, request):
+        additional_types = request.data.get('additional_types')
 
+    def get_basic_type(self, request):
+        if request.data.get('basic_type'):
+            return get_object_or_404(TourType, pk=request.data.get('basic_type'))
+        return None
     
-    # def get_serializer_class(self):
-    #     if self.action == 'list':
-    #         return TourBasicListSerializer
-    #     return super().get_serializer_class()
+    def get_expert(self, request):
+        return get_object_or_404(Expert, pk=request.user.id)
+
+    def get_queryset(self):
+        qs = TourBasic.objects.prefetch_related('expert', 'start_country', 'start_city')
+        return qs
     
-    # def get_serializer_context(self):
-    #     context = super(TourBasicViewSet, self).get_serializer_context()
-    #     context.update({"language": get_language()})
-    #     return context
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            data = serializer.validated_data
+        else:
+            return Response(serializer.errors, status=400)
+        tour_basic = TourBasic.objects.create(expert=self.get_expert(request), basic_type = self.get_basic_type(request), **data)
+        if request.data.get('additional_types'):
+            self.set_additional_types(request)
+        # tour_basic.save()
+        return Response(TourBasicSerializer(tour_basic).data, status=201)
+    
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
+
+class TourTypeViewSet(viewsets.ModelViewSet):
+    queryset = TourType.objects.all()
+    serializer_class = TourTypeSerializer
+    permission_classes = [AllowAny]

@@ -114,15 +114,7 @@ class CustomerMeSerializer(serializers.ModelSerializer):
             'password': {'write_only': True, 'required': False,},
         }
         
-    
-    def create(self, validated_data):
-        password = check_password(self)
-        validated_data['is_customer'] = True
-        user = Customer(**validated_data)
-        user.set_password(password)
-        user.save()
-        return user
-    
+ 
     def update(self, instance, validated_data):
         if validated_data.get('password') is not None:
             check_password(self)
@@ -136,7 +128,19 @@ class CustomerSerializer(serializers.ModelSerializer):
     tmb_avatar = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Customer
-        fields = ('id', 'first_name', 'last_name', 'avatar', 'tmb_avatar')
+        fields = ('id', 'first_name', 'last_name', 'avatar', 'tmb_avatar', 'email', 'password')
+        extra_kwargs = {
+            'password': {'write_only': True, 'required': False,},
+            'email': {'write_only': True, 'required': True,}
+        }
     
     def get_tmb_avatar(self, obj): 
         return get_tmb_avatar_uri(self, obj)
+    
+    def create(self, validated_data):
+        password = check_password(self)
+        validated_data['is_customer'] = True
+        customer = Customer(**validated_data)
+        customer.set_password(password)
+        customer.save()
+        return customer

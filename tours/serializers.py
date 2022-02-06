@@ -3,7 +3,7 @@ from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
 from accounts.models import Expert
 from accounts.serializers import ExpertListSerializer
-from .models import TourAdvanced, TourBasic, TourDay, TourPropertyImage, TourImage
+from .models import TourAdvanced, TourBasic, TourDay, TourPropertyImage, TourImage, TourType
 
 
 class PropertyImageSerializer(serializers.ModelSerializer):
@@ -21,6 +21,11 @@ class TourDaySerializer(serializers.ModelSerializer):
     class Meta:
         model = TourDay
         exclude = ('tour',)
+
+class TourTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TourType
+        fields = '__all__'
 
 
 class TourSerializer(serializers.ModelSerializer):
@@ -72,7 +77,8 @@ class TourListSerializer(serializers.ModelSerializer):
         fields = ['id', 'rating', 'reviews_count', 'name', 'tmb_wallpaper', 'start_date', 'finish_date', 'start_country',  'expert', 'price', 'cost', 'discount']
 
 class TourBasicSerializer(serializers.ModelSerializer):
-
+    basic_type = TourTypeSerializer(many=False, required=False)
+    additional_types  = TourTypeSerializer(many=True, required=False)
     class Meta:
         model = TourBasic
         fields ='__all__'
@@ -80,6 +86,7 @@ class TourBasicSerializer(serializers.ModelSerializer):
             'expert': {'required': False,},
         }
     
-    def create(self, validated_data):
-        validated_data['expert_id'] = self.context['request'].user.id
-        return super().create(validated_data)
+    # def create(self, validated_data):
+    #     validated_data['expert_id'] = self.context['request'].user.id
+    #     validated_data['is_draft'] = True
+    #     return super().create(validated_data)
