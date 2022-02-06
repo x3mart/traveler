@@ -67,9 +67,21 @@ class ExpertSerializer(serializers.ModelSerializer):
     class Meta:
         model = Expert
         fields = ('id', 'first_name', 'last_name', 'avatar', 'tmb_avatar', 'country', 'city', 'languages', 'visited_countries', 'about', 'email_confirmed', 'phone_confirmed', 'docs_confirmed', 'status_confirmed', 'rating', 'tours_count', 'tours_rating', 'reviews_count', 'tour_reviews_count',)
+        extra_kwargs = {
+            'password': {'write_only': True, 'required': False,},
+        }
             
     def get_tmb_avatar(self, obj): 
         return get_tmb_avatar_uri(self, obj) 
+    
+    def create(self, validated_data):
+        print('create')
+        password = check_password(self)
+        validated_data['is_expert'] = True
+        expert = Expert(**validated_data)
+        expert.set_password(password)
+        expert.save()
+        return expert
     
 class ExpertMeSerializer(serializers.ModelSerializer):
     tmb_avatar = serializers.SerializerMethodField(read_only=True)
@@ -82,14 +94,6 @@ class ExpertMeSerializer(serializers.ModelSerializer):
             
     def get_tmb_avatar(self, obj): 
         return get_tmb_avatar_uri(self, obj)   
-    
-    def create(self, validated_data):
-        password = check_password(self)
-        validated_data['is_expert'] = True
-        expert = Expert(**validated_data)
-        expert.set_password(password)
-        expert.save()
-        return expert
     
     def update(self, instance, validated_data):
         validated_data['is_expert'] = True

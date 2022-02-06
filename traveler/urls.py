@@ -33,10 +33,12 @@ urlpatterns = [
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
+    # path to my app's endpoints
+    path('api/', include('accounts.urls')),
+    path('api/', include('tours.urls')),
 ]
 
-urlpatterns += i18n_patterns(path('api/', include('accounts.urls')),
-                            path('api/', include('tours.urls')),)
+urlpatterns += i18n_patterns()
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
