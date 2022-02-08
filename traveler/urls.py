@@ -19,6 +19,8 @@ from django.conf.urls import url
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
+from rest_framework_simplejwt.views import TokenVerifyView, TokenRefreshView
+from accounts.views import MyTokenObtainPairView
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -31,7 +33,10 @@ urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
     path('api-auth/', include('rest_framework.urls')),
     path('auth/', include('djoser.urls')),
-    path('auth/', include('djoser.urls.jwt')),
+    # path('auth/', include('djoser.urls.jwt')),
+    path('auth/jwt/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    path('auth/jwt/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('auth/jwt/create/', MyTokenObtainPairView.as_view(), name='token_create'),
     path('ckeditor/', include('ckeditor_uploader.urls')),
     # path to my app's endpoints
     path('api/', include('accounts.urls')),

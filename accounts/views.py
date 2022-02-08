@@ -5,6 +5,21 @@ from rest_framework import viewsets
 from accounts.models import Expert, User, Customer
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        if hasattr(user, 'expert'):
+            token['user_status'] = 'experts'
+        elif hasattr(user, 'customer'):
+            token['user_status'] = 'customers'  
+        return token
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
 
 # Create your views here.
 def get_me(self, request,  *args, **kwargs):
