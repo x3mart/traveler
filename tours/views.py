@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404
 from tours.filters import TourFilter
 from tours.models import TourAdvanced, TourBasic, TourType
 from accounts.models import Expert
+from tours.permissions import TourBasicPermission, TourTypePermission
 from tours.serializers import TourBasicSerializer, TourListSerializer, TourSerializer, TourTypeSerializer
 
 # Create your views here.
@@ -42,10 +43,9 @@ class TourViewSet(viewsets.ReadOnlyModelViewSet):
 class TourBasicViewSet(viewsets.ModelViewSet):
     queryset = TourBasic.objects.all()
     serializer_class = TourBasicSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [TourBasicPermission]
     filter_backends = [filters.OrderingFilter, DjangoFilterBackend]
     ordering_fields = ['rating', 'id']
-    # filterset_class = TourFilter
 
     def set_additional_types(self, request, instance=None):
         if instance and instance.additional_types.exists():
@@ -90,7 +90,7 @@ class TourBasicViewSet(viewsets.ModelViewSet):
             instance.save()
         return super().update(request, *args, **kwargs)
 
-class TourTypeViewSet(viewsets.ModelViewSet):
+class TourTypeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = TourType.objects.all()
     serializer_class = TourTypeSerializer
-    permission_classes = [AllowAny]
+    # permission_classes = [TourTypePermission]
