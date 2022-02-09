@@ -12,6 +12,7 @@ from accounts.models import Expert
 from tours.permissions import TourBasicPermission, TourTypePermission
 from tours.serializers import TourBasicSerializer, TourListSerializer, TourSerializer, TourTypeSerializer
 
+
 # Create your views here.
 class TourViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = TourAdvanced.objects.all()
