@@ -153,36 +153,25 @@ class TourImage(models.Model):
 
 
 class TourDay(models.Model):
-    number = models.PositiveIntegerField(_('Номер'))
     name = models.CharField(_('Название'), max_length=255)
     location =  models.CharField(_('Локация'), max_length=255, null=True, blank=True)
     description = RichTextField(_('Описание'))
     tour = models.ForeignKey('Tour', on_delete=models.CASCADE, related_name='tour_days', verbose_name=_('Тур'))
-    image = models.ImageField(_('Фото'), upload_to=tour_image_path, max_length=255, null=True, blank=True)
 
     def __str__(self):
-        return f'#{self.number} {self.tour.name} {self.name}'
+        return self.tour.name
     
     class Meta:
         verbose_name = _('День тура')
         verbose_name_plural = _('Дни туров')
-        ordering = ['number', 'tour']
-        unique_together = ['number', 'tour']
-    
-    @property
-    def tmb_image(self):
-        if self.image:
-            tmb_path = get_tmb_path(self.image.url)
-            return tmb_path
-        return None
+        ordering = ['id']
+
 
 
 class TourDayImage(models.Model):
-    name = models.CharField(_('Название'), max_length=255, null=True, blank=True)
-    description = models.TextField(_('Описание'), null=True, blank=True)
     image = models.ImageField(_('Фото'), upload_to=tour_image_path, max_length=255, null=True, blank=True)
     alt =  models.CharField(_('alt текст'), max_length=255, null=True, blank=True)
-    tour_day = models.OneToOneField("TourDay", verbose_name=_("День тура"), on_delete=models.CASCADE, max_length=255, null=True, blank=True, related_name='tour_day_image')
+    tour_day = models.ForeignKey("TourDay", verbose_name=_("День тура"), on_delete=models.CASCADE, max_length=255, null=True, blank=True, related_name='tour_day_images')
 
     class Meta:
         verbose_name = _('Фото дня тура')

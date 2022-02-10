@@ -7,10 +7,10 @@ from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
 from tours.filters import TourFilter
-from tours.models import Tour, TourType
+from tours.models import Tour, TourDay, TourType
 from accounts.models import Expert
 from tours.permissions import TourPermission, TourTypePermission
-from tours.serializers import TourBasicSerializer, TourListSerializer, TourSerializer, TourTypeSerializer
+from tours.serializers import TourBasicSerializer, TourDaySerializer, TourListSerializer, TourSerializer, TourTypeSerializer
 
 
 # Create your views here.
@@ -25,10 +25,12 @@ class TourViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         expert = Expert.objects.only('id', 'first_name', 'last_name', 'about', 'rating', 'tours_count', 'tours_rating', 'reviews_count', 'tour_reviews_count', 'avatar')
         prefetched_expert = Prefetch('expert', expert)
+        tour_days = TourDay.objects.prefetch_related('tour_day_images')
+        prefetched_tour_days = Prefetch('tour_days', tour_days)
         if self.action == 'list':
             qs = Tour.objects.prefetch_related(prefetched_expert, 'start_country', 'currency').filter(is_active=True).only('id', 'start_date', 'finish_date', 'currency', 'cost', 'price', 'discount', 'rating', 'reviews_count', 'name', 'start_country', 'expert', 'wallpaper')
             return qs
-        qs = Tour.objects.prefetch_related(prefetched_expert, 'start_country', 'start_city', 'start_region', 'finish_country', 'finish_city', 'finish_region', 'basic_type', 'additional_types', 'tour_property_types', 'tour_property_images', 'tour_images', 'tour_days', 'tour_impressions', 'tour_included_services', 'tour_excluded_services', 'languages', 'currency').filter(is_active=True)        
+        qs = Tour.objects.prefetch_related(prefetched_expert, 'start_country', 'start_city', 'start_region', 'finish_country', 'finish_city', 'finish_region', 'basic_type', 'additional_types', 'tour_property_types', 'tour_property_images', 'tour_images', prefetched_tour_days, 'tour_impressions', 'tour_included_services', 'tour_excluded_services', 'languages', 'currency').filter(is_active=True)        
         return qs
     
     def get_serializer_class(self):
@@ -134,3 +136,8 @@ class TourTypeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = TourType.objects.all()
     serializer_class = TourTypeSerializer
     # permission_classes = [TourTypePermission]
+
+class TourDayViewSet(viewsets.ModelViewSet):
+    queryset = TourDay.objects.all()
+    serializer_class = TourDaySerializer
+

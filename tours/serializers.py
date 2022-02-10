@@ -16,8 +16,13 @@ class TourImageSerializer(serializers.ModelSerializer):
         model = TourImage
         exclude = ('tour',)
 
+class TourDayImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TourImage
+        exclude = ('tour_day',)
 
 class TourDaySerializer(serializers.ModelSerializer):
+    tour_day_images = TourDayImageSerializer(read_only=True, many=True)
     class Meta:
         model = TourDay
         exclude = ('tour',)
