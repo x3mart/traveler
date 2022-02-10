@@ -45,7 +45,7 @@ class Tour(models.Model):
     on_moderation = models.BooleanField(_('На модерации'), default=False)
     rating = models.DecimalField(_('Рейтинг'), decimal_places=1, max_digits=2, null=True, blank=True)
     reviews_count = models.IntegerField(_('Кол-во отзывов'), default=0)
-    name = models.CharField(_('Название'), max_length=255)
+    name = models.CharField(_('Название'), max_length=255, null=True, blank=True)
     wallpaper = models.ImageField(_('Главное фото'), max_length=255, upload_to=tour_image_path, null=True, blank=True)
     basic_type = models.ForeignKey("TourType", verbose_name=_("Основной тип тура"), on_delete=models.CASCADE, related_name='tours_by_basic_type', null=True, blank=True)
     additional_types = models.ManyToManyField("TourType", verbose_name=_("Дополнительные типы тура"), related_name='tours_by_additional_types', blank=True)
