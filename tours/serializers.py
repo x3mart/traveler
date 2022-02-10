@@ -37,7 +37,7 @@ class TourSerializer(serializers.ModelSerializer):
     finish_country = serializers.StringRelatedField(many=False,)
     start_city = serializers.StringRelatedField(many=False,)
     finish_city = serializers.StringRelatedField(many=False,)
-    property_types = serializers.StringRelatedField(many=True, source='basic_tour.tour_property_types')
+    property_types = serializers.StringRelatedField(many=True,)
     property_images = PropertyImageSerializer(many=True,)
     tour_images = TourImageSerializer(many=True,)
     languages = serializers.StringRelatedField(many=True,)
@@ -54,12 +54,8 @@ class TourSerializer(serializers.ModelSerializer):
 
 
 class TourListSerializer(serializers.ModelSerializer):
-    expert = ExpertListSerializer(many=False, source='basic_tour.expert')
-    rating = serializers.DecimalField(decimal_places=1, max_digits=2, source='basic_tour.rating')
-    reviews_count = serializers.IntegerField(source='basic_tour.reviews_count')
-    name = serializers.CharField(source='basic_tour.name')
-    tmb_wallpaper = serializers.ImageField(source='basic_tour.tmb_wallpaper')
-    start_country = serializers.StringRelatedField(many=False, source='basic_tour.start_country')
+    expert = ExpertListSerializer(many=False,)
+    start_country = serializers.StringRelatedField(many=False,)
     class Meta:
         model = Tour
         fields = ['id', 'rating', 'reviews_count', 'name', 'tmb_wallpaper', 'start_date', 'finish_date', 'start_country',  'expert', 'price', 'cost', 'discount']

@@ -19,16 +19,16 @@ class TourViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = TourSerializer
     permission_classes = [AllowAny]
     filter_backends = [filters.OrderingFilter, DjangoFilterBackend]
-    ordering_fields = ['basic_tour__rating', 'id']
+    ordering_fields = ['rating', 'id']
     filterset_class = TourFilter
 
     def get_queryset(self):
         expert = Expert.objects.only('id', 'first_name', 'last_name', 'about', 'rating', 'tours_count', 'tours_rating', 'reviews_count', 'tour_reviews_count', 'avatar')
         prefetched_expert = Prefetch('expert', expert)
         if self.action == 'list':
-            qs = Tour.objects.prefetch_related(prefetched_expert, 'start_country', 'currency').filter(basic_tour__is_active=True).only('id', 'start_date', 'finish_date', 'basic_tour', 'currency', 'cost', 'price', 'discount', 'rating', 'reviews_count', 'name', 'start_country', 'expert', 'wallpaper')
+            qs = Tour.objects.prefetch_related(prefetched_expert, 'start_country', 'currency').filter(is_active=True).only('id', 'start_date', 'finish_date', 'currency', 'cost', 'price', 'discount', 'rating', 'reviews_count', 'name', 'start_country', 'expert', 'wallpaper')
             return qs
-        qs = Tour.objects.prefetch_related(prefetched_expert, 'start_country', 'start_city', 'start_region', 'finish_country', 'finish_city', 'finish_region', 'basic_type', 'additional_types', 'tour_property_types', 'tour_property_images', 'tour_images', 'tour_days', 'tour_impressions', 'tour_included_services', 'tour_excluded_services', 'languages', 'currency').filter(basic_tour__is_active=True)        
+        qs = Tour.objects.prefetch_related(prefetched_expert, 'start_country', 'start_city', 'start_region', 'finish_country', 'finish_city', 'finish_region', 'basic_type', 'additional_types', 'tour_property_types', 'tour_property_images', 'tour_images', 'tour_days', 'tour_impressions', 'tour_included_services', 'tour_excluded_services', 'languages', 'currency').filter(is_active=True)        
         return qs
     
     def get_serializer_class(self):
