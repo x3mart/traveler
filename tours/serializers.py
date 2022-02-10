@@ -3,7 +3,7 @@ from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
 from accounts.models import Expert
 from accounts.serializers import ExpertListSerializer
-from .models import Tour, TourDay, TourPropertyImage, TourImage, TourType
+from .models import Tour, TourDay, TourDayImage, TourPropertyImage, TourImage, TourType
 
 
 class PropertyImageSerializer(serializers.ModelSerializer):
@@ -18,7 +18,7 @@ class TourImageSerializer(serializers.ModelSerializer):
 
 class TourDayImageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = TourImage
+        model = TourDayImage
         exclude = ('tour_day',)
 
 class TourDaySerializer(serializers.ModelSerializer):
