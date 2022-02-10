@@ -4,7 +4,7 @@ from ckeditor.fields import RichTextField
 
 # Create your models here.
 class TourReview(models.Model):
-    tour = models.ForeignKey('tours.TourBasic', on_delete=models.CASCADE, verbose_name=_('Тур'), related_name='tour_reviews')
+    tour = models.ForeignKey('tours.Tour', on_delete=models.CASCADE, verbose_name=_('Тур'), related_name='tour_reviews')
     body = RichTextField(_('Отзыв'))
     rating = models.DecimalField(_('Оценка'), max_digits=2, decimal_places=1)
     author = models.ForeignKey('accounts.Customer', on_delete=models.CASCADE, verbose_name=_('Путешественник'), related_name='customer_tours_reviews')

@@ -11,7 +11,7 @@ from utils.images import get_tmb_path
 def tour_image_path(instance, filename):
     name, extension = os.path.splitext(filename)
     class_name = instance.__class__.__name__
-    if class_name == 'TourBasic':
+    if class_name == 'Tour':
         folder = f'{slugify(unidecode(instance.name))}/wallpaper'
     elif class_name == 'TourDay':
         folder = f'{slugify(unidecode(instance.tour.name))}/day-{instance.number}'
@@ -38,7 +38,7 @@ class TourType(models.Model):
 
 
 
-class TourBasic(models.Model):
+class Tour(models.Model):
     expert = models.ForeignKey("accounts.Expert", verbose_name=_('Эксперт'), on_delete=models.CASCADE, related_name='tours')
     is_draft = models.BooleanField(_('Черновик'), default=True)
     is_active = models.BooleanField(default=False)
@@ -65,24 +65,6 @@ class TourBasic(models.Model):
     comfort_level = models.PositiveIntegerField(_('Уровень комфорта'), default=3)
     babies_alowed = models.BooleanField(_('Можно с маленькими детьми'), default=False)
     animals_not_exploited = models.BooleanField(_('Животные не эксплуатируются'), default=False)
-
-    class Meta:
-        verbose_name = _('Тур основа')
-        verbose_name_plural = _('Туры основа')
-    
-    def __str__(self):
-        return self.name
-   
-    @property
-    def tmb_wallpaper(self):
-        if self.wallpaper:
-            tmb_path = get_tmb_path(self.wallpaper.url)
-            return tmb_path
-        return None
-
-
-class TourAdvanced(models.Model):
-    basic_tour = models.ForeignKey("TourBasic", verbose_name=_("Тур основа"), on_delete=models.CASCADE, related_name='advanced_tours')
     start_date = models.DateField(_('Дата начала'), null=True, blank=True)
     duration = models.PositiveIntegerField(_("Продолжительность тура в днях"), null=True, blank=True)
     finish_date = models.DateField(_('Дата завершения'), null=True, blank=True)
@@ -103,18 +85,24 @@ class TourAdvanced(models.Model):
     is_guaranteed = models.BooleanField(_('Тур гарантирован'), default=False)
     flight_included = models.BooleanField(_('Перелет включен'), default=False)
     scouting = models.BooleanField(_('Разведка'), default=False)
+
+    class Meta:
+        verbose_name = _('Тур основа')
+        verbose_name_plural = _('Туры основа')
     
     def __str__(self):
-        return f'{self.basic_tour.name} {self.start_date} - {self.finish_date}'
-    
-    class Meta:
-        verbose_name = _('Тур доп сведения')
-        verbose_name_plural = _('Туры доп сведения')    
-
+        return self.name
+   
+    @property
+    def tmb_wallpaper(self):
+        if self.wallpaper:
+            tmb_path = get_tmb_path(self.wallpaper.url)
+            return tmb_path
+        return None
 
 class TourPropertyType(models.Model):
     name = models.CharField(_('Название'), max_length=255)
-    tours = models.ManyToManyField('TourBasic', related_name='tour_property_types')
+    tours = models.ManyToManyField('Tour', related_name='tour_property_types')
 
     def __str__(self):
         return self.name
@@ -129,7 +117,7 @@ class TourPropertyImage(models.Model):
     description = models.TextField(_('Описание'), null=True, blank=True)
     image = models.ImageField(_('Фото'), upload_to=tour_image_path, max_length=255)
     alt =  models.CharField(_('alt текст'), max_length=255, null=True, blank=True)
-    tour = models.ForeignKey("TourBasic", verbose_name=_("Тур"), on_delete=models.CASCADE, related_name='tour_property_images')
+    tour = models.ForeignKey("Tour", verbose_name=_("Тур"), on_delete=models.CASCADE, related_name='tour_property_images')
 
     
     class Meta:
@@ -149,7 +137,7 @@ class TourImage(models.Model):
     description = models.TextField(_('Описание'), null=True, blank=True)
     image = models.ImageField(_('Фото'), upload_to=tour_image_path, max_length=255, null=True, blank=True)
     alt =  models.CharField(_('alt текст'), max_length=255, null=True, blank=True)
-    tour = models.ForeignKey("TourBasic", verbose_name=_("Тур"), on_delete=models.CASCADE, related_name='tour_images', max_length=255, null=True, blank=True)
+    tour = models.ForeignKey("Tour", verbose_name=_("Тур"), on_delete=models.CASCADE, related_name='tour_images', max_length=255, null=True, blank=True)
     
     class Meta:
         verbose_name = _('Фото тура')
@@ -169,7 +157,7 @@ class TourDay(models.Model):
     name = models.CharField(_('Название'), max_length=255)
     location =  models.CharField(_('Локация'), max_length=255, null=True, blank=True)
     description = RichTextField(_('Описание'))
-    tour = models.ForeignKey('TourBasic', on_delete=models.CASCADE, related_name='tour_days', verbose_name=_('Тур'))
+    tour = models.ForeignKey('Tour', on_delete=models.CASCADE, related_name='tour_days', verbose_name=_('Тур'))
     image = models.ImageField(_('Фото'), upload_to=tour_image_path, max_length=255, null=True, blank=True)
 
     def __str__(self):
@@ -210,7 +198,7 @@ class TourDayImage(models.Model):
 
 class TourImpression(models.Model):
     name = models.CharField(_('Название'), max_length=150)
-    tour = models.ForeignKey('TourBasic', on_delete=models.CASCADE, related_name='tour_impressions', verbose_name=_('Тур'))
+    tour = models.ForeignKey('Tour', on_delete=models.CASCADE, related_name='tour_impressions', verbose_name=_('Тур'))
 
     class Meta:
         verbose_name = _('Главное впечатление')
@@ -219,7 +207,7 @@ class TourImpression(models.Model):
 
 class TourIncludedService(models.Model):
     name = models.CharField(_('Название'), max_length=150)
-    tour = models.ForeignKey('TourBasic', on_delete=models.CASCADE, related_name='tour_included_services', verbose_name=_('Тур'))
+    tour = models.ForeignKey('Tour', on_delete=models.CASCADE, related_name='tour_included_services', verbose_name=_('Тур'))
 
     class Meta:
         verbose_name = _('Входит в стоимость')
@@ -228,7 +216,7 @@ class TourIncludedService(models.Model):
 
 class TourExcludedService(models.Model):
     name = models.CharField(_('Название'), max_length=150)
-    tour = models.ForeignKey('TourBasic', on_delete=models.CASCADE, related_name='tour_excluded_services', verbose_name=_('Тур'))
+    tour = models.ForeignKey('Tour', on_delete=models.CASCADE, related_name='tour_excluded_services', verbose_name=_('Тур'))
 
     class Meta:
         verbose_name = _('Не входит в стоимость')
@@ -240,7 +228,7 @@ class TourAddetionalService(models.Model):
     description = RichTextField(_('Описание'))
     currency = models.ForeignKey('currencies.Currency', verbose_name=_("Валюта"), on_delete=models.CASCADE, related_name='tour_addetional_service', null=True, blank=True)
     price = models.IntegerField(_('Цена'), null=True, blank=True)
-    tour = models.ForeignKey('TourBasic', on_delete=models.CASCADE, related_name='tour_addetional_services', verbose_name=_('Тур'))
+    tour = models.ForeignKey('Tour', on_delete=models.CASCADE, related_name='tour_addetional_services', verbose_name=_('Тур'))
 
     class Meta:
         verbose_name = _('Дополнительная услуга')

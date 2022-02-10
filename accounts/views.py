@@ -7,6 +7,18 @@ from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+from django.views import View
+from django.http import JsonResponse
+from rest_framework_simplejwt.settings import api_settings
+from django.contrib.auth.models import update_last_login
+
+class RedirectSocial(View):
+
+    def get(self, request, *args, **kwargs):
+        code, state = str(request.GET['code']), str(request.GET['state'])
+        json_obj = {'code': code, 'state': state}
+        print(json_obj)
+        return JsonResponse(json_obj)
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
@@ -15,13 +27,31 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         if hasattr(user, 'expert'):
             token['user_status'] = 'experts'
         elif hasattr(user, 'customer'):
-            token['user_status'] = 'customers'  
+            token['user_status'] = 'customers'
+        else:
+            token['user_status'] = 'stuff'
         return token
+    
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        refresh = self.get_token(self.user)
+        data['refresh'] = str(refresh)
+        data['access'] = str(refresh.access_token)
+        if hasattr(self.user, 'expert'):
+            data['user_status'] = 'experts'
+        elif hasattr(self.user, 'customer'):
+            data['user_status'] = 'customers'
+        elif self.user.is_staff:
+            data['user_status'] = 'staff'
+        if api_settings.UPDATE_LAST_LOGIN:
+            update_last_login(None, self.user)
+        return data
+
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
-# Create your views here.
+
 def get_me(self, request,  *args, **kwargs):
     self.get_object = self.get_instance
     if request.method == 'GET':

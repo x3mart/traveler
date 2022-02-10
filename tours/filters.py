@@ -1,6 +1,6 @@
 from django_filters.filters import BaseInFilter, DurationFilter, BooleanFilter, DateFromToRangeFilter, NumberFilter
 from django_filters import rest_framework as filters
-from tours.models import TourAdvanced, TourBasic
+from tours.models import Tour
 from django.db.models import Q
 
 class NumberInFilter(BaseInFilter, NumberFilter):
@@ -23,8 +23,8 @@ class TourFilter(filters.FilterSet):
     difficulty = NumberFilter(field_name='basic_tour__difficulty_level', lookup_expr='gte')
 
     class Meta:
-        model = TourAdvanced
+        model = Tour
         fields = ['start_date', 'countries', 'regions', 'types', 'languages', 'cost_min', 'cost_max', 'discount', 'duration_min', 'duration_max', 'vacants_number', 'rating', 'difficulty']
     
     def types_filter(self, queryset, name, value):
-        return TourAdvanced.objects.filter(Q(basic_tour__basic_type__in=value) | Q(basic_tour__additional_types__in=value)).distinct()
+        return Tour.objects.filter(Q(basic_type__in=value) | Q(additional_types__in=value)).distinct()

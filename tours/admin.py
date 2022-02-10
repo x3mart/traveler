@@ -1,10 +1,9 @@
 from django.contrib import admin
 
-from tours.models import TourAddetionalService, TourExcludedService, TourIncludedService, TourPropertyImage, TourPropertyType, TourAdvanced, TourBasic, TourDay, TourDayImage, TourImage, TourType
+from tours.models import TourAddetionalService, TourExcludedService, TourIncludedService, TourPropertyImage, TourPropertyType, Tour, TourDay, TourDayImage, TourImage, TourType
 
 # Register your models here.
-admin.site.register(TourBasic)
-admin.site.register(TourAdvanced)
+admin.site.register(Tour)
 admin.site.register(TourType)
 admin.site.register(TourPropertyType)
 admin.site.register(TourPropertyImage)

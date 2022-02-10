@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
 from tours.filters import TourFilter
-from tours.models import TourAdvanced, TourBasic, TourType
+from tours.models import Tour, TourType
 from accounts.models import Expert
 from tours.permissions import TourBasicPermission, TourTypePermission
 from tours.serializers import TourBasicSerializer, TourListSerializer, TourSerializer, TourTypeSerializer
@@ -15,7 +15,7 @@ from tours.serializers import TourBasicSerializer, TourListSerializer, TourSeria
 
 # Create your views here.
 class TourViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = TourAdvanced.objects.all()
+    queryset = Tour.objects.all()
     serializer_class = TourSerializer
     permission_classes = [AllowAny]
     filter_backends = [filters.OrderingFilter, DjangoFilterBackend]
@@ -26,13 +26,9 @@ class TourViewSet(viewsets.ReadOnlyModelViewSet):
         expert = Expert.objects.only('id', 'first_name', 'last_name', 'about', 'rating', 'tours_count', 'tours_rating', 'reviews_count', 'tour_reviews_count', 'avatar')
         prefetched_expert = Prefetch('expert', expert)
         if self.action == 'list':
-            basic_tour = TourBasic.objects.prefetch_related(prefetched_expert, 'start_country',).only('rating', 'reviews_count', 'name', 'start_country', 'expert', 'wallpaper')
-            prefetched_basic_tour = Prefetch('basic_tour', basic_tour)
-            qs = TourAdvanced.objects.prefetch_related(prefetched_basic_tour, 'currency').filter(basic_tour__is_active=True).only('id', 'start_date', 'finish_date', 'basic_tour', 'currency', 'cost', 'price', 'discount')
+            qs = Tour.objects.prefetch_related(prefetched_expert, 'start_country', 'currency').filter(basic_tour__is_active=True).only('id', 'start_date', 'finish_date', 'basic_tour', 'currency', 'cost', 'price', 'discount', 'rating', 'reviews_count', 'name', 'start_country', 'expert', 'wallpaper')
             return qs
-        basic_tour = TourBasic.objects.prefetch_related(prefetched_expert, 'start_country', 'start_city', 'start_region', 'finish_country', 'finish_city', 'finish_region', 'basic_type', 'additional_types', 'tour_property_types', 'tour_property_images', 'tour_images', 'tour_days', 'tour_impressions', 'tour_included_services', 'tour_excluded_services',)
-        prefetched_basic_tour = Prefetch('basic_tour', basic_tour)
-        qs = TourAdvanced.objects.prefetch_related(prefetched_basic_tour, 'languages', 'currency').filter(basic_tour__is_active=True)        
+        qs = Tour.objects.prefetch_related(prefetched_expert, 'start_country', 'start_city', 'start_region', 'finish_country', 'finish_city', 'finish_region', 'basic_type', 'additional_types', 'tour_property_types', 'tour_property_images', 'tour_images', 'tour_days', 'tour_impressions', 'tour_included_services', 'tour_excluded_services', 'languages', 'currency').filter(basic_tour__is_active=True)        
         return qs
     
     def get_serializer_class(self):
@@ -42,7 +38,7 @@ class TourViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class TourBasicViewSet(viewsets.ModelViewSet):
-    queryset = TourBasic.objects.all()
+    queryset = Tour.objects.all()
     serializer_class = TourBasicSerializer
     permission_classes = [TourBasicPermission]
     filter_backends = [filters.OrderingFilter, DjangoFilterBackend]
@@ -66,7 +62,7 @@ class TourBasicViewSet(viewsets.ModelViewSet):
         return get_object_or_404(Expert, pk=request.user.id)
 
     def get_queryset(self):
-        qs = TourBasic.objects.prefetch_related('expert', 'start_country', 'start_city')
+        qs = Tour.objects.prefetch_related('expert', 'start_country', 'start_city')
         return qs
     
     def create(self, request, *args, **kwargs):
@@ -76,7 +72,7 @@ class TourBasicViewSet(viewsets.ModelViewSet):
         else:
             return Response(serializer.errors, status=400)
         data['is_draft'] = True
-        tour_basic = TourBasic.objects.create(expert=self.get_expert(request), basic_type = self.get_basic_type(request), **data)
+        tour_basic = Tour.objects.create(expert=self.get_expert(request), basic_type = self.get_basic_type(request), **data)
         if request.data.get('additional_types'):
             self.set_additional_types(request, tour_basic)
             # tour_basic.save()

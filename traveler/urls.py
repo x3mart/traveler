@@ -26,6 +26,7 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from django.conf.urls.i18n import i18n_patterns
 import debug_toolbar
+from accounts.views import RedirectSocial
 
 
 urlpatterns = [
@@ -33,6 +34,8 @@ urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
     path('api-auth/', include('rest_framework.urls')),
     path('auth/', include('djoser.urls')),
+    # Djoser Beta extension for social_django
+    path('api/auth/social/', include('djoser.social.urls')),
     # path('auth/', include('djoser.urls.jwt')),
     path('auth/jwt/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('auth/jwt/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
@@ -41,6 +44,8 @@ urlpatterns = [
     # path to my app's endpoints
     path('api/', include('accounts.urls')),
     path('api/', include('tours.urls')),
+    # test google-oauth2
+    path('account/profile/', RedirectSocial.as_view()),
 ]
 
 urlpatterns += i18n_patterns()
