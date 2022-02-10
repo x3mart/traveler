@@ -11,9 +11,10 @@ def lang_icon_path(instance, filename):
 
 
 class Language(models.Model):
-    name = models.CharField(_('Название'), max_length=25)
-    short_name = models.CharField(_('Краткое_название'), max_length=25)
-    icon = models.ImageField(_('Иконка'), max_length=255, upload_to=lang_icon_path)
+    name = models.CharField(_('Название'), max_length=100, null=True, blank=True)
+    native_name = models.CharField(_('Оригинальное название'), max_length=100, null=True, blank=True)
+    code = models.CharField(_('Код'), max_length=10, null=True, blank=True)
+    icon = models.ImageField(_('Иконка'), max_length=255, upload_to=lang_icon_path, null=True, blank=True)
 
     def __str__(self):
         return self.name

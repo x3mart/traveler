@@ -9,15 +9,15 @@ from django.shortcuts import get_object_or_404
 from tours.filters import TourFilter
 from tours.models import Tour, TourType
 from accounts.models import Expert
-from tours.permissions import TourBasicPermission, TourTypePermission
+from tours.permissions import TourPermission, TourTypePermission
 from tours.serializers import TourBasicSerializer, TourListSerializer, TourSerializer, TourTypeSerializer
 
 
 # Create your views here.
-class TourViewSet(viewsets.ReadOnlyModelViewSet):
+class TourViewSet(viewsets.ModelViewSet):
     queryset = Tour.objects.all()
     serializer_class = TourSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [TourPermission]
     filter_backends = [filters.OrderingFilter, DjangoFilterBackend]
     ordering_fields = ['rating', 'id']
     filterset_class = TourFilter
@@ -35,12 +35,55 @@ class TourViewSet(viewsets.ReadOnlyModelViewSet):
         if self.action == 'list':
             return TourListSerializer
         return super().get_serializer_class()
+    
+    def set_additional_types(self, request, instance=None):
+        if instance and instance.additional_types.exists():
+            instance.additional_types.clear()
+        additional_types = []
+        additional_type_ids = request.data.get('additional_types').split(',')
+        for additional_type_id in additional_type_ids:
+            additional_types.append(TourType.objects.get(pk=additional_type_id))
+        instance.additional_types.add(*tuple(additional_types))
+        
+    def get_basic_type(self, request):
+        if request.data.get('basic_type'):
+            return get_object_or_404(TourType, pk=request.data.get('basic_type'))
+        return None
+    
+    def get_expert(self, request):
+        return get_object_or_404(Expert, pk=request.user.id)
+
+    def get_queryset(self):
+        qs = Tour.objects.prefetch_related('expert', 'start_country', 'start_city')
+        return qs
+    
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            data = serializer.validated_data
+        else:
+            return Response(serializer.errors, status=400)
+        data['is_draft'] = True
+        tour_basic = Tour.objects.create(expert=self.get_expert(request), basic_type = self.get_basic_type(request), **data)
+        if request.data.get('additional_types'):
+            self.set_additional_types(request, tour_basic)
+            # tour_basic.save()
+        return Response(TourBasicSerializer(tour_basic).data, status=201)
+    
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if request.data.get('additional_types'):
+            self.set_additional_types(request, instance)
+        if self.get_basic_type(request):
+            instance.basic_type = self.get_basic_type(request)
+            instance.save()
+        return super().update(request, *args, **kwargs)
 
 
 class TourBasicViewSet(viewsets.ModelViewSet):
     queryset = Tour.objects.all()
     serializer_class = TourBasicSerializer
-    permission_classes = [TourBasicPermission]
+    permission_classes = [TourPermission]
     filter_backends = [filters.OrderingFilter, DjangoFilterBackend]
     ordering_fields = ['rating', 'id']
 

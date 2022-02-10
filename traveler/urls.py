@@ -44,6 +44,7 @@ urlpatterns = [
     # path to my app's endpoints
     path('api/', include('accounts.urls')),
     path('api/', include('tours.urls')),
+    path('api/', include('languages.urls')),
     # test google-oauth2
     path('account/profile/', RedirectSocial.as_view()),
 ]
