@@ -19,7 +19,8 @@ def tour_type_post_save(instance, **kwargs):
 
 @receiver(post_delete, sender=TourType)
 def tour_type_post_delete(instance, **kwargs):
-    delete_image(instance.current_img)
+    if instance.image:
+        delete_image(instance.image)
 
 @receiver(pre_save, sender=Tour)
 def tour_basic_pre_save(instance, **kwargs):
@@ -51,7 +52,8 @@ def tour_basic_post_save(instance, created, **kwargs):
 
 @receiver(post_delete, sender=Tour)
 def tour_basic_post_delete(instance, **kwargs):
-    delete_image(instance.current_img)
+    if instance.wallpaper:
+        delete_image(instance.wallpaper)
     
 
 @receiver(pre_save, sender=TourPropertyImage)
@@ -67,7 +69,8 @@ def tour_property_image_post_save(instance, **kwargs):
 
 @receiver(post_delete, sender=TourPropertyImage)
 def tour_property_image_post_delete(instance, **kwargs):
-    delete_image(instance.current_img)
+    if instance.image:
+        delete_image(instance.image)
 
 @receiver(pre_save, sender=TourImage)
 def tour_image_pre_save(instance, **kwargs):
@@ -82,7 +85,8 @@ def tour_image_post_save(instance, **kwargs):
 
 @receiver(post_delete, sender=TourImage)
 def tour_image_post_delete(instance, **kwargs):
-    delete_image(instance.current_img)
+    if instance.image:
+        delete_image(instance.image)
 
 @receiver(pre_save, sender=TourDayImage)
 def tour_day_image_pre_save(instance, **kwargs):
@@ -97,4 +101,5 @@ def tour_day_image_post_save(instance, **kwargs):
 
 @receiver(post_delete, sender=TourDayImage)
 def tour_day_image_post_delete(instance, **kwargs):
-    delete_image(instance.current_img)
+    if instance.image:
+        delete_image(instance.image)
