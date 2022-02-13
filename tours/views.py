@@ -56,7 +56,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
     
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
-        instance = self.set_related_models(self, request, instance)
+        instance = self.set_related_models(request, instance)
         instance.save()
         return super().update(request, *args, **kwargs)
 
