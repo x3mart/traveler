@@ -121,7 +121,6 @@ class TourBasicViewSet(viewsets.ModelViewSet):
         tour_basic = Tour.objects.create(expert=self.get_expert(request), basic_type = self.get_basic_type(request), **data)
         if request.data.get('additional_types'):
             self.set_additional_types(request, tour_basic)
-            # tour_basic.save()
         return Response(TourBasicSerializer(tour_basic).data, status=201)
     
     def update(self, request, *args, **kwargs):
