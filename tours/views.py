@@ -31,8 +31,8 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         prefetched_tour_days = Prefetch('tour_days', tour_days)
         if self.action == 'list':
             qs = Tour.objects.prefetch_related(prefetched_expert, 'start_country', 'currency').only('id', 'start_date', 'finish_date', 'currency', 'cost', 'price', 'discount', 'rating', 'reviews_count', 'name', 'start_country', 'expert', 'wallpaper')
-            return qs
-        qs = Tour.objects.prefetch_related(prefetched_expert, 'start_country', 'start_city', 'start_region', 'start_russian_region', 'finish_russian_region', 'finish_country', 'finish_city', 'finish_region', 'basic_type', 'additional_types', 'tour_property_types', 'tour_property_images', 'tour_images', prefetched_tour_days, 'tour_impressions', 'tour_included_services', 'tour_excluded_services', 'languages', 'currency')        
+        else:
+            qs = Tour.objects.prefetch_related(prefetched_expert, 'start_country', 'start_city', 'start_region', 'start_russian_region', 'finish_russian_region', 'finish_country', 'finish_city', 'finish_region', 'basic_type', 'additional_types', 'tour_property_types', 'tour_property_images', 'tour_images', prefetched_tour_days, 'tour_impressions', 'tour_included_services', 'tour_excluded_services', 'languages', 'currency')  
         return qs
     
     def get_serializer_class(self):
