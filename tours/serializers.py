@@ -2,30 +2,40 @@ from dataclasses import fields
 from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
 from accounts.models import Expert
-from accounts.serializers import ExpertListSerializer
-from .models import Tour, TourDay, TourDayImage, TourPropertyImage, TourImage, TourType
+from accounts.serializers import ExpertListSerializer, TeamMemberSerializer
+from .models import Tour, TourDay, TourDayImage, TourExcludedService, TourImpression, TourIncludedService, TourPropertyImage, TourImage, TourPropertyType, TourType
+from geoplaces.serializers import RegionSerializer, CountrySerializer, RussianRegionSerializer, CitySerializer
+from languages.serializers import LanguagesSerializer
+from currencies.serializers import CurrencySerializer
 
 
-class PropertyImageSerializer(serializers.ModelSerializer):
+
+class TourPropertyTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = TourPropertyImage
-        exclude = ('tour',)
+        fields = '__all__'
+
+
+class TourPropertyImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TourPropertyImage
+        fields = '__all__'
 
 class TourImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = TourImage
-        exclude = ('tour',)
+        fields = '__all__'
 
 class TourDayImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = TourDayImage
-        exclude = ('tour_day',)
+        fields = '__all__'
 
 class TourDaySerializer(serializers.ModelSerializer):
     tour_day_images = TourDayImageSerializer(read_only=True, many=True)
     class Meta:
         model = TourDay
-        exclude = ('tour',)
+        fields = '__all__'
 
 class TourTypeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -33,27 +43,46 @@ class TourTypeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class TourImpressionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TourImpression
+        fields = '__all__'
+
+
+class TourIncludedServiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TourIncludedService
+        fields = '__all__'
+
+
+class TourExcludedServiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TourExcludedService
+        fields = '__all__'
+
+
 class TourSerializer(serializers.ModelSerializer):
-    basic_type = serializers.StringRelatedField(many=False, read_only=True)
-    additional_types = serializers.StringRelatedField(many=True, read_only=True)
-    start_region = serializers.StringRelatedField(many=False, read_only=True)
-    finish_region = serializers.StringRelatedField(many=False, read_only=True)
-    start_country = serializers.StringRelatedField(many=False, read_only=True)
-    finish_country = serializers.StringRelatedField(many=False, read_only=True)
-    start_russian_region = serializers.StringRelatedField(many=False, read_only=True)
-    finish_russian_region = serializers.StringRelatedField(many=False, read_only=True)
-    start_city = serializers.StringRelatedField(many=False, read_only=True)
-    finish_city = serializers.StringRelatedField(many=False, read_only=True)
-    tour_property_types = serializers.StringRelatedField(many=True, read_only=True)
-    tour_property_images = PropertyImageSerializer(many=True, read_only=True)
+    basic_type = TourTypeSerializer(many=False, read_only=True)
+    additional_types = TourTypeSerializer(many=True, read_only=True)
+    start_region = RegionSerializer(many=False, read_only=True)
+    finish_region = RegionSerializer(many=False, read_only=True)
+    start_country = CountrySerializer(many=False, read_only=True)
+    finish_country = CountrySerializer(many=False, read_only=True)
+    start_russian_region = RussianRegionSerializer(many=False, read_only=True)
+    finish_russian_region = RussianRegionSerializer(many=False, read_only=True)
+    start_city = CitySerializer(many=False, read_only=True)
+    finish_city = CitySerializer(many=False, read_only=True)
+    tour_property_types = TourPropertyTypeSerializer(many=True, read_only=True)
+    tour_property_images = TourPropertyImageSerializer(many=True, read_only=True)
     tour_images = TourImageSerializer(many=True, read_only=True)
-    languages = serializers.StringRelatedField(many=True, read_only=True)
-    currency = serializers.StringRelatedField(many=False, source='currency.short_name', read_only=True)
+    languages = LanguagesSerializer(many=True, read_only=True)
+    currency = CurrencySerializer(many=False, read_only=True)
     expert = ExpertListSerializer(many=False, read_only=True)
+    team_member = TeamMemberSerializer(many=False, read_only=True)
     tour_days = TourDaySerializer(many=True, read_only=True)
-    tour_impressions = serializers.StringRelatedField(many=True, read_only=True)
-    tour_included_services = serializers.StringRelatedField(many=True, read_only=True)
-    tour_excluded_services = serializers.StringRelatedField(many=True, read_only=True)
+    tour_impressions = TourImpressionSerializer(many=True, read_only=True)
+    tour_included_services = TourIncludedServiceSerializer(many=True, read_only=True)
+    tour_excluded_services = TourExcludedServiceSerializer(many=True, read_only=True)
 
     class Meta:
         model = Tour
