@@ -5,7 +5,7 @@ from accounts.models import Expert
 from accounts.serializers import ExpertListSerializer, TeamMemberSerializer
 from .models import Tour, TourDay, TourDayImage, TourExcludedService, TourImpression, TourIncludedService, TourPropertyImage, TourImage, TourPropertyType, TourType
 from geoplaces.serializers import RegionSerializer, CountrySerializer, RussianRegionSerializer, CitySerializer
-from languages.serializers import LanguagesSerializer
+from languages.serializers import LanguageSerializer
 from currencies.serializers import CurrencySerializer
 
 
@@ -75,7 +75,7 @@ class TourSerializer(serializers.ModelSerializer):
     tour_property_types = TourPropertyTypeSerializer(many=True, read_only=True)
     tour_property_images = TourPropertyImageSerializer(many=True, read_only=True)
     tour_images = TourImageSerializer(many=True, read_only=True)
-    languages = LanguagesSerializer(many=True, read_only=True)
+    languages = LanguageSerializer(many=True, read_only=True)
     currency = CurrencySerializer(many=False, read_only=True)
     expert = ExpertListSerializer(many=False, read_only=True)
     team_member = TeamMemberSerializer(many=False, read_only=True)
