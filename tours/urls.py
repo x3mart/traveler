@@ -8,5 +8,6 @@ router.register(r'tourtypes', TourTypeViewSet, basename='tourtype')
 router.register(r'tourdays', TourDayViewSet, basename='tourday')
 router.register(r'tourdayimages', TourDayImageViewSet, basename='tourdayimage')
 router.register(r'tourpropertyimages', TourPropertyImageViewSet, basename='tourpropertyimage')
+router.register(r'tourimages', TourPropertyImageViewSet, basename='tourimage')
 
 urlpatterns = router.urls
