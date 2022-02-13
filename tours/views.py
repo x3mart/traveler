@@ -39,10 +39,6 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         if self.action == 'list':
             return TourListSerializer
         return super().get_serializer_class()
-
-    def get_queryset(self):
-        qs = Tour.objects.prefetch_related('expert', 'start_country', 'start_city')
-        return qs
     
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
