@@ -81,7 +81,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 class Expert(User):
     country = models.CharField(_('Страна'), max_length=100, null=True, blank=True)
     city  = models.CharField(_('Город'), max_length=100, null=True, blank=True)
-    languages = models.CharField(_('Языки'), max_length=255, null=True, blank=True)
+    languages = models.ManyToManyField("languages.Language" ,verbose_name=_('Языки'), blank=True, related_name='expert')
     visited_countries = models.CharField(_('Посещенные страны'), max_length=255, null=True, blank=True)
     about = RichTextField(_('О себе'), null=True, blank=True)
     email_confirmed = models.BooleanField(_('Email подтвержден'), default=False)

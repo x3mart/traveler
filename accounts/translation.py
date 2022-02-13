@@ -10,7 +10,7 @@ class UserTranslationOptions(TranslationOptions):
 
 @register(Expert)
 class ExpertTranslationOptions(TranslationOptions):
-    fields = ('country', 'city', 'languages', 'visited_countries','about')
+    fields = ('country', 'city', 'visited_countries', 'about')
 
 
 @register(Customer)

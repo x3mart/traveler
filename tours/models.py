@@ -53,6 +53,8 @@ class Tour(models.Model):
     finish_region = models.ForeignKey("geoplaces.Region", verbose_name=_("Регион завершения путешествия"), on_delete=models.CASCADE, related_name='tours_by_finish_region', null=True, blank=True)
     start_country = models.ForeignKey("geoplaces.Country", verbose_name=_("Страна начала путешествия"), on_delete=models.CASCADE, related_name='tours_by_start_country', null=True, blank=True)
     finish_country = models.ForeignKey("geoplaces.Country", verbose_name=_("Страна завершения путешествия"), on_delete=models.CASCADE, related_name='tours_by_finish_country', null=True, blank=True)
+    start_russian_region = models.ForeignKey("geoplaces.RussianRegion", verbose_name=_("Российский регион начала путешествия"), on_delete=models.CASCADE, related_name='tours_by_start_russian_region', null=True, blank=True)
+    finish_russian_region = models.ForeignKey("geoplaces.RussianRegion", verbose_name=_("Российский регион завершения путешествия"), on_delete=models.CASCADE, related_name='tours_by_finish_russian_region', null=True, blank=True)
     start_city = models.ForeignKey("geoplaces.City", verbose_name=_("Город начала путешествия"), on_delete=models.CASCADE, related_name='tours_by_start_city', null=True, blank=True)
     finish_city = models.ForeignKey("geoplaces.City", verbose_name=_("Город завершения путешествия"), on_delete=models.CASCADE, related_name='tours_by_finish_city', null=True, blank=True)
     week_recurrent = models.BooleanField(_('Повторять еженедельно'), default=False)
