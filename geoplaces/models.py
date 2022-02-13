@@ -58,5 +58,5 @@ class RussianRegion(models.Model):
         return self.name
     
     class Meta:
-        verbose_name = _('Регион')
-        verbose_name_plural = _('Регионы')
+        verbose_name = _('Регион России')
+        verbose_name_plural = _('Регионы России')
