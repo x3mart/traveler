@@ -33,6 +33,10 @@ class TourMixin():
             instance.start_country_id = request.data.get('start_country')
         if request.data.get('finish_country'):
             instance.finish_country_id = request.data.get('finish_country')
+        if request.data.get('start_russian_region'):
+            instance.start_russian_region_id = request.data.get('start_russian_region')
+        if request.data.get('finish_russian_region'):
+            instance.finish_russian_region_id = request.data.get('finish_russian_region')
         if request.data.get('start_city'):
             instance.start_city_id = request.data.get('start_city')
         if request.data.get('finish_city'):
