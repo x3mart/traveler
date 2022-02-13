@@ -15,6 +15,8 @@ def tour_image_path(instance, filename):
         folder = f'{slugify(unidecode(instance.name))}/wallpaper'
     elif class_name == 'TourDay':
         folder = f'{slugify(unidecode(instance.tour.name))}/day-{instance.number}'
+    elif class_name == 'TourPropertyImage':
+        folder = f'{slugify(unidecode(instance.tour.name))}'
     else:
         folder = f'{slugify(unidecode(instance.tour.name))}/{slugify(unidecode(instance.__class__.__name__))}/{slugify(unidecode(instance.name))}'
     return 'tours/{0}/{1}{2}'.format(folder, slugify(unidecode(name)), extension)
