@@ -141,3 +141,4 @@ class TourDayImageViewSet(viewsets.ModelViewSet):
 class TourPropertyImageViewSet(viewsets.ModelViewSet):
     queryset = TourPropertyImage.objects.all()
     serializer_class = TourPropertyImageSerializer
+    permission_classes = [AllowAny]
