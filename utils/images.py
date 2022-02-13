@@ -6,6 +6,12 @@ import os
 from traveler.settings import BASE_DIR
 
 
+def get_current_img(sender, instance):
+    try:
+        return sender.objects.get(pk=instance.id).image
+    except:
+        return ''
+
 def resize_with_aspectratio(main_path, max_width=350, max_height=400):
     size = (max_width, max_height)
     pil_image = PilImage.open(main_path)

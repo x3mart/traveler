@@ -2,16 +2,13 @@ from django.dispatch import receiver
 from django.db.models.signals import post_delete, post_save, pre_save
 from accounts.models import Expert
 from tours.models import Tour, TourDay, TourDayImage, TourImage, TourPropertyImage, TourType
-from utils.images import delete_image, image_processing
+from utils.images import delete_image, image_processing, get_current_img
 from django.db.models import Count, Q
         
 
 @receiver(pre_save, sender=TourType)
-def tour_type_pre_save(instance, **kwargs):
-    try:
-        instance._current_img = TourType.objects.get(pk=instance.id).wallpaper
-    except:
-        instance._current_img = ''
+def tour_type_pre_save(instance, sender, **kwargs):
+    instance._current_img = get_current_img(sender, instance)
 
 @receiver(post_save, sender=TourType)
 def tour_type_post_save(instance, **kwargs):
@@ -57,11 +54,8 @@ def tour_basic_post_delete(instance, **kwargs):
     
 
 @receiver(pre_save, sender=TourPropertyImage)
-def tour_property_image_pre_save(instance, **kwargs):
-    try:
-        instance._current_img = TourPropertyImage.objects.get(pk=instance.id).wallpaper
-    except:
-        instance._current_img = ''
+def tour_property_image_pre_save(instance, sender, **kwargs):
+    instance._current_img = get_current_img(sender, instance)
 
 @receiver(post_save, sender=TourPropertyImage)
 def tour_property_image_post_save(instance, **kwargs):
@@ -73,11 +67,8 @@ def tour_property_image_post_delete(instance, **kwargs):
         delete_image(instance.image)
 
 @receiver(pre_save, sender=TourImage)
-def tour_image_pre_save(instance, **kwargs):
-    try:
-        instance._current_img = TourImage.objects.get(pk=instance.id).wallpaper
-    except:
-        instance._current_img = ''
+def tour_image_pre_save(instance, sender, **kwargs):
+    instance._current_img = get_current_img(sender, instance)
 
 @receiver(post_save, sender=TourImage)
 def tour_image_post_save(instance, **kwargs):
@@ -89,11 +80,8 @@ def tour_image_post_delete(instance, **kwargs):
         delete_image(instance.image)
 
 @receiver(pre_save, sender=TourDayImage)
-def tour_day_image_pre_save(instance, **kwargs):
-    try:
-        instance._current_img = TourDay.objects.get(pk=instance.id).image
-    except:
-        instance._current_img = ''
+def tour_day_image_pre_save(instance, sender, **kwargs):
+    instance._current_img = get_current_img(sender, instance)
 
 @receiver(post_save, sender=TourDayImage)
 def tour_day_image_post_save(instance, **kwargs):
