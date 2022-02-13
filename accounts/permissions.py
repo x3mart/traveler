@@ -32,3 +32,15 @@ class CustomerPermission(permissions.BasePermission):
         if view.action in ['me', 'update', 'partial_update',]:
             return obj.id == request.user.id or request.user.is_staff
         return True
+
+
+class TeamMemberPermission(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if view.action in ['create',]:
+            return request.auth and hasattr(request.user, 'expert')
+        return True           
+
+    def has_object_permission(self, request, view, obj):
+        if view.action in ['destroy', 'update', 'partial_update',]:
+            return obj.expert.id == request.user.id or request.user.is_staff
+        return True

@@ -167,7 +167,6 @@ class TourDay(models.Model):
         ordering = ['id']
 
 
-
 class TourDayImage(models.Model):
     image = models.ImageField(_('Фото'), upload_to=tour_image_path, max_length=255, null=True, blank=True)
     alt =  models.CharField(_('alt текст'), max_length=255, null=True, blank=True)

@@ -1,14 +1,16 @@
 from rest_framework.decorators import action
-from accounts.permissions import UserPermission, CustomerPermission, ExpertPermission
-from accounts.serializers import CustomerMeSerializer, ExpertListSerializer, ExpertMeSerializer, ExpertSerializer, UserSerializer, CustomerSerializer
+from accounts.permissions import TeamMemberPermission, UserPermission, CustomerPermission, ExpertPermission
+from accounts.serializers import CustomerMeSerializer, ExpertListSerializer, ExpertMeSerializer, ExpertSerializer, TeamMemberSerializer, UserSerializer, CustomerSerializer
 from rest_framework import viewsets
-from accounts.models import Expert, User, Customer
+from accounts.models import Expert, TeamMember, User, Customer
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.views import View
 from django.http import JsonResponse
+from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.settings import api_settings
 from django.contrib.auth.models import update_last_login
 
@@ -124,3 +126,20 @@ class CustomerViewSet(viewsets.ModelViewSet):
         if self.action in ['me', 'create', 'update', 'partial_update'] or (is_staff and self.action != 'list'):
             return CustomerMeSerializer
         return super().get_serializer_class()
+
+class TeamMemberViewSet(viewsets.ModelViewSet):
+    queryset = TeamMember.objects.all()
+    serializer_class = TeamMemberSerializer
+    permission_classes = [TeamMemberPermission]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['expert',]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            data = serializer.validated_data
+        else:
+            return Response(serializer.errors, status=400)
+        data['expert_id'] = request.user.id
+        instance = TeamMember.objects.create(**data)
+        return Response(TeamMemberSerializer(instance).data, status=201)

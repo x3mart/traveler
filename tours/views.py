@@ -129,7 +129,21 @@ class TourBasicViewSet(viewsets.ModelViewSet):
             self.set_additional_types(request, instance)
         if self.get_basic_type(request):
             instance.basic_type = self.get_basic_type(request)
-            instance.save()
+        if request.data.get('start_region'):
+            instance.start_region_id = request.data.get('start_region')
+        if request.data.get('finish_region'):
+            instance.finish_region_id = request.data.get('finish_region')
+        if request.data.get('start_country'):
+            instance.start_country_id = request.data.get('start_country')
+        if request.data.get('finish_country'):
+            instance.finish_country_id = request.data.get('finish_country')
+        if request.data.get('start_city'):
+            instance.start_city_id = request.data.get('start_city')
+        if request.data.get('finish_city'):
+            instance.finish_city_id = request.data.get('finish_city')
+        if request.data.get('team_member'):
+            instance.team_member_id = request.data.get('team_member')
+        instance.save()
         return super().update(request, *args, **kwargs)
 
 class TourTypeViewSet(viewsets.ReadOnlyModelViewSet):

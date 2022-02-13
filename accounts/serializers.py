@@ -1,4 +1,5 @@
-from .models import Customer, Expert, User
+from dataclasses import fields
+from .models import Customer, Expert, TeamMember, User
 from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
 import django.contrib.auth.password_validation as validators
@@ -24,7 +25,13 @@ def get_tmb_avatar_uri(self, obj):
         if obj.tmb_avatar:
             request = self.context.get('request')
             return request.build_absolute_uri(obj.tmb_avatar) 
-        return None         
+        return None 
+
+
+class TeamMemberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TeamMember
+        fields ='__all__'
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
