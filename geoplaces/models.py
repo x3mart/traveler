@@ -37,7 +37,8 @@ class Country(models.Model):
 
 class City(models.Model):
     name = models.CharField(_('Название'), max_length=255)
-    country = models.ForeignKey('Country', on_delete=models.CASCADE, related_name='cities', verbose_name=_('Страна'))
+    country = models.ForeignKey('Country', on_delete=models.CASCADE, related_name='cities', verbose_name=_('Страна'), null=True, blank=True)
+    russian_region = models.ForeignKey('RussianRegion', on_delete=models.CASCADE, related_name='cities', verbose_name=_('Страна'), null=True, blank=True)
     image = models.ImageField(_("Фото"), upload_to=geo_path, max_length=255, null=True, blank=True)
     alt =  models.CharField(_('alt текст'), max_length=255, null=True, blank=True)
 
@@ -47,3 +48,15 @@ class City(models.Model):
     class Meta:
         verbose_name = _('Город')
         verbose_name_plural = _('Города')
+
+class RussianRegion(models.Model):
+    name = models.CharField(_('Название'), max_length=255)
+    image = models.ImageField(_("Фото"), upload_to=geo_path, max_length=255, null=True, blank=True)
+    alt =  models.CharField(_('alt текст'), max_length=255, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        verbose_name = _('Регион')
+        verbose_name_plural = _('Регионы')

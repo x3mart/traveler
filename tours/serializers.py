@@ -42,8 +42,8 @@ class TourSerializer(serializers.ModelSerializer):
     finish_country = serializers.StringRelatedField(many=False, read_only=True)
     start_city = serializers.StringRelatedField(many=False, read_only=True)
     finish_city = serializers.StringRelatedField(many=False, read_only=True)
-    property_types = serializers.StringRelatedField(many=True, read_only=True)
-    property_images = PropertyImageSerializer(many=True, read_only=True)
+    tour_property_types = serializers.StringRelatedField(many=True, read_only=True)
+    tour_property_images = PropertyImageSerializer(many=True, read_only=True)
     tour_images = TourImageSerializer(many=True, read_only=True)
     languages = serializers.StringRelatedField(many=True, read_only=True)
     currency = serializers.StringRelatedField(many=False, source='currency.short_name', read_only=True)
@@ -55,7 +55,7 @@ class TourSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tour
-        fields = ('id', 'rating', 'reviews_count', 'name', 'wallpaper', 'basic_type', 'additional_types', 'start_region', 'finish_region', 'start_country', 'finish_country', 'start_city', 'finish_city', 'description', 'plan', 'cancellation_terms', 'difficulty_level', 'property_types', 'difficulty_description', 'comfort_level', 'babies_alowed', 'animals_not_exploited', 'property_images', 'start_date', 'finish_date', 'start_time', 'finish_time', 'direct_link', 'instant_booking', 'members_number', 'prepayment', 'postpayment', 'team_member', 'currency', 'price', 'cost', 'discount', 'languages', 'is_guaranteed', 'flight_included', 'scouting', 'tour_images', 'expert', 'tour_days', 'tour_impressions', 'tour_included_services', 'tour_excluded_services',)
+        fields = ('id', 'rating', 'reviews_count', 'name', 'wallpaper', 'basic_type', 'additional_types', 'start_region', 'finish_region', 'start_country', 'finish_country', 'start_city', 'finish_city', 'description', 'plan', 'cancellation_terms', 'difficulty_level', 'tour_property_types', 'difficulty_description', 'comfort_level', 'babies_alowed', 'animals_not_exploited', 'tour_property_images', 'start_date', 'finish_date', 'start_time', 'finish_time', 'direct_link', 'instant_booking', 'members_number', 'prepayment', 'postpayment', 'team_member', 'currency', 'price', 'cost', 'discount', 'languages', 'is_guaranteed', 'flight_included', 'scouting', 'tour_images', 'expert', 'tour_days', 'tour_impressions', 'tour_included_services', 'tour_excluded_services',)
 
 
 class TourListSerializer(serializers.ModelSerializer):

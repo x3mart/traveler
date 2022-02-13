@@ -45,6 +45,7 @@ urlpatterns = [
     path('api/', include('accounts.urls')),
     path('api/', include('tours.urls')),
     path('api/', include('languages.urls')),
+    path('api/', include('geoplaces.urls')),
     # test google-oauth2
     path('account/profile/', RedirectSocial.as_view()),
 ]

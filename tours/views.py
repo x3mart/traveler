@@ -1,4 +1,5 @@
 from posixpath import split
+import time
 from django.db.models.query import Prefetch
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
@@ -145,3 +146,6 @@ class TourDayViewSet(viewsets.ModelViewSet):
 class TourDayImageViewSet(viewsets.ModelViewSet):
     queryset = TourDayImage.objects.all()
     serializer_class = TourDayImageSerializer
+
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
