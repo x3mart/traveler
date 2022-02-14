@@ -80,14 +80,13 @@ class TourSerializer(serializers.ModelSerializer):
     expert = ExpertListSerializer(many=False, read_only=True)
     team_member = TeamMemberSerializer(many=False, read_only=True)
     tour_days = TourDaySerializer(many=True, read_only=True)
-    tour_impressions = TourImpressionSerializer(many=True, read_only=True)
+    main_impressions = TourImpressionSerializer(many=True, read_only=True)
     tour_included_services = TourIncludedServiceSerializer(many=True, read_only=True)
     tour_excluded_services = TourExcludedServiceSerializer(many=True, read_only=True)
 
     class Meta:
         model = Tour
-        fields = ('id', 'rating', 'reviews_count', 'name', 'wallpaper', 'basic_type', 'additional_types', 'start_region', 'finish_region', 'start_country', 'finish_country', 'start_russian_region', 'finish_russian_region', 'start_city', 'finish_city', 'description', 'plan', 'cancellation_terms', 'difficulty_level', 'difficulty_description', 'tour_property_types', 'tour_property_images', 'comfort_level', 'babies_alowed', 'animals_not_exploited', 'start_date', 'finish_date', 'start_time', 'finish_time', 'direct_link', 'instant_booking', 'members_number', 'team_member', 'price_comment', 'prepay_amount', 'prepay_in_prc', 'prepay_currency', 'prepay_starts', 'prepay_finish', 'postpay_on_start_day', 'postpay_days_before_start', 'currency', 'price', 'cost', 'discount', 'languages', 'is_guaranteed', 'flight_included', 'scouting', 'tour_images', 'expert', 'tour_days', 'tour_impressions', 'tour_included_services', 'tour_excluded_services', )
-
+        fields = ('id', 'rating', 'reviews_count', 'name', 'wallpaper', 'basic_type', 'additional_types', 'start_region', 'finish_region', 'start_country', 'finish_country', 'start_russian_region', 'finish_russian_region', 'start_city', 'finish_city', 'description', 'plan', 'cancellation_terms', 'difficulty_level', 'difficulty_description', 'tour_property_types', 'tour_property_images', 'comfort_level', 'babies_alowed', 'animals_not_exploited', 'start_date', 'finish_date', 'start_time', 'finish_time', 'direct_link', 'instant_booking', 'members_number', 'team_member', 'price_comment', 'prepay_amount', 'prepay_in_prc', 'prepay_currency', 'prepay_starts', 'prepay_finish', 'postpay_on_start_day', 'postpay_days_before_start', 'currency', 'price', 'cost', 'discount', 'languages', 'is_guaranteed', 'flight_included', 'scouting', 'tour_images', 'expert', 'tour_days', 'main_impressions', 'tour_included_services', 'tour_excluded_services', 'hotel_name', 'age_starts', 'age_ends', 'media_link', 'accomodation')
 
 class TourListSerializer(serializers.ModelSerializer):
     expert = ExpertListSerializer(many=False,)

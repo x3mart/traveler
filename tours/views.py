@@ -32,7 +32,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         if self.action == 'list':
             qs = Tour.objects.prefetch_related(prefetched_expert, 'start_country', 'currency').only('id', 'start_date', 'finish_date', 'currency', 'cost', 'price', 'discount', 'rating', 'reviews_count', 'name', 'start_country', 'expert', 'wallpaper')
         else:
-            qs = Tour.objects.prefetch_related(prefetched_expert, 'start_country', 'start_city', 'start_region', 'start_russian_region', 'finish_russian_region', 'finish_country', 'finish_city', 'finish_region', 'basic_type', 'additional_types', 'tour_property_types', 'tour_property_images', 'tour_images', prefetched_tour_days, 'tour_impressions', 'tour_included_services', 'tour_excluded_services', 'languages', 'currency')  
+            qs = Tour.objects.prefetch_related(prefetched_expert, 'start_country', 'start_city', 'start_region', 'start_russian_region', 'finish_russian_region', 'finish_country', 'finish_city', 'finish_region', 'basic_type', 'additional_types', 'tour_property_types', 'tour_property_images', 'tour_images', prefetched_tour_days, 'main_impressions', 'tour_included_services', 'tour_excluded_services', 'languages', 'currency', 'prepay_currency')  
         return qs
     
     def get_serializer_class(self):
@@ -58,7 +58,6 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
             return Response(serializer.errors, status=400)
         instance = self.get_object()
         instance = self.set_related_models(request, instance)
-        # print(data)
         instance = self.set_model_fields(data, instance)
         instance.save()
         if getattr(instance, '_prefetched_objects_cache', None):

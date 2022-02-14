@@ -71,6 +71,7 @@ class Tour(models.Model):
     comfort_level = models.PositiveIntegerField(_('Уровень комфорта'), default=3)
     babies_alowed = models.BooleanField(_('Можно с маленькими детьми'), default=False)
     animals_not_exploited = models.BooleanField(_('Животные не эксплуатируются'), default=False)
+    hotel_name = models.CharField(_('Наименование отеля'), max_length=255, null=True, blank=True) 
     start_date = models.DateField(_('Дата начала'), null=True, blank=True)
     duration = models.PositiveIntegerField(_("Продолжительность тура в днях"), null=True, blank=True)
     finish_date = models.DateField(_('Дата завершения'), null=True, blank=True)
@@ -97,6 +98,10 @@ class Tour(models.Model):
     is_guaranteed = models.BooleanField(_('Тур гарантирован'), default=False, null=True, blank=True)
     flight_included = models.BooleanField(_('Перелет включен'), default=False, null=True, blank=True)
     scouting = models.BooleanField(_('Разведка'), default=False, null=True, blank=True)
+    age_starts = models.PositiveIntegerField(_('Мин возраст участника тура'), default=15, null=True, blank=True)
+    age_ends = models.PositiveIntegerField(_('Мин возраст участника тура'), default=85, null=True, blank=True)
+    media_link = models.URLField(_('Ссылка на видео тура'), max_length=150, null=True, blank=True)
+    accomodation = models.CharField(_('РАЗМЕЩЕНИЕ'), max_length=255, null=True, blank=True)
 
     class Meta:
         verbose_name = _('Тур основа')
@@ -198,7 +203,7 @@ class TourDayImage(models.Model):
 
 class TourImpression(models.Model):
     name = models.CharField(_('Название'), max_length=150)
-    tour = models.ForeignKey('Tour', on_delete=models.CASCADE, related_name='tour_impressions', verbose_name=_('Тур'))
+    tour = models.ForeignKey('Tour', on_delete=models.CASCADE, related_name='main_impressions', verbose_name=_('Тур'))
 
     class Meta:
         verbose_name = _('Главное впечатление')
