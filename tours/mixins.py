@@ -6,8 +6,8 @@ class TourMixin():
     def set_additional_types(self, request, instance=None):
         if instance and instance.additional_types.exists():
             instance.additional_types.clear()
+        additional_type_ids = request.data.get('additional_types')
         additional_types = []
-        additional_type_ids = request.data.get('additional_types').split(',')
         for additional_type_id in additional_type_ids:
             additional_types.append(TourType.objects.get(pk=additional_type_id))
         instance.additional_types.add(*tuple(additional_types))
