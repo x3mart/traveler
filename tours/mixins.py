@@ -44,3 +44,9 @@ class TourMixin():
         if request.data.get('team_member'):
             instance.team_member_id = request.data.get('team_member')
         return instance
+
+    def set_model_fields(self, data, instance):
+        print(data)
+        for key, value in data.items():
+            setattr(instance, key, value)
+        return instance

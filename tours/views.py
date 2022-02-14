@@ -47,15 +47,23 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         else:
             return Response(serializer.errors, status=400)
         data['is_draft'] = True
-        tour_basic = Tour.objects.create(expert=self.get_expert(request), **data)
-        return Response(TourBasicSerializer(tour_basic).data, status=201)
+        tour = Tour.objects.create(expert=self.get_expert(request), **data)
+        return Response(TourSerializer(tour).data, status=201)
     
     def update(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            data = serializer.validated_data
+        else:
+            return Response(serializer.errors, status=400)
         instance = self.get_object()
         instance = self.set_related_models(request, instance)
+        # print(data)
+        instance = self.set_model_fields(data, instance)
         instance.save()
-        return super().update(request, *args, **kwargs)
-
+        if getattr(instance, '_prefetched_objects_cache', None):
+            instance._prefetched_objects_cache = {}
+        return Response(TourSerializer(instance).data, status=201)
 
 class TourTypeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = TourType.objects.all()
