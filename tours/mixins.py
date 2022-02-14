@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from tours.models import TourType
+from tours.models import TourPropertyType, TourType
 from accounts.models import Expert
 
 class TourMixin():
@@ -11,6 +11,15 @@ class TourMixin():
         for additional_type_id in additional_type_ids:
             additional_types.append(TourType.objects.get(pk=additional_type_id))
         instance.additional_types.add(*tuple(additional_types))
+    
+    def set_property_types(self, request, instance=None):
+        if instance and instance.additional_types.exists():
+            instance.tour_property_types.clear()
+        type_ids = request.data.get('tour_property_types')
+        types = []
+        for type_id in type_ids:
+            types.append(TourPropertyType.objects.get(pk=type_id))
+        instance.tour_property_types.add(*tuple(types))
         
     def get_basic_type(self, request):
         if request.data.get('basic_type'):
@@ -43,6 +52,8 @@ class TourMixin():
             instance.finish_city_id = request.data.get('finish_city')
         if request.data.get('team_member'):
             instance.team_member_id = request.data.get('team_member')
+        if request.data.get('tour_property_types'):
+            self.set_property_types(request, instance)
         return instance
 
     def set_model_fields(self, data, instance):
