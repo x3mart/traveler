@@ -119,7 +119,7 @@ class Tour(models.Model):
 
 class TourPropertyType(models.Model):
     name = models.CharField(_('Название'), max_length=255)
-    tours = models.ManyToManyField('Tour', related_name='tour_property_types', verbose_name=_("Тур"))
+    tours = models.ManyToManyField('Tour', related_name='tour_property_types', verbose_name=_("Тур"), blank=True)
 
     def __str__(self):
         return self.name
