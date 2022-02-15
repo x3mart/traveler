@@ -57,7 +57,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         else:
             return Response(serializer.errors, status=400)
         instance = self.get_object()
-        instance = self.set_related_models(request, instance)
+        instance = self.set_mtm_fields(request, instance)
         instance = self.set_model_fields(data, instance)
         instance.save()
         if getattr(instance, '_prefetched_objects_cache', None):

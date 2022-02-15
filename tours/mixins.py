@@ -21,37 +21,37 @@ class TourMixin():
             types.append(TourPropertyType.objects.get(pk=type_id))
         instance.tour_property_types.add(*tuple(types))
         
-    def get_basic_type(self, request):
-        if request.data.get('basic_type'):
-            return get_object_or_404(TourType, pk=request.data.get('basic_type'))
-        return None
+    # def get_basic_type(self, request):
+    #     if request.data.get('basic_type'):
+    #         return get_object_or_404(TourType, pk=request.data.get('basic_type'))
+    #     return None
     
     def get_expert(self, request):
         return get_object_or_404(Expert, pk=request.user.id)
     
-    def set_related_models(self, request, instance=None):
+    def set_mtm_fields(self, request, instance=None):
         if request.data.get('additional_types'):
             self.set_additional_types(request, instance)
-        if self.get_basic_type(request):
-            instance.basic_type = self.get_basic_type(request)
-        if request.data.get('start_region'):
-            instance.start_region_id = request.data.get('start_region')
-        if request.data.get('finish_region'):
-            instance.finish_region_id = request.data.get('finish_region')
-        if request.data.get('start_country'):
-            instance.start_country_id = request.data.get('start_country')
-        if request.data.get('finish_country'):
-            instance.finish_country_id = request.data.get('finish_country')
-        if request.data.get('start_russian_region'):
-            instance.start_russian_region_id = request.data.get('start_russian_region')
-        if request.data.get('finish_russian_region'):
-            instance.finish_russian_region_id = request.data.get('finish_russian_region')
-        if request.data.get('start_city'):
-            instance.start_city_id = request.data.get('start_city')
-        if request.data.get('finish_city'):
-            instance.finish_city_id = request.data.get('finish_city')
-        if request.data.get('team_member'):
-            instance.team_member_id = request.data.get('team_member')
+        # if self.get_basic_type(request):
+        #     instance.basic_type = self.get_basic_type(request)
+        # if request.data.get('start_region'):
+        #     instance.start_region_id = request.data.get('start_region')
+        # if request.data.get('finish_region'):
+        #     instance.finish_region_id = request.data.get('finish_region')
+        # if request.data.get('start_country'):
+        #     instance.start_country_id = request.data.get('start_country')
+        # if request.data.get('finish_country'):
+        #     instance.finish_country_id = request.data.get('finish_country')
+        # if request.data.get('start_russian_region'):
+        #     instance.start_russian_region_id = request.data.get('start_russian_region')
+        # if request.data.get('finish_russian_region'):
+        #     instance.finish_russian_region_id = request.data.get('finish_russian_region')
+        # if request.data.get('start_city'):
+        #     instance.start_city_id = request.data.get('start_city')
+        # if request.data.get('finish_city'):
+        #     instance.finish_city_id = request.data.get('finish_city')
+        # if request.data.get('team_member'):
+            # instance.team_member_id = request.data.get('team_member')
         if request.data.get('tour_property_types'):
             self.set_property_types(request, instance)
         return instance
