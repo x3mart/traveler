@@ -12,7 +12,7 @@ from currencies.serializers import CurrencySerializer
 
 class TourPropertyTypeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = TourPropertyImage
+        model = TourPropertyType
         fields = '__all__'
 
 
