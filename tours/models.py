@@ -108,7 +108,7 @@ class Tour(models.Model):
         verbose_name_plural = _('Туры основа')
     
     def __str__(self):
-        return self.name
+        return self.name if self.name else 'безымянный тур'
    
     @property
     def tmb_wallpaper(self):
