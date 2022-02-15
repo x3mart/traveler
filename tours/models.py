@@ -104,8 +104,8 @@ class Tour(models.Model):
     accomodation = models.CharField(_('РАЗМЕЩЕНИЕ'), max_length=255, null=True, blank=True)
 
     class Meta:
-        verbose_name = _('Тур основа')
-        verbose_name_plural = _('Туры основа')
+        verbose_name = _('Тур')
+        verbose_name_plural = _('Туры')
     
     def __str__(self):
         return self.name if self.name else 'безымянный тур'

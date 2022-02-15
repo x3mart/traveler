@@ -19,7 +19,7 @@ class RegionViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=400)
         instance, created = Region.objects.get_or_create(**data)
         return Response(RegionSerializer(instance).data, status=201)
-
+        
 
 class CountryViewSet(viewsets.ModelViewSet):
     queryset = Country.objects.all()

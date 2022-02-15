@@ -177,3 +177,4 @@ sqlite3.db
 
 #vsc
 .vscode/
+x3m_test.py
