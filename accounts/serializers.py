@@ -33,6 +33,12 @@ class TeamMemberSerializer(serializers.ModelSerializer):
         model = TeamMember
         fields ='__all__'
 
+
+class GuideSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TeamMember
+        exclude = ['email', ]
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
