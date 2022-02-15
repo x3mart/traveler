@@ -73,13 +73,13 @@ class TourSerializer(serializers.ModelSerializer):
     # start_city = CitySerializer(many=False, read_only=True)
     # finish_city = CitySerializer(many=False, read_only=True)
     # tour_property_types = TourPropertyTypeSerializer(many=True, read_only=True)
-    # tour_property_images = TourPropertyImageSerializer(many=True, read_only=True)
-    # tour_images = TourImageSerializer(many=True, read_only=True)
+    tour_property_images = TourPropertyImageSerializer(many=True, read_only=True)
+    tour_images = TourImageSerializer(many=True, read_only=True)
     # languages = LanguageSerializer(many=True, read_only=True)
     # currency = CurrencySerializer(many=False, read_only=True)
     # expert = ExpertListSerializer(many=False, read_only=True)
     # team_member = TeamMemberSerializer(many=False, read_only=True)
-    # tour_days = TourDaySerializer(many=True, read_only=True)
+    tour_days = TourDaySerializer(many=True, read_only=True)
     # main_impressions = TourImpressionSerializer(many=True, read_only=True)
     # tour_included_services = TourIncludedServiceSerializer(many=True, read_only=True)
     # tour_excluded_services = TourExcludedServiceSerializer(many=True, read_only=True)
@@ -97,6 +97,7 @@ class TourSerializer(serializers.ModelSerializer):
             'tour_included_services': {'required': False, 'read_only':True},
             'tour_excluded_services': {'required': False, 'read_only':True},
             'additional_types': {'required': False, 'read_only':True},
+            'languages': {'required': False, 'read_only':True},
         }
 
 class TourListSerializer(serializers.ModelSerializer):
