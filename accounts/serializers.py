@@ -4,6 +4,7 @@ from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
 import django.contrib.auth.password_validation as validators
 from django.core import exceptions
+from utils.images import get_tmb_image_uri
 
 
 def check_password(self):
@@ -19,14 +20,6 @@ def check_password(self):
     except exceptions.ValidationError as exc:
         raise serializers.ValidationError(str(exc))
     return password
-
-
-def get_tmb_avatar_uri(self, obj):
-        if obj.tmb_avatar:
-            request = self.context.get('request')
-            return request.build_absolute_uri(obj.tmb_avatar) 
-        return None 
-
 
 class TeamMemberSerializer(serializers.ModelSerializer):
     class Meta:
@@ -66,13 +59,13 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ExpertListSerializer(serializers.ModelSerializer):
-    # tmb_avatar = serializers.SerializerMethodField(read_only=True)
+    tmb_avatar = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Expert
         fields = ('id', 'first_name', 'last_name', 'tmb_avatar', 'rating', 'tours_count', 'tours_rating', 'reviews_count', 'tour_reviews_count',)
             
     def get_tmb_avatar(self, obj): 
-        return get_tmb_avatar_uri(self, obj) 
+        return get_tmb_image_uri(self, obj) 
 
 
 class ExpertSerializer(serializers.ModelSerializer):
@@ -86,7 +79,7 @@ class ExpertSerializer(serializers.ModelSerializer):
         }
             
     def get_tmb_avatar(self, obj): 
-        return get_tmb_avatar_uri(self, obj) 
+        return get_tmb_image_uri(self, obj) 
     
     def create(self, validated_data):
         password = check_password(self)
@@ -106,7 +99,7 @@ class ExpertMeSerializer(serializers.ModelSerializer):
         }
             
     def get_tmb_avatar(self, obj): 
-        return get_tmb_avatar_uri(self, obj)   
+        return get_tmb_image_uri(self, obj)   
     
     def update(self, instance, validated_data):
         validated_data['is_expert'] = True
@@ -148,7 +141,7 @@ class CustomerSerializer(serializers.ModelSerializer):
         }
     
     def get_tmb_avatar(self, obj): 
-        return get_tmb_avatar_uri(self, obj)
+        return get_tmb_image_uri(self, obj)
     
     def create(self, validated_data):
         password = check_password(self)

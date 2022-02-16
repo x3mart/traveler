@@ -7,6 +7,7 @@ from .models import Tour, TourDay, TourDayImage, TourExcludedService, TourImpres
 from geoplaces.serializers import RegionSerializer, CountrySerializer, RussianRegionSerializer, CitySerializer
 from languages.serializers import LanguageSerializer
 from currencies.serializers import CurrencySerializer
+from utils.images import get_tmb_image_uri
 
 
 
@@ -17,19 +18,31 @@ class TourPropertyTypeSerializer(serializers.ModelSerializer):
 
 
 class TourPropertyImageSerializer(serializers.ModelSerializer):
+    tmb_image = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = TourPropertyImage
         fields = '__all__'
+    
+    def get_tmb_image(self, obj): 
+        return get_tmb_image_uri(self, obj)
 
 class TourImageSerializer(serializers.ModelSerializer):
+    tmb_image = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = TourImage
         fields = '__all__'
+    
+    def get_tmb_image(self, obj): 
+        return get_tmb_image_uri(self, obj)
 
 class TourDayImageSerializer(serializers.ModelSerializer):
+    tmb_image = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = TourDayImage
         fields = '__all__'
+    
+    def get_tmb_image(self, obj): 
+        return get_tmb_image_uri(self, obj)
 
 class TourDaySerializer(serializers.ModelSerializer):
     tour_day_images = TourDayImageSerializer(read_only=True, many=True)
@@ -90,9 +103,9 @@ class TourSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'expert': {'required': False, 'read_only':True},
             'tour_property_types': {'required': False, 'read_only':True},
-            'tour_property_images': {'required': False, 'read_only':True},
-            'tour_images': {'required': False, 'read_only':True},
-            'tour_days': {'required': False, 'read_only':True},
+            # 'tour_property_images': {'required': False,},
+            # 'tour_images': {'required': False},
+            # 'tour_days': {'required': False, 'read_only':True},
             'main_impressions': {'required': False, 'read_only':True},
             'tour_included_services': {'required': False, 'read_only':True},
             'tour_excluded_services': {'required': False, 'read_only':True},

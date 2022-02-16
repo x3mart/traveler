@@ -56,6 +56,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
             data = serializer.validated_data
         else:
             return Response(serializer.errors, status=400)
+        print(request.data)
         instance = self.get_object()
         instance = self.set_mtm_fields(request, instance)
         instance = self.set_model_fields(data, instance)
@@ -78,9 +79,6 @@ class TourDayViewSet(viewsets.ModelViewSet):
 class TourDayImageViewSet(viewsets.ModelViewSet):
     queryset = TourDayImage.objects.all()
     serializer_class = TourDayImageSerializer
-
-    def create(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
 
 
 class TourPropertyTypeViewSet(viewsets.ReadOnlyModelViewSet):

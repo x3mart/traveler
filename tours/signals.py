@@ -53,39 +53,39 @@ def tour_basic_post_delete(instance, **kwargs):
         delete_image(instance.wallpaper)
     
 
-@receiver(pre_save, sender=TourPropertyImage)
-def tour_property_image_pre_save(instance, sender, **kwargs):
-    instance._current_img = get_current_img(sender, instance)
+# @receiver(pre_save, sender=TourPropertyImage)
+# def tour_property_image_pre_save(instance, sender, **kwargs):
+#     instance._current_img = get_current_img(sender, instance)
 
 @receiver(post_save, sender=TourPropertyImage)
 def tour_property_image_post_save(instance, **kwargs):
-    image_processing(instance.image, instance._current_img, 1067, 800, 350, 240, True)
+    image_processing(instance.image, None, 1067, 800, 350, 240, True)
 
 @receiver(post_delete, sender=TourPropertyImage)
 def tour_property_image_post_delete(instance, **kwargs):
     if instance.image:
         delete_image(instance.image)
 
-@receiver(pre_save, sender=TourImage)
-def tour_image_pre_save(instance, sender, **kwargs):
-    instance._current_img = get_current_img(sender, instance)
+# @receiver(pre_save, sender=TourImage)
+# def tour_image_pre_save(instance, sender, **kwargs):
+#     instance._current_img = get_current_img(sender, instance)
 
 @receiver(post_save, sender=TourImage)
 def tour_image_post_save(instance, **kwargs):
-    image_processing(instance.image, instance._current_img, 1067, 800, 350, 240, True)
+    image_processing(instance.image, None, 1067, 800, 350, 240, True)
 
 @receiver(post_delete, sender=TourImage)
 def tour_image_post_delete(instance, **kwargs):
     if instance.image:
         delete_image(instance.image)
 
-@receiver(pre_save, sender=TourDayImage)
-def tour_day_image_pre_save(instance, sender, **kwargs):
-    instance._current_img = get_current_img(sender, instance)
+# @receiver(pre_save, sender=TourDayImage)
+# def tour_day_image_pre_save(instance, sender, **kwargs):
+#     instance._current_img = get_current_img(sender, instance)
 
 @receiver(post_save, sender=TourDayImage)
 def tour_day_image_post_save(instance, **kwargs):
-    image_processing(instance.image, instance._current_img, 730, 400)
+    image_processing(instance.image, None, 730, 400, 365, 200)
 
 @receiver(post_delete, sender=TourDayImage)
 def tour_day_image_post_delete(instance, **kwargs):

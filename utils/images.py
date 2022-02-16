@@ -6,6 +6,15 @@ import os
 from traveler.settings import BASE_DIR
 
 
+def get_tmb_image_uri(self, obj):
+        if hasattr(obj, 'avatar') and obj.tmb_avatar:
+            request = self.context.get('request')
+            return request.build_absolute_uri(obj.tmb_avatar)
+        elif hasattr(obj, 'image') and obj.tmb_image:
+            request = self.context.get('request')
+            return request.build_absolute_uri(obj.tmb_image)  
+        return None 
+
 def get_current_img(sender, instance):
     try:
         return sender.objects.get(pk=instance.id).image
