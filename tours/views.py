@@ -63,7 +63,6 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         instance.save()
         if getattr(instance, '_prefetched_objects_cache', None):
             instance._prefetched_objects_cache = {}
-        # tour = Tour.objects.get(pk=instance)
         return Response(TourSerializer(instance).data, status=201)
 
 class TourTypeViewSet(viewsets.ReadOnlyModelViewSet):

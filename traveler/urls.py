@@ -20,7 +20,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
 from rest_framework_simplejwt.views import TokenVerifyView, TokenRefreshView
-from accounts.views import MyTokenObtainPairView
+from accounts.views import MyTokenObtainPairView, PasswordRecovery, PasswordRecoveryConfirm
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -48,6 +48,9 @@ urlpatterns = [
     path('api/', include('geoplaces.urls')),
     # test google-oauth2
     path('account/profile/', RedirectSocial.as_view()),
+    # temporary password recovery Must be deleted on production
+    path('account/passwordrecovery/', PasswordRecovery.as_view()),
+    path('password/reset/confirm/<str:uid>/<str:token>', PasswordRecoveryConfirm.as_view()),
 ]
 
 urlpatterns += i18n_patterns()

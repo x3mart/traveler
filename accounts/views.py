@@ -1,3 +1,4 @@
+from django.shortcuts import redirect
 from rest_framework.decorators import action
 from accounts.permissions import TeamMemberPermission, UserPermission, CustomerPermission, ExpertPermission
 from accounts.serializers import CustomerMeSerializer, ExpertListSerializer, ExpertMeSerializer, ExpertSerializer, TeamMemberSerializer, UserSerializer, CustomerSerializer
@@ -9,18 +10,37 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.views import View
 from django.http import JsonResponse
+from django.template.response import TemplateResponse
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
+import requests
 from rest_framework_simplejwt.settings import api_settings
 from django.contrib.auth.models import update_last_login
 
 class RedirectSocial(View):
-
     def get(self, request, *args, **kwargs):
         code, state = str(request.GET['code']), str(request.GET['state'])
         json_obj = {'code': code, 'state': state}
-        print(json_obj)
         return JsonResponse(json_obj)
+
+class PasswordRecovery(View):
+    def get(self, request, *args, **kwargs):
+        return TemplateResponse(request, 'resetpassword.html')
+    
+    def post(self, request, *args, **kwargs):
+        data = {'email': request.POST.get('email')}
+        response = requests.post('http://x3mart.ru/auth/users/reset_password/', json=data)
+        if response.status_code == 204:
+            return TemplateResponse(request, 'resetpassword_success.html', {'email':request.POST.get('email')})
+        return TemplateResponse(request, 'resetpassword _error.html')
+
+
+class PasswordRecoveryConfirm(View):
+    def get(self, request, uid, token, *args, **kwargs):
+        return TemplateResponse(request, 'enter_new_ password.html', {'uid':uid, 'token':token})
+    
+    def post(self, request, uid, token, *args, **kwargs):
+        return redirect('http://x3mart.ru/admin/')
+
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
@@ -31,7 +51,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         elif hasattr(user, 'customer'):
             token['user_status'] = 'customers'
         else:
-            token['user_status'] = 'stuff'
+            token['user_status'] = 'staff'
         return token
     
     def validate(self, attrs):
