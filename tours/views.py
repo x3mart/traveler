@@ -56,14 +56,13 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
             data = serializer.validated_data
         else:
             return Response(serializer.errors, status=400)
-        print(request.data)
         instance = self.get_object()
         instance = self.set_mtm_fields(request, instance)
         instance = self.set_model_fields(data, instance)
         instance.save()
         if getattr(instance, '_prefetched_objects_cache', None):
             instance._prefetched_objects_cache = {}
-        return Response(TourSerializer(instance).data, status=201)
+        return Response(TourSerializer(instance, context={'request': request}).data, status=201)
 
 class TourTypeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = TourType.objects.all()

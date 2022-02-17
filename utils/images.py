@@ -12,7 +12,10 @@ def get_tmb_image_uri(self, obj):
             return request.build_absolute_uri(obj.tmb_avatar)
         elif hasattr(obj, 'image') and obj.tmb_image:
             request = self.context.get('request')
-            return request.build_absolute_uri(obj.tmb_image)  
+            return request.build_absolute_uri(obj.tmb_image)
+        elif hasattr(obj, 'wallpaper') and obj.tmb_wallpaper:
+            request = self.context.get('request')
+            return request.build_absolute_uri(obj.tmb_wallpaper)  
         return None 
 
 def get_current_img(sender, instance):
