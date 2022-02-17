@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from tours.models import TourPropertyImage, TourPropertyType, TourType
+from tours.models import TourImpression, TourPropertyImage, TourPropertyType, TourType
 from accounts.models import Expert
 from languages.models import Language
 from rest_framework.response import Response
@@ -33,16 +33,16 @@ class TourMixin():
         objects = self.get_mtm_objects(Language, ids)
         instance.languages.add(*tuple(objects))
     
-    def set_tour_property_images(self, request, instance):
-        images = request.FILES.getlist('tour_property_images')
-        print(images)
-        objects = []
-        for image in images:
-            data = {'image':ContentFile(image), 'tour_id':instance.id}
-
-            print(data)
-            TourPropertyImage.objects.create(**data)
-
+    def set_main_impressions(self, request, instance):
+        main_impressions = request.data.get('main_impressions').split(',')
+        map(lambda x: x.stripe(), main_impressions)
+        if instance.main_impressions.exists():
+            instance.main_impressions.all().delete()
+        impressions = []
+        for impression in main_impressions:
+            impressions.append(TourImpression(name=impression, tour=instance))
+        TourImpression.objects.bulk_create(impressions)
+        
     
     def get_expert(self, request):
         return get_object_or_404(Expert, pk=request.user.id)
@@ -54,8 +54,8 @@ class TourMixin():
             self.set_property_types(request, instance)
         if request.data.get('languages'):
             self.set_languages(request, instance)
-        # if request.data.get('tour_property_images'):
-        #     self.set_tour_property_images(request, instance)
+        if request.data.get('main_impressions'):
+            self.set_main_impressions(request, instance)
         return instance
 
     def set_model_fields(self, data, instance):

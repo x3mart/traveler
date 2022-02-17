@@ -93,7 +93,7 @@ class TourSerializer(serializers.ModelSerializer):
     # expert = ExpertListSerializer(many=False, read_only=True)
     # team_member = TeamMemberSerializer(many=False, read_only=True)
     tour_days = TourDaySerializer(many=True, read_only=True)
-    # main_impressions = TourImpressionSerializer(many=True, read_only=True)
+    main_impressions = serializers.SerializerMethodField(read_only=True)
     # tour_included_services = TourIncludedServiceSerializer(many=True, read_only=True)
     # tour_excluded_services = TourExcludedServiceSerializer(many=True, read_only=True)
     tmb_wallpaper = serializers.SerializerMethodField(read_only=True)
@@ -104,7 +104,6 @@ class TourSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'expert': {'required': False, 'read_only':True},
             'tour_property_types': {'required': False, 'read_only':True},
-            'main_impressions': {'required': False, 'read_only':True},
             'tour_included_services': {'required': False, 'read_only':True},
             'tour_excluded_services': {'required': False, 'read_only':True},
             'additional_types': {'required': False, 'read_only':True},
@@ -113,6 +112,10 @@ class TourSerializer(serializers.ModelSerializer):
 
     def get_tmb_wallpaper(self, obj): 
         return get_tmb_image_uri(self, obj)
+    
+    def get_main_impressions(self, obj): 
+        main_impressions = obj.main_impressions.all().values_list('name', flat=True)
+        return ','.join(main_impressions)
 
 class TourListSerializer(serializers.ModelSerializer):
     expert = ExpertListSerializer(many=False,)
