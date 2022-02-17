@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from tours.models import TourAddetionalService, TourExcludedService, TourIncludedService, TourPropertyImage, TourPropertyType, Tour, TourDay, TourDayImage, TourImage, TourType
+from tours.models import TourAddetionalService, TourExcludedService, TourIncludedService, TourPropertyImage, TourPropertyType, Tour, TourDay, TourDayImage, TourImage, TourType, TourImpression
 
 # Register your models here.
 admin.site.register(Tour)
@@ -13,3 +13,4 @@ admin.site.register(TourDayImage)
 admin.site.register(TourIncludedService)
 admin.site.register(TourExcludedService)
 admin.site.register(TourAddetionalService)
+admin.site.register(TourImpression)

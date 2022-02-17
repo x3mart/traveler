@@ -97,10 +97,11 @@ class TourSerializer(serializers.ModelSerializer):
     tour_included_services = serializers.SerializerMethodField(read_only=True)
     tour_excluded_services = serializers.SerializerMethodField(read_only=True)
     tmb_wallpaper = serializers.SerializerMethodField(read_only=True)
+    prepay_in_prc = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Tour
-        fields = ('id', 'rating', 'reviews_count', 'name', 'wallpaper', 'tmb_wallpaper', 'basic_type', 'additional_types', 'start_region', 'finish_region', 'start_country', 'finish_country', 'start_russian_region', 'finish_russian_region', 'start_city', 'finish_city', 'description', 'plan', 'cancellation_terms', 'difficulty_level', 'difficulty_description', 'tour_property_types', 'tour_property_images', 'comfort_level', 'babies_alowed', 'animals_not_exploited', 'start_date', 'finish_date', 'start_time', 'finish_time', 'direct_link', 'instant_booking', 'members_number', 'team_member', 'price_comment', 'prepay_amount', 'prepay_in_prc', 'prepay_currency', 'prepay_starts', 'prepay_finish', 'postpay_on_start_day', 'postpay_days_before_start', 'currency', 'price', 'cost', 'discount', 'languages', 'is_guaranteed', 'flight_included', 'scouting', 'tour_images', 'expert', 'tour_days', 'main_impressions', 'tour_included_services', 'tour_excluded_services', 'hotel_name', 'age_starts', 'age_ends', 'media_link', 'accomodation')
+        fields = ('id', 'rating', 'reviews_count', 'name', 'wallpaper', 'tmb_wallpaper', 'basic_type', 'additional_types', 'start_region', 'finish_region', 'start_country', 'finish_country', 'start_russian_region', 'finish_russian_region', 'start_city', 'finish_city', 'description', 'plan', 'cancellation_terms', 'difficulty_level', 'difficulty_description', 'tour_property_types', 'tour_property_images', 'comfort_level', 'babies_alowed', 'animals_not_exploited', 'start_date', 'finish_date', 'start_time', 'finish_time', 'direct_link', 'instant_booking', 'members_number', 'team_member', 'price_comment', 'prepay_amount', 'prepay_in_prc', 'prepay_currency', 'prepay_starts', 'prepay_finish', 'postpay_on_start_day', 'postpay_days_before_start', 'currency', 'price', 'cost', 'discount', 'languages', 'is_guaranteed', 'flight_included', 'scouting', 'tour_images', 'expert', 'tour_days', 'main_impressions', 'tour_included_services', 'tour_excluded_services', 'hotel_name', 'age_starts', 'age_ends', 'media_link', 'accomodation', 'week_recurrent', 'month_recurrent', 'vacants_number' )
         extra_kwargs = {
             'expert': {'required': False, 'read_only':True},
             'tour_property_types': {'required': False, 'read_only':True},
@@ -123,6 +124,9 @@ class TourSerializer(serializers.ModelSerializer):
     def get_tour_excluded_services(self, obj): 
         tour_excluded_services = obj.tour_excluded_services.all().values_list('name', flat=True)
         return ', '.join(tour_excluded_services)
+    def get_prepay_in_prc(self, obj): 
+        return 1 if obj.prepay_in_prc else 0
+
 
 class TourListSerializer(serializers.ModelSerializer):
     expert = ExpertListSerializer(many=False,)
