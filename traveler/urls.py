@@ -49,7 +49,7 @@ urlpatterns = [
     # test google-oauth2
     path('account/profile/', RedirectSocial.as_view()),
     # temporary password recovery Must be deleted on production
-    path('password/passwordrecovery/', PasswordRecovery.as_view(), name='password_reset_url'),
+    path('password/passwordrecovery/', PasswordRecovery.as_view(), name='admin_password_reset'),
     path('password/reset/confirm/<str:uid>/<str:token>', PasswordRecoveryConfirm.as_view()),
 ]
 
