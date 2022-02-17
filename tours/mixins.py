@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from tours.models import TourImpression, TourPropertyImage, TourPropertyType, TourType
+from tours.models import TourExcludedService, TourImpression, TourIncludedService, TourPropertyImage, TourPropertyType, TourType
 from accounts.models import Expert
 from languages.models import Language
 from rest_framework.response import Response
@@ -35,14 +35,33 @@ class TourMixin():
     
     def set_main_impressions(self, request, instance):
         main_impressions = request.data.get('main_impressions').split(',')
-        map(lambda x: x.stripe(), main_impressions)
+        main_impressions = map(lambda x: x.strip(), main_impressions)
         if instance.main_impressions.exists():
             instance.main_impressions.all().delete()
         impressions = []
         for impression in main_impressions:
             impressions.append(TourImpression(name=impression, tour=instance))
         TourImpression.objects.bulk_create(impressions)
-        
+    
+    def set_tour_included_services(self, request, instance):
+        tour_included_services = request.data.get('tour_included_services').split(',')
+        tour_included_services = map(lambda x: x.strip(), tour_included_services)
+        if instance.tour_included_services.exists():
+            instance.tour_included_services.all().delete()
+        services = []
+        for service in tour_included_services:
+            services.append(TourIncludedService(name=service, tour=instance))
+        TourIncludedService.objects.bulk_create(services)
+    
+    def set_tour_excluded_services(self, request, instance):
+        tour_excluded_services = request.data.get('tour_excluded_services').split(',')
+        tour_excluded_services = map(lambda x: x.strip(), tour_excluded_services)
+        if instance.tour_excluded_services.exists():
+            instance.tour_excluded_services.all().delete()
+        services = []
+        for service in tour_excluded_services:
+            services.append(TourExcludedService(name=service, tour=instance))
+        TourExcludedService.objects.bulk_create(services)    
     
     def get_expert(self, request):
         return get_object_or_404(Expert, pk=request.user.id)
@@ -56,6 +75,10 @@ class TourMixin():
             self.set_languages(request, instance)
         if request.data.get('main_impressions'):
             self.set_main_impressions(request, instance)
+        if request.data.get('tour_included_services'):
+            self.set_tour_included_services(request, instance)
+        if request.data.get('tour_excluded_services'):
+            self.set_tour_excluded_services(request, instance)
         return instance
 
     def set_model_fields(self, data, instance):

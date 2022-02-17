@@ -94,8 +94,8 @@ class TourSerializer(serializers.ModelSerializer):
     # team_member = TeamMemberSerializer(many=False, read_only=True)
     tour_days = TourDaySerializer(many=True, read_only=True)
     main_impressions = serializers.SerializerMethodField(read_only=True)
-    # tour_included_services = TourIncludedServiceSerializer(many=True, read_only=True)
-    # tour_excluded_services = TourExcludedServiceSerializer(many=True, read_only=True)
+    tour_included_services = serializers.SerializerMethodField(read_only=True)
+    tour_excluded_services = serializers.SerializerMethodField(read_only=True)
     tmb_wallpaper = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
@@ -104,7 +104,6 @@ class TourSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'expert': {'required': False, 'read_only':True},
             'tour_property_types': {'required': False, 'read_only':True},
-            'tour_included_services': {'required': False, 'read_only':True},
             'tour_excluded_services': {'required': False, 'read_only':True},
             'additional_types': {'required': False, 'read_only':True},
             'languages': {'required': False, 'read_only':True},
@@ -115,7 +114,15 @@ class TourSerializer(serializers.ModelSerializer):
     
     def get_main_impressions(self, obj): 
         main_impressions = obj.main_impressions.all().values_list('name', flat=True)
-        return ','.join(main_impressions)
+        return ', '.join(main_impressions)
+    
+    def get_tour_included_services(self, obj): 
+        tour_included_services = obj.tour_included_services.all().values_list('name', flat=True)
+        return ', '.join(tour_included_services)
+    
+    def get_tour_excluded_services(self, obj): 
+        tour_excluded_services = obj.tour_excluded_services.all().values_list('name', flat=True)
+        return ', '.join(tour_excluded_services)
 
 class TourListSerializer(serializers.ModelSerializer):
     expert = ExpertListSerializer(many=False,)
