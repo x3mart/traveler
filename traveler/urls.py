@@ -46,6 +46,7 @@ urlpatterns = [
     path('api/', include('tours.urls')),
     path('api/', include('languages.urls')),
     path('api/', include('geoplaces.urls')),
+    path('api/', include('currencies.urls')),
     # test google-oauth2
     path('account/profile/', RedirectSocial.as_view()),
     # temporary password recovery Must be deleted on production

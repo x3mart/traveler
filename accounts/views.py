@@ -44,7 +44,6 @@ class PasswordRecoveryConfirm(View):
         response = requests.post('http://x3mart.ru/auth/users/reset_password_confirm/', json=data)
         if response.status_code == 204:
             return redirect('http://x3mart.ru/admin/')
-        print(response.json())
         return TemplateResponse(request, 'enter_new_ password.html', {'uid':response.json().get('uid'), 'token':response.json().get('token'), 'new_password':response.json().get('new_password')})
 
 
