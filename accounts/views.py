@@ -39,6 +39,9 @@ class PasswordRecoveryConfirm(View):
         return TemplateResponse(request, 'enter_new_ password.html', {'uid':uid, 'token':token})
     
     def post(self, request, uid, token, *args, **kwargs):
+        data = request.POST
+        data = {'uid': data.get('uid'), 'token':data.get('token'), 'new_password':data.get('password'), 're_new_password':data.get('re_password')}
+        response = requests.post('http://x3mart.ru/auth/users/reset_password_confirm/', json=data)
         return redirect('http://x3mart.ru/admin/')
 
 
