@@ -104,9 +104,6 @@ class TourSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'expert': {'required': False, 'read_only':True},
             'tour_property_types': {'required': False, 'read_only':True},
-            # 'tour_property_images': {'required': False,},
-            # 'tour_images': {'required': False},
-            # 'tour_days': {'required': False, 'read_only':True},
             'main_impressions': {'required': False, 'read_only':True},
             'tour_included_services': {'required': False, 'read_only':True},
             'tour_excluded_services': {'required': False, 'read_only':True},
