@@ -12,15 +12,15 @@ def tour_image_path(instance, filename):
     name, extension = os.path.splitext(filename)
     class_name = instance.__class__.__name__
     if class_name == 'Tour':
-        folder = f'{slugify(unidecode(instance.name))}/wallpaper'
+        folder = f'{slugify(unidecode(instance.id))}/wallpaper'
     elif class_name == 'TourDay':
-        folder = f'{slugify(unidecode(instance.tour.name))}/day-{instance.number}'
+        folder = f'{slugify(unidecode(instance.tour.id))}/day-{instance.number}'
     elif class_name == 'TourPropertyImage':
-        folder = f'{slugify(unidecode(instance.tour.name))}'
+        folder = f'{slugify(unidecode(instance.tour.id))}'
     elif class_name == 'TourImage':
-        folder = f'{slugify(unidecode(instance.tour.name))}/gallary'
+        folder = f'{slugify(unidecode(instance.tour.id))}/gallary'
     else:
-        folder = f'{slugify(unidecode(instance.tour.name))}/{slugify(unidecode(instance.__class__.__name__))}/{slugify(unidecode(instance.name))}'
+        folder = f'{slugify(unidecode(instance.tour.id))}/{slugify(unidecode(instance.__class__.__name__))}/{slugify(unidecode(instance.name))}'
     return 'tours/{0}/{1}{2}'.format(folder, slugify(unidecode(name)), extension)
 
 def tour_types_path(instance, filename):
