@@ -20,7 +20,7 @@ def tour_image_path(instance, filename):
     elif class_name == 'TourImage':
         folder = f'{instance.id}/gallary'
     else:
-        folder = f'{instance.id}/{slugify(unidecode(instance.__class__.__name__))}/{slugify(unidecode(instance.name))}'
+        folder = f'{instance.id}/{slugify(unidecode(instance.__class__.__name__))}/{instance.id}'
     return 'tours/{0}/{1}{2}'.format(folder, slugify(unidecode(name)), extension)
 
 def tour_types_path(instance, filename):

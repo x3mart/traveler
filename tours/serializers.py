@@ -124,6 +124,7 @@ class TourSerializer(serializers.ModelSerializer):
     def get_tour_excluded_services(self, obj): 
         tour_excluded_services = obj.tour_excluded_services.all().values_list('name', flat=True)
         return ', '.join(tour_excluded_services)
+
     def get_prepay_in_prc(self, obj): 
         return 1 if obj.prepay_in_prc else 0
 
