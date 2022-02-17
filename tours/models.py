@@ -170,10 +170,10 @@ class TourImage(models.Model):
 
 
 class TourDay(models.Model):
-    name = models.CharField(_('Название'), max_length=255)
+    name = models.CharField(_('Название'), max_length=255, null=True, blank=True)
     location =  models.CharField(_('Локация'), max_length=255, null=True, blank=True)
-    description = RichTextField(_('Описание'))
-    tour = models.ForeignKey('Tour', on_delete=models.CASCADE, related_name='tour_days', verbose_name=_('Тур'))
+    description = RichTextField(_('Описание'), null=True, blank=True)
+    tour = models.ForeignKey('Tour', on_delete=models.CASCADE, related_name='tour_days', verbose_name=_('Тур'), null=True, blank=True)
 
     def __str__(self):
         return self.tour.name
