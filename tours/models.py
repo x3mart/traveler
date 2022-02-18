@@ -102,6 +102,7 @@ class Tour(models.Model):
     age_ends = models.PositiveIntegerField(_('Мин возраст участника тура'), default=85, null=True, blank=True)
     media_link = models.URLField(_('Ссылка на видео тура'), max_length=150, null=True, blank=True)
     accomodation = models.CharField(_('РАЗМЕЩЕНИЕ'), max_length=255, null=True, blank=True)
+    air_tickets = models.TextField(_('Авиабилеты'), null=True, blank=True)
 
     class Meta:
         verbose_name = _('Тур')
