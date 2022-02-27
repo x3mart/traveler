@@ -199,7 +199,7 @@ class TourDay(models.Model):
     tour = models.ForeignKey('Tour', on_delete=models.CASCADE, related_name='tour_days', verbose_name=_('Тур'), null=True, blank=True)
 
     def __str__(self):
-        return self.tour.name
+        return self.name if self.name else 'безымянный'
     
     class Meta:
         verbose_name = _('День тура')
