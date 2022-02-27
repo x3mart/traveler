@@ -41,15 +41,26 @@ class TourType(models.Model):
         verbose_name_plural = _('Типы туров')
 
 
+class TourBasic(models.Model):
+    expert = models.ForeignKey("accounts.Expert", verbose_name=_('Эксперт'), on_delete=models.CASCADE, related_name='tours')
+    reviews_count = models.IntegerField(_('Кол-во отзывов'), default=0)
+    rating = models.DecimalField(_('Рейтинг'), decimal_places=1, max_digits=2, null=True, blank=True)
+    created_at = models.DateTimeField(_('Создан'), auto_now_add=True)
+    direct_link = models.BooleanField(_('Доступ по прямой ссылке'), default=False)
+    is_active = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = _('Основа тура')
+        verbose_name_plural = _('Основы туров')
+    
+
 
 class Tour(models.Model):
-    expert = models.ForeignKey("accounts.Expert", verbose_name=_('Эксперт'), on_delete=models.CASCADE, related_name='tours')
+    tour_basic = models.ForeignKey("TourBasic", verbose_name=_('Основа тура'), on_delete=models.CASCADE, related_name='tours', null=True, blank=True)
+    name = models.CharField(_('Название'), max_length=255, null=True, blank=True)
     is_draft = models.BooleanField(_('Черновик'), default=True)
     is_active = models.BooleanField(default=False)
     on_moderation = models.BooleanField(_('На модерации'), default=False)
-    rating = models.DecimalField(_('Рейтинг'), decimal_places=1, max_digits=2, null=True, blank=True)
-    reviews_count = models.IntegerField(_('Кол-во отзывов'), default=0)
-    name = models.CharField(_('Название'), max_length=255, null=True, blank=True)
     wallpaper = models.ImageField(_('Главное фото'), max_length=255, upload_to=tour_image_path, null=True, blank=True)
     basic_type = models.ForeignKey("TourType", verbose_name=_("Основной тип тура"), on_delete=models.CASCADE, related_name='tours_by_basic_type', null=True, blank=True)
     additional_types = models.ManyToManyField("TourType", verbose_name=_("Дополнительные типы тура"), related_name='tours_by_additional_types', blank=True)
@@ -77,7 +88,6 @@ class Tour(models.Model):
     finish_date = models.DateField(_('Дата завершения'), null=True, blank=True)
     start_time = models.TimeField(_('Время старта'), null=True, blank=True)
     finish_time = models.TimeField(_('Время завершения'), null=True, blank=True)
-    direct_link = models.BooleanField(_('Доступ по прямой ссылке'), default=False)
     instant_booking = models.BooleanField(_('Моментальное бронирование'), default=False)
     members_number = models.PositiveIntegerField(_('Колличество мест'), default=0)
     vacants_number = models.PositiveIntegerField(_('Колличество свободных мест'), default=0)
@@ -85,14 +95,15 @@ class Tour(models.Model):
     prepay_amount = models.PositiveIntegerField(_('Размер предоплаты'), default=15)
     prepay_in_prc = models.BooleanField(_('Предоплата в процентах'), default=True)
     prepay_currency = models.ForeignKey('currencies.Currency', verbose_name=_("Валюта предоплаты"), on_delete=models.CASCADE, related_name='tours_by_prepay_currency', null=True, blank=True)
-    prepay_starts = models.DateField(_('Действует с'), null=True, blank=True)
-    prepay_finish = models.DateField(_('Действует до'), null=True, blank=True)
     postpay_on_start_day = models.BooleanField(_('Постоплата в день старта'), default=False)
     postpay_days_before_start = models.PositiveIntegerField(_('Дни внесения полной суммы до старта'), null=True, blank=True)
     team_member = models.ForeignKey('accounts.TeamMember', verbose_name=_("Гид"), on_delete=models.CASCADE, related_name='tours', null=True, blank=True)
     currency = models.ForeignKey('currencies.Currency', verbose_name=_("Валюта"), on_delete=models.CASCADE, related_name='tours', null=True, blank=True)
     cost = models.IntegerField(_('Стоимость со скидкой'), null=True, blank=True)
     price = models.IntegerField(_('Цена'), null=True, blank=True)
+    discount_starts = models.DateField(_('Действует с'), null=True, blank=True)
+    discount_finish = models.DateField(_('Действует до'), null=True, blank=True)
+    discount_in_prc = models.BooleanField(_('Скидка в процентах'), default=True)
     discount = models.IntegerField(_('Скидка'), null=True, blank=True)
     languages = models.ManyToManyField('languages.Language', verbose_name=_('Языки тура'), related_name='tours', blank=True)
     is_guaranteed = models.BooleanField(_('Тур гарантирован'), default=False, null=True, blank=True)
@@ -101,7 +112,6 @@ class Tour(models.Model):
     age_starts = models.PositiveIntegerField(_('Мин возраст участника тура'), default=15, null=True, blank=True)
     age_ends = models.PositiveIntegerField(_('Мин возраст участника тура'), default=85, null=True, blank=True)
     media_link = models.URLField(_('Ссылка на видео тура'), max_length=150, null=True, blank=True)
-    accomodation = models.CharField(_('РАЗМЕЩЕНИЕ'), max_length=255, null=True, blank=True)
     air_tickets = models.TextField(_('Авиабилеты'), null=True, blank=True)
 
     class Meta:
@@ -120,7 +130,19 @@ class Tour(models.Model):
 
 class TourPropertyType(models.Model):
     name = models.CharField(_('Название'), max_length=255)
-    tours = models.ManyToManyField('Tour', related_name='tour_property_types', verbose_name=_("Тур"), blank=True)
+    tours = models.ManyToManyField('Tour', related_name='accomodation', verbose_name=_("Тур"), blank=True)
+
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        verbose_name = _('Тип размещения')
+        verbose_name_plural = _('Типы размещения')
+
+
+class TourAccomodation(models.Model):
+    name = models.CharField(_('Название'), max_length=255)
+    tours = models.ManyToManyField('Tour', related_name='accomodation', verbose_name=_("Тур"), blank=True)
 
     def __str__(self):
         return self.name

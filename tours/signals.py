@@ -1,7 +1,7 @@
 from django.dispatch import receiver
 from django.db.models.signals import post_delete, post_save, pre_save
 from accounts.models import Expert
-from tours.models import Tour, TourDay, TourDayImage, TourImage, TourPropertyImage, TourType
+from tours.models import Tour, TourBasic, TourDay, TourDayImage, TourImage, TourPropertyImage, TourType
 from utils.images import delete_image, image_processing, get_current_img
 from django.db.models import Count, Q
         
@@ -24,9 +24,6 @@ def tour_basic_pre_save(instance, **kwargs):
     try:
         current_tour_basic = Tour.objects.get(pk=instance.id)
         instance._current_img = current_tour_basic.wallpaper
-        if current_tour_basic.is_active:
-            instance.is_active = False
-            instance.on_moderation = True
     except:
         instance._current_img = ''
     if instance.discount == 0:
@@ -40,17 +37,20 @@ def tour_basic_pre_save(instance, **kwargs):
 
 @receiver(post_save, sender=Tour)
 def tour_basic_post_save(instance, created, **kwargs):
-    if created:
-        instance.vacants_number = instance.members_number
     image_processing(instance.wallpaper, instance._current_img, 1920, 480, 730, 280)
-    expert = instance.expert
-    expert.tours_count = Expert.objects.filter(pk=expert.id).aggregate(count=Count('tours', filter=Q(tours__is_active=True)))['count']
-    expert.save()
+    
 
 @receiver(post_delete, sender=Tour)
 def tour_basic_post_delete(instance, **kwargs):
     if instance.wallpaper:
         delete_image(instance.wallpaper)
+
+
+@receiver(post_save, sender=TourBasic)
+def tour_basic_post_save(instance, created, **kwargs):
+    expert = instance.expert
+    expert.tours_count = Expert.objects.filter(pk=expert.id).aggregate(count=Count('tours', filter=Q(tours__is_active=True)&Q(tours__direct_link=False)))['count']
+    expert.save()
     
 
 # @receiver(pre_save, sender=TourPropertyImage)

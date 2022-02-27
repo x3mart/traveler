@@ -90,7 +90,7 @@ class TourSerializer(serializers.ModelSerializer):
     tour_images = TourImageSerializer(many=True, read_only=True)
     # languages = LanguageSerializer(many=True, read_only=True)
     # currency = CurrencySerializer(many=False, read_only=True)
-    # expert = ExpertListSerializer(many=False, read_only=True)
+    # expert = ExpertListSerializer(many=False, read_only=True, source='tour_basic.expert')
     # team_member = TeamMemberSerializer(many=False, read_only=True)
     tour_days = TourDaySerializer(many=True, read_only=True)
     main_impressions = serializers.SerializerMethodField(read_only=True)
@@ -98,15 +98,24 @@ class TourSerializer(serializers.ModelSerializer):
     tour_excluded_services = serializers.SerializerMethodField(read_only=True)
     tmb_wallpaper = serializers.SerializerMethodField(read_only=True)
     prepay_in_prc = serializers.SerializerMethodField(read_only=True)
+    discount_in_prc = serializers.SerializerMethodField(read_only=True)
+    postpay_on_start_day = serializers.BooleanField(required=False)
+    rating = serializers.DecimalField(max_digits=2,decimal_places=1, source='tour_basic.rating',read_only=True)
+    reviews_count = serializers.IntegerField(source='tour_basic.reviews_count',read_only=True)
+    direct_link = serializers.BooleanField(source='tour_basic.direct_link',read_only=True)
 
     class Meta:
         model = Tour
-        fields = ('id', 'rating', 'reviews_count', 'name', 'wallpaper', 'tmb_wallpaper', 'basic_type', 'additional_types', 'start_region', 'finish_region', 'start_country', 'finish_country', 'start_russian_region', 'finish_russian_region', 'start_city', 'finish_city', 'description', 'plan', 'cancellation_terms', 'difficulty_level', 'difficulty_description', 'tour_property_types', 'tour_property_images', 'comfort_level', 'babies_alowed', 'animals_not_exploited', 'start_date', 'finish_date', 'start_time', 'finish_time', 'direct_link', 'instant_booking', 'members_number', 'team_member', 'price_comment', 'prepay_amount', 'prepay_in_prc', 'prepay_currency', 'prepay_starts', 'prepay_finish', 'postpay_on_start_day', 'postpay_days_before_start', 'currency', 'price', 'cost', 'discount', 'languages', 'is_guaranteed', 'flight_included', 'scouting', 'tour_images', 'expert', 'tour_days', 'main_impressions', 'tour_included_services', 'tour_excluded_services', 'hotel_name', 'age_starts', 'age_ends', 'media_link', 'accomodation', 'week_recurrent', 'month_recurrent', 'vacants_number', 'on_moderation', 'is_active', 'is_draft', 'air_tickets')
+        fields = ('id', 'rating', 'reviews_count', 'name', 'wallpaper', 'tmb_wallpaper', 'basic_type', 'additional_types', 'start_region', 'finish_region', 'start_country', 'finish_country', 'start_russian_region', 'finish_russian_region', 'start_city', 'finish_city', 'description', 'plan', 'cancellation_terms', 'difficulty_level', 'difficulty_description', 'tour_property_types', 'tour_property_images', 'comfort_level', 'babies_alowed', 'animals_not_exploited', 'start_date', 'finish_date', 'start_time', 'finish_time', 'direct_link', 'instant_booking', 'members_number', 'team_member', 'price_comment', 'prepay_amount', 'prepay_in_prc', 'prepay_currency', 'postpay_on_start_day', 'postpay_days_before_start', 'currency', 'price', 'cost', 'discount_starts', 'discount_finish', 'discount_in_prc', 'discount', 'languages', 'is_guaranteed', 'flight_included', 'scouting', 'tour_images', 'tour_days', 'main_impressions', 'tour_included_services', 'tour_excluded_services', 'hotel_name', 'age_starts', 'age_ends', 'media_link', 'accomodation', 'week_recurrent', 'month_recurrent', 'vacants_number', 'on_moderation', 'is_active', 'is_draft', 'air_tickets') 
         extra_kwargs = {
-            'expert': {'required': False, 'read_only':True},
             'tour_property_types': {'required': False, 'read_only':True},
             'additional_types': {'required': False, 'read_only':True},
             'languages': {'required': False, 'read_only':True},
+            'animals_not_exploited': {'required': False,},
+            'instant_booking': {'required': False,},
+            'direct_link': {'required': False,},
+            'is_draft': {'required': False,},
+            'flight_included': {'required': False,},
         }
 
     def get_tmb_wallpaper(self, obj): 
@@ -126,11 +135,16 @@ class TourSerializer(serializers.ModelSerializer):
 
     def get_prepay_in_prc(self, obj): 
         return 1 if obj.prepay_in_prc else 0
+    
+    def get_discount_in_prc(self, obj): 
+        return 1 if obj.prepay_in_prc else 0
 
 
 class TourListSerializer(serializers.ModelSerializer):
-    expert = ExpertListSerializer(many=False,)
+    expert = ExpertListSerializer(many=False, source='tour_basic.expert')
     start_country = serializers.StringRelatedField(many=False,)
+    rating = serializers.DecimalField(max_digits=2,decimal_places=1, source='tour_basic.rating')
+    reviews_count = serializers.IntegerField(source='tour_basic.reviews_count')
     class Meta:
         model = Tour
         fields = ['id', 'rating', 'reviews_count', 'name', 'tmb_wallpaper', 'start_date', 'finish_date', 'start_country',  'expert', 'price', 'cost', 'discount']

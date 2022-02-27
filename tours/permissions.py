@@ -9,7 +9,7 @@ class TourPermission(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         if view.action in ['update', 'partial_update', 'destroy']:
-            return request.auth and (obj.expert_id == request.user.id or request.user.is_staff)
+            return request.auth and (obj.tour_basic.expert_id == request.user.id or request.user.is_staff)
         return True
 
 class TourTypePermission(permissions.BasePermission):
@@ -27,5 +27,5 @@ class TourDayPermission(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
         if view.action in ['update', 'partial_update', 'destroy']:
-            return request.auth and (obj.tour.expert_id == request.user.id or request.user.is_staff)
+            return request.auth and (obj.tour.tour_basic.expert_id == request.user.id or request.user.is_staff)
         return True

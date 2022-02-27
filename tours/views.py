@@ -6,10 +6,10 @@ from rest_framework.permissions import AllowAny
 from rest_framework import filters
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
-from django.shortcuts import get_object_or_404
+from django.forms.models import model_to_dict
 from tours.filters import TourFilter
-from tours.mixins import TourMixin
-from tours.models import Tour, TourDay, TourDayImage, TourImage, TourPropertyImage, TourPropertyType, TourType
+from tours.mixins import TourMixin, NOT_MODERATED_FIELDS
+from tours.models import Tour, TourBasic, TourDay, TourDayImage, TourImage, TourPropertyImage, TourPropertyType, TourType
 from accounts.models import Expert
 from tours.permissions import TourPermission, TourTypePermission
 from tours.serializers import TourBasicSerializer, TourDayImageSerializer, TourDaySerializer, TourImageSerializer, TourListSerializer, TourPropertyImageSerializer, TourPropertyTypeSerializer, TourSerializer, TourTypeSerializer
@@ -27,12 +27,14 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
     def get_queryset(self):
         expert = Expert.objects.only('id', 'first_name', 'last_name', 'about', 'rating', 'tours_count', 'tours_rating', 'reviews_count', 'tour_reviews_count', 'avatar')
         prefetched_expert = Prefetch('expert', expert)
+        tour_basic = TourBasic.objects.prefetch_related(prefetched_expert)
+        prefetched_tour_basic = Prefetch('tour_basic', tour_basic)
         tour_days = TourDay.objects.prefetch_related('tour_day_images')
         prefetched_tour_days = Prefetch('tour_days', tour_days)
         if self.action == 'list':
-            qs = Tour.objects.prefetch_related(prefetched_expert, 'start_country', 'currency').only('id', 'start_date', 'finish_date', 'currency', 'cost', 'price', 'discount', 'rating', 'reviews_count', 'name', 'start_country', 'expert', 'wallpaper')
+            qs = Tour.objects.prefetch_related(prefetched_tour_basic, 'start_country', 'currency').only('id', 'start_date', 'finish_date', 'currency', 'cost', 'price', 'discount', 'name', 'start_country', 'wallpaper').filter(tour_basic__expert_id=self.request.user.id)
         else:
-            qs = Tour.objects.prefetch_related(prefetched_expert, 'start_country', 'start_city', 'start_region', 'start_russian_region', 'finish_russian_region', 'finish_country', 'finish_city', 'finish_region', 'basic_type', 'additional_types', 'tour_property_types', 'tour_property_images', 'tour_images', prefetched_tour_days, 'main_impressions', 'tour_included_services', 'tour_excluded_services', 'languages', 'currency', 'prepay_currency')  
+            qs = Tour.objects.prefetch_related(prefetched_tour_basic, 'start_country', 'start_city', 'start_region', 'start_russian_region', 'finish_russian_region', 'finish_country', 'finish_city', 'finish_region', 'basic_type', 'additional_types', 'tour_property_types', 'tour_property_images', 'tour_images', prefetched_tour_days, 'main_impressions', 'tour_included_services', 'tour_excluded_services', 'languages', 'currency', 'prepay_currency')  
         return qs
     
     def get_serializer_class(self):
@@ -47,7 +49,8 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         else:
             return Response(serializer.errors, status=400)
         data['is_draft'] = True
-        tour = Tour.objects.create(expert=self.get_expert(request), **data)
+        tour_basic = TourBasic.objects.create(expert=self.get_expert(request))
+        tour = Tour.objects.create(tour_basic=tour_basic, **data)
         return Response(TourSerializer(tour).data, status=201)
     
     def update(self, request, *args, **kwargs):
@@ -57,8 +60,15 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         else:
             return Response(serializer.errors, status=400)
         instance = self.get_object()
-        instance = self.set_mtm_fields(request, instance)
-        instance = self.set_model_fields(data, instance)
+        instance_dict = model_to_dict(instance)
+        instance, updated_mtm_fields = self.set_mtm_fields(request, instance)
+        instance, updated_model_fields = self.set_model_fields(data, instance)
+        updated_fields = set(updated_mtm_fields + updated_model_fields)
+        # print(instance_dict)      
+        # print(instance_dict == model_to_dict(instance, exclude=NOT_MODERATED_FIELDS))      
+        if instance_dict == model_to_dict(instance, exclude=NOT_MODERATED_FIELDS) and instance.is_active:
+            instance.is_active = False
+            instance.on_moderation = True
         instance.save()
         if getattr(instance, '_prefetched_objects_cache', None):
             instance._prefetched_objects_cache = {}
