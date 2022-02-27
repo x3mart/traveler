@@ -104,6 +104,7 @@ class TourSerializer(serializers.ModelSerializer):
     # expert = ExpertListSerializer(many=False, read_only=True, source='tour_basic.expert')
     # team_member = TeamMemberSerializer(many=False, read_only=True)
     tour_days = TourDaySerializer(many=True, read_only=True)
+    plan = TourPlanSerializer(many=True, read_only=True)
     main_impressions = serializers.SerializerMethodField(read_only=True)
     tour_included_services = serializers.SerializerMethodField(read_only=True)
     tour_excluded_services = serializers.SerializerMethodField(read_only=True)
