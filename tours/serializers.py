@@ -121,6 +121,7 @@ class TourSerializer(serializers.ModelSerializer):
         fields = ('id', 'rating', 'reviews_count', 'name', 'wallpaper', 'tmb_wallpaper', 'basic_type', 'additional_types', 'start_region', 'finish_region', 'start_country', 'finish_country', 'start_russian_region', 'finish_russian_region', 'start_city', 'finish_city', 'description', 'plan', 'cancellation_terms', 'difficulty_level', 'difficulty_description', 'tour_property_types', 'accomodation', 'tour_property_images', 'comfort_level', 'babies_alowed', 'animals_not_exploited', 'start_date', 'finish_date', 'start_time', 'finish_time', 'direct_link', 'instant_booking', 'members_number', 'team_member', 'price_comment', 'prepay_amount', 'prepay_in_prc', 'prepay_currency', 'postpay_on_start_day', 'postpay_days_before_start', 'currency', 'price', 'cost', 'discount_starts', 'discount_finish', 'discount_in_prc', 'discount', 'languages', 'is_guaranteed', 'flight_included', 'scouting', 'tour_images', 'tour_days', 'main_impressions', 'tour_included_services', 'tour_excluded_services', 'hotel_name', 'age_starts', 'age_ends', 'media_link', 'week_recurrent', 'month_recurrent', 'vacants_number', 'on_moderation', 'is_active', 'is_draft', 'air_tickets', 'duration', 'sold', 'watched') 
         extra_kwargs = {
             'tour_property_types': {'required': False, 'read_only':True},
+            'accomodation': {'required': False, 'read_only':True},
             'additional_types': {'required': False, 'read_only':True},
             'languages': {'required': False, 'read_only':True},
             'animals_not_exploited': {'required': False,},
@@ -153,13 +154,14 @@ class TourSerializer(serializers.ModelSerializer):
 
 
 class TourListSerializer(serializers.ModelSerializer):
-    expert = ExpertListSerializer(many=False, source='tour_basic.expert')
+    # expert = ExpertListSerializer(many=False, source='tour_basic.expert')
+    currency = CurrencySerializer(many=False)
     start_country = serializers.StringRelatedField(many=False,)
     rating = serializers.DecimalField(max_digits=2,decimal_places=1, source='tour_basic.rating')
     reviews_count = serializers.IntegerField(source='tour_basic.reviews_count')
     class Meta:
         model = Tour
-        fields = ['id', 'rating', 'reviews_count', 'name', 'tmb_wallpaper', 'start_date', 'finish_date', 'start_country',  'expert', 'price', 'cost', 'discount', 'on_moderation', 'is_active', 'is_draft', 'duration', 'sold', 'watched']
+        fields = ['id', 'rating', 'reviews_count', 'name', 'tmb_wallpaper', 'start_date', 'finish_date', 'start_country', 'price', 'cost', 'discount', 'on_moderation', 'is_active', 'is_draft', 'duration', 'sold', 'watched', 'currency']
 
 class TourBasicSerializer(serializers.ModelSerializer):
     basic_type = TourTypeSerializer(many=False, required=False)

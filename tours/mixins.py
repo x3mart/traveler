@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from django.core.files.base import ContentFile
 
 NOT_MODERATED_FIELDS = {'is_active', 'on_moderation', 'vacants_number', 'is_draft'}
-CHECBOX_SET = {'is_guaranteed', 'is_active', 'postpay_on_start_day', 'scouting', 'animals_not_exploited', 'month_recurrent', 'flight_included', 'babies_alowed', 'direct_link', 'on_moderation', 'week_recurrent', 'is_draft', 'instant_booking'}
+CHECBOX_SET = {'is_guaranteed', 'is_active', 'postpay_on_start_day', 'scouting', 'animals_not_exploited', 'month_recurrent', 'flight_included', 'babies_alowed', 'on_moderation', 'week_recurrent', 'is_draft', 'instant_booking'}
 
 class TourMixin():
     def get_mtm_objects(self, model, ids):

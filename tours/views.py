@@ -25,14 +25,12 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
     filterset_class = TourFilter
 
     def get_queryset(self):
-        expert = Expert.objects.only('id', 'first_name', 'last_name', 'about', 'rating', 'tours_count', 'tours_rating', 'reviews_count', 'tour_reviews_count', 'avatar')
-        prefetched_expert = Prefetch('expert', expert)
-        tour_basic = TourBasic.objects.prefetch_related(prefetched_expert)
+        tour_basic = TourBasic.objects.all()
         prefetched_tour_basic = Prefetch('tour_basic', tour_basic)
         tour_days = TourDay.objects.prefetch_related('tour_day_images')
         prefetched_tour_days = Prefetch('tour_days', tour_days)
         if self.action == 'list':
-            qs = Tour.objects.prefetch_related(prefetched_tour_basic, 'start_country', 'currency').filter(tour_basic__expert_id=self.request.user.id)
+            qs = Tour.objects.prefetch_related(prefetched_tour_basic, 'start_country', 'currency').only('id', 'name', 'start_date', 'finish_date', 'start_country', 'price', 'cost', 'discount', 'on_moderation', 'is_active', 'is_draft', 'duration', 'sold', 'watched', 'currency', 'tour_basic', 'wallpaper').filter(tour_basic__expert_id=self.request.user.id)
         else:
             qs = Tour.objects.prefetch_related(prefetched_tour_basic, 'start_country', 'start_city', 'start_region', 'start_russian_region', 'finish_russian_region', 'finish_country', 'finish_city', 'finish_region', 'basic_type', 'additional_types', 'tour_property_types', 'tour_property_images', 'tour_images', prefetched_tour_days, 'main_impressions', 'tour_included_services', 'tour_excluded_services', 'languages', 'currency', 'prepay_currency', 'accomodation')  
         return qs
