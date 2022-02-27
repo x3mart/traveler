@@ -130,7 +130,7 @@ class Tour(models.Model):
 
 class TourPropertyType(models.Model):
     name = models.CharField(_('Название'), max_length=255)
-    tours = models.ManyToManyField('Tour', related_name='accomodation', verbose_name=_("Тур"), blank=True)
+    tours = models.ManyToManyField('Tour', related_name='tour_property_types', verbose_name=_("Тур"), blank=True)
 
     def __str__(self):
         return self.name
@@ -148,8 +148,8 @@ class TourAccomodation(models.Model):
         return self.name
     
     class Meta:
-        verbose_name = _('Тип размещения')
-        verbose_name_plural = _('Типы размещения')
+        verbose_name = _('Размещения')
+        verbose_name_plural = _('Размещение')
 
 
 class TourPropertyImage(models.Model):

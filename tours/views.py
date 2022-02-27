@@ -34,7 +34,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         if self.action == 'list':
             qs = Tour.objects.prefetch_related(prefetched_tour_basic, 'start_country', 'currency').only('id', 'start_date', 'finish_date', 'currency', 'cost', 'price', 'discount', 'name', 'start_country', 'wallpaper').filter(tour_basic__expert_id=self.request.user.id)
         else:
-            qs = Tour.objects.prefetch_related(prefetched_tour_basic, 'start_country', 'start_city', 'start_region', 'start_russian_region', 'finish_russian_region', 'finish_country', 'finish_city', 'finish_region', 'basic_type', 'additional_types', 'tour_property_types', 'tour_property_images', 'tour_images', prefetched_tour_days, 'main_impressions', 'tour_included_services', 'tour_excluded_services', 'languages', 'currency', 'prepay_currency')  
+            qs = Tour.objects.prefetch_related(prefetched_tour_basic, 'start_country', 'start_city', 'start_region', 'start_russian_region', 'finish_russian_region', 'finish_country', 'finish_city', 'finish_region', 'basic_type', 'additional_types', 'tour_property_types', 'tour_property_images', 'tour_images', prefetched_tour_days, 'main_impressions', 'tour_included_services', 'tour_excluded_services', 'languages', 'currency', 'prepay_currency', 'accomodation')  
         return qs
     
     def get_serializer_class(self):
