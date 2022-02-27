@@ -154,14 +154,18 @@ class TourSerializer(serializers.ModelSerializer):
 
 
 class TourListSerializer(serializers.ModelSerializer):
-    # expert = ExpertListSerializer(many=False, source='tour_basic.expert')
+    tmb_wallpaper = serializers.SerializerMethodField(read_only=True)
     currency = CurrencySerializer(many=False)
     start_country = serializers.StringRelatedField(many=False,)
     rating = serializers.DecimalField(max_digits=2,decimal_places=1, source='tour_basic.rating')
     reviews_count = serializers.IntegerField(source='tour_basic.reviews_count')
+    
     class Meta:
         model = Tour
         fields = ['id', 'rating', 'reviews_count', 'name', 'tmb_wallpaper', 'start_date', 'finish_date', 'start_country', 'price', 'cost', 'discount', 'on_moderation', 'is_active', 'is_draft', 'duration', 'sold', 'watched', 'currency']
+    
+    def get_tmb_wallpaper(self, obj): 
+        return get_tmb_image_uri(self, obj)
 
 class TourBasicSerializer(serializers.ModelSerializer):
     basic_type = TourTypeSerializer(many=False, required=False)
