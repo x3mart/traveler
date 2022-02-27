@@ -159,7 +159,7 @@ class TourListSerializer(serializers.ModelSerializer):
     reviews_count = serializers.IntegerField(source='tour_basic.reviews_count')
     class Meta:
         model = Tour
-        fields = ['id', 'rating', 'reviews_count', 'name', 'tmb_wallpaper', 'start_date', 'finish_date', 'start_country',  'expert', 'price', 'cost', 'discount']
+        fields = ['id', 'rating', 'reviews_count', 'name', 'tmb_wallpaper', 'start_date', 'finish_date', 'start_country',  'expert', 'price', 'cost', 'discount', 'on_moderation', 'is_active', 'is_draft', 'duration', 'sold', 'watched']
 
 class TourBasicSerializer(serializers.ModelSerializer):
     basic_type = TourTypeSerializer(many=False, required=False)
