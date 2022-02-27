@@ -13,12 +13,14 @@ def tour_image_path(instance, filename):
     class_name = instance.__class__.__name__
     if class_name == 'Tour':
         folder = f'{instance.id}/wallpaper'
-    elif class_name == 'TourDay':
-        folder = f'{instance.id}/day-{instance.number}'
+    elif class_name == 'TourDayImage':
+        folder = f'days/{instance.id}'
     elif class_name == 'TourPropertyImage':
-        folder = f'{instance.id}'
+        folder = f'properties/{instance.id}'
     elif class_name == 'TourImage':
-        folder = f'{instance.id}/gallary'
+        folder = f'gallary/{instance.id}'
+    elif class_name == 'TourPlan':
+        folder = f'plans/{instance.id}'
     else:
         folder = f'{instance.id}/{slugify(unidecode(instance.__class__.__name__))}/{instance.id}'
     return 'tours/{0}/{1}{2}'.format(folder, slugify(unidecode(name)), extension)
@@ -75,7 +77,6 @@ class Tour(models.Model):
     week_recurrent = models.BooleanField(_('Повторять еженедельно'), default=False)
     month_recurrent = models.BooleanField(_('Повторять ежемесячно'), default=False)
     description = RichTextField(_('Описание тура'), null=True, blank=True)
-    plan = RichTextUploadingField(_('Чем займемся'), null=True, blank=True)
     cancellation_terms = RichTextField(_('Условия отмены'), null=True, blank=True)
     difficulty_level = models.PositiveIntegerField(_('Уровень сложности'), default=1)
     difficulty_description = RichTextField(_('Описание сложностей'), null=True, blank=True)
@@ -222,6 +223,27 @@ class TourDayImage(models.Model):
             tmb_path = get_tmb_path(self.image.url)
             return tmb_path
         return None
+
+
+class TourPlan(models.Model):
+    image = models.ImageField(_('Фото'), upload_to=tour_image_path, max_length=255, null=True, blank=True)
+    description = RichTextField(_('Описание'), null=True, blank=True)
+    tour = models.ForeignKey('Tour', on_delete=models.CASCADE, related_name='plan', verbose_name=_('Тур'), null=True, blank=True)
+
+    @property
+    def tmb_image(self):
+        if self.image:
+            tmb_path = get_tmb_path(self.image.url)
+            return tmb_path
+        return None
+
+    def __str__(self):
+        return self.tour.name if self.tour.name else 'безымянный'
+    
+    class Meta:
+        verbose_name = _('День тура')
+        verbose_name_plural = _('Дни туров')
+        ordering = ['id']
 
 
 class TourImpression(models.Model):

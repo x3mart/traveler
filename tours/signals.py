@@ -1,7 +1,7 @@
 from django.dispatch import receiver
 from django.db.models.signals import post_delete, post_save, pre_save
 from accounts.models import Expert
-from tours.models import Tour, TourBasic, TourDay, TourDayImage, TourImage, TourPropertyImage, TourType
+from tours.models import Tour, TourBasic, TourDay, TourDayImage, TourImage, TourPlan, TourPropertyImage, TourType
 from utils.images import delete_image, image_processing, get_current_img
 from django.db.models import Count, Q
         
@@ -40,10 +40,10 @@ def tour_basic_post_save(instance, created, **kwargs):
     image_processing(instance.wallpaper, instance._current_img, 1920, 480, 730, 280)
     
 
-@receiver(post_delete, sender=Tour)
-def tour_basic_post_delete(instance, **kwargs):
-    if instance.wallpaper:
-        delete_image(instance.wallpaper)
+# @receiver(post_delete, sender=Tour)
+# def tour_basic_post_delete(instance, **kwargs):
+#     if instance.wallpaper:
+#         delete_image(instance.wallpaper)
 
 
 @receiver(post_save, sender=TourBasic)
@@ -74,10 +74,10 @@ def tour_property_image_post_delete(instance, **kwargs):
 def tour_image_post_save(instance, **kwargs):
     image_processing(instance.image, None, 1067, 800, 350, 240, True)
 
-@receiver(post_delete, sender=TourImage)
-def tour_image_post_delete(instance, **kwargs):
-    if instance.image:
-        delete_image(instance.image)
+# @receiver(post_delete, sender=TourImage)
+# def tour_image_post_delete(instance, **kwargs):
+#     if instance.image:
+#         delete_image(instance.image)
 
 # @receiver(pre_save, sender=TourDayImage)
 # def tour_day_image_pre_save(instance, sender, **kwargs):
@@ -85,9 +85,13 @@ def tour_image_post_delete(instance, **kwargs):
 
 @receiver(post_save, sender=TourDayImage)
 def tour_day_image_post_save(instance, **kwargs):
+    image_processing(instance.image, None, 730, 400, 365, 200, True)
+
+@receiver(post_save, sender=TourPlan)
+def tour_plan_post_save(instance, **kwargs):
     image_processing(instance.image, None, 730, 400, 365, 200)
 
-@receiver(post_delete, sender=TourDayImage)
-def tour_day_image_post_delete(instance, **kwargs):
-    if instance.image:
-        delete_image(instance.image)
+# @receiver(post_delete, sender=TourDayImage)
+# def tour_day_image_post_delete(instance, **kwargs):
+#     if instance.image:
+#         delete_image(instance.image)

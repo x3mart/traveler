@@ -9,10 +9,10 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.forms.models import model_to_dict
 from tours.filters import TourFilter
 from tours.mixins import TourMixin, NOT_MODERATED_FIELDS
-from tours.models import Tour, TourBasic, TourDay, TourDayImage, TourImage, TourPropertyImage, TourPropertyType, TourType
+from tours.models import Tour, TourBasic, TourDay, TourDayImage, TourImage, TourPlan, TourPropertyImage, TourPropertyType, TourType
 from accounts.models import Expert
 from tours.permissions import TourPermission, TourTypePermission
-from tours.serializers import TourBasicSerializer, TourDayImageSerializer, TourDaySerializer, TourImageSerializer, TourListSerializer, TourPropertyImageSerializer, TourPropertyTypeSerializer, TourSerializer, TourTypeSerializer
+from tours.serializers import TourBasicSerializer, TourDayImageSerializer, TourDaySerializer, TourImageSerializer, TourListSerializer, TourPlanSerializer, TourPropertyImageSerializer, TourPropertyTypeSerializer, TourSerializer, TourTypeSerializer
 
 
 # Create your views here.
@@ -87,6 +87,11 @@ class TourDayViewSet(viewsets.ModelViewSet):
 class TourDayImageViewSet(viewsets.ModelViewSet):
     queryset = TourDayImage.objects.all()
     serializer_class = TourDayImageSerializer
+
+
+class TourPlanViewSet(viewsets.ModelViewSet):
+    queryset = TourPlan.objects.all()
+    serializer_class = TourPlanSerializer
 
 
 class TourPropertyTypeViewSet(viewsets.ReadOnlyModelViewSet):
