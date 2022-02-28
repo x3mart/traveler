@@ -5,7 +5,7 @@ from languages.models import Language
 from rest_framework.response import Response
 from django.core.files.base import ContentFile
 
-NOT_MODERATED_FIELDS = {'is_active', 'on_moderation', 'vacants_number', 'is_draft'}
+NOT_MODERATED_FIELDS = {'is_active', 'on_moderation', 'vacants_number', 'is_draft', 'discount_starts', 'discount_finish', 'discount_in_prc', 'discount', 'sold', 'watched'} 
 CHECBOX_SET = {'is_guaranteed', 'is_active', 'postpay_on_start_day', 'scouting', 'animals_not_exploited', 'month_recurrent', 'flight_included', 'babies_alowed', 'on_moderation', 'week_recurrent', 'is_draft', 'instant_booking'}
 
 class TourMixin():
@@ -82,10 +82,12 @@ class TourMixin():
         tour_basic.save()
     
     def set_mtm_fields(self, request, instance):
-        if request.data.get('additional_types'):
+        if request.data.get('additional_types') is not None:
             self.set_additional_types(request, instance)
-        if request.data.get('tour_property_types'):
+        if request.data.get('tour_property_types') is not None:
             self.set_property_types(request, instance)
+        if request.data.get('accomodation') is not None:
+            self.set_accomodation(request, instance)
         if request.data.get('languages'):
             self.set_languages(request, instance)
         if request.data.get('main_impressions'):

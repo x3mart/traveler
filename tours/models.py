@@ -54,7 +54,29 @@ class TourBasic(models.Model):
     class Meta:
         verbose_name = _('Основа тура')
         verbose_name_plural = _('Основы туров')
+
+
+class TourPropertyType(models.Model):
+    name = models.CharField(_('Название'), max_length=255)
     
+
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        verbose_name = _('Тип размещения')
+        verbose_name_plural = _('Типы размещения')
+
+
+class TourAccomodation(models.Model):
+    name = models.CharField(_('Название'), max_length=255)
+    
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        verbose_name = _('Размещения')
+        verbose_name_plural = _('Размещение')
 
 
 class Tour(models.Model):
@@ -116,6 +138,9 @@ class Tour(models.Model):
     air_tickets = models.TextField(_('Авиабилеты'), null=True, blank=True)
     watched = models.PositiveIntegerField(_('Просмотры'), null=True, blank=True)
     sold = models.PositiveIntegerField(_('Продажи'), null=True, blank=True)
+    tour_property_types = models.ManyToManyField('TourPropertyType', related_name='tours', verbose_name=_("Типы размещения"), blank=True)
+    accomodation = models.ManyToManyField('TourAccomodation', related_name='accomodation', verbose_name=_("Размещения"), blank=True)
+
 
     class Meta:
         verbose_name = _('Тур')
@@ -130,30 +155,6 @@ class Tour(models.Model):
             tmb_path = get_tmb_path(self.wallpaper.url)
             return tmb_path
         return None
-
-class TourPropertyType(models.Model):
-    name = models.CharField(_('Название'), max_length=255)
-    tours = models.ManyToManyField('Tour', related_name='tour_property_types', verbose_name=_("Тур"), blank=True)
-
-    def __str__(self):
-        return self.name
-    
-    class Meta:
-        verbose_name = _('Тип размещения')
-        verbose_name_plural = _('Типы размещения')
-
-
-class TourAccomodation(models.Model):
-    name = models.CharField(_('Название'), max_length=255)
-    tours = models.ManyToManyField('Tour', related_name='accomodation', verbose_name=_("Тур"), blank=True)
-
-    def __str__(self):
-        return self.name
-    
-    class Meta:
-        verbose_name = _('Размещения')
-        verbose_name_plural = _('Размещение')
-
 
 class TourPropertyImage(models.Model):
     name = models.CharField(_('Название'), max_length=255, null=True, blank=True)

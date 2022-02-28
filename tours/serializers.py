@@ -14,7 +14,7 @@ from utils.images import get_tmb_image_uri
 class TourPropertyTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = TourPropertyType
-        exclude = ['tours',]
+        fields = '__all__'
 
 
 class TourPropertyImageSerializer(serializers.ModelSerializer):
@@ -114,7 +114,7 @@ class TourSerializer(serializers.ModelSerializer):
     postpay_on_start_day = serializers.BooleanField(required=False)
     rating = serializers.DecimalField(max_digits=2,decimal_places=1, source='tour_basic.rating',read_only=True)
     reviews_count = serializers.IntegerField(source='tour_basic.reviews_count',read_only=True)
-    direct_link = serializers.BooleanField(source='tour_basic.direct_link',read_only=True)
+    direct_link = serializers.BooleanField(source='tour_basic.direct_link', read_only=True)
 
     class Meta:
         model = Tour
@@ -125,8 +125,7 @@ class TourSerializer(serializers.ModelSerializer):
             'additional_types': {'required': False, 'read_only':True},
             'languages': {'required': False, 'read_only':True},
             'animals_not_exploited': {'required': False,},
-            'instant_booking': {'required': False,},
-            'direct_link': {'required': False,},
+            'instant_booking': {'required': False,}, 
             'is_draft': {'required': False,},
             'flight_included': {'required': False,},
         }
@@ -159,7 +158,7 @@ class TourListSerializer(serializers.ModelSerializer):
     start_country = serializers.StringRelatedField(many=False,)
     rating = serializers.DecimalField(max_digits=2,decimal_places=1, source='tour_basic.rating')
     reviews_count = serializers.IntegerField(source='tour_basic.reviews_count')
-    
+
     class Meta:
         model = Tour
         fields = ['id', 'rating', 'reviews_count', 'name', 'tmb_wallpaper', 'start_date', 'finish_date', 'start_country', 'price', 'cost', 'discount', 'on_moderation', 'is_active', 'is_draft', 'duration', 'sold', 'watched', 'currency']
