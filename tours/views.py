@@ -12,7 +12,7 @@ from tours.mixins import TourMixin, NOT_MODERATED_FIELDS
 from tours.models import Tour, TourBasic, TourDay, TourDayImage, TourImage, TourPlan, TourPropertyImage, TourPropertyType, TourType
 from accounts.models import Expert
 from tours.permissions import TourPermission, TourTypePermission
-from tours.serializers import TourBasicSerializer, TourDayImageSerializer, TourDaySerializer, TourImageSerializer, TourListSerializer, TourPlanSerializer, TourPropertyImageSerializer, TourPropertyTypeSerializer, TourSerializer, TourTypeSerializer
+from tours.serializers import TourAccomodationSerializer, TourBasicSerializer, TourDayImageSerializer, TourDaySerializer, TourImageSerializer, TourListSerializer, TourPlanSerializer, TourPropertyImageSerializer, TourPropertyTypeSerializer, TourSerializer, TourTypeSerializer
 
 
 # Create your views here.
@@ -106,3 +106,8 @@ class TourImageViewSet(viewsets.ModelViewSet):
     queryset = TourImage.objects.all()
     serializer_class = TourImageSerializer
     permission_classes = [AllowAny]
+
+
+class TourAccomodationTypeViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = TourPropertyType.objects.all()
+    serializer_class = TourAccomodationSerializer

@@ -3,7 +3,7 @@ from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
 from accounts.models import Expert
 from accounts.serializers import ExpertListSerializer, TeamMemberSerializer
-from .models import Tour, TourDay, TourDayImage, TourExcludedService, TourImpression, TourIncludedService, TourPlan, TourPropertyImage, TourImage, TourPropertyType, TourType
+from .models import Tour, TourAccomodation, TourDay, TourDayImage, TourExcludedService, TourImpression, TourIncludedService, TourPlan, TourPropertyImage, TourImage, TourPropertyType, TourType
 from geoplaces.serializers import RegionSerializer, CountrySerializer, RussianRegionSerializer, CitySerializer
 from languages.serializers import LanguageSerializer
 from currencies.serializers import CurrencySerializer
@@ -14,6 +14,12 @@ from utils.images import get_tmb_image_uri
 class TourPropertyTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = TourPropertyType
+        fields = '__all__'
+
+
+class TourAccomodationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TourAccomodation
         fields = '__all__'
 
 
