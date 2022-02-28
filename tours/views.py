@@ -60,11 +60,10 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         instance = self.get_object()
         instance_dict = model_to_dict(instance, exclude=NOT_MODERATED_FIELDS)
         instance, updated_mtm_fields = self.set_mtm_fields(request, instance)
-        instance, updated_model_fields = self.set_model_fields(data, instance)
-        updated_fields = set(updated_mtm_fields + updated_model_fields)
+        instance = self.set_model_fields(data, instance)
         # print(instance_dict)      
         # print(instance_dict == model_to_dict(instance, exclude=NOT_MODERATED_FIELDS))      
-        if instance_dict != model_to_dict(instance, exclude=NOT_MODERATED_FIELDS) and instance.is_active:
+        if (instance_dict != model_to_dict(instance, exclude=NOT_MODERATED_FIELDS) or updated_mtm_fields - NOT_MODERATED_FIELDS) and instance.is_active:
             instance.is_active = False
             instance.on_moderation = True
         instance.save()

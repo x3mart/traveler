@@ -14,6 +14,9 @@ class TourMixin():
         for id in ids:
             objects.append(model.objects.get(pk=id))
         return objects
+    
+    def get_mtm_set(self, obj_set): 
+        return set(obj_set.all().values_list('name', flat=True))
 
     def set_additional_types(self, request, instance):
         if instance.additional_types.exists():
@@ -43,35 +46,24 @@ class TourMixin():
         objects = self.get_mtm_objects(Language, ids)
         instance.languages.add(*tuple(objects))
     
-    def set_main_impressions(self, request, instance):
-        main_impressions = request.data.get('main_impressions').split(',')
-        main_impressions = map(lambda x: x.strip(), main_impressions)
-        if instance.main_impressions.exists():
-            instance.main_impressions.all().delete()
-        impressions = []
-        for impression in main_impressions:
-            impressions.append(TourImpression(name=impression, tour=instance))
-        TourImpression.objects.bulk_create(impressions)
-    
-    def set_tour_included_services(self, request, instance):
-        tour_included_services = request.data.get('tour_included_services').split(',')
-        tour_included_services = map(lambda x: x.strip(), tour_included_services)
-        if instance.tour_included_services.exists():
-            instance.tour_included_services.all().delete()
-        services = []
-        for service in tour_included_services:
-            services.append(TourIncludedService(name=service, tour=instance))
-        TourIncludedService.objects.bulk_create(services)
-    
-    def set_tour_excluded_services(self, request, instance):
-        tour_excluded_services = request.data.get('tour_excluded_services').split(',')
-        tour_excluded_services = map(lambda x: x.strip(), tour_excluded_services)
-        if instance.tour_excluded_services.exists():
-            instance.tour_excluded_services.all().delete()
-        services = []
-        for service in tour_excluded_services:
-            services.append(TourExcludedService(name=service, tour=instance))
-        TourExcludedService.objects.bulk_create(services)    
+    def set_mtm_from_str(self, request, instance, field, model, updated_fields):
+        new_set = request.data.get(field).split(',')
+        new_set = set(map(lambda x: x.strip(), new_set))
+        if getattr(instance, field).exists():
+            old_set = self.get_mtm_set(getattr(instance, field))
+            to_delete = old_set - new_set
+            to_add = new_set - old_set
+            getattr(instance, field).filter(name__in=to_delete).delete()
+        else:
+            to_add = new_set
+            to_delete = None
+        objs = []
+        for name in to_add:
+            objs.append(model(name=name, tour=instance))
+        model.objects.bulk_create(objs)
+        if to_delete or to_add:
+            updated_fields.add(field) 
+        return updated_fields 
     
     def get_expert(self, request):
         return get_object_or_404(Expert, pk=request.user.id)
@@ -82,23 +74,24 @@ class TourMixin():
         tour_basic.save()
     
     def set_mtm_fields(self, request, instance):
+        updated_fields = set()
         if request.data.get('additional_types') is not None:
             self.set_additional_types(request, instance)
         if request.data.get('tour_property_types') is not None:
             self.set_property_types(request, instance)
         if request.data.get('accomodation') is not None:
             self.set_accomodation(request, instance)
-        if request.data.get('languages'):
+        if request.data.get('languages') is not None:
             self.set_languages(request, instance)
-        if request.data.get('main_impressions'):
-            self.set_main_impressions(request, instance)
-        if request.data.get('tour_included_services'):
-            self.set_tour_included_services(request, instance)
-        if request.data.get('tour_excluded_services'):
-            self.set_tour_excluded_services(request, instance)
-        if request.data.get('direct_link'):
+        if request.data.get('main_impressions') is not None:
+            updated_fields = self.set_mtm_from_str(request, instance, 'main_impressions', TourImpression, updated_fields)
+        if request.data.get('tour_included_services') is not None:
+            updated_fields = self.set_mtm_from_str(request, instance, 'tour_included_services', TourIncludedService, updated_fields)
+        if request.data.get('tour_excluded_services') is not None:
+            updated_fields = self.set_mtm_from_str(request, instance, 'tour_excluded_services', TourExcludedService, updated_fields)
+        if request.data.get('direct_link') is not None:
             self.set_tour_direct_links(request, instance)
-        return (instance, list(request.data.keys()))
+        return (instance, updated_fields)
 
     def set_model_fields(self, data, instance):
         if self.request.META.get('CONTENT_TYPE') != 'application/json':
@@ -107,4 +100,4 @@ class TourMixin():
                 data.pop(item)
         for key, value in data.items():
             setattr(instance, key, value)
-        return (instance, list(data.keys()))
+        return instance

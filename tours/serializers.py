@@ -134,15 +134,15 @@ class TourSerializer(serializers.ModelSerializer):
         return get_tmb_image_uri(self, obj)
     
     def get_main_impressions(self, obj): 
-        main_impressions = obj.main_impressions.all().values_list('name', flat=True)
+        main_impressions = obj.main_impressions.order_by('id').all().values_list('name', flat=True)
         return ', '.join(main_impressions)
     
     def get_tour_included_services(self, obj): 
-        tour_included_services = obj.tour_included_services.all().values_list('name', flat=True)
+        tour_included_services = obj.tour_included_services.order_by('id').all().values_list('name', flat=True)
         return ', '.join(tour_included_services)
     
     def get_tour_excluded_services(self, obj): 
-        tour_excluded_services = obj.tour_excluded_services.all().values_list('name', flat=True)
+        tour_excluded_services = obj.tour_excluded_services.order_by('id').all().values_list('name', flat=True)
         return ', '.join(tour_excluded_services)
 
     def get_prepay_in_prc(self, obj): 
