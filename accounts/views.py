@@ -159,6 +159,9 @@ class TeamMemberViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['expert',]
 
+    def get_queryset(self):
+        return super().get_queryset().filter(expert=self.request.user)
+
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():

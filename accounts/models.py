@@ -75,7 +75,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         return None
 
     def __str__(self):
-        return self.full_name
+        return self.full_name if self.full_name else '--'
     
     
 class Expert(User):
@@ -98,10 +98,6 @@ class Expert(User):
         verbose_name = _('Эксперт')
         verbose_name_plural = _('Эксперты')
         ordering = ['-id']
-    
-    def __str__(self):
-        return self.full_name
-
 
 class TeamMember(models.Model):
     first_name = models.CharField(_('Имя'), max_length=255,  null=True, blank=True,)
@@ -131,10 +127,10 @@ class TeamMember(models.Model):
         return None
     
     def __str__(self):
-        return self.full_name
+        return self.full_name if self.full_name else '--'
 
 
 class Customer(User):
     class Meta:
-        verbose_name = _('Путешественник')
-        verbose_name_plural = _('Путешественники')
+        verbose_name = _('Покупатели')
+        verbose_name_plural = _('Покупатель')

@@ -1,3 +1,4 @@
+import email
 from django.dispatch import receiver
 from django.db.models.signals import post_delete, post_init, post_save, pre_save
 from .models import Expert, TeamMember, User, Customer
@@ -22,8 +23,19 @@ def expert_post_init(instance, **kwargs):
     instance._current_avatar = instance.avatar
 
 @receiver(post_save, sender=Expert)
-def expert_post_save(instance, **kwargs):
+def expert_post_save(instance, created, **kwargs):
     image_processing(instance.avatar, instance._current_avatar, 255, 355, 200, 200)
+    if created:
+        teammember = TeamMember.objects.create(expert=instance, is_expert=True)
+    else:
+        teammember = instance.team_members.get(is_expert=True)
+    teammember.first_name = instance.first_name
+    teammember.last_name = instance.last_name
+    teammember.email = instance.email
+    teammember.avatar = instance.avatar
+    teammember.languages.set(objs=instance.languages.all())
+    teammember.about = instance.about
+    teammember.save()
 
 @receiver(post_delete, sender=Expert)
 def expert_post_delete(instance, **kwargs):
