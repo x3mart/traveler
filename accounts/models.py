@@ -112,6 +112,7 @@ class TeamMember(models.Model):
     about = models.TextField(_('О себе'), null=True, blank=True)
     expert = models.ForeignKey('Expert', on_delete=models.CASCADE, null=True, blank=True, verbose_name=_('Эксперт'), related_name='team_members')
     is_active = models.BooleanField(default=True)
+    is_expert = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = _('Член команды')
