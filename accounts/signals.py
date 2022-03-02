@@ -25,10 +25,7 @@ def expert_post_init(instance, **kwargs):
 @receiver(post_save, sender=Expert)
 def expert_post_save(instance, created, **kwargs):
     image_processing(instance.avatar, instance._current_avatar, 255, 355, 200, 200)
-    if created:
-        teammember = TeamMember.objects.create(expert=instance, is_expert=True)
-    else:
-        teammember = instance.team_members.get(is_expert=True)
+    teammember, created = TeamMember.objects.get_or_create(expert=instance, is_expert=True)
     teammember.first_name = instance.first_name
     teammember.last_name = instance.last_name
     teammember.email = instance.email
