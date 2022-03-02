@@ -7,22 +7,25 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from ckeditor.fields import RichTextField
 from utils.images import get_tmb_path
 
+def get_mtm_tour_basic(obj):
+    return obj.tours.first().tour_basic.id
+
 
 def tour_image_path(instance, filename):
     name, extension = os.path.splitext(filename)
     class_name = instance.__class__.__name__
     if class_name == 'Tour':
-        folder = f'{instance.id}/wallpaper'
+        folder = f'{instance.tour_basic.id}/wallpapers'
     elif class_name == 'TourDayImage':
-        folder = f'days/{instance.id}'
+        folder = f'{get_mtm_tour_basic(instance.tour_day)}/days/{instance.tour_day.id}'
     elif class_name == 'TourPropertyImage':
-        folder = f'properties/{instance.id}'
+        folder = f'{get_mtm_tour_basic(instance)}/properties'
     elif class_name == 'TourImage':
-        folder = f'gallary/{instance.id}'
+        folder = f'{get_mtm_tour_basic(instance)}/gallary'
     elif class_name == 'TourPlan':
-        folder = f'plans/{instance.id}'
+        folder = f'{get_mtm_tour_basic(instance)}/plans'
     else:
-        folder = f'{instance.id}/{slugify(unidecode(instance.__class__.__name__))}/{instance.id}'
+        folder = f'{slugify(unidecode(instance.__class__.__name__))}'
     return 'tours/{0}/{1}{2}'.format(folder, slugify(unidecode(name)), extension)
 
 def tour_types_path(instance, filename):
@@ -77,6 +80,125 @@ class TourAccomodation(models.Model):
     class Meta:
         verbose_name = _('Размещения')
         verbose_name_plural = _('Размещение')
+
+class TourPropertyImage(models.Model):
+    name = models.CharField(_('Название'), max_length=255, null=True, blank=True)
+    description = models.TextField(_('Описание'), null=True, blank=True)
+    image = models.ImageField(_('Фото'), upload_to=tour_image_path, max_length=255)
+    alt =  models.CharField(_('alt текст'), max_length=255, null=True, blank=True)
+    
+    class Meta:
+        verbose_name = _('Фото размещения')
+        verbose_name_plural = _('Фотографии размещений')
+    
+    @property
+    def tmb_image(self):
+        if self.image:
+            tmb_path = get_tmb_path(self.image.url)
+            return tmb_path
+        return None
+
+
+class TourImage(models.Model):
+    name = models.CharField(_('Название'), max_length=255, null=True, blank=True)
+    description = models.TextField(_('Описание'), null=True, blank=True)
+    image = models.ImageField(_('Фото'), upload_to=tour_image_path, max_length=255, null=True, blank=True)
+    alt =  models.CharField(_('alt текст'), max_length=255, null=True, blank=True)
+    
+    class Meta:
+        verbose_name = _('Фото тура')
+        verbose_name_plural = _('Фотографии туров')
+        ordering =  ['-id']
+    
+    @property
+    def tmb_image(self):
+        if self.image:
+            tmb_path = get_tmb_path(self.image.url)
+            return tmb_path
+        return None
+
+
+class TourDay(models.Model):
+    name = models.CharField(_('Название'), max_length=255, null=True, blank=True)
+    location =  models.CharField(_('Локация'), max_length=255, null=True, blank=True)
+    description = RichTextField(_('Описание'), null=True, blank=True)
+    tour_day_images = models.ManyToManyField("TourDay", verbose_name=_("Фотографии дня"), max_length=255, blank=True, related_name='tour_day')
+
+    def __str__(self):
+        return self.name if self.name else 'безымянный'
+    
+    class Meta:
+        verbose_name = _('День тура')
+        verbose_name_plural = _('Дни туров')
+        ordering = ['id']
+
+
+class TourDayImage(models.Model):
+    image = models.ImageField(_('Фото'), upload_to=tour_image_path, max_length=255, null=True, blank=True)
+    alt =  models.CharField(_('alt текст'), max_length=255, null=True, blank=True)
+
+    class Meta:
+        verbose_name = _('Фото дня тура')
+        verbose_name_plural = _('Фото дней туров')
+    
+    @property
+    def tmb_image(self):
+        if self.image:
+            tmb_path = get_tmb_path(self.image.url)
+            return tmb_path
+        return None
+
+
+class TourPlan(models.Model):
+    image = models.ImageField(_('Фото'), upload_to=tour_image_path, max_length=255, null=True, blank=True)
+    description = RichTextField(_('Описание'), null=True, blank=True)
+
+    @property
+    def tmb_image(self):
+        if self.image:
+            tmb_path = get_tmb_path(self.image.url)
+            return tmb_path
+        return None
+    
+    class Meta:
+        verbose_name = _('День тура')
+        verbose_name_plural = _('Дни туров')
+        ordering = ['id']
+
+
+class TourImpression(models.Model):
+    name = models.CharField(_('Название'), max_length=150)
+
+    class Meta:
+        verbose_name = _('Главное впечатление')
+        verbose_name_plural = _('Главные впечатления')
+
+
+class TourIncludedService(models.Model):
+    name = models.CharField(_('Название'), max_length=150)
+
+    class Meta:
+        verbose_name = _('Входит в стоимость')
+        verbose_name_plural = _('Входит в стоимость')
+
+
+class TourExcludedService(models.Model):
+    name = models.CharField(_('Название'), max_length=150)
+
+    class Meta:
+        verbose_name = _('Не входит в стоимость')
+        verbose_name_plural = _('Не входит в стоимость')
+
+
+class TourAddetionalService(models.Model):
+    name = models.CharField(_('Название'), max_length=150)
+    description = RichTextField(_('Описание'))
+    currency = models.ForeignKey('currencies.Currency', verbose_name=_("Валюта"), on_delete=models.CASCADE, related_name='tour_addetional_service', null=True, blank=True)
+    price = models.IntegerField(_('Цена'), null=True, blank=True)
+
+    class Meta:
+        verbose_name = _('Дополнительная услуга')
+        verbose_name_plural = _('Дополнительнае услуги')
 
 
 class Tour(models.Model):
@@ -139,8 +261,15 @@ class Tour(models.Model):
     watched = models.PositiveIntegerField(_('Просмотры'), null=True, blank=True)
     sold = models.PositiveIntegerField(_('Продажи'), null=True, blank=True)
     tour_property_types = models.ManyToManyField('TourPropertyType', related_name='tours', verbose_name=_("Типы размещения"), blank=True)
-    accomodation = models.ManyToManyField('TourAccomodation', related_name='accomodation', verbose_name=_("Размещения"), blank=True)
-
+    accomodation = models.ManyToManyField('TourAccomodation', related_name='tours', verbose_name=_("Размещения"), blank=True)
+    tour_addetional_services = models.ManyToManyField('TourAddetionalService', related_name='tours', verbose_name=_("Дополнительные услуги"), blank=True)
+    tour_excluded_services = models.JSONField(_("Не включенные услуги"),  null=True, blank=True)
+    tour_included_services = models.JSONField(_("Включенные услуги"), null=True, blank=True)
+    main_impressions = models.JSONField(_("Главные впечатления"), null=True, blank=True)
+    plan = models.ManyToManyField('TourPlan', related_name='tours', verbose_name=_("Чем займемся"), blank=True)
+    tour_days = models.ManyToManyField('TourDay', related_name='tours', verbose_name=_("Дни тура"), blank=True)
+    tour_images = models.ManyToManyField('TourImage', related_name='tours', verbose_name=_("Галерея тура"), blank=True)
+    tour_property_images = models.ManyToManyField('TourPropertyImage', related_name='tours', verbose_name=_("Фото размещений"), blank=True)
 
     class Meta:
         verbose_name = _('Тур')
@@ -155,134 +284,3 @@ class Tour(models.Model):
             tmb_path = get_tmb_path(self.wallpaper.url)
             return tmb_path
         return None
-
-class TourPropertyImage(models.Model):
-    name = models.CharField(_('Название'), max_length=255, null=True, blank=True)
-    description = models.TextField(_('Описание'), null=True, blank=True)
-    image = models.ImageField(_('Фото'), upload_to=tour_image_path, max_length=255)
-    alt =  models.CharField(_('alt текст'), max_length=255, null=True, blank=True)
-    tour = models.ForeignKey("Tour", verbose_name=_("Тур"), on_delete=models.CASCADE, related_name='tour_property_images')
-
-    
-    class Meta:
-        verbose_name = _('Фото размещения')
-        verbose_name_plural = _('Фотографии размещений')
-    
-    @property
-    def tmb_image(self):
-        if self.image:
-            tmb_path = get_tmb_path(self.image.url)
-            return tmb_path
-        return None
-
-
-class TourImage(models.Model):
-    name = models.CharField(_('Название'), max_length=255, null=True, blank=True)
-    description = models.TextField(_('Описание'), null=True, blank=True)
-    image = models.ImageField(_('Фото'), upload_to=tour_image_path, max_length=255, null=True, blank=True)
-    alt =  models.CharField(_('alt текст'), max_length=255, null=True, blank=True)
-    tour = models.ForeignKey("Tour", verbose_name=_("Тур"), on_delete=models.CASCADE, related_name='tour_images', max_length=255, null=True, blank=True)
-    
-    class Meta:
-        verbose_name = _('Фото тура')
-        verbose_name_plural = _('Фотографии туров')
-        ordering =  ['tour', '-id']
-    
-    @property
-    def tmb_image(self):
-        if self.image:
-            tmb_path = get_tmb_path(self.image.url)
-            return tmb_path
-        return None
-
-
-class TourDay(models.Model):
-    name = models.CharField(_('Название'), max_length=255, null=True, blank=True)
-    location =  models.CharField(_('Локация'), max_length=255, null=True, blank=True)
-    description = RichTextField(_('Описание'), null=True, blank=True)
-    tour = models.ForeignKey('Tour', on_delete=models.CASCADE, related_name='tour_days', verbose_name=_('Тур'), null=True, blank=True)
-
-    def __str__(self):
-        return self.name if self.name else 'безымянный'
-    
-    class Meta:
-        verbose_name = _('День тура')
-        verbose_name_plural = _('Дни туров')
-        ordering = ['id']
-
-
-class TourDayImage(models.Model):
-    image = models.ImageField(_('Фото'), upload_to=tour_image_path, max_length=255, null=True, blank=True)
-    alt =  models.CharField(_('alt текст'), max_length=255, null=True, blank=True)
-    tour_day = models.ForeignKey("TourDay", verbose_name=_("День тура"), on_delete=models.CASCADE, max_length=255, null=True, blank=True, related_name='tour_day_images')
-
-    class Meta:
-        verbose_name = _('Фото дня тура')
-        verbose_name_plural = _('Фото дней туров')
-    
-    @property
-    def tmb_image(self):
-        if self.image:
-            tmb_path = get_tmb_path(self.image.url)
-            return tmb_path
-        return None
-
-
-class TourPlan(models.Model):
-    image = models.ImageField(_('Фото'), upload_to=tour_image_path, max_length=255, null=True, blank=True)
-    description = RichTextField(_('Описание'), null=True, blank=True)
-    tour = models.ForeignKey('Tour', on_delete=models.CASCADE, related_name='plan', verbose_name=_('Тур'), null=True, blank=True)
-
-    @property
-    def tmb_image(self):
-        if self.image:
-            tmb_path = get_tmb_path(self.image.url)
-            return tmb_path
-        return None
-
-    def __str__(self):
-        return self.tour.name if self.tour.name else 'безымянный'
-    
-    class Meta:
-        verbose_name = _('День тура')
-        verbose_name_plural = _('Дни туров')
-        ordering = ['id']
-
-
-class TourImpression(models.Model):
-    name = models.CharField(_('Название'), max_length=150)
-    tour = models.ForeignKey('Tour', on_delete=models.CASCADE, related_name='main_impressions', verbose_name=_('Тур'))
-
-    class Meta:
-        verbose_name = _('Главное впечатление')
-        verbose_name_plural = _('Главные впечатления')
-
-
-class TourIncludedService(models.Model):
-    name = models.CharField(_('Название'), max_length=150)
-    tour = models.ForeignKey('Tour', on_delete=models.CASCADE, related_name='tour_included_services', verbose_name=_('Тур'))
-
-    class Meta:
-        verbose_name = _('Входит в стоимость')
-        verbose_name_plural = _('Входит в стоимость')
-
-
-class TourExcludedService(models.Model):
-    name = models.CharField(_('Название'), max_length=150)
-    tour = models.ForeignKey('Tour', on_delete=models.CASCADE, related_name='tour_excluded_services', verbose_name=_('Тур'))
-
-    class Meta:
-        verbose_name = _('Не входит в стоимость')
-        verbose_name_plural = _('Не входит в стоимость')
-
-
-class TourAddetionalService(models.Model):
-    name = models.CharField(_('Название'), max_length=150)
-    description = RichTextField(_('Описание'))
-    currency = models.ForeignKey('currencies.Currency', verbose_name=_("Валюта"), on_delete=models.CASCADE, related_name='tour_addetional_service', null=True, blank=True)
-    price = models.IntegerField(_('Цена'), null=True, blank=True)
-    tour = models.ForeignKey('Tour', on_delete=models.CASCADE, related_name='tour_addetional_services', verbose_name=_('Тур'))
-
-    class Meta:
-        verbose_name = _('Дополнительная услуга')
-        verbose_name_plural = _('Дополнительнае услуги')
