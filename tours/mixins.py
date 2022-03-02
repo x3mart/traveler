@@ -46,24 +46,10 @@ class TourMixin():
         objects = self.get_mtm_objects(Language, ids)
         instance.languages.add(*tuple(objects))
     
-    def set_mtm_from_str(self, request, instance, field, model, updated_fields):
-        new_set = request.data.get(field).split(',')
-        new_set = set(map(lambda x: x.strip(), new_set))
-        if getattr(instance, field).exists():
-            old_set = self.get_mtm_set(getattr(instance, field))
-            to_delete = old_set - new_set
-            to_add = new_set - old_set
-            getattr(instance, field).filter(name__in=to_delete).delete()
-        else:
-            to_add = new_set
-            to_delete = None
-        objs = []
-        for name in to_add:
-            objs.append(model(name=name, tour=instance))
-        model.objects.bulk_create(objs)
-        if to_delete or to_add:
-            updated_fields.add(field) 
-        return updated_fields 
+    def set_mtm_from_str(self, request, field):
+        new_list = request.data.get(field).split(',')
+        new_list = list(map(lambda x: x.strip(), new_list))
+        return new_list 
     
     def get_expert(self, request):
         return get_object_or_404(Expert, pk=request.user.id)
@@ -84,11 +70,11 @@ class TourMixin():
         if request.data.get('languages') is not None:
             self.set_languages(request, instance)
         if request.data.get('main_impressions') is not None:
-            updated_fields = self.set_mtm_from_str(request, instance, 'main_impressions', TourImpression, updated_fields)
+            instance.main_impressions = self.set_mtm_from_str(request, 'main_impressions')
         if request.data.get('tour_included_services') is not None:
-            updated_fields = self.set_mtm_from_str(request, instance, 'tour_included_services', TourIncludedService, updated_fields)
+            instance.tour_included_services = self.set_mtm_from_str(request, 'tour_included_services')
         if request.data.get('tour_excluded_services') is not None:
-            updated_fields = self.set_mtm_from_str(request, instance, 'tour_excluded_services', TourExcludedService, updated_fields)
+            instance.tour_excluded_services = self.set_mtm_from_str(request, 'tour_excluded_services')
         if request.data.get('direct_link') is not None:
             self.set_tour_direct_links(request, instance)
         return (instance, updated_fields)
