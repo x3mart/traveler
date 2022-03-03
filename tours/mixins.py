@@ -59,32 +59,9 @@ class TourMixin():
         tour_basic = instance.tour_basic
         tour_basic.direct_link = request.data.get('direct_link')
         tour_basic.save()
-    
-    # def update_plan(self, request, instance, plan):
-    #     old = TourPlan.objects.filter(pk=plan['id'])
-    #     old_dict = model_to_dict(old.first())
-    #     old_dict.pop('image')
-    #     old_dict.pop('id')
-    #     serializer = TourPlanSerializer(data=plan, partial=True)
-    #     if serializer.is_valid():
-    #         data = serializer.validated_data
-    #     else:
-    #         return Response(serializer.errors, status=400)
-    #     data.pop('image')
-    #     if dict(data) != old_dict:
-    #         old.update(**data)
-    #     return old.first()
-    
-    # def set_plans(self, request, instance):
-    #     plans = request.data.get('plan')
-    #     for plan in plans:
-    #         self.update_plan(request, instance, plan)
 
     def set_mtm_fields(self, request, instance):
-        updated_fields = set()
-        # if request.data.get('plan') is not None:
-        #     self.set_plans(request, instance)
-            
+        updated_fields = set()            
         if request.data.get('additional_types') is not None:
             self.set_additional_types(request, instance)
         if request.data.get('tour_property_types') is not None:
