@@ -3,11 +3,17 @@ from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
 from accounts.models import Expert
 from accounts.serializers import ExpertListSerializer, TeamMemberSerializer
-from .models import Tour, TourAccomodation, TourDay, TourDayImage, TourExcludedService, TourImpression, TourIncludedService, TourPlan, TourPropertyImage, TourImage, TourPropertyType, TourType
+from .models import Tour, TourAccomodation, TourAddetionalService, TourDay, TourDayImage, TourExcludedService, TourImpression, TourIncludedService, TourPlan, TourPropertyImage, TourImage, TourPropertyType, TourType
 from geoplaces.serializers import RegionSerializer, CountrySerializer, RussianRegionSerializer, CitySerializer
 from languages.serializers import LanguageSerializer
 from currencies.serializers import CurrencySerializer
 from utils.images import get_tmb_image_uri
+
+
+class TourAddetionalServiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TourAddetionalService
+        fields = '__all__'
 
 
 
@@ -111,6 +117,7 @@ class TourSerializer(serializers.ModelSerializer):
     # team_member = TeamMemberSerializer(many=False, read_only=True)
     tour_days = TourDaySerializer(many=True, read_only=True)
     plan = TourPlanSerializer(many=True, read_only=True)
+    tour_addetional_services = TourAddetionalServiceSerializer(many=True, read_only=True)
     main_impressions = serializers.SerializerMethodField(read_only=True)
     tour_included_services = serializers.SerializerMethodField(read_only=True)
     tour_excluded_services = serializers.SerializerMethodField(read_only=True)
@@ -124,7 +131,7 @@ class TourSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tour
-        fields = ('id', 'rating', 'reviews_count', 'name', 'wallpaper', 'tmb_wallpaper', 'basic_type', 'additional_types', 'start_region', 'finish_region', 'start_country', 'finish_country', 'start_russian_region', 'finish_russian_region', 'start_city', 'finish_city', 'description', 'plan', 'cancellation_terms', 'difficulty_level', 'difficulty_description', 'tour_property_types', 'accomodation', 'tour_property_images', 'comfort_level', 'babies_alowed', 'animals_not_exploited', 'start_date', 'finish_date', 'start_time', 'finish_time', 'direct_link', 'instant_booking', 'members_number', 'team_member', 'price_comment', 'prepay_amount', 'prepay_in_prc', 'prepay_currency', 'postpay_on_start_day', 'postpay_days_before_start', 'currency', 'price', 'cost', 'discount_starts', 'discount_finish', 'discount_in_prc', 'discount', 'languages', 'is_guaranteed', 'flight_included', 'scouting', 'tour_images', 'tour_days', 'main_impressions', 'tour_included_services', 'tour_excluded_services', 'hotel_name', 'age_starts', 'age_ends', 'media_link', 'week_recurrent', 'month_recurrent', 'vacants_number', 'on_moderation', 'is_active', 'is_draft', 'air_tickets', 'duration', 'sold', 'watched') 
+        fields = ('id', 'rating', 'reviews_count', 'name', 'wallpaper', 'tmb_wallpaper', 'basic_type', 'additional_types', 'start_region', 'finish_region', 'start_country', 'finish_country', 'start_russian_region', 'finish_russian_region', 'start_city', 'finish_city', 'description', 'plan', 'cancellation_terms', 'difficulty_level', 'difficulty_description', 'tour_property_types', 'accomodation', 'tour_property_images', 'comfort_level', 'babies_alowed', 'animals_not_exploited', 'start_date', 'finish_date', 'start_time', 'finish_time', 'direct_link', 'instant_booking', 'members_number', 'team_member', 'price_comment', 'prepay_amount', 'prepay_in_prc', 'prepay_currency', 'postpay_on_start_day', 'postpay_days_before_start', 'currency', 'price', 'cost', 'discount_starts', 'discount_finish', 'discount_in_prc', 'discount', 'languages', 'is_guaranteed', 'flight_included', 'scouting', 'tour_images', 'tour_days', 'main_impressions', 'tour_included_services', 'tour_excluded_services', 'tour_addetional_services','hotel_name', 'age_starts', 'age_ends', 'media_link', 'week_recurrent', 'month_recurrent', 'vacants_number', 'on_moderation', 'is_active', 'is_draft', 'air_tickets', 'duration', 'sold', 'watched') 
         extra_kwargs = {
             'tour_property_types': {'required': False, 'read_only':True},
             'accomodation': {'required': False, 'read_only':True},

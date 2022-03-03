@@ -17,13 +17,13 @@ def tour_image_path(instance, filename):
     if class_name == 'Tour':
         folder = f'{instance.tour_basic.id}/wallpapers'
     elif class_name == 'TourDayImage':
-        folder = f'{get_mtm_tour_basic(instance.tour_day)}/days/{instance.tour_day.id}'
+        folder = f'days'
     elif class_name == 'TourPropertyImage':
-        folder = f'{get_mtm_tour_basic(instance)}/properties'
+        folder = f'properties'
     elif class_name == 'TourImage':
-        folder = f'{get_mtm_tour_basic(instance)}/gallary'
+        folder = f'gallary'
     elif class_name == 'TourPlan':
-        folder = f'{get_mtm_tour_basic(instance)}/plans'
+        folder = f'plans'
     else:
         folder = f'{slugify(unidecode(instance.__class__.__name__))}'
     return 'tours/{0}/{1}{2}'.format(folder, slugify(unidecode(name)), extension)
@@ -118,21 +118,6 @@ class TourImage(models.Model):
         return None
 
 
-class TourDay(models.Model):
-    name = models.CharField(_('Название'), max_length=255, null=True, blank=True)
-    location =  models.CharField(_('Локация'), max_length=255, null=True, blank=True)
-    description = RichTextField(_('Описание'), null=True, blank=True)
-    tour_day_images = models.ManyToManyField("TourDay", verbose_name=_("Фотографии дня"), max_length=255, blank=True, related_name='tour_day')
-
-    def __str__(self):
-        return self.name if self.name else 'безымянный'
-    
-    class Meta:
-        verbose_name = _('День тура')
-        verbose_name_plural = _('Дни туров')
-        ordering = ['id']
-
-
 class TourDayImage(models.Model):
     image = models.ImageField(_('Фото'), upload_to=tour_image_path, max_length=255, null=True, blank=True)
     alt =  models.CharField(_('alt текст'), max_length=255, null=True, blank=True)
@@ -147,6 +132,21 @@ class TourDayImage(models.Model):
             tmb_path = get_tmb_path(self.image.url)
             return tmb_path
         return None
+
+
+class TourDay(models.Model):
+    name = models.CharField(_('Название'), max_length=255, null=True, blank=True)
+    location =  models.CharField(_('Локация'), max_length=255, null=True, blank=True)
+    description = RichTextField(_('Описание'), null=True, blank=True)
+    tour_day_images = models.ManyToManyField("TourDayImage", verbose_name=_("Фотографии дня"), max_length=255, blank=True, related_name='tour_day')
+
+    def __str__(self):
+        return self.name if self.name else 'безымянный'
+    
+    class Meta:
+        verbose_name = _('День тура')
+        verbose_name_plural = _('Дни туров')
+        ordering = ['id']
 
 
 class TourPlan(models.Model):
