@@ -1,9 +1,10 @@
+from django.forms import model_to_dict
 from django.shortcuts import get_object_or_404
+from uritemplate import partial
 from tours.models import TourAccomodation, TourExcludedService, TourImpression, TourIncludedService, TourPropertyImage, TourPropertyType, TourType
 from accounts.models import Expert
 from languages.models import Language
-from rest_framework.response import Response
-from django.core.files.base import ContentFile
+
 
 NOT_MODERATED_FIELDS = {'is_active', 'on_moderation', 'vacants_number', 'is_draft', 'discount_starts', 'discount_finish', 'discount_in_prc', 'discount', 'sold', 'watched'} 
 CHECBOX_SET = {'is_guaranteed', 'is_active', 'postpay_on_start_day', 'scouting', 'animals_not_exploited', 'month_recurrent', 'flight_included', 'babies_alowed', 'on_moderation', 'week_recurrent', 'is_draft', 'instant_booking'}
@@ -59,8 +60,31 @@ class TourMixin():
         tour_basic.direct_link = request.data.get('direct_link')
         tour_basic.save()
     
+    # def update_plan(self, request, instance, plan):
+    #     old = TourPlan.objects.filter(pk=plan['id'])
+    #     old_dict = model_to_dict(old.first())
+    #     old_dict.pop('image')
+    #     old_dict.pop('id')
+    #     serializer = TourPlanSerializer(data=plan, partial=True)
+    #     if serializer.is_valid():
+    #         data = serializer.validated_data
+    #     else:
+    #         return Response(serializer.errors, status=400)
+    #     data.pop('image')
+    #     if dict(data) != old_dict:
+    #         old.update(**data)
+    #     return old.first()
+    
+    # def set_plans(self, request, instance):
+    #     plans = request.data.get('plan')
+    #     for plan in plans:
+    #         self.update_plan(request, instance, plan)
+
     def set_mtm_fields(self, request, instance):
         updated_fields = set()
+        # if request.data.get('plan') is not None:
+        #     self.set_plans(request, instance)
+            
         if request.data.get('additional_types') is not None:
             self.set_additional_types(request, instance)
         if request.data.get('tour_property_types') is not None:

@@ -149,9 +149,8 @@ class TourDay(models.Model):
         ordering = ['id']
 
 
-class TourPlan(models.Model):
+class TourPlanImage(models.Model):
     image = models.ImageField(_('Фото'), upload_to=tour_image_path, max_length=255, null=True, blank=True)
-    description = RichTextField(_('Описание'), null=True, blank=True)
 
     @property
     def tmb_image(self):
@@ -266,7 +265,7 @@ class Tour(models.Model):
     tour_excluded_services = models.JSONField(_("Не включенные услуги"),  null=True, blank=True)
     tour_included_services = models.JSONField(_("Включенные услуги"), null=True, blank=True)
     main_impressions = models.JSONField(_("Главные впечатления"), null=True, blank=True)
-    plan = models.ManyToManyField('TourPlan', related_name='tours', verbose_name=_("Чем займемся"), blank=True)
+    plan = models.JSONField(_("Чем займемся"), null=True, blank=True)
     tour_days = models.ManyToManyField('TourDay', related_name='tours', verbose_name=_("Дни тура"), blank=True)
     tour_images = models.ManyToManyField('TourImage', related_name='tours', verbose_name=_("Галерея тура"), blank=True)
     tour_property_images = models.ManyToManyField('TourPropertyImage', related_name='tours', verbose_name=_("Фото размещений"), blank=True)

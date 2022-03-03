@@ -9,10 +9,10 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.forms.models import model_to_dict
 from tours.filters import TourFilter
 from tours.mixins import TourMixin, NOT_MODERATED_FIELDS
-from tours.models import Tour, TourAccomodation, TourAddetionalService, TourBasic, TourDay, TourDayImage, TourImage, TourPlan, TourPropertyImage, TourPropertyType, TourType
+from tours.models import Tour, TourAccomodation, TourAddetionalService, TourBasic, TourDay, TourDayImage, TourImage, TourPlanImage, TourPropertyImage, TourPropertyType, TourType
 from accounts.models import Expert
 from tours.permissions import TourPermission, TourTypePermission
-from tours.serializers import TourAccomodationSerializer, TourAddetionalServiceSerializer, TourBasicSerializer, TourDayImageSerializer, TourDaySerializer, TourImageSerializer, TourListSerializer, TourPlanSerializer, TourPropertyImageSerializer, TourPropertyTypeSerializer, TourSerializer, TourTypeSerializer
+from tours.serializers import TourAccomodationSerializer, TourAddetionalServiceSerializer, TourBasicSerializer, TourDayImageSerializer, TourDaySerializer, TourImageSerializer, TourListSerializer, TourPlanImageSerializer, TourPropertyImageSerializer, TourPropertyTypeSerializer, TourSerializer, TourTypeSerializer
 
 
 # Create your views here.
@@ -143,19 +143,20 @@ class TourDayImageViewSet(viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         return Response(TourDayImageSerializer(image, context={'request': request}).data, status=201, headers=headers)
 
-class TourPlanViewSet(viewsets.ModelViewSet):
-    queryset = TourPlan.objects.all()
-    serializer_class = TourPlanSerializer
+class TourPlanImageViewSet(viewsets.ModelViewSet):
+    queryset = TourPlanImage.objects.all()
+    serializer_class = TourPlanImageSerializer
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            data = serializer.validated_data
-        else:
-            return Response(serializer.errors, status=400)
-        instance = Tour.objects.get(pk=request.data.get('tour'))
-        instance.plan.create(**data)
-        return Response(TourSerializer(instance, context={'request': request}).data, status=201)
+    # def create(self, request, *args, **kwargs):
+    #     serializer = self.get_serializer(data=request.data)
+    #     if serializer.is_valid():
+    #         data = serializer.validated_data
+    #     else:
+    #         return Response(serializer.errors, status=400)
+    #     instance = Tour.objects.get(pk=request.data.get('tour'))
+    #     instance.plan.create(**data)
+    #     return Response(TourSerializer(instance, context={'request': request}).data, status=201)
+
 
 class TourAddetionalServiceViewSet(viewsets.ModelViewSet):
     queryset = TourAddetionalService.objects.all()

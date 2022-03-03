@@ -3,7 +3,7 @@ from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
 from accounts.models import Expert
 from accounts.serializers import ExpertListSerializer, TeamMemberSerializer
-from .models import Tour, TourAccomodation, TourAddetionalService, TourDay, TourDayImage, TourExcludedService, TourImpression, TourIncludedService, TourPlan, TourPropertyImage, TourImage, TourPropertyType, TourType
+from .models import Tour, TourAccomodation, TourAddetionalService, TourDay, TourDayImage, TourExcludedService, TourImpression, TourIncludedService, TourPlanImage, TourPropertyImage, TourImage, TourPropertyType, TourType
 from geoplaces.serializers import RegionSerializer, CountrySerializer, RussianRegionSerializer, CitySerializer
 from languages.serializers import LanguageSerializer
 from currencies.serializers import CurrencySerializer
@@ -57,10 +57,10 @@ class TourDayImageSerializer(serializers.ModelSerializer):
         return get_tmb_image_uri(self, obj)
 
 
-class TourPlanSerializer(serializers.ModelSerializer):
+class TourPlanImageSerializer(serializers.ModelSerializer):
     tmb_image = serializers.SerializerMethodField(read_only=True)
     class Meta:
-        model = TourPlan
+        model = TourPlanImage
         fields = '__all__'
     
     def get_tmb_image(self, obj): 
@@ -116,7 +116,7 @@ class TourSerializer(serializers.ModelSerializer):
     # expert = ExpertListSerializer(many=False, read_only=True, source='tour_basic.expert')
     # team_member = TeamMemberSerializer(many=False, read_only=True)
     tour_days = TourDaySerializer(many=True, read_only=True)
-    plan = TourPlanSerializer(many=True, read_only=True)
+    # plan = TourPlanSerializer(many=True, read_only=True)
     tour_addetional_services = TourAddetionalServiceSerializer(many=True, read_only=True)
     main_impressions = serializers.SerializerMethodField(read_only=True)
     tour_included_services = serializers.SerializerMethodField(read_only=True)
