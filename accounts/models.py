@@ -110,6 +110,7 @@ class TeamMember(models.Model):
     is_active = models.BooleanField(default=True)
     is_expert = models.BooleanField(default=False)
 
+
     class Meta:
         verbose_name = _('Член команды')
         verbose_name_plural = _('Члены команды')

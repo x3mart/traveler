@@ -117,18 +117,6 @@ class TourDayImageViewSet(viewsets.ModelViewSet):
     queryset = TourDayImage.objects.all()
     serializer_class = TourDayImageSerializer
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            data = serializer.validated_data
-        else:
-            return Response(serializer.errors, status=400)
-        tour_day = TourDay.objects.get(pk=request.data.get('tour_day'))
-        image = TourDayImage(**data)
-        image.save()
-        image.tour_day.add(tour_day)
-        headers = self.get_success_headers(serializer.data)
-        return Response(TourDayImageSerializer(image, context={'request': request}).data, status=201, headers=headers)
 
 class TourPlanImageViewSet(viewsets.ModelViewSet):
     queryset = TourPlanImage.objects.all()
