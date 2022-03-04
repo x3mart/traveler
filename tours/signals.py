@@ -1,7 +1,7 @@
 from django.dispatch import receiver
 from django.db.models.signals import post_delete, post_save, pre_save
 from accounts.models import Expert
-from tours.models import Tour, TourBasic, TourDay, TourDayImage, TourImage, TourPlanImage, TourPropertyImage, TourType
+from tours.models import Tour, TourBasic, TourDayImage, TourGuestGuideImage, TourImage, TourPlanImage, TourPropertyImage, TourType
 from utils.images import delete_image, image_processing, get_current_img
 from django.db.models import Count, Q
         
@@ -95,3 +95,7 @@ def tour_plan_image_post_save(instance, **kwargs):
 # def tour_day_image_post_delete(instance, **kwargs):
 #     if instance.image:
 #         delete_image(instance.image)
+
+@receiver(post_save, sender=TourGuestGuideImage)
+def expert_post_save(instance, created, **kwargs):
+    image_processing(instance.image, None, 255, 355, 200, 200)

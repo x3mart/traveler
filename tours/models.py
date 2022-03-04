@@ -24,6 +24,8 @@ def tour_image_path(instance, filename):
         folder = f'gallary'
     elif class_name == 'TourPlan':
         folder = f'plans'
+    elif class_name == 'TourGuestGuideImage':
+        folder = 'guestguide'
     else:
         folder = f'{slugify(unidecode(instance.__class__.__name__))}'
     return 'tours/{0}/{1}{2}'.format(folder, slugify(unidecode(name)), extension)
@@ -124,7 +126,7 @@ class TourDayImage(models.Model):
 
     class Meta:
         verbose_name = _('Фото дня тура')
-        verbose_name_plural = _('Фото дней туров')
+        verbose_name_plural = _('Фотографии дней туров')
     
     @property
     def tmb_image(self):
@@ -160,8 +162,24 @@ class TourPlanImage(models.Model):
         return None
     
     class Meta:
-        verbose_name = _('День тура')
-        verbose_name_plural = _('Дни туров')
+        verbose_name = _('Фото чем займемся')
+        verbose_name_plural = _('Фотографии чем займемся')
+        ordering = ['id']
+
+
+class TourGuestGuideImage(models.Model):
+    image = models.ImageField(_('Фото'), upload_to=tour_image_path, max_length=255, null=True, blank=True)
+
+    @property
+    def tmb_image(self):
+        if self.image:
+            tmb_path = get_tmb_path(self.image.url)
+            return tmb_path
+        return None
+    
+    class Meta:
+        verbose_name = _('Фото приглашенного гида')
+        verbose_name_plural = _('Фотографии приглашенных гидов')
         ordering = ['id']
 
 
@@ -269,6 +287,7 @@ class Tour(models.Model):
     tour_days = models.JSONField(_("Дни тура"), blank=True, null=True)
     tour_images = models.ManyToManyField('TourImage', related_name='tours', verbose_name=_("Галерея тура"), blank=True)
     tour_property_images = models.ManyToManyField('TourPropertyImage', related_name='tours', verbose_name=_("Фото размещений"), blank=True)
+    guest_guide = models.JSONField(_("Приглашенный гид"), null=True, blank=True)
 
     class Meta:
         verbose_name = _('Тур')
