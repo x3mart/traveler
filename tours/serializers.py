@@ -3,11 +3,20 @@ from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
 from accounts.models import Expert
 from accounts.serializers import ExpertListSerializer, TeamMemberSerializer
-from .models import Tour, TourAccomodation, TourAddetionalService, TourDay, TourDayImage, TourExcludedService, TourGuestGuideImage, TourImpression, TourIncludedService, TourPlanImage, TourPropertyImage, TourImage, TourPropertyType, TourType
+from .models import Tour, TourAccomodation, TourAddetionalService, TourDayImage, TourExcludedService, TourGuestGuideImage, TourImpression, TourIncludedService, TourPlanImage, TourPropertyImage, TourImage, TourPropertyType, TourType
 from geoplaces.serializers import RegionSerializer, CountrySerializer, RussianRegionSerializer, CitySerializer
 from languages.serializers import LanguageSerializer
 from currencies.serializers import CurrencySerializer
 from utils.images import get_tmb_image_uri
+
+
+class ImageSerializer(serializers.Serializer):
+    tmb_image = serializers.SerializerMethodField(read_only=True)
+    image = serializers.ImageField(max_length=255)
+    id = serializers.IntegerField(read_only=True)
+    
+    def get_tmb_image(self, obj): 
+        return get_tmb_image_uri(self, obj)
 
 
 class TourAddetionalServiceSerializer(serializers.ModelSerializer):
@@ -67,21 +76,14 @@ class TourPlanImageSerializer(serializers.ModelSerializer):
         return get_tmb_image_uri(self, obj)
 
 
-class TourGuestGuideImageSerializer(serializers.ModelSerializer):
+class TourGuestGuideImageSerializer(serializers.Serializer):
     tmb_image = serializers.SerializerMethodField(read_only=True)
-    class Meta:
-        model = TourGuestGuideImage
-        fields = '__all__'
+    image = serializers.ImageField(max_length=255)
+    id = serializers.IntegerField(read_only=True)
     
     def get_tmb_image(self, obj): 
         return get_tmb_image_uri(self, obj)
 
-
-class TourDaySerializer(serializers.ModelSerializer):
-    tour_day_images = TourDayImageSerializer(read_only=True, many=True)
-    class Meta:
-        model = TourDay
-        fields = '__all__'
 
 class TourTypeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -168,7 +170,6 @@ class TourSerializer(serializers.ModelSerializer):
             return ""
     
     def get_tour_excluded_services(self, obj):
-        print(obj.tour_excluded_services)
         if obj.tour_excluded_services is not None:
             return ', '.join(obj.tour_excluded_services)
         else:

@@ -9,10 +9,9 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.forms.models import model_to_dict
 from tours.filters import TourFilter
 from tours.mixins import TourMixin, NOT_MODERATED_FIELDS
-from tours.models import Tour, TourAccomodation, TourAddetionalService, TourBasic, TourDay, TourDayImage, TourGuestGuideImage, TourImage, TourPlanImage, TourPropertyImage, TourPropertyType, TourType
-from accounts.models import Expert
-from tours.permissions import TourPermission, TourTypePermission
-from tours.serializers import TourAccomodationSerializer, TourAddetionalServiceSerializer, TourBasicSerializer, TourDayImageSerializer, TourDaySerializer, TourGuestGuideImageSerializer, TourImageSerializer, TourListSerializer, TourPlanImageSerializer, TourPropertyImageSerializer, TourPropertyTypeSerializer, TourSerializer, TourTypeSerializer
+from tours.models import Tour, TourAccomodation, TourBasic, TourDayImage, TourGuestGuideImage, TourImage, TourPlanImage, TourPropertyImage, TourPropertyType, TourType
+from tours.permissions import TourPermission
+from tours.serializers import ImageSerializer, TourAccomodationSerializer, TourDayImageSerializer, TourGuestGuideImageSerializer, TourImageSerializer, TourListSerializer, TourPlanImageSerializer, TourPropertyImageSerializer, TourPropertyTypeSerializer, TourSerializer, TourTypeSerializer
 
 
 # Create your views here.
@@ -27,8 +26,6 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
     def get_queryset(self):
         tour_basic = TourBasic.objects.all()
         prefetched_tour_basic = Prefetch('tour_basic', tour_basic)
-        # tour_days = TourDay.objects.prefetch_related('tour_day_images')
-        # prefetched_tour_days = Prefetch('tour_days', tour_days)
         if self.action == 'list':
             qs = Tour.objects.prefetch_related(prefetched_tour_basic, 'start_country', 'currency').only('id', 'name', 'start_date', 'finish_date', 'start_country', 'price', 'cost', 'discount', 'on_moderation', 'is_active', 'is_draft', 'duration', 'sold', 'watched', 'currency', 'tour_basic', 'wallpaper').filter(tour_basic__expert_id=self.request.user.id)
         else:
@@ -42,10 +39,8 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
     
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             data = serializer.validated_data
-        else:
-            return Response(serializer.errors, status=400)
         data['is_draft'] = True
         tour_basic = TourBasic.objects.create(expert=self.get_expert(request))
         tour = Tour.objects.create(tour_basic=tour_basic, **data)
@@ -53,13 +48,11 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
     
     def update(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             data = serializer.validated_data
-        else:
-            return Response(serializer.errors, status=400)
         instance = self.get_object()
         instance_dict = model_to_dict(instance, exclude=NOT_MODERATED_FIELDS)
-        instance, updated_mtm_fields = self.set_mtm_fields(request, instance)
+        instance = self.set_mtm_fields(request, instance)
         instance = self.set_model_fields(data, instance)    
         if instance_dict != model_to_dict(instance, exclude=NOT_MODERATED_FIELDS) and instance.is_active:
             instance.is_active = False
@@ -70,49 +63,46 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         return Response(TourSerializer(instance, context={'request': request}).data, status=201)
     
     @action(['post'], detail=True)
+    def propertyimages(self, request, *args, **kwargs):
+        instance, data = self.get_instance_image_data(request)
+        image = instance.tour_property_images.create(expert=instance.tour_basic.expert, tour_basic =instance.tour_basic, **data)
+        return Response(ImageSerializer(image, context={'request': request}).data, status=201)
+    
+    @action(['post'], detail=True)
+    def gallary(self, request, *args, **kwargs):
+        instance, data = self.get_instance_image_data(request)
+        image = instance.tour_images.create(expert=instance.tour_basic.expert, tour_basic =instance.tour_basic, **data)
+        return Response(ImageSerializer(image, context={'request': request}).data, status=201)
+    
+    @action(['post'], detail=True)
+    def dayimages(self, request, *args, **kwargs):
+        instance, data = self.get_instance_image_data(request)
+        image = TourDayImage.objects.create(expert=instance.tour_basic.expert, tour_basic =instance.tour_basic, **data)
+        return Response(ImageSerializer(image, context={'request': request}).data, status=201)
+    
+    @action(['post'], detail=True)
+    def guestguideimages(self, request, *args, **kwargs):
+        instance, data = self.get_instance_image_data(request)
+        image = TourGuestGuideImage.objects.create(expert=instance.tour_basic.expert, **data)
+        return Response(ImageSerializer(image, context={'request': request}).data, status=201)
+    
+    @action(['post'], detail=True)
     def tourcopy(self, request, *args, **kwargs):
         instance = self.get_object()
-        additional_types = instance.additional_types.all()
-        tour_property_types = instance.tour_property_types.all()
-        accomodation = instance.accomodation.all()
-        tour_property_images = instance.tour_property_images.all()
-        languages = instance.languages.all()
-        tour_images = instance.tour_images.all()
-        print(languages)
-        print(tour_images)
+        old_instance = instance
         instance.pk = None
         instance.id = None
         instance._state.adding = True
         instance.sold = None
         instance.watched = None
         instance.save()
-        instance.additional_types.set(additional_types)
-        instance.tour_property_types.set(tour_property_types)
-        instance.accomodation.set(accomodation)
-        instance.tour_property_images.set(tour_property_images)
-        instance.languages.set(languages)
-        instance.tour_images.set(tour_images)
-        print(instance.tour_images.all())
+        self.copy_tour_mtm(old_instance, instance)
         return Response(TourSerializer(instance, context={'request': request}).data, status=201)
 
 class TourTypeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = TourType.objects.all()
     serializer_class = TourTypeSerializer
     # permission_classes = [TourTypePermission]
-
-class TourDayViewSet(viewsets.ModelViewSet):
-    queryset = TourDay.objects.all()
-    serializer_class = TourDaySerializer
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            data = serializer.validated_data
-        else:
-            return Response(serializer.errors, status=400)
-        instance = Tour.objects.get(pk=request.data.get('tour'))
-        instance.tour_days.create(**data)
-        return Response(TourSerializer(instance, context={'request': request}).data, status=201)
 
 
 class TourDayImageViewSet(viewsets.ModelViewSet):
@@ -128,21 +118,6 @@ class TourPlanImageViewSet(viewsets.ModelViewSet):
 class TourGuestGuideImageViewSet(viewsets.ModelViewSet):
     queryset = TourGuestGuideImage.objects.all()
     serializer_class = TourGuestGuideImageSerializer
-
-
-class TourAddetionalServiceViewSet(viewsets.ModelViewSet):
-    queryset = TourAddetionalService.objects.all()
-    serializer_class = TourAddetionalServiceSerializer
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            data = serializer.validated_data
-        else:
-            return Response(serializer.errors, status=400)
-        instance = Tour.objects.get(pk=request.data.get('tour'))
-        instance.tour_addetional_services.create(**data)
-        return Response(TourSerializer(instance, context={'request': request}).data, status=201)
 
 
 class TourPropertyTypeViewSet(viewsets.ReadOnlyModelViewSet):

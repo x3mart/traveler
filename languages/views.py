@@ -22,7 +22,6 @@ class LanguageView(generics.CreateAPIView):
             data = serializer.validated_data
         else:
             return Response(serializer.errors, status=400)
-        print(data['language'])
         languages = []
         for language in data['language']:
             languages.append(Language(**language))
