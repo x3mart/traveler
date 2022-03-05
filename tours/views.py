@@ -32,8 +32,8 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         return qs
     
     def get_serializer_class(self):
-        # if self.action == 'list':
-        #     return TourListSerializer
+        if self.action == 'list':
+            return TourListSerializer
         return super().get_serializer_class()
     
     def create(self, request, *args, **kwargs):

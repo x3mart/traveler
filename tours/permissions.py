@@ -8,6 +8,6 @@ class TourPermission(permissions.BasePermission):
         return True           
 
     def has_object_permission(self, request, view, obj):
-        if view.action in ['update', 'partial_update', 'destroy', 'propertyimages', 'gallary', 'dayimages', 'guestguideimages', 'tourcopy']:
+        if view.action in ['update', 'partial_update', 'destroy', 'propertyimages', 'gallary', 'dayimages', 'guestguideimages', 'tourcopy', 'wallpaper', 'planimages']:
             return request.auth and (obj.tour_basic.expert_id == request.user.id)
         return True
