@@ -135,5 +135,7 @@ class TourListSerializer(serializers.ModelSerializer):
         model = Tour
         fields = ['id', 'rating', 'reviews_count', 'name', 'tmb_wallpaper', 'start_date', 'finish_date', 'start_country', 'price', 'cost', 'discount', 'on_moderation', 'is_active', 'is_draft', 'duration', 'sold', 'watched', 'currency']
     
-    def get_tmb_wallpaper(self, obj): 
-        return get_tmb_image_uri(self, obj)
+    def get_tmb_wallpaper(self, obj):
+        if obj.wallpaper: 
+            return get_tmb_image_uri(self, obj.wallpaper)
+        return None
