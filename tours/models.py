@@ -22,7 +22,7 @@ def tour_image_path(instance, filename):
         folder = f'expert/{instance.tour_basic.expert.id}/tour/{instance.tour_basic.id}/properties'
     elif class_name == 'TourImage':
         folder = f'expert/{instance.tour_basic.expert.id}/tour/{instance.tour_basic.id}/gallary'
-    elif class_name == 'TourPlan':
+    elif class_name == 'TourPlanImage':
         folder = f'expert/{instance.tour_basic.expert.id}/tour/{instance.tour_basic.id}/plans'
     elif class_name == 'TourGuestGuideImage':
         folder = f'expert/{instance.expert.id}/guestguide'
