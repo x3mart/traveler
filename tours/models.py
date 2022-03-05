@@ -14,7 +14,7 @@ def get_mtm_tour_basic(obj):
 def tour_image_path(instance, filename):
     name, extension = os.path.splitext(filename)
     class_name = instance.__class__.__name__
-    if class_name == 'Tour':
+    if class_name == 'TourWallpaper':
         folder = f'expert/{instance.tour_basic.expert.id}/tour/{instance.tour_basic.id}/wallpapers'
     elif class_name == 'TourDayImage':
         folder = f'expert/{instance.tour_basic.expert.id}/tour/{instance.tour_basic.id}/days'
@@ -170,13 +170,31 @@ class TourGuestGuideImage(models.Model):
         ordering = ['id']
 
 
+class TourWallpaper(models.Model):
+    wallpaper = models.ImageField(_('Фото'), upload_to=tour_image_path, max_length=255, null=True, blank=True)
+    expert = models.ForeignKey('accounts.Expert', on_delete=models.CASCADE, related_name='tour_wallpapers', null=True, blank=True)
+    tour_basic = models.ForeignKey("TourBasic", verbose_name=_('Основа тура'), on_delete=models.CASCADE, related_name='tour_wallpapers', null=True, blank=True)
+
+    @property
+    def tmb_wallpaper(self):
+        if self.wallpaper:
+            tmb_path = get_tmb_path(self.wallpaper.url)
+            return tmb_path
+        return None
+    
+    class Meta:
+        verbose_name = _('Обложка тура')
+        verbose_name_plural = _('Обложки тура')
+        ordering = ['id']
+
+
 class Tour(models.Model):
     tour_basic = models.ForeignKey("TourBasic", verbose_name=_('Основа тура'), on_delete=models.CASCADE, related_name='tours', null=True, blank=True)
     name = models.CharField(_('Название'), max_length=255, null=True, blank=True)
     is_draft = models.BooleanField(_('Черновик'), default=True)
     is_active = models.BooleanField(default=False)
     on_moderation = models.BooleanField(_('На модерации'), default=False)
-    wallpaper = models.ImageField(_('Главное фото'), max_length=255, upload_to=tour_image_path, null=True, blank=True)
+    wallpaper = models.ForeignKey("TourWallpaper", verbose_name=_('Главное фото'), on_delete=models.CASCADE, related_name='tour', null=True, blank=True)
     basic_type = models.ForeignKey("TourType", verbose_name=_("Основной тип тура"), on_delete=models.CASCADE, related_name='tours_by_basic_type', null=True, blank=True)
     additional_types = models.ManyToManyField("TourType", verbose_name=_("Дополнительные типы тура"), related_name='tours_by_additional_types', blank=True)
     start_region = models.ForeignKey("geoplaces.Region", verbose_name=_("Регион начала путешествия"), on_delete=models.CASCADE, related_name='tours_by_start_region', null=True, blank=True)
@@ -249,10 +267,3 @@ class Tour(models.Model):
     
     def __str__(self):
         return self.name if self.name else 'безымянный тур'
-   
-    @property
-    def tmb_wallpaper(self):
-        if self.wallpaper:
-            tmb_path = get_tmb_path(self.wallpaper.url)
-            return tmb_path
-        return None

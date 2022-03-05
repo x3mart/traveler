@@ -16,7 +16,19 @@ def get_tmb_image_uri(self, obj):
         elif hasattr(obj, 'wallpaper') and obj.tmb_wallpaper:
             request = self.context.get('request')
             return request.build_absolute_uri(obj.tmb_wallpaper)  
-        return None 
+        return None
+
+def get_image_uri(self, obj):
+        if hasattr(obj, 'avatar') and obj.avatar:
+            request = self.context.get('request')
+            return request.build_absolute_uri(obj.avatar)
+        elif hasattr(obj, 'image') and obj.image:
+            request = self.context.get('request')
+            return request.build_absolute_uri(obj.image)
+        elif hasattr(obj, 'wallpaper') and obj.wallpaper:
+            request = self.context.get('request')
+            return request.build_absolute_uri(obj.wallpaper)  
+        return None  
 
 def get_current_img(sender, instance):
     try:

@@ -4,7 +4,7 @@ from uritemplate import partial
 from tours.models import TourAccomodation, TourPropertyType, TourType
 from accounts.models import Expert
 from languages.models import Language
-from tours.serializers import ImageSerializer
+from tours.serializers import ImageSerializer, WallpaperSerializer
 
 
 NOT_MODERATED_FIELDS = {'is_active', 'on_moderation', 'vacants_number', 'is_draft', 'discount_starts', 'discount_finish', 'discount_in_prc', 'discount', 'sold', 'watched'} 
@@ -19,6 +19,13 @@ class TourMixin():
     def get_instance_image_data(self, request):
         instance = self.get_object()
         serializer = ImageSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            data = serializer.validated_data
+        return (instance, data)
+    
+    def get_instance_wallpaper_data(self, request):
+        instance = self.get_object()
+        serializer = WallpaperSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             data = serializer.validated_data
         return (instance, data)

@@ -3,7 +3,7 @@ from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
 from .models import Tour, TourAccomodation, TourPropertyType, TourType
 from currencies.serializers import CurrencySerializer
-from utils.images import get_tmb_image_uri
+from utils.images import get_image_uri, get_tmb_image_uri
 
 
 class ImageSerializer(serializers.Serializer):
@@ -12,6 +12,15 @@ class ImageSerializer(serializers.Serializer):
     id = serializers.IntegerField(required=False)
     
     def get_tmb_image(self, obj): 
+        return get_tmb_image_uri(self, obj)
+
+
+class WallpaperSerializer(serializers.Serializer):
+    tmb_wallpaper = serializers.SerializerMethodField(read_only=True)
+    wallpaper = serializers.ImageField(max_length=255, required=False)
+    id = serializers.IntegerField(required=False)
+    
+    def get_tmb_wallpaper(self, obj): 
         return get_tmb_image_uri(self, obj)
 
 
@@ -58,6 +67,7 @@ class TourSerializer(serializers.ModelSerializer):
     tour_included_services = serializers.SerializerMethodField(read_only=True)
     tour_excluded_services = serializers.SerializerMethodField(read_only=True)
     tmb_wallpaper = serializers.SerializerMethodField(read_only=True)
+    wallpaper = serializers.SerializerMethodField(read_only=True)
     prepay_in_prc = serializers.SerializerMethodField(read_only=True)
     discount_in_prc = serializers.SerializerMethodField(read_only=True)
     postpay_on_start_day = serializers.BooleanField(required=False)
@@ -80,8 +90,15 @@ class TourSerializer(serializers.ModelSerializer):
             'duration': {'required': False, 'read_only':True},
         }
 
-    def get_tmb_wallpaper(self, obj): 
-        return get_tmb_image_uri(self, obj)
+    def get_tmb_wallpaper(self, obj):
+        if obj.wallpaper: 
+            return get_tmb_image_uri(self, obj.wallpaper)
+        return None
+    
+    def get_wallpaper(self, obj):
+        if obj.wallpaper: 
+            return get_image_uri(self, obj.wallpaper)
+        return None
     
     def get_main_impressions(self, obj):
         if obj.main_impressions:

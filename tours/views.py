@@ -8,9 +8,9 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.forms.models import model_to_dict
 from tours.filters import TourFilter
 from tours.mixins import TourMixin, NOT_MODERATED_FIELDS
-from tours.models import Tour, TourAccomodation, TourBasic, TourDayImage, TourGuestGuideImage, TourImage, TourPlanImage, TourPropertyImage, TourPropertyType, TourType
+from tours.models import Tour, TourAccomodation, TourBasic, TourDayImage, TourGuestGuideImage, TourImage, TourPlanImage, TourPropertyImage, TourPropertyType, TourType, TourWallpaper
 from tours.permissions import TourPermission
-from tours.serializers import ImageSerializer, TourAccomodationSerializer, TourListSerializer, TourPropertyTypeSerializer, TourSerializer, TourTypeSerializer
+from tours.serializers import ImageSerializer, TourAccomodationSerializer, TourListSerializer, TourPropertyTypeSerializer, TourSerializer, TourTypeSerializer, WallpaperSerializer
 
 
 # Create your views here.
@@ -91,6 +91,20 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
             self.check_set_tour_field_for_moderation(instance, 'tour_images')
             images = instance.tour_images.all()
             return Response(ImageSerializer(images, context={'request': request}, many=True).data, status=200)
+    
+    @action(['post', 'delete'], detail=True)
+    def wallpaper(self, request, *args, **kwargs):
+        if request.method == 'POST':
+            instance, data = self.get_instance_wallpaper_data(request)
+            image = TourWallpaper.objects.create(expert=instance.tour_basic.expert, tour_basic =instance.tour_basic, **data)
+            instance.wallpaper = image
+            instance.save()
+            return Response(WallpaperSerializer(image, context={'request': request}).data, status=201)
+        if request.method == 'DELETE':
+            instance = self.get_object()
+            instance.wallpaper = None
+            instance.save()
+            return Response({}, status=200)
     
     @action(['post'], detail=True)
     def dayimages(self, request, *args, **kwargs):

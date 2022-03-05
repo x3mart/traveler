@@ -1,7 +1,7 @@
 from django.dispatch import receiver
 from django.db.models.signals import post_delete, post_save, pre_save
 from accounts.models import Expert
-from tours.models import Tour, TourBasic, TourDayImage, TourGuestGuideImage, TourImage, TourPlanImage, TourPropertyImage, TourType
+from tours.models import Tour, TourBasic, TourDayImage, TourGuestGuideImage, TourImage, TourPlanImage, TourPropertyImage, TourType, TourWallpaper
 from utils.images import delete_image, image_processing, get_current_img
 from django.db.models import Count, Q
         
@@ -21,11 +21,6 @@ def tour_type_post_delete(instance, **kwargs):
 
 @receiver(pre_save, sender=Tour)
 def tour_basic_pre_save(instance, **kwargs):
-    try:
-        current_tour_basic = Tour.objects.get(pk=instance.id)
-        instance._current_img = current_tour_basic.wallpaper
-    except:
-        instance._current_img = ''
     if instance.discount == 0:
         instance.discount = None
     if instance.discount:
@@ -35,10 +30,10 @@ def tour_basic_pre_save(instance, **kwargs):
     if instance.finish_date and instance.start_date:
         instance.duration = (instance.finish_date - instance.start_date).days
 
-@receiver(post_save, sender=Tour)
+@receiver(post_save, sender=TourWallpaper)
 def tour_basic_post_save(instance, created, **kwargs):
-    image_processing(instance.wallpaper, instance._current_img, 1920, 480, 730, 280)
-    print('signal')
+    image_processing(instance.wallpaper, None, 1920, 480, 730, 280)
+
     
 
 # @receiver(post_delete, sender=Tour)
