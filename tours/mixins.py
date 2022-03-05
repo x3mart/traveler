@@ -1,15 +1,28 @@
 from django.forms import model_to_dict
 from django.shortcuts import get_object_or_404
 from uritemplate import partial
-from tours.models import TourAccomodation, TourExcludedService, TourImpression, TourIncludedService, TourPropertyImage, TourPropertyType, TourType
+from tours.models import TourAccomodation, TourPropertyType, TourType
 from accounts.models import Expert
 from languages.models import Language
+from tours.serializers import ImageSerializer
 
 
 NOT_MODERATED_FIELDS = {'is_active', 'on_moderation', 'vacants_number', 'is_draft', 'discount_starts', 'discount_finish', 'discount_in_prc', 'discount', 'sold', 'watched'} 
 CHECBOX_SET = {'is_guaranteed', 'is_active', 'postpay_on_start_day', 'scouting', 'animals_not_exploited', 'month_recurrent', 'flight_included', 'babies_alowed', 'on_moderation', 'week_recurrent', 'is_draft', 'instant_booking'}
 
 class TourMixin():
+    def check_set_tour_field_for_moderation(self, instance, field):
+        if field not in NOT_MODERATED_FIELDS and instance.is_active:
+            instance.is_active = False
+            instance.on_moderation = True
+
+    def get_instance_image_data(self, request):
+        instance = self.get_object()
+        serializer = ImageSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            data = serializer.validated_data
+        return (instance, data)
+
     def get_mtm_objects(self, model, ids):
         objects = []
         for id in ids:
@@ -20,32 +33,24 @@ class TourMixin():
         return set(obj_set.all().values_list('name', flat=True))
 
     def set_additional_types(self, request, instance):
-        if instance.additional_types.exists():
-            instance.additional_types.clear()
         ids = request.data.get('additional_types')
         objects = self.get_mtm_objects(TourType, ids)
-        instance.additional_types.add(*tuple(objects))
+        instance.additional_types.set(objects)
     
     def set_property_types(self, request, instance):
-        if instance.tour_property_types.exists():
-            instance.tour_property_types.clear()
         ids = request.data.get('tour_property_types')
         objects = self.get_mtm_objects(TourPropertyType, ids)
-        instance.tour_property_types.add(*tuple(objects))
+        instance.tour_property_types.set(objects)
     
     def set_accomodation(self, request, instance):
-        if instance.accomodation.exists():
-            instance.accomodation.clear()
         ids = request.data.get('accomodation')
         objects = self.get_mtm_objects(TourAccomodation, ids)
-        instance.accomodation.add(*tuple(objects))
+        instance.accomodation.set(objects)
     
     def set_languages(self, request, instance=None):
-        if instance.languages.exists():
-            instance.languages.clear()
         ids = request.data.get('languages')
         objects = self.get_mtm_objects(Language, ids)
-        instance.languages.add(*tuple(objects))
+        instance.languages.set(objects)
     
     def set_mtm_from_str(self, request, field):
         new_list = request.data.get(field).split(',')
@@ -60,8 +65,7 @@ class TourMixin():
         tour_basic.direct_link = request.data.get('direct_link')
         tour_basic.save()
 
-    def set_mtm_fields(self, request, instance):
-        updated_fields = set()            
+    def set_mtm_fields(self, request, instance):       
         if request.data.get('additional_types') is not None:
             self.set_additional_types(request, instance)
         if request.data.get('tour_property_types') is not None:
@@ -78,7 +82,7 @@ class TourMixin():
             instance.tour_excluded_services = self.set_mtm_from_str(request, 'tour_excluded_services')
         if request.data.get('direct_link') is not None:
             self.set_tour_direct_links(request, instance)
-        return (instance, updated_fields)
+        return instance
 
     def set_model_fields(self, data, instance):
         if self.request.META.get('CONTENT_TYPE') != 'application/json':
@@ -88,3 +92,17 @@ class TourMixin():
         for key, value in data.items():
             setattr(instance, key, value)
         return instance
+    
+    def copy_tour_mtm(self, old_instance, instance):
+        additional_types = old_instance.additional_types.all()
+        tour_property_types = old_instance.tour_property_types.all()
+        accomodation = old_instance.accomodation.all()
+        tour_property_images = old_instance.tour_property_images.all()
+        languages = old_instance.languages.all()
+        tour_images = old_instance.tour_images.all()
+        instance.additional_types.add(*additional_types)
+        instance.tour_property_types.add(*tour_property_types)
+        instance.accomodation.add(*accomodation)
+        instance.tour_property_images.add(*tour_property_images)
+        instance.languages.add(*languages)
+        instance.tour_images.add(*tour_images)
