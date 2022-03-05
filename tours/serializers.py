@@ -18,7 +18,6 @@ class ImageSerializer(serializers.Serializer):
 class WallpaperSerializer(serializers.Serializer):
     tmb_wallpaper = serializers.SerializerMethodField(read_only=True)
     wallpaper = serializers.ImageField(max_length=255, required=False)
-    id = serializers.IntegerField(required=False)
     
     def get_tmb_wallpaper(self, obj): 
         return get_tmb_image_uri(self, obj)
