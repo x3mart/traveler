@@ -156,7 +156,6 @@ class TourPlanImage(models.Model):
 class TourGuestGuideImage(models.Model):
     image = models.ImageField(_('Фото'), upload_to=tour_image_path, max_length=255, null=True, blank=True)
     expert = models.ForeignKey('accounts.Expert', on_delete=models.CASCADE, related_name='tour_guest_guide_images', null=True, blank=True)
-    # tour_basic = models.ForeignKey("TourBasic", verbose_name=_('Основа тура'), on_delete=models.CASCADE, related_name='tour_basics', null=True, blank=True)
 
     @property
     def tmb_image(self):
@@ -169,41 +168,6 @@ class TourGuestGuideImage(models.Model):
         verbose_name = _('Фото приглашенного гида')
         verbose_name_plural = _('Фотографии приглашенных гидов')
         ordering = ['id']
-
-
-class TourImpression(models.Model):
-    name = models.CharField(_('Название'), max_length=150)
-
-    class Meta:
-        verbose_name = _('Главное впечатление')
-        verbose_name_plural = _('Главные впечатления')
-
-
-class TourIncludedService(models.Model):
-    name = models.CharField(_('Название'), max_length=150)
-
-    class Meta:
-        verbose_name = _('Входит в стоимость')
-        verbose_name_plural = _('Входит в стоимость')
-
-
-class TourExcludedService(models.Model):
-    name = models.CharField(_('Название'), max_length=150)
-
-    class Meta:
-        verbose_name = _('Не входит в стоимость')
-        verbose_name_plural = _('Не входит в стоимость')
-
-
-class TourAddetionalService(models.Model):
-    name = models.CharField(_('Название'), max_length=150)
-    description = RichTextField(_('Описание'))
-    currency = models.ForeignKey('currencies.Currency', verbose_name=_("Валюта"), on_delete=models.CASCADE, related_name='tour_addetional_service', null=True, blank=True)
-    price = models.IntegerField(_('Цена'), null=True, blank=True)
-
-    class Meta:
-        verbose_name = _('Дополнительная услуга')
-        verbose_name_plural = _('Дополнительнае услуги')
 
 
 class Tour(models.Model):

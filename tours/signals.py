@@ -38,6 +38,7 @@ def tour_basic_pre_save(instance, **kwargs):
 @receiver(post_save, sender=Tour)
 def tour_basic_post_save(instance, created, **kwargs):
     image_processing(instance.wallpaper, instance._current_img, 1920, 480, 730, 280)
+    print('signal')
     
 
 # @receiver(post_delete, sender=Tour)

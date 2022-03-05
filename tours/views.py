@@ -1,17 +1,16 @@
+from datetime import timedelta, datetime
 from rest_framework.decorators import action
-import time
 from django.db.models.query import Prefetch
 from rest_framework import viewsets
-from rest_framework.permissions import AllowAny
 from rest_framework import filters
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from django.forms.models import model_to_dict
 from tours.filters import TourFilter
 from tours.mixins import TourMixin, NOT_MODERATED_FIELDS
-from tours.models import Tour, TourAccomodation, TourBasic, TourDayImage, TourGuestGuideImage, TourImage, TourPlanImage, TourPropertyImage, TourPropertyType, TourType
+from tours.models import Tour, TourAccomodation, TourBasic, TourDayImage, TourGuestGuideImage, TourImage, TourPropertyImage, TourPropertyType, TourType
 from tours.permissions import TourPermission
-from tours.serializers import ImageSerializer, TourAccomodationSerializer, TourDayImageSerializer, TourGuestGuideImageSerializer, TourImageSerializer, TourListSerializer, TourPlanImageSerializer, TourPropertyImageSerializer, TourPropertyTypeSerializer, TourSerializer, TourTypeSerializer
+from tours.serializers import ImageSerializer, TourAccomodationSerializer, TourListSerializer, TourPropertyTypeSerializer, TourSerializer, TourTypeSerializer
 
 
 # Create your views here.
@@ -62,17 +61,36 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
             instance._prefetched_objects_cache = {}
         return Response(TourSerializer(instance, context={'request': request}).data, status=201)
     
-    @action(['post'], detail=True)
+    @action(['post', 'delete'], detail=True)
     def propertyimages(self, request, *args, **kwargs):
-        instance, data = self.get_instance_image_data(request)
-        image = instance.tour_property_images.create(expert=instance.tour_basic.expert, tour_basic =instance.tour_basic, **data)
-        return Response(ImageSerializer(image, context={'request': request}).data, status=201)
+        if request.method == 'POST':
+            instance, data = self.get_instance_image_data(request)
+            image = instance.tour_property_images.create(expert=instance.tour_basic.expert, tour_basic =instance.tour_basic, **data)
+            self.check_set_tour_field_for_moderation(instance, 'tour_property_images')
+            return Response(ImageSerializer(image, context={'request': request}).data, status=201)
+        if request.method == 'DELETE':
+            instance, data = self.get_instance_image_data(request)
+            image = TourPropertyImage.objects.get(pk=data['id'])
+            instance.tour_property_images.remove(image)
+            self.check_set_tour_field_for_moderation(instance, 'tour_property_images')
+            images = instance.tour_property_images.all()
+            return Response(ImageSerializer(images, context={'request': request}, many=True).data, status=200)
+
     
-    @action(['post'], detail=True)
+    @action(['post', 'delete'], detail=True)
     def gallary(self, request, *args, **kwargs):
-        instance, data = self.get_instance_image_data(request)
-        image = instance.tour_images.create(expert=instance.tour_basic.expert, tour_basic =instance.tour_basic, **data)
-        return Response(ImageSerializer(image, context={'request': request}).data, status=201)
+        if request.method == 'POST':
+            instance, data = self.get_instance_image_data(request)
+            image = instance.tour_images.create(expert=instance.tour_basic.expert, tour_basic =instance.tour_basic, **data)
+            self.check_set_tour_field_for_moderation(instance, 'tour_images')
+            return Response(ImageSerializer(image, context={'request': request}).data, status=201)
+        if request.method == 'DELETE':
+            instance, data = self.get_instance_image_data(request)
+            image = TourImage.objects.get(pk=data['id'])
+            instance.tour_images.remove(image)
+            self.check_set_tour_field_for_moderation(instance, 'tour_images')
+            images = instance.tour_images.all()
+            return Response(ImageSerializer(images, context={'request': request}, many=True).data, status=200)
     
     @action(['post'], detail=True)
     def dayimages(self, request, *args, **kwargs):
@@ -93,6 +111,9 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         instance.pk = None
         instance.id = None
         instance._state.adding = True
+        if request.data.get('start_date'):
+            instance.start_date = datetime.strptime(request.data.get('start_date'), "%Y-%m-%d").date()
+            instance.finish_date = instance.start_date + timedelta(days=instance.duration)
         instance.sold = None
         instance.watched = None
         instance.save()
@@ -102,59 +123,10 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
 class TourTypeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = TourType.objects.all()
     serializer_class = TourTypeSerializer
-    # permission_classes = [TourTypePermission]
-
-
-class TourDayImageViewSet(viewsets.ModelViewSet):
-    queryset = TourDayImage.objects.all()
-    serializer_class = TourDayImageSerializer
-
-
-class TourPlanImageViewSet(viewsets.ModelViewSet):
-    queryset = TourPlanImage.objects.all()
-    serializer_class = TourPlanImageSerializer
-
-
-class TourGuestGuideImageViewSet(viewsets.ModelViewSet):
-    queryset = TourGuestGuideImage.objects.all()
-    serializer_class = TourGuestGuideImageSerializer
-
 
 class TourPropertyTypeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = TourPropertyType.objects.all()
     serializer_class = TourPropertyTypeSerializer
-
-
-class TourPropertyImageViewSet(viewsets.ModelViewSet):
-    queryset = TourPropertyImage.objects.all()
-    serializer_class = TourPropertyImageSerializer
-    permission_classes = [AllowAny]
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            data = serializer.validated_data
-        else:
-            return Response(serializer.errors, status=400)
-        tour = Tour.objects.get(pk=request.data.get('tour'))
-        instance = tour.tour_property_images.create(**data)
-        return Response(TourPropertyImageSerializer(instance, context={'request': request}).data, status=201)
-
-
-class TourImageViewSet(viewsets.ModelViewSet):
-    queryset = TourImage.objects.all()
-    serializer_class = TourImageSerializer
-    permission_classes = [AllowAny]
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            data = serializer.validated_data
-        else:
-            return Response(serializer.errors, status=400)
-        tour = Tour.objects.get(pk=request.data.get('tour'))
-        instance = tour.tour_images.create(**data)
-        return Response(TourImageSerializer(instance, context={'request': request}).data, status=201)
 
 
 class TourAccomodationTypeViewSet(viewsets.ReadOnlyModelViewSet):

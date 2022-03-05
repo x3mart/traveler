@@ -1,29 +1,18 @@
 from dataclasses import fields
 from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
-from accounts.models import Expert
-from accounts.serializers import ExpertListSerializer, TeamMemberSerializer
-from .models import Tour, TourAccomodation, TourAddetionalService, TourDayImage, TourExcludedService, TourGuestGuideImage, TourImpression, TourIncludedService, TourPlanImage, TourPropertyImage, TourImage, TourPropertyType, TourType
-from geoplaces.serializers import RegionSerializer, CountrySerializer, RussianRegionSerializer, CitySerializer
-from languages.serializers import LanguageSerializer
+from .models import Tour, TourAccomodation, TourPropertyType, TourType
 from currencies.serializers import CurrencySerializer
 from utils.images import get_tmb_image_uri
 
 
 class ImageSerializer(serializers.Serializer):
     tmb_image = serializers.SerializerMethodField(read_only=True)
-    image = serializers.ImageField(max_length=255)
-    id = serializers.IntegerField(read_only=True)
+    image = serializers.ImageField(max_length=255, required=False)
+    id = serializers.IntegerField(required=False)
     
     def get_tmb_image(self, obj): 
         return get_tmb_image_uri(self, obj)
-
-
-class TourAddetionalServiceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TourAddetionalService
-        fields = '__all__'
-
 
 
 class TourPropertyTypeSerializer(serializers.ModelSerializer):
@@ -38,74 +27,9 @@ class TourAccomodationSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class TourPropertyImageSerializer(serializers.ModelSerializer):
-    tmb_image = serializers.SerializerMethodField(read_only=True)
-    class Meta:
-        model = TourPropertyImage
-        fields = '__all__'
-    
-    def get_tmb_image(self, obj): 
-        return get_tmb_image_uri(self, obj)
-
-class TourImageSerializer(serializers.ModelSerializer):
-    tmb_image = serializers.SerializerMethodField(read_only=True)
-    class Meta:
-        model = TourImage
-        fields = '__all__'
-    
-    def get_tmb_image(self, obj): 
-        return get_tmb_image_uri(self, obj)
-
-class TourDayImageSerializer(serializers.ModelSerializer):
-    tmb_image = serializers.SerializerMethodField(read_only=True)
-    class Meta:
-        model = TourDayImage
-        fields = '__all__'
-    
-    def get_tmb_image(self, obj): 
-        return get_tmb_image_uri(self, obj)
-
-
-class TourPlanImageSerializer(serializers.ModelSerializer):
-    tmb_image = serializers.SerializerMethodField(read_only=True)
-    class Meta:
-        model = TourPlanImage
-        fields = '__all__'
-    
-    def get_tmb_image(self, obj): 
-        return get_tmb_image_uri(self, obj)
-
-
-class TourGuestGuideImageSerializer(serializers.Serializer):
-    tmb_image = serializers.SerializerMethodField(read_only=True)
-    image = serializers.ImageField(max_length=255)
-    id = serializers.IntegerField(read_only=True)
-    
-    def get_tmb_image(self, obj): 
-        return get_tmb_image_uri(self, obj)
-
-
 class TourTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = TourType
-        fields = '__all__'
-
-
-class TourImpressionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TourImpression
-        fields = '__all__'
-
-
-class TourIncludedServiceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TourIncludedService
-        fields = '__all__'
-
-
-class TourExcludedServiceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TourExcludedService
         fields = '__all__'
 
 
@@ -121,8 +45,8 @@ class TourSerializer(serializers.ModelSerializer):
     # start_city = CitySerializer(many=False, read_only=True)
     # finish_city = CitySerializer(many=False, read_only=True)
     # tour_property_types = TourPropertyTypeSerializer(many=True, read_only=True)
-    tour_property_images = TourPropertyImageSerializer(many=True, read_only=True)
-    tour_images = TourImageSerializer(many=True, read_only=True)
+    tour_property_images = ImageSerializer(many=True, read_only=True)
+    tour_images = ImageSerializer(many=True, read_only=True)
     # languages = LanguageSerializer(many=True, read_only=True)
     # currency = CurrencySerializer(many=False, read_only=True)
     # expert = ExpertListSerializer(many=False, read_only=True, source='tour_basic.expert')
@@ -153,6 +77,7 @@ class TourSerializer(serializers.ModelSerializer):
             'instant_booking': {'required': False,}, 
             'is_draft': {'required': False,},
             'flight_included': {'required': False,},
+            'duration': {'required': False, 'read_only':True},
         }
 
     def get_tmb_wallpaper(self, obj): 
@@ -179,7 +104,7 @@ class TourSerializer(serializers.ModelSerializer):
         return 1 if obj.prepay_in_prc else 0
     
     def get_discount_in_prc(self, obj): 
-        return 1 if obj.prepay_in_prc else 0
+        return 1 if obj.discount_in_prc else 0
 
 
 class TourListSerializer(serializers.ModelSerializer):
@@ -195,18 +120,3 @@ class TourListSerializer(serializers.ModelSerializer):
     
     def get_tmb_wallpaper(self, obj): 
         return get_tmb_image_uri(self, obj)
-
-class TourBasicSerializer(serializers.ModelSerializer):
-    basic_type = TourTypeSerializer(many=False, required=False)
-    additional_types  = TourTypeSerializer(many=True, required=False)
-    class Meta:
-        model = Tour
-        fields ='__all__'
-        extra_kwargs = {
-            'expert': {'required': False,},
-        }
-    
-    # def create(self, validated_data):
-    #     validated_data['expert_id'] = self.context['request'].user.id
-    #     validated_data['is_draft'] = True
-    #     return super().create(validated_data)

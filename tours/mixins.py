@@ -11,6 +11,11 @@ NOT_MODERATED_FIELDS = {'is_active', 'on_moderation', 'vacants_number', 'is_draf
 CHECBOX_SET = {'is_guaranteed', 'is_active', 'postpay_on_start_day', 'scouting', 'animals_not_exploited', 'month_recurrent', 'flight_included', 'babies_alowed', 'on_moderation', 'week_recurrent', 'is_draft', 'instant_booking'}
 
 class TourMixin():
+    def check_set_tour_field_for_moderation(self, instance, field):
+        if field not in NOT_MODERATED_FIELDS and instance.is_active:
+            instance.is_active = False
+            instance.on_moderation = True
+
     def get_instance_image_data(self, request):
         instance = self.get_object()
         serializer = ImageSerializer(data=request.data)
