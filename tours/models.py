@@ -288,6 +288,8 @@ class Tour(models.Model):
     tour_images = models.ManyToManyField('TourImage', related_name='tours', verbose_name=_("Галерея тура"), blank=True)
     tour_property_images = models.ManyToManyField('TourPropertyImage', related_name='tours', verbose_name=_("Фото размещений"), blank=True)
     guest_guide = models.JSONField(_("Приглашенный гид"), null=True, blank=True)
+    guest_requirements = RichTextField(_('Требования к гостю'), null=True, blank=True)
+    important_to_know_comments = RichTextField(_('Важно знать (коментарии)'), null=True, blank=True)
 
     class Meta:
         verbose_name = _('Тур')
