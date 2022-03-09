@@ -23,16 +23,14 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
     filterset_class = TourFilter
 
     def get_queryset(self):
-        tour_basic = TourBasic.objects.all()
-        prefetched_tour_basic = Prefetch('tour_basic', tour_basic)
-        if self.action == 'list':
-            qs = Tour.objects.prefetch_related(prefetched_tour_basic, 'start_country', 'currency').only('id', 'name', 'start_date', 'finish_date', 'start_country', 'price', 'cost', 'discount', 'on_moderation', 'is_active', 'is_draft', 'duration', 'sold', 'watched', 'currency', 'tour_basic', 'wallpaper').filter(tour_basic__expert_id=self.request.user.id)
+        if self.action in ['list',]:
+            qs = Tour.objects.prefetch_related('tour_basic', 'start_country', 'currency').only('id', 'name', 'start_date', 'finish_date', 'start_country', 'price', 'cost', 'discount', 'on_moderation', 'is_active', 'is_draft', 'duration', 'sold', 'watched', 'currency', 'tour_basic', 'wallpaper').filter(tour_basic__expert_id=self.request.user.id).order_by('-id')
         else:
-            qs = Tour.objects.prefetch_related(prefetched_tour_basic, 'start_country', 'start_city', 'start_region', 'start_russian_region', 'finish_russian_region', 'finish_country', 'finish_city', 'finish_region', 'basic_type', 'additional_types', 'tour_property_types', 'tour_property_images', 'tour_images', 'languages', 'currency', 'prepay_currency', 'accomodation')  
+            qs = Tour.objects.prefetch_related('tour_basic', 'start_country', 'start_city', 'start_region', 'start_russian_region', 'finish_russian_region', 'finish_country', 'finish_city', 'finish_region', 'basic_type', 'additional_types', 'tour_property_types', 'tour_property_images', 'tour_images', 'languages', 'currency', 'prepay_currency', 'accomodation')  
         return qs
     
     def get_serializer_class(self):
-        if self.action == 'list':
+        if self.action in ['list',]:
             return TourListSerializer
         return super().get_serializer_class()
     
@@ -139,7 +137,8 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         instance.watched = None
         instance.save()
         self.copy_tour_mtm(old_instance, instance)
-        return Response(TourSerializer(instance, context={'request': request}).data, status=201)
+        qs = Tour.objects.prefetch_related('tour_basic', 'start_country', 'currency').only('id', 'name', 'start_date', 'finish_date', 'start_country', 'price', 'cost', 'discount', 'on_moderation', 'is_active', 'is_draft', 'duration', 'sold', 'watched', 'currency', 'tour_basic', 'wallpaper').filter(tour_basic__expert_id=self.request.user.id).order_by('-id')
+        return Response(TourListSerializer(qs, context={'request': request}, many=True).data, status=201)
 
 class TourTypeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = TourType.objects.all()
