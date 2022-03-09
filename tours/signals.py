@@ -23,12 +23,14 @@ def tour_type_post_delete(instance, **kwargs):
 def tour_basic_pre_save(instance, **kwargs):
     if instance.discount == 0:
         instance.discount = None
-    if instance.discount:
+    if instance.discount and instance.discount_in_prc:
         instance.cost = instance.price - instance.price*instance.discount/100
+    elif instance.discount and not instance.discount_in_prc:
+        instance.cost = instance.price - instance.discount
     else:
         instance.cost = instance.price
     if instance.finish_date and instance.start_date:
-        instance.duration = (instance.finish_date - instance.start_date).days
+        instance.duration = (instance.finish_date - instance.start_date).days + 1
 
 @receiver(post_save, sender=TourWallpaper)
 def tour_basic_post_save(instance, created, **kwargs):

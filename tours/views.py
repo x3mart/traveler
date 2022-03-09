@@ -10,7 +10,7 @@ from tours.filters import TourFilter
 from tours.mixins import TourMixin, NOT_MODERATED_FIELDS
 from tours.models import Tour, TourAccomodation, TourBasic, TourDayImage, TourGuestGuideImage, TourImage, TourPlanImage, TourPropertyImage, TourPropertyType, TourType, TourWallpaper
 from tours.permissions import TourPermission
-from tours.serializers import ImageSerializer, TourAccomodationSerializer, TourListSerializer, TourPropertyTypeSerializer, TourSerializer, TourTypeSerializer, WallpaperSerializer
+from tours.serializers import ImageSerializer, TourAccomodationSerializer, TourListSerializer, TourPreviewSerializer, TourPropertyTypeSerializer, TourSerializer, TourTypeSerializer, WallpaperSerializer
 
 
 # Create your views here.
@@ -32,6 +32,8 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
     def get_serializer_class(self):
         if self.action in ['list',]:
             return TourListSerializer
+        elif self.action in ['preview',]:
+            return TourPreviewSerializer
         return super().get_serializer_class()
     
     def create(self, request, *args, **kwargs):
@@ -132,13 +134,18 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         instance._state.adding = True
         if request.data.get('start_date'):
             instance.start_date = datetime.strptime(request.data.get('start_date'), "%Y-%m-%d").date()
-            instance.finish_date = instance.start_date + timedelta(days=instance.duration)
+            instance.finish_date = instance.start_date + timedelta(days=instance.duration - 1)
         instance.sold = None
         instance.watched = None
         instance.save()
         self.copy_tour_mtm(old_instance, instance)
         qs = Tour.objects.prefetch_related('tour_basic', 'start_country', 'currency').only('id', 'name', 'start_date', 'finish_date', 'start_country', 'price', 'cost', 'discount', 'on_moderation', 'is_active', 'is_draft', 'duration', 'sold', 'watched', 'currency', 'tour_basic', 'wallpaper').filter(tour_basic__expert_id=self.request.user.id).order_by('-id')
         return Response(TourListSerializer(qs, context={'request': request}, many=True).data, status=201)
+    
+    @action(['get'], detail=True)
+    def preview(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+        
 
 class TourTypeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = TourType.objects.all()
