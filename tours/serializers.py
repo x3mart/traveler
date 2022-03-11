@@ -92,7 +92,7 @@ class TourPreviewSerializer(serializers.ModelSerializer):
             return get_image_uri(self, obj.wallpaper)
         return None
     def get_start_time(self, obj):
-        return obj.start_time.strftime('%H-%M')
+        return None
 
     def get_prepay_in_prc(self, obj): 
         return 1 if obj.prepay_in_prc else 0
