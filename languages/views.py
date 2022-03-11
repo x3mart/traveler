@@ -6,7 +6,7 @@ from languages.serializers import LanguageSerializer, LanguagesSerializer
 
 
 class LanguageViewSet(viewsets.ModelViewSet):
-    queryset = Language.objects.all()
+    queryset = Language.objects.all().order_by('name')
     serializer_class = LanguageSerializer
 
     def create(self, request, *args, **kwargs):
