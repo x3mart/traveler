@@ -80,7 +80,7 @@ class TourPreviewSerializer(serializers.ModelSerializer):
         if obj.wallpaper: 
             return get_tmb_image_uri(self, obj.wallpaper)
         return None
-    
+      
     def get_wallpaper(self, obj):
         if obj.wallpaper: 
             return get_image_uri(self, obj.wallpaper)

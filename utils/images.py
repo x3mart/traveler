@@ -7,28 +7,24 @@ from traveler.settings import BASE_DIR
 
 
 def get_tmb_image_uri(self, obj):
-        if hasattr(obj, 'avatar') and obj.tmb_avatar:
-            request = self.context.get('request')
-            return request.build_absolute_uri(obj.tmb_avatar)
-        elif hasattr(obj, 'image') and obj.tmb_image:
-            request = self.context.get('request')
-            return request.build_absolute_uri(obj.tmb_image)
-        elif hasattr(obj, 'wallpaper') and obj.tmb_wallpaper:
-            request = self.context.get('request')
-            return request.build_absolute_uri(obj.tmb_wallpaper)  
-        return None
+    request = self.context.get('request')
+    if hasattr(obj, 'avatar') and obj.tmb_avatar:
+        return request.build_absolute_uri(obj.tmb_avatar)
+    elif hasattr(obj, 'image') and obj.tmb_image:
+        return request.build_absolute_uri(obj.tmb_image)
+    elif hasattr(obj, 'wallpaper') and obj.tmb_wallpaper:
+        return request.build_absolute_uri(obj.tmb_wallpaper)  
+    return None
 
 def get_image_uri(self, obj):
-        if hasattr(obj, 'avatar') and obj.avatar:
-            request = self.context.get('request')
-            return request.build_absolute_uri(obj.avatar)
-        elif hasattr(obj, 'image') and obj.image:
-            request = self.context.get('request')
-            return request.build_absolute_uri(obj.image)
-        elif hasattr(obj, 'wallpaper') and obj.wallpaper:
-            request = self.context.get('request')
-            return request.build_absolute_uri(obj.wallpaper)  
-        return None  
+    request = self.context.get('request')
+    if hasattr(obj, 'avatar') and obj.avatar:
+        return request.build_absolute_uri(obj.avatar.url)
+    elif hasattr(obj, 'image') and obj.image:
+        return request.build_absolute_uri(obj.image.url)
+    elif hasattr(obj, 'wallpaper') and obj.wallpaper:
+        return request.build_absolute_uri(obj.wallpaper.url)  
+    return None  
 
 def get_current_img(sender, instance):
     try:
