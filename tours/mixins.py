@@ -31,10 +31,7 @@ class TourMixin():
         return (instance, data)
 
     def get_mtm_objects(self, model, ids):
-        objects = []
-        for id in ids:
-            objects.append(model.objects.get(pk=id))
-        return objects
+        return model.objects.filter(pk__in=ids)
     
     def get_mtm_set(self, obj_set): 
         return set(obj_set.all().values_list('name', flat=True))
