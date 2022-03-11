@@ -58,7 +58,7 @@ class TourMixin():
     
     def set_mtm_from_str(self, request, field):
         field = request.data.get(field).rstrip(';')
-        new_list = request.data.get(field).split(';')
+        new_list = field.split(';')
         new_list = list(map(lambda x: x.strip(), new_list))
         return new_list 
     
