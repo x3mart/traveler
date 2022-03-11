@@ -140,18 +140,18 @@ class TourSerializer(serializers.ModelSerializer):
     
     def get_main_impressions(self, obj):
         if obj.main_impressions:
-            return ', '.join(obj.main_impressions)
+            return '; '.join(obj.main_impressions)
         else:
             return ""
     def get_tour_included_services(self, obj): 
         if obj.tour_included_services:
-            return ', '.join(obj.tour_included_services)
+            return '; '.join(obj.tour_included_services)
         else:
             return ""
     
     def get_tour_excluded_services(self, obj):
         if obj.tour_excluded_services is not None:
-            return ', '.join(obj.tour_excluded_services)
+            return '; '.join(obj.tour_excluded_services)
         else:
             return "" 
 
