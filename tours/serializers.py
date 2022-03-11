@@ -76,6 +76,7 @@ class TourPreviewSerializer(serializers.ModelSerializer):
     rating = serializers.DecimalField(max_digits=2,decimal_places=1, source='tour_basic.rating',read_only=True)
     reviews_count = serializers.IntegerField(source='tour_basic.reviews_count',read_only=True)
     direct_link = serializers.BooleanField(source='tour_basic.direct_link', read_only=True)
+    start_time = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Tour
@@ -90,6 +91,8 @@ class TourPreviewSerializer(serializers.ModelSerializer):
         if obj.wallpaper: 
             return get_image_uri(self, obj.wallpaper)
         return None
+    def get_start_time(self, obj):
+        return obj.start_time.strftime('%H-%M')
 
     def get_prepay_in_prc(self, obj): 
         return 1 if obj.prepay_in_prc else 0
