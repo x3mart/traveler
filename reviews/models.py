@@ -10,7 +10,7 @@ class TourReview(models.Model):
     author = models.ForeignKey('accounts.Customer', on_delete=models.CASCADE, verbose_name=_('Путешественник'), related_name='customer_tours_reviews')
 
     def __str__(self):
-        return f'{self.tour.name} {self.author.full_name}'
+        return f'{self.author.full_name}'
     
     class Meta:
         verbose_name = _('Отзыв о туре')
