@@ -96,16 +96,28 @@ class TourPreviewSerializer(serializers.ModelSerializer):
         return None
 
     def get_start_time(self, obj):
-        return obj.start_time.strftime('%H:%M')
+        if obj.start_time:
+            return obj.start_time.strftime('%H:%M')
+        else:
+            return None
 
     def get_finish_time(self, obj):
-        return obj.start_time.strftime('%H:%M')
+        if obj.finish_time:
+            return obj.finish_time.strftime('%H:%M')
+        else:
+            return None
     
     def get_start_date(self, obj):
-        return obj.start_date.strftime('%d-%m-%Y',)
+        if obj.start_date:
+            return obj.start_date.strftime('%d-%m-%Y',)
+        else:
+            return None
 
     def get_finish_date(self, obj):
-        return obj.start_date.strftime('%d-%m-%Y',)
+        if obj.finish_date:
+            return obj.finish_date.strftime('%d-%m-%Y',)
+        else:
+            return None
 
     def get_prepay_in_prc(self, obj): 
         return 1 if obj.prepay_in_prc else 0
