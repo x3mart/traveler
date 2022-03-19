@@ -111,6 +111,13 @@ class ExpertMeSerializer(serializers.ModelSerializer):
             instance.save()    
         return super().update(instance, validated_data)
 
+class AvatarSerializer(serializers.Serializer):
+    tmb_avatar = serializers.SerializerMethodField(read_only=True)
+    avatar = serializers.ImageField(max_length=255, required=True)
+    
+    def get_tmb_avatar(self, obj): 
+        return get_tmb_image_uri(self, obj)
+
 
 class CustomerMeSerializer(serializers.ModelSerializer):
     class Meta:

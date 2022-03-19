@@ -142,10 +142,7 @@ class TourPlanImage(models.Model):
 
     @property
     def tmb_image(self):
-        if self.image:
-            tmb_path = get_tmb_path(self.image.url)
-            return tmb_path
-        return None
+        return get_tmb_path(self.image.url) if self.image else None
     
     class Meta:
         verbose_name = _('Фото чем займемся')
@@ -159,10 +156,7 @@ class TourGuestGuideImage(models.Model):
 
     @property
     def tmb_image(self):
-        if self.image:
-            tmb_path = get_tmb_path(self.image.url)
-            return tmb_path
-        return None
+        return get_tmb_path(self.image.url) if self.image else None
     
     class Meta:
         verbose_name = _('Фото приглашенного гида')
@@ -177,10 +171,7 @@ class TourWallpaper(models.Model):
 
     @property
     def tmb_wallpaper(self):
-        if self.wallpaper:
-            tmb_path = get_tmb_path(self.wallpaper.url)
-            return tmb_path
-        return None
+        return get_tmb_path(self.wallpaper.url) if self.wallpaper else None
     
     class Meta:
         verbose_name = _('Обложка тура')

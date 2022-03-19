@@ -46,7 +46,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(_('Имя'), max_length=255,  null=True, blank=True,)
     last_name = models.CharField(_('Фамилия'), max_length=255, null=True, blank=True,)
     avatar = models.ImageField(upload_to=user_avatar_path, null=True, blank=True,)
-    # tmb_avatar = models.ImageField(upload_to=user_avatar_path, null=True, blank=True,)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(_('Сотрудник'), default=False, )
     is_expert = models.BooleanField(_('Эксперт'), default=False, )
@@ -69,10 +68,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     @property
     def tmb_avatar(self):
-        if self.avatar:
-            tmb_path = get_tmb_path(self.avatar.url)
-            return tmb_path
-        return None
+        return get_tmb_path(self.avatar.url) if self.avatar else None
 
     def __str__(self):
         return self.full_name if self.full_name else '--'
@@ -84,6 +80,7 @@ class Expert(User):
     languages = models.ManyToManyField("languages.Language" ,verbose_name=_('Языки'), blank=True, related_name='expert')
     visited_countries = models.CharField(_('Посещенные страны'), max_length=255, null=True, blank=True)
     about = RichTextField(_('О себе'), null=True, blank=True)
+    video = models.URLField(_('Ссылка на видео'), max_length=255, null=True, blank=True)
     email_confirmed = models.BooleanField(_('Email подтвержден'), default=False)
     phone_confirmed = models.BooleanField(_('Телефон подтвержден'), default=False)
     docs_confirmed = models.BooleanField(_('Документы подтверждены'), default=False)
@@ -122,10 +119,7 @@ class TeamMember(models.Model):
     
     @property
     def tmb_avatar(self):
-        if self.avatar:
-            tmb_path = get_tmb_path(self.avatar.url)
-            return tmb_path
-        return None
+        return get_tmb_path(self.avatar.url) if self.avatar else None
     
     def __str__(self):
         return self.full_name if self.full_name else '--'

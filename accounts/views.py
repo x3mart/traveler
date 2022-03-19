@@ -1,8 +1,8 @@
 from django.shortcuts import redirect
 from rest_framework.decorators import action
 from accounts.permissions import TeamMemberPermission, UserPermission, CustomerPermission, ExpertPermission
-from accounts.serializers import CustomerMeSerializer, ExpertListSerializer, ExpertMeSerializer, ExpertSerializer, TeamMemberSerializer, UserSerializer, CustomerSerializer
-from rest_framework import viewsets
+from accounts.serializers import AvatarSerializer, CustomerMeSerializer, ExpertListSerializer, ExpertMeSerializer, ExpertSerializer, TeamMemberSerializer, UserSerializer, CustomerSerializer
+from rest_framework import viewsets, status
 from accounts.models import Expert, TeamMember, User, Customer
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
@@ -113,6 +113,22 @@ class ExpertViewSet(viewsets.ModelViewSet):
     @action(['get', 'put', 'patch', 'delete'], detail=False)
     def me(self, request, *args, **kwargs):
         return get_me(self, request, *args, **kwargs)
+    
+    @action(['patch', 'delete'], detail=False)
+    def avatar(self, request, *args, **kwargs):
+        if request.method == 'PATCH':
+            serializer = AvatarSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                data = serializer.validated_data
+            expert = Expert.objects.get(pk=request.user.id)
+            expert.avatar = data['avatar']
+            expert.save()
+        elif request.method == 'DELETE':
+            expert = Expert.objects.get(pk=request.user.id)
+            expert.avatar = None
+            expert.save()
+        return Response(ExpertSerializer(expert, context={'request':request}).data, status=status.HTTP_200_OK)
+
 
     def get_queryset(self):
         qs = Expert.objects.all()
