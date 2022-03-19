@@ -15,6 +15,31 @@ from rest_framework.response import Response
 import requests
 from rest_framework_simplejwt.settings import api_settings
 from django.contrib.auth.models import update_last_login
+from djoser.compat import get_user_email
+from djoser.conf import settings
+from django.core.mail import send_mail
+import threading
+from django.template.loader import render_to_string
+from templated_mail.mail import BaseEmailMessage
+
+
+class ConfirmEmailThread(threading.Thread, BaseEmailMessage):
+    def __init__(self, user, request):
+        self.user = user
+        self.request = request
+        threading.Thread.__init__(self)
+        BaseEmailMessage.__init__(self, request, template_name='email_confirm.html')
+    
+    def run(self):
+        subject = 'Подтверждение почты'
+        context = self.get_context_data()
+        # self.send('x3mart@gmail.com')
+        print(context)
+        message_html = render_to_string("email_confirm.html", context)
+        sended = send_mail(subject, "message", 'x3mart@gmail.com',[self.user.email], html_message=message_html,)
+        print(sended)
+        # print(self.request.site)
+
 
 class RedirectSocial(View):
     def get(self, request, *args, **kwargs):
@@ -128,7 +153,12 @@ class ExpertViewSet(viewsets.ModelViewSet):
             expert.avatar = None
             expert.save()
         return Response(ExpertSerializer(expert, context={'request':request}).data, status=status.HTTP_200_OK)
-
+    
+    @action(["get"], detail=False)
+    def getconfimationemail(self, request, *args, **kwargs):
+        user = User.objects.get(email='x3mart@gmail.com')
+        ConfirmEmailThread(user, request).start()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     def get_queryset(self):
         qs = Expert.objects.all()
