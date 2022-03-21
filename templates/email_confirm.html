@@ -1,0 +1,16 @@
+{% load i18n %}
+
+{% block subject %}
+{% blocktrans %}Подтвеждение email на {{ site_name }}{% endblocktrans %}
+{% endblock subject %}
+
+{% block html_body %}
+
+<p>{% trans "Для подтверждения адреса электронной почты продите по ссылке:" %}</p>
+<p><a href="{{ protocol }}://{{ domain }}/{{ url|safe }}">{{ protocol }}://{{ domain }}/{{ url|safe }}</a></p>
+
+<p>{% trans "Спасибо что используете наш сайт" %}</p>
+
+<p>{% blocktrans %}Команда {{ site_name }}{% endblocktrans %}</p>
+
+{% endblock html_body %}
