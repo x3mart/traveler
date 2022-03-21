@@ -5,6 +5,8 @@ from django.utils.translation import gettext_lazy as _
 import django.contrib.auth.password_validation as validators
 from django.core import exceptions
 from utils.images import get_tmb_image_uri
+from djoser.serializers import UidAndTokenSerializer
+
 
 
 def check_password(self):
@@ -20,6 +22,14 @@ def check_password(self):
     except exceptions.ValidationError as exc:
         raise serializers.ValidationError(str(exc))
     return password
+
+class EmailActivationSerializer(UidAndTokenSerializer):
+    def validate(self, attrs):
+        attrs = super().validate(attrs)
+        expert = Expert.objects.get(pk=self.user.id)
+        if not expert.email_confirmed:
+            return attrs
+        raise exceptions.PermissionDenied(self.error_messages["stale_token"])
 
 class TeamMemberSerializer(serializers.ModelSerializer):
     class Meta:

@@ -1,7 +1,7 @@
 from django.shortcuts import redirect
 from rest_framework.decorators import action
 from accounts.permissions import TeamMemberPermission, UserPermission, CustomerPermission, ExpertPermission
-from accounts.serializers import AvatarSerializer, CustomerMeSerializer, ExpertListSerializer, ExpertMeSerializer, ExpertSerializer, TeamMemberSerializer, UserSerializer, CustomerSerializer
+from accounts.serializers import AvatarSerializer, CustomerMeSerializer, EmailActivationSerializer, ExpertListSerializer, ExpertMeSerializer, ExpertSerializer, TeamMemberSerializer, UserSerializer, CustomerSerializer
 from rest_framework import viewsets, status
 from accounts.models import Expert, TeamMember, User, Customer
 from rest_framework import filters
@@ -16,11 +16,13 @@ import requests
 from rest_framework_simplejwt.settings import api_settings
 from django.contrib.auth.models import update_last_login
 from djoser.compat import get_user_email
+from djoser import utils
 from djoser.conf import settings
 from django.core.mail import send_mail
 import threading
 from django.template.loader import render_to_string
 from templated_mail.mail import BaseEmailMessage
+from django.contrib.auth.tokens import default_token_generator
 
 
 class ConfirmEmailThread(threading.Thread, BaseEmailMessage):
@@ -33,12 +35,11 @@ class ConfirmEmailThread(threading.Thread, BaseEmailMessage):
     def run(self):
         subject = 'Подтверждение почты'
         context = self.get_context_data()
-        # self.send('x3mart@gmail.com')
-        print(context)
+        context["uid"] = utils.encode_uid(self.user.pk)
+        context["token"] = default_token_generator.make_token(self.user)
+        context["url"] = settings.ACTIVATION_URL.format(**context)
         message_html = render_to_string("email_confirm.html", context)
-        sended = send_mail(subject, "message", 'x3mart@gmail.com',[self.user.email], html_message=message_html,)
-        print(sended)
-        # print(self.request.site)
+        send_mail(subject, "message", 'x3mart@gmail.com',[self.user.email], html_message=message_html,)
 
 
 class RedirectSocial(View):
@@ -131,9 +132,19 @@ class ExpertViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.OrderingFilter, DjangoFilterBackend]
     ordering_fields = ['tours_count', 'tours_avg_rating']
     filterset_fields = ['first_name', 'last_name']
+    token_generator = default_token_generator
 
     def get_instance(self):
         return self.queryset.get(pk=self.request.user.id)
+    
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return ExpertListSerializer
+        if self.action == 'me':
+            return ExpertMeSerializer
+        if self.action == 'confirm_email':
+            return EmailActivationSerializer
+        return super().get_serializer_class()
 
     @action(['get', 'put', 'patch', 'delete'], detail=False)
     def me(self, request, *args, **kwargs):
@@ -154,23 +165,20 @@ class ExpertViewSet(viewsets.ModelViewSet):
             expert.save()
         return Response(ExpertSerializer(expert, context={'request':request}).data, status=status.HTTP_200_OK)
     
-    @action(["get"], detail=False)
-    def getconfimationemail(self, request, *args, **kwargs):
+    @action(["post"], detail=False)
+    def send_confirmation_email(self, request, *args, **kwargs):
         user = User.objects.get(email='x3mart@gmail.com')
         ConfirmEmailThread(user, request).start()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-    def get_queryset(self):
-        qs = Expert.objects.all()
-        return qs
     
-    def get_serializer_class(self):
-        if self.action == 'list':
-            return ExpertListSerializer
-        is_staff = self.request.auth and self.request.user.is_staff
-        if self.action == 'me' or is_staff:
-            return ExpertMeSerializer
-        return super().get_serializer_class()
+    @action(["post"], detail=False)
+    def confirm_email(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        expert = Expert.objects.get(pk=serializer.user.id)
+        expert.email_confirmed = True
+        expert.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class CustomerViewSet(viewsets.ModelViewSet):
