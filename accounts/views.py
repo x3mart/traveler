@@ -167,7 +167,7 @@ class ExpertViewSet(viewsets.ModelViewSet):
     
     @action(["post"], detail=False)
     def send_confirmation_email(self, request, *args, **kwargs):
-        user = User.objects.get(email='x3mart@gmail.com')
+        user = request.user
         ConfirmEmailThread(user, request).start()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
