@@ -38,7 +38,7 @@ class ConfirmEmailThread(threading.Thread, BaseEmailMessage):
         context["uid"] = utils.encode_uid(self.user.pk)
         context["token"] = default_token_generator.make_token(self.user)
         context["domain"] = self.request.headers['Host']
-        # context["domain"] = self.request.headers['Host']
+        context["site_name"] = self.request.headers['Host']
         context["url"] = settings.ACTIVATION_URL.format(**context)
         message_html = render_to_string("email_confirm.html", context)
         # print(context["site_name"])
