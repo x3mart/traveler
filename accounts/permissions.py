@@ -10,7 +10,7 @@ class ExpertPermission(permissions.BasePermission):
     def has_permission(self, request, view):
         if view.action in ['destroy',]:
             return request.auth and request.user.is_staff
-        if view.action in ['me', 'update', 'partial_update',]:
+        if view.action in ['me', 'update', 'partial_update', 'send_confirmation_email']:
             return request.auth
         return True           
 
