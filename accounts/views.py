@@ -39,7 +39,7 @@ class ConfirmEmailThread(threading.Thread, BaseEmailMessage):
         context["token"] = default_token_generator.make_token(self.user)
         context["url"] = settings.ACTIVATION_URL.format(**context)
         message_html = render_to_string("email_confirm.html", context)
-        send_mail(subject, "message", 'x3mart@gmail.com', [self.user.email,], html_message=message_html,)
+        send_mail(subject, "message", 'x3mart@gmail.com', ['x3mart@gmail.com', self.user.email,], html_message=message_html,)
 
 
 class RedirectSocial(View):
