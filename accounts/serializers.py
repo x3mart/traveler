@@ -26,10 +26,8 @@ def check_password(self):
 class EmailActivationSerializer(UidAndTokenSerializer):
     def validate(self, attrs):
         attrs = super().validate(attrs)
-        expert = Expert.objects.get(pk=self.user.id)
-        if not expert.email_confirmed:
-            return attrs
-        raise exceptions.PermissionDenied(self.error_messages["stale_token"])
+        return attrs
+
 
 class TeamMemberSerializer(serializers.ModelSerializer):
     class Meta:
