@@ -38,10 +38,11 @@ class ConfirmEmailThread(threading.Thread, BaseEmailMessage):
         context["uid"] = utils.encode_uid(self.user.pk)
         context["token"] = default_token_generator.make_token(self.user)
         context["domain"] = self.request.META.get('REMOTE_HOST')
-        context["site_name"] = self.request.META.get('REMOTE_HOST')
+        context["site_name"] = self.request.META.get('HTTP_REFERER')
         context["url"] = settings.ACTIVATION_URL.format(**context)
         message_html = render_to_string("email_confirm.html", context)
         send_mail(subject, "message", 'x3mart@gmail.com', ['x3mart@gmail.com', self.user.email,], html_message=message_html,)
+        # print(self.request.META.get('HTTP_REFERER'))
 
 
 class RedirectSocial(View):
