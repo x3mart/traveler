@@ -7,7 +7,7 @@
 {% block html_body %}
 
 <p>{% trans "Для подтверждения адреса электронной почты продите по ссылке:" %}</p>
-<p><a href="{{ site_name }}{{ url|safe }}">{{ protocol }}://{{ domain }}/{{ url|safe }}</a></p>
+<p><a href="{{ site_name }}{{ url|safe }}">{{ site_name }}{{ url|safe }}</a></p>
 
 <p>{% trans "Спасибо что используете наш сайт" %}</p>
 
