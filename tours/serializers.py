@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from .models import Tour, TourAccomodation, TourPropertyType, TourType
 from currencies.serializers import CurrencySerializer
 from accounts.serializers import ExpertListSerializer, TeamMemberSerializer
+from languages.serializers import LanguageSerializer
 from utils.images import get_image_uri, get_tmb_image_uri
 
 
@@ -120,6 +121,12 @@ class TourPreviewSerializer(serializers.ModelSerializer):
 
 
 class TourSerializer(serializers.ModelSerializer):
+    basic_type = TourTypeSerializer(many=False, read_only=True)
+    additional_types = TourTypeSerializer(many=True, read_only=True)
+    tour_property_types = TourPropertyTypeSerializer(many=True, read_only=True)
+    accomodation = TourAccomodationSerializer(many=True, read_only=True)
+    languages = LanguageSerializer(many=True, read_only=True)
+    currency = CurrencySerializer(many=False, read_only=True)
     tour_property_images = ImageSerializer(many=True, read_only=True)
     tour_images = ImageSerializer(many=True, read_only=True)
     main_impressions = serializers.SerializerMethodField(read_only=True)
@@ -139,10 +146,6 @@ class TourSerializer(serializers.ModelSerializer):
         model = Tour
         fields = TOUR_FIELDS
         extra_kwargs = {
-            'tour_property_types': {'required': False, 'read_only':True},
-            'accomodation': {'required': False, 'read_only':True},
-            'additional_types': {'required': False, 'read_only':True},
-            'languages': {'required': False, 'read_only':True},
             'animals_not_exploited': {'required': False,},
             'instant_booking': {'required': False,}, 
             'is_draft': {'required': False,},

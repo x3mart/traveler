@@ -38,21 +38,26 @@ class TourMixin():
 
     def set_additional_types(self, request, instance):
         ids = request.data.get('additional_types')
+        additional_types = request.data.pop('additional_types')
+        ids = map(lambda additional_type: additional_type.get('id'), additional_types)
         objects = self.get_mtm_objects(TourType, ids)
         instance.additional_types.set(objects)
     
     def set_property_types(self, request, instance):
-        ids = request.data.get('tour_property_types')
+        tour_property_types = request.data.pop('tour_property_types')
+        ids = map(lambda tour_property_type: tour_property_type.get('id'), tour_property_types)
         objects = self.get_mtm_objects(TourPropertyType, ids)
         instance.tour_property_types.set(objects)
     
     def set_accomodation(self, request, instance):
-        ids = request.data.get('accomodation')
+        accomodations = request.data.pop('accomodation')
+        ids = map(lambda accomodation: accomodation.get('id'), accomodations)
         objects = self.get_mtm_objects(TourAccomodation, ids)
         instance.accomodation.set(objects)
     
     def set_languages(self, request, instance=None):
-        ids = request.data.get('languages')
+        languages = request.data.pop('languages')
+        ids = map(lambda language: language.get('id'), languages)
         objects = self.get_mtm_objects(Language, ids)
         instance.languages.set(objects)
     
