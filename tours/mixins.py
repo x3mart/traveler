@@ -79,13 +79,15 @@ class TourMixin():
         tour_basic.save()
     
     def set_fk_fields(self, request, instance):
-        fk_fields = {field.name for field in instance._meta.get_fields() if isinstance(field, models.ForeignKey)} - {'tour_basic', 'wallpaper'}
-        print(fk_fields)
+        fk_fields = {field.name for field in instance._meta.get_fields() if isinstance(field, models.ForeignKey)} - {'tour_basic', 'wallpaper', 'team_member'}
         for field in fk_fields:
             model = instance._meta.get_field(field).remote_field.model       
             if request.data.get(field) is not None:
                 fk_id = request.data.get(field)['id']
                 setattr(instance, field, model.objects.get(pk=fk_id))
+            if request.data.get('team_member') is not None:
+                fk_id = request.data.get('team_member')['id']
+                setattr(instance, 'team_member', model.objects.get(pk=fk_id))
             else:
                 setattr(instance, field, None)
         return instance
