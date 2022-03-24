@@ -87,7 +87,7 @@ class TourMixin():
                 setattr(instance, field, model.objects.get(pk=fk_id))
             if request.data.get('team_member') is not None:
                 fk_id = request.data.get('team_member')['id']
-                setattr(instance, 'team_member', model.objects.get(pk=fk_id))
+                setattr(instance, 'team_member', TeamMember.objects.get(pk=fk_id))
             else:
                 setattr(instance, field, None)
         return instance
