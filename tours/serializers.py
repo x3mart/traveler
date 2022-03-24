@@ -1,4 +1,4 @@
-from dataclasses import fields
+from datetime import date
 from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
 from .models import Tour, TourAccomodation, TourPropertyType, TourType
@@ -78,12 +78,11 @@ class TourPreviewSerializer(serializers.ModelSerializer):
     direct_link = serializers.BooleanField(source='tour_basic.direct_link', read_only=True)
     start_time = serializers.SerializerMethodField(read_only=True)
     finish_time = serializers.SerializerMethodField(read_only=True)
-    # start_date = serializers.SerializerMethodField(read_only=True)
-    # finish_date = serializers.SerializerMethodField(read_only=True)
+    price = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Tour
-        fields = TOUR_FIELDS + ('expert',)
+        fields = TOUR_FIELDS + ('expert', 'cost')
 
     def get_tmb_wallpaper(self, obj):
         if obj.wallpaper: 
@@ -107,17 +106,11 @@ class TourPreviewSerializer(serializers.ModelSerializer):
         else:
             return None
     
-    # def get_start_date(self, obj):
-    #     if obj.start_date:
-    #         return obj.start_date.strftime('%d-%m-%Y',)
-    #     else:
-    #         return None
-
-    # def get_finish_date(self, obj):
-    #     if obj.finish_date:
-    #         return obj.finish_date.strftime('%d-%m-%Y',)
-    #     else:
-    #         return None
+    def get_price(self, obj):
+        if obj.price and obj.discount and obj.discount_starts < date.today() and  obj.discount_finish > date.today():
+            return obj.price - obj.price*(obj.discount/100) if obj.prepay_in_prc else obj.price - obj.discount
+        else:
+            return obj.price
 
     def get_prepay_in_prc(self, obj): 
         return 1 if obj.prepay_in_prc else 0
@@ -140,6 +133,7 @@ class TourSerializer(serializers.ModelSerializer):
     rating = serializers.DecimalField(max_digits=2,decimal_places=1, source='tour_basic.rating',read_only=True)
     reviews_count = serializers.IntegerField(source='tour_basic.reviews_count',read_only=True)
     direct_link = serializers.BooleanField(source='tour_basic.direct_link', read_only=True)
+    
 
     class Meta:
         model = Tour

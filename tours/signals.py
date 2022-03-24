@@ -21,34 +21,18 @@ def tour_type_post_delete(instance, **kwargs):
 
 @receiver(pre_save, sender=Tour)
 def tour_pre_save(instance, **kwargs):
-    if instance.discount == 0:
-        instance.discount = None
-    if instance.discount and instance.discount_in_prc:
-        instance.cost = instance.price - instance.price*instance.discount/100
-    elif instance.discount and not instance.discount_in_prc:
-        instance.cost = instance.price - instance.discount
-    else:
-        instance.cost = instance.price
     if instance.finish_date and instance.start_date:
         instance.duration = (instance.finish_date - instance.start_date).days + 1
 
 @receiver(post_save, sender=Tour)
 def tour_post_save(instance, **kwargs):
     expert = instance.tour_basic.expert
-    expert.tours_count = expert.tours.filter(tours__is_active=True).distinct().count()
-
+    expert.tours_count = expert.tours.filter(tours__is_active=True).count()
     expert.save()
 
 @receiver(post_save, sender=TourWallpaper)
 def tour_basic_post_save(instance, created, **kwargs):
     image_processing(instance.wallpaper, None, 1920, 480, 730, 280)
-
-    
-
-# @receiver(post_delete, sender=Tour)
-# def tour_basic_post_delete(instance, **kwargs):
-#     if instance.wallpaper:
-#         delete_image(instance.wallpaper)
 
 
 @receiver(post_save, sender=TourBasic)
