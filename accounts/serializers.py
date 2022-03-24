@@ -30,7 +30,7 @@ class EmailActivationSerializer(UidAndTokenSerializer):
 
 
 class TeamMemberSerializer(serializers.ModelSerializer):
-    full_name = serializers.CharField()
+    full_name = serializers.CharField(read_only=True)
     class Meta:
         model = TeamMember
         fields = '__all__'
