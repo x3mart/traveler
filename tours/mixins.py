@@ -2,13 +2,15 @@ from django.forms import model_to_dict
 from django.shortcuts import get_object_or_404
 from uritemplate import partial
 from tours.models import TourAccomodation, TourPropertyType, TourType
-from accounts.models import Expert
+from accounts.models import Expert, TeamMember
 from languages.models import Language
+from currencies.models import Currency
 from tours.serializers import ImageSerializer, WallpaperSerializer
 
 
 NOT_MODERATED_FIELDS = {'is_active', 'on_moderation', 'vacants_number', 'is_draft', 'discount_starts', 'discount_finish', 'discount_in_prc', 'discount', 'sold', 'watched'} 
 CHECBOX_SET = {'is_guaranteed', 'is_active', 'postpay_on_start_day', 'scouting', 'animals_not_exploited', 'month_recurrent', 'flight_included', 'babies_alowed', 'on_moderation', 'week_recurrent', 'is_draft', 'instant_booking'}
+FK_FIELDS = {'tour_basic', 'team_member', 'currency'}
 
 class TourMixin():
     def check_set_tour_field_for_moderation(self, instance, field):
@@ -70,10 +72,33 @@ class TourMixin():
     def get_expert(self, request):
         return get_object_or_404(Expert, pk=request.user.id)
     
+    def set_basic_type(self, request, instance):
+        basic_type = request.data.pop('basic_type')
+        instance.basic_type = TourType.objects.get(pk=basic_type['id'])
+    
+    def set_currency(self, request, instance):
+        currency = request.data.pop('currency')
+        instance.currency = Currency.objects.get(pk=currency['id'])
+    
+    def set_team_member(self, request, instance):
+        team_member = request.data.pop('team_member')
+        instance.team_member = TeamMember.objects.get(pk=team_member['id'])
+    
     def set_tour_direct_links(self, request, instance):
         tour_basic = instance.tour_basic
         tour_basic.direct_link = request.data.get('direct_link')
         tour_basic.save()
+    
+    def set_fk_fields(self, request, instance):       
+        if request.data.get('basic_type') is not None:
+            self.set_basic_type(request, instance)
+        if request.data.get('team_member') is not None:
+            self.set_team_member(request, instance)
+        else:
+            instance.team_member = None
+        if request.data.get('currency') is not None:
+            self.set_currency(request, instance)
+        return instance
 
     def set_mtm_fields(self, request, instance):       
         if request.data.get('additional_types') is not None:

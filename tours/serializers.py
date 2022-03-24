@@ -121,7 +121,8 @@ class TourPreviewSerializer(serializers.ModelSerializer):
 
 
 class TourSerializer(serializers.ModelSerializer):
-    basic_type = TourTypeSerializer(many=False)
+    basic_type = TourTypeSerializer(many=False, read_only=True)
+    team_member = TeamMemberSerializer(many=False, read_only=True)
     additional_types = TourTypeSerializer(many=True, read_only=True)
     tour_property_types = TourPropertyTypeSerializer(many=True, read_only=True)
     accomodation = TourAccomodationSerializer(many=True, read_only=True)
