@@ -78,8 +78,8 @@ class TourPreviewSerializer(serializers.ModelSerializer):
     direct_link = serializers.BooleanField(source='tour_basic.direct_link', read_only=True)
     start_time = serializers.SerializerMethodField(read_only=True)
     finish_time = serializers.SerializerMethodField(read_only=True)
-    start_date = serializers.SerializerMethodField(read_only=True)
-    finish_date = serializers.SerializerMethodField(read_only=True)
+    # start_date = serializers.SerializerMethodField(read_only=True)
+    # finish_date = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Tour
@@ -107,17 +107,17 @@ class TourPreviewSerializer(serializers.ModelSerializer):
         else:
             return None
     
-    def get_start_date(self, obj):
-        if obj.start_date:
-            return obj.start_date.strftime('%d-%m-%Y',)
-        else:
-            return None
+    # def get_start_date(self, obj):
+    #     if obj.start_date:
+    #         return obj.start_date.strftime('%d-%m-%Y',)
+    #     else:
+    #         return None
 
-    def get_finish_date(self, obj):
-        if obj.finish_date:
-            return obj.finish_date.strftime('%d-%m-%Y',)
-        else:
-            return None
+    # def get_finish_date(self, obj):
+    #     if obj.finish_date:
+    #         return obj.finish_date.strftime('%d-%m-%Y',)
+    #     else:
+    #         return None
 
     def get_prepay_in_prc(self, obj): 
         return 1 if obj.prepay_in_prc else 0
