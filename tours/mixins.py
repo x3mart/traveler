@@ -11,7 +11,7 @@ from tours.serializers import ImageSerializer, WallpaperSerializer
 
 NOT_MODERATED_FIELDS = {'is_active', 'on_moderation', 'vacants_number', 'is_draft', 'discount_starts', 'discount_finish', 'discount_in_prc', 'discount', 'sold', 'watched'} 
 CHECBOX_SET = {'is_guaranteed', 'is_active', 'postpay_on_start_day', 'scouting', 'animals_not_exploited', 'month_recurrent', 'flight_included', 'babies_alowed', 'on_moderation', 'week_recurrent', 'is_draft', 'instant_booking'}
-FK_FIELDS = {'basic_type', 'start_region', 'finish_region', 'start_country', 'finish_country', 'start_russian_region', 'finish_russian_region', 'start_city', 'finish_city', 'prepay_currency', 'team_member', 'currency'}
+EXCLUDED_FK_FIELDS = {'tour_basic', 'wallpaper', 'team_member'}
 
 class TourMixin():
     def check_set_tour_field_for_moderation(self, instance, field):
@@ -79,7 +79,7 @@ class TourMixin():
         tour_basic.save()
     
     def set_fk_fields(self, request, instance):
-        fk_fields = {field.name for field in instance._meta.get_fields() if isinstance(field, models.ForeignKey)} - {'tour_basic', 'wallpaper', 'team_member'}
+        fk_fields = {field.name for field in instance._meta.get_fields() if isinstance(field, models.ForeignKey)} - EXCLUDED_FK_FIELDS
         for field in fk_fields:
             model = instance._meta.get_field(field).remote_field.model       
             if request.data.get(field) is not None:
