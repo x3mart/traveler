@@ -4,6 +4,8 @@ from geoplaces.models import City, Country, Region, CountryRegion
 
 
 class CitySerializer(serializers.ModelSerializer):
+    country = serializers.StringRelatedField(many=False)
+    country_region = serializers.StringRelatedField(many=False)
     class Meta:
         model = City
         fields = '__all__'

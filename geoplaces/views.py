@@ -79,8 +79,8 @@ class CityViewSet(viewsets.ModelViewSet):
         instance, created = City.objects.get_or_create(**data)
         return Response(CitySerializer(instance).data, status=201)
 
-@api_view(['POST'])
-def get_vk_countries(request):
+
+def get_vk_countries():
     url = 'https://api.vk.com/method/database.getCountries'
     vk_data = {
         'v':'5.131',
@@ -94,18 +94,15 @@ def get_vk_countries(request):
     if error:
         return Response(error, status=403)
     vk_data['count'] = vk_response.json().get('response')['count']
-    # print(vk_data['count'])
     vk_response = requests.post(url, data=vk_data)
     for item in vk_response.json().get('response')['items']:
         country = {}
         country['name'] = item['title']
         country['foreign_id'] = item['id']
         Country.objects.get_or_create(**country)
-    # print(vk_response.json())
-    return Response({'count':Country.objects.count()}, status=200)
+    return Country.objects.count()
 
-@api_view(['POST'])
-def get_vk_country_regions(request):
+def get_vk_country_regions():
     url = 'https://api.vk.com/method/database.getRegions'
     vk_data = {
         'v':'5.131',
@@ -119,22 +116,14 @@ def get_vk_country_regions(request):
     error = vk_response.json().get('error', None)
     if error:
         return Response(error, status=403)
-    # vk_data['count'] = vk_response.json().get('response')['count']
     for item in vk_response.json().get('response')['items']:
         region = {}
         region['name'] = item['title']
         region['foreign_id'] = item['id']
         region['country'] = country
         CountryRegion.objects.get_or_create(**region)
-        # print(country.name)
-        # print(vk_data['count'])
-    # vk_response = requests.post(url, data=vk_data)
-    # 
-    # print(vk_response.json())
-    return Response({'count':CountryRegion.objects.count()}, status=200)
+    return CountryRegion.objects.count()
 
-
-# @api_view(['POST'])
 def get_vk_country_cities():
     url = 'https://api.vk.com/method/database.getCities'
     vk_data = {
@@ -153,7 +142,6 @@ def get_vk_country_cities():
         if error:
             return Response(error, status=403)
         count = vk_response.json().get('response')['count']
-        # print(vk_response.json())
         print(count)
         print(region.name)
         x = 0
@@ -172,11 +160,6 @@ def get_vk_country_cities():
                 cities.append(VKCity(**city))
             VKCity.objects.bulk_create(cities)
             time.sleep(1)
-        # print(country.name)
-        # print(VKCity.objects.filter(country=country).count())
-    # vk_response = requests.post(url, data=vk_data)
-    # 
-    # print(vk_response.json())
     return VKCity.objects.count()
 
 def set_russian_cities():
