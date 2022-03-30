@@ -63,9 +63,12 @@ class CityViewSet(viewsets.ModelViewSet):
     queryset = City.objects.all()
     serializer_class = CitySerializer
     permission_classes = [AllowAny]
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['country', 'country_region']
     search_fields = ['@name', '^name']
+    ordering_fields = ['name',]
+    ordering = ['name']
+    
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
