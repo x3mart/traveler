@@ -151,9 +151,9 @@ def get_vk_country_cities(request):
         # print(count)
         # print(region.foreign_id)
         x = 0
-        while x < count/1000 + 1:
-            vk_data['count'] = 1000
-            vk_data['offset'] = 1000 * x
+        while x < count/500 + 1:
+            vk_data['count'] = 500
+            vk_data['offset'] = 500 * x
             vk_response = requests.post(url, data=vk_data)
             x += 1
             cities = []
