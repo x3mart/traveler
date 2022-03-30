@@ -185,6 +185,6 @@ def set_russian_cities():
             city['name'] = item
             city['country'] = country
             city['country_region'] = region
-            cities.append(VKCity(**city))
-        VKCity.objects.bulk_create(cities)
+            cities.append(City(**city))
+        City.objects.bulk_create(cities)
     return country.cities.count()
