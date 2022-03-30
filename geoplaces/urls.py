@@ -5,9 +5,9 @@ from .views import CityViewSet, CountryViewSet, RegionViewSet, CountryRegionView
 router = DefaultRouter()
 
 urlpatterns = [
-    path('addcountries/', get_vk_countries, name='addcountry'),
-    path('addregions/', get_vk_country_regions, name='addregion'),
-    path('addcities/', get_vk_country_cities, name='addcity'),
+    # path('addcountries/', get_vk_countries, name='addcountry'),
+    # path('addregions/', get_vk_country_regions, name='addregion'),
+    # path('addcities/', get_vk_country_cities, name='addcity'),
 ]
 
 router.register(r'regions', RegionViewSet, basename='region')
