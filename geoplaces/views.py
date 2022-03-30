@@ -167,7 +167,7 @@ def get_vk_country_cities(request):
             VKCity.objects.bulk_create(cities)
             time.sleep(1)
         # print(country.name)
-        print(VKCity.objects.filter(country=country).count())
+        # print(VKCity.objects.filter(country=country).count())
     # vk_response = requests.post(url, data=vk_data)
     # 
     # print(vk_response.json())
