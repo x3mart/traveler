@@ -107,7 +107,7 @@ def get_vk_country_regions(request):
         'access_token':VK_ACCESS_TOKEN,
         'lang':'ru'
     }
-    # for country in Country.objects.exclude(pk=1):
+    country = Country.objects.get(foreign_id=1)
     vk_data['country_id'] = 1
     vk_response = requests.post(url, data=vk_data)
     error = vk_response.json().get('error', None)
