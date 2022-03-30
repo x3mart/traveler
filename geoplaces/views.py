@@ -172,3 +172,19 @@ def get_vk_country_cities():
     # 
     # print(vk_response.json())
     return VKCity.objects.count()
+
+def set_russian_cities():
+    country = Country.objects.get(foreign_id=1)
+    for region in country.country_regions.all():
+        names = region.vkcities.values("name").distinct()
+        print(names.count())
+        print(region.name)
+        cities = []
+        for item in names:
+            city = {}
+            city['name'] = item
+            city['country'] = country
+            city['country_region'] = region
+            cities.append(VKCity(**city))
+        VKCity.objects.bulk_create(cities)
+    return country.cities.count()
