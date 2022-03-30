@@ -107,19 +107,19 @@ def get_vk_country_regions(request):
         'access_token':VK_ACCESS_TOKEN,
         'lang':'ru'
     }
-    for country in Country.objects.exclude(pk=1):
-        vk_data['country_id'] = country.foreign_id
-        vk_response = requests.post(url, data=vk_data)
-        error = vk_response.json().get('error', None)
-        if error:
-            return Response(error, status=403)
-        # vk_data['count'] = vk_response.json().get('response')['count']
-        for item in vk_response.json().get('response')['items']:
-            region = {}
-            region['name'] = item['title']
-            region['foreign_id'] = item['id']
-            region['country'] = country
-            CountryRegion.objects.get_or_create(**region)
+    # for country in Country.objects.exclude(pk=1):
+    vk_data['country_id'] = 1
+    vk_response = requests.post(url, data=vk_data)
+    error = vk_response.json().get('error', None)
+    if error:
+        return Response(error, status=403)
+    # vk_data['count'] = vk_response.json().get('response')['count']
+    for item in vk_response.json().get('response')['items']:
+        region = {}
+        region['name'] = item['title']
+        region['foreign_id'] = item['id']
+        region['country'] = country
+        CountryRegion.objects.get_or_create(**region)
         # print(country.name)
         # print(vk_data['count'])
     # vk_response = requests.post(url, data=vk_data)
