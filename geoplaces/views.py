@@ -128,8 +128,8 @@ def get_vk_country_regions(request):
     return Response({'count':CountryRegion.objects.count()}, status=200)
 
 
-@api_view(['POST'])
-def get_vk_country_cities(request):
+# @api_view(['POST'])
+def get_vk_country_cities():
     url = 'https://api.vk.com/method/database.getCities'
     vk_data = {
         'v':'5.131',
@@ -148,8 +148,8 @@ def get_vk_country_cities(request):
             return Response(error, status=403)
         count = vk_response.json().get('response')['count']
         # print(vk_response.json())
-        # print(count)
-        # print(region.foreign_id)
+        print(count)
+        print(region.name)
         x = 0
         while x < count/500 + 1:
             vk_data['count'] = 500
@@ -171,4 +171,4 @@ def get_vk_country_cities(request):
     # vk_response = requests.post(url, data=vk_data)
     # 
     # print(vk_response.json())
-    return Response({'count':VKCity.objects.count()}, status=200)
+    return VKCity.objects.count()
