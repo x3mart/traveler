@@ -176,13 +176,13 @@ def get_vk_country_cities():
 def set_russian_cities():
     country = Country.objects.get(foreign_id=1)
     for region in country.country_regions.all():
-        names = region.vkcities.values_list("name").distinct()
+        names = region.vkcities.values("name").distinct()
         print(region.vkcities.count() - names.count())
         print(region.name)
         cities = []
         for item in names:
             city = {}
-            city['name'] = item
+            city['name'] = item['name']
             city['country'] = country
             city['country_region'] = region
             cities.append(City(**city))
