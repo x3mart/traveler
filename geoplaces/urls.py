@@ -12,7 +12,7 @@ urlpatterns = [
 
 router.register(r'regions', RegionViewSet, basename='region')
 router.register(r'countries', CountryViewSet, basename='country')
-router.register(r'CountryRegions', CountryRegionViewSet, basename='russsianregion')
+router.register(r'russsianregions', CountryRegionViewSet, basename='russsianregion')
 router.register(r'cities', CityViewSet, basename='city')
 
 urlpatterns += router.urls
