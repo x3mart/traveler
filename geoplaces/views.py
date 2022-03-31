@@ -68,7 +68,9 @@ class CityViewSet(viewsets.ModelViewSet):
     search_fields = ['@name', '^name']
     ordering_fields = ['name',]
     ordering = ['name']
-    
+
+    def get_queryset(self):
+        return super().get_queryset()[:150]    
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
