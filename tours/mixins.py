@@ -92,7 +92,7 @@ class TourMixin():
                 setattr(instance, field, None)
             start_city = request.data.get('start_city')
             finish_city = request.data.get('finish_city')
-            if start_city and start_city.get('id'):
+            if start_city and start_city.get('id') is not None:
                 city = City.objects.get(pk=start_city.get('id'))
                 country = city.country
                 country_region = city.country_region
@@ -101,10 +101,10 @@ class TourMixin():
                 setattr(instance, 'start_region', region)
                 setattr(instance, 'start_russian_region', country_region)
                 setattr(instance, 'start_country', country)
-            elif start_city and not start_city.get('id'):
+            elif start_city and not start_city.get('id') is None:
                 city = City.objects.create(name=start_city.get('full_name'))
                 setattr(instance, 'start_city', city)
-            if finish_city and finish_city.get('id'):
+            if finish_city and finish_city.get('id') is not None:
                 city = City.objects.get(pk=finish_city.get('id'))
                 country = city.country
                 country_region = city.country_region
@@ -113,7 +113,7 @@ class TourMixin():
                 setattr(instance, 'finish_region', region)
                 setattr(instance, 'finish_russian_region', country_region)
                 setattr(instance, 'finish_country', country)
-            elif finish_city and not finish_city.get('id'):
+            elif finish_city and finish_city.get('id') is None:
                 city = City.objects.create(name=finish_city.get('full_name'))
                 setattr(instance, 'finish_city', city)
         return instance
