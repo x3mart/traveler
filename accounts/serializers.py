@@ -1,4 +1,6 @@
 from dataclasses import fields
+
+from languages.serializers import LanguageSerializer
 from .models import Customer, Expert, TeamMember, User
 from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
@@ -31,6 +33,7 @@ class EmailActivationSerializer(UidAndTokenSerializer):
 
 class TeamMemberSerializer(serializers.ModelSerializer):
     full_name = serializers.CharField(read_only=True)
+    languages = LanguageSerializer(many=True, read_only=True)
     class Meta:
         model = TeamMember
         fields = '__all__'
@@ -79,6 +82,7 @@ class ExpertListSerializer(serializers.ModelSerializer):
 
 class ExpertSerializer(serializers.ModelSerializer):
     tmb_avatar = serializers.SerializerMethodField(read_only=True)
+    languages = LanguageSerializer(many=True, read_only=True)
     class Meta:
         model = Expert
         fields = ('id', 'email', 'first_name', 'last_name', 'avatar', 'tmb_avatar', 'country', 'city', 'languages', 'visited_countries', 'about', 'email_confirmed', 'phone_confirmed', 'docs_confirmed', 'status_confirmed', 'rating', 'tours_count', 'tours_rating', 'reviews_count', 'tour_reviews_count', 'video')
@@ -100,6 +104,8 @@ class ExpertSerializer(serializers.ModelSerializer):
     
 class ExpertMeSerializer(serializers.ModelSerializer):
     tmb_avatar = serializers.SerializerMethodField(read_only=True)
+    languages = LanguageSerializer(many=True, read_only=True)
+
     class Meta:
         model = Expert
         fields = ('id', 'password', 'email', 'first_name', 'last_name', 'avatar', 'phone', 'tmb_avatar', 'country', 'city', 'languages', 'visited_countries', 'about', 'email_confirmed', 'phone_confirmed', 'docs_confirmed', 'status_confirmed', 'rating', 'tours_count', 'tours_rating', 'reviews_count', 'tour_reviews_count', 'video')

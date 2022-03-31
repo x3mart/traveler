@@ -148,6 +148,11 @@ class ExpertViewSet(viewsets.ModelViewSet):
         if self.action == 'confirm_email':
             return EmailActivationSerializer
         return super().get_serializer_class()
+    
+    def perform_update(self, serializer):
+        if self.request.get('languages'):
+            pass 
+        return super().perform_update(serializer)
 
     @action(['get', 'put', 'patch', 'delete'], detail=False)
     def me(self, request, *args, **kwargs):
@@ -226,9 +231,23 @@ class TeamMemberViewSet(viewsets.ModelViewSet):
         else:
             return Response(serializer.errors, status=400)
         data['expert_id'] = request.user.id
-        data.pop('is_expert', None)
         instance = TeamMember.objects.create(**data)
         return Response(TeamMemberSerializer(instance).data, status=201)
+    
+    @action(['patch', 'delete'], detail=True)
+    def avatar(self, request, *args, **kwargs):
+        if request.method == 'PATCH':
+            serializer = AvatarSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                data = serializer.validated_data
+            team_member = self.get_object()
+            team_member.avatar = data['avatar']
+            team_member.save()
+        elif request.method == 'DELETE':
+            team_member = Expert.objects.get(pk=request.user.id)
+            team_member.avatar = None
+            team_member.save()
+        return Response(TeamMemberSerializer(team_member, context={'request':request}).data, status=status.HTTP_200_OK)
     
     def perform_update(self, serializer):
         serializer.data.pop('is_expert', None)
