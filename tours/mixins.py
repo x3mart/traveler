@@ -41,7 +41,6 @@ class TourMixin():
         return set(obj_set.all().values_list('name', flat=True))
 
     def set_additional_types(self, request, instance):
-        ids = request.data.get('additional_types')
         additional_types = request.data.pop('additional_types')
         ids = map(lambda additional_type: additional_type.get('id'), additional_types)
         objects = self.get_mtm_objects(TourType, ids)
