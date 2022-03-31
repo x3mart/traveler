@@ -97,7 +97,7 @@ class TourMixin():
                 city = City.objects.get(pk=start_city.get('id'))
                 country = city.country
                 country_region = city.country_region
-                region = country.region
+                region = country.region if country else None
                 setattr(instance, 'start_city', city)
                 setattr(instance, 'start_region', region)
                 setattr(instance, 'start_russian_region', country_region)
@@ -109,7 +109,7 @@ class TourMixin():
                 city = City.objects.get(pk=finish_city.get('id'))
                 country = city.country
                 country_region = city.country_region
-                region = country.region
+                region = country.region if country else None
                 setattr(instance, 'finish_city', city)
                 setattr(instance, 'finish_region', region)
                 setattr(instance, 'finish_russian_region', country_region)
