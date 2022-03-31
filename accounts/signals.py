@@ -16,7 +16,8 @@ def user_post_save(instance, **kwargs):
 
 @receiver(post_delete, sender=User)
 def user_post_delete(instance, **kwargs):
-    delete_image(instance._current_avatar)
+    if instance._current_avatar:
+        delete_image(instance._current_avatar)
 
 @receiver(post_init, sender=Expert)
 def expert_post_init(instance, **kwargs):
@@ -36,7 +37,8 @@ def expert_post_save(instance, created, **kwargs):
 
 @receiver(post_delete, sender=Expert)
 def expert_post_delete(instance, **kwargs):
-    delete_image(instance._current_avatar)
+    if instance._current_avatar:
+        delete_image(instance._current_avatar)
 
 @receiver(post_init, sender=TeamMember)
 def team_member_post_init(instance, **kwargs):
@@ -48,7 +50,7 @@ def team_member_post_save(instance, **kwargs):
 
 @receiver(post_delete, sender=TeamMember)
 def team_member_post_delete(instance, **kwargs):
-    if not instance.is_expert:
+    if not instance.is_expert and instance._current_avatar:
         delete_image(instance._current_avatar)
 
 @receiver(post_init, sender=Customer)
@@ -61,4 +63,5 @@ def team_member_post_save(instance, **kwargs):
 
 @receiver(post_delete, sender=Customer)
 def team_member_post_delete(instance, **kwargs):
-    delete_image(instance._current_avatar)
+    if instance._current_avatar:
+        delete_image(instance._current_avatar)
