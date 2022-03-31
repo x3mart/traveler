@@ -216,7 +216,7 @@ class CustomerViewSet(viewsets.ModelViewSet):
             return CustomerMeSerializer
         return super().get_serializer_class()
 
-class TeamMemberViewSet(viewsets.ModelViewSet):
+class TeamMemberViewSet(viewsets.ModelViewSet, TourMixin):
     queryset = TeamMember.objects.all()
     serializer_class = TeamMemberSerializer
     permission_classes = [TeamMemberPermission]
