@@ -243,11 +243,11 @@ class TeamMemberViewSet(viewsets.ModelViewSet, TourMixin):
     
     @action(['patch', 'delete'], detail=True)
     def avatar(self, request, *args, **kwargs):
+        team_member = self.get_object()
         if request.method == 'PATCH':
             serializer = AvatarSerializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
                 data = serializer.validated_data
-            team_member = self.get_object()
             team_member.avatar = data['avatar']
             team_member.save()
         elif request.method == 'DELETE':
