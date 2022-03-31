@@ -150,7 +150,7 @@ class ExpertViewSet(viewsets.ModelViewSet):
         return super().get_serializer_class()
     
     def perform_update(self, serializer):
-        if self.request.get('languages'):
+        if self.request.data.get('languages'):
             pass 
         return super().perform_update(serializer)
 
