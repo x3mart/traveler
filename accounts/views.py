@@ -224,7 +224,7 @@ class TeamMemberViewSet(viewsets.ModelViewSet):
     filterset_fields = ['expert',]
 
     def get_queryset(self):
-        return super().get_queryset().filter(expert=self.request.user)
+        return super().get_queryset().filter(expert_id=self.request.user.id)
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
