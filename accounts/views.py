@@ -223,8 +223,8 @@ class TeamMemberViewSet(viewsets.ModelViewSet, TourMixin):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['expert',]
 
-    def get_queryset(self):
-        return super().get_queryset().filter(expert_id=self.request.user.id)
+    # def get_queryset(self):
+    #     return super().get_queryset().filter(expert_id=self.request.user.id)
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

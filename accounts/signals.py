@@ -40,13 +40,13 @@ def expert_post_delete(instance, **kwargs):
     if instance._current_avatar:
         delete_image(instance._current_avatar)
 
-# @receiver(post_init, sender=TeamMember)
-# def team_member_post_init(instance, **kwargs):
-#     instance._current_avatar = instance.avatar
+@receiver(post_init, sender=TeamMember)
+def team_member_post_init(instance, **kwargs):
+    instance._current_avatar = instance.avatar
 
-# @receiver(post_save, sender=TeamMember)
-# def team_member_post_save(instance, **kwargs):
-#     image_processing(instance.avatar, instance._current_avatar, 255, 355, 200, 200)
+@receiver(post_save, sender=TeamMember)
+def team_member_post_save(instance, **kwargs):
+    image_processing(instance.avatar, instance._current_avatar, 255, 355, 200, 200)
 
 @receiver(post_delete, sender=TeamMember)
 def team_member_post_delete(instance, **kwargs):
