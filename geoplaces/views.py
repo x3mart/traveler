@@ -8,7 +8,7 @@ from rest_framework.permissions import AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from geoplaces.models import City, Country, Region, CountryRegion, VKCity
-from .serializers import CitySerializer, CountrySerializer, RegionSerializer, CountryRegionSerializer
+from .serializers import CityFullNameSerializer, CitySerializer, CountrySerializer, RegionSerializer, CountryRegionSerializer
 
 
 class RegionViewSet(viewsets.ModelViewSet):
@@ -61,22 +61,13 @@ class CountryRegionViewSet(viewsets.ModelViewSet):
 
 class CityViewSet(viewsets.ModelViewSet):
     queryset = City.objects.all()
-    serializer_class = CitySerializer
+    serializer_class = CityFullNameSerializer
     permission_classes = [AllowAny]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['country', 'country_region']
     search_fields = ['@name', '^name']
     ordering_fields = ['name',]
     ordering = ['name']  
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            data = serializer.validated_data
-        else:
-            return Response(serializer.errors, status=400)
-        instance, created = City.objects.get_or_create(**data)
-        return Response(CitySerializer(instance).data, status=201)
 
 
 def get_vk_countries():
