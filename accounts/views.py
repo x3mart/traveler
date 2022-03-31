@@ -226,5 +226,10 @@ class TeamMemberViewSet(viewsets.ModelViewSet):
         else:
             return Response(serializer.errors, status=400)
         data['expert_id'] = request.user.id
+        data.pop('is_expert', None)
         instance = TeamMember.objects.create(**data)
         return Response(TeamMemberSerializer(instance).data, status=201)
+    
+    def perform_update(self, serializer):
+        serializer.data.pop('is_expert', None)
+        return super().perform_update(serializer)
