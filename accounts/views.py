@@ -235,11 +235,11 @@ class TeamMemberViewSet(viewsets.ModelViewSet, TourMixin):
         instance = TeamMember.objects.create(expert_id = request.user.id, **data)
         return Response(TeamMemberSerializer(instance).data, status=201)
     
-    # def perform_update(self, serializer):
-    #     if self.request.data.get('languages'):
-    #         expert = self.get_object()
-    #         self.set_languages(self.request, expert) 
-    #     return super().perform_update(serializer)
+    def perform_update(self, serializer):
+        if self.request.data.get('languages'):
+            expert = self.get_object()
+            self.set_languages(self.request, expert) 
+        return super().perform_update(serializer)
     
     @action(['patch', 'delete'], detail=True)
     def avatar(self, request, *args, **kwargs):
@@ -255,7 +255,3 @@ class TeamMemberViewSet(viewsets.ModelViewSet, TourMixin):
             team_member.avatar = None
             team_member.save()
         return Response(TeamMemberSerializer(team_member, context={'request':request}).data, status=status.HTTP_200_OK)
-    
-    def perform_update(self, serializer):
-        serializer.data.pop('is_expert', None)
-        return super().perform_update(serializer)
