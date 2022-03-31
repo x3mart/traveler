@@ -91,6 +91,14 @@ class TourMixin():
             else:
                 setattr(instance, field, None)
         return instance
+    
+    def check_postpay_days_before_start(self, data):
+        if data.get('postpay_on_start_day'):
+            data['postpay_days_before_start'] = 0
+        if not data.get('postpay_on_start_day') and not data.get('postpay_days_before_start'):
+            data['postpay_on_start_day'] = True
+            data['postpay_days_before_start'] = 0
+        return data
 
     def set_mtm_fields(self, request, instance):       
         if request.data.get('additional_types') is not None:
@@ -116,6 +124,7 @@ class TourMixin():
             not_sended_checbox = CHECBOX_SET - set(self.request.data.keys()).intersection(CHECBOX_SET)
             for item in not_sended_checbox:
                 data.pop(item)
+        data = self.check_postpay_days_before_start(data)
         for key, value in data.items():
             setattr(instance, key, value)
         return instance

@@ -219,7 +219,7 @@ class Tour(models.Model):
     prepay_in_prc = models.BooleanField(_('Предоплата в процентах'), default=True)
     prepay_currency = models.ForeignKey('currencies.Currency', verbose_name=_("Валюта предоплаты"), on_delete=models.CASCADE, related_name='tours_by_prepay_currency', null=True, blank=True)
     postpay_on_start_day = models.BooleanField(_('Постоплата в день старта'), default=False)
-    postpay_days_before_start = models.PositiveIntegerField(_('Дни внесения полной суммы до старта'), default=3)
+    postpay_days_before_start = models.PositiveIntegerField(_('Дни внесения полной суммы до старта'), default=3, blank=True)
     team_member = models.ForeignKey('accounts.TeamMember', verbose_name=_("Гид"), on_delete=models.CASCADE, related_name='tours', null=True, blank=True)
     currency = models.ForeignKey('currencies.Currency', verbose_name=_("Валюта"), on_delete=models.CASCADE, related_name='tours', null=True, blank=True)
     cost = models.IntegerField(_('Стоимость со скидкой'), null=True, blank=True)
