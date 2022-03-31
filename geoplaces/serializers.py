@@ -3,6 +3,12 @@ from rest_framework import serializers
 from geoplaces.models import City, Country, Region, CountryRegion
 
 
+class CitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = City
+        fields = '__all__'
+
+
 class CityFullNameSerializer(serializers.ModelSerializer):
     full_name = serializers.SerializerMethodField(read_only=True)
     class Meta:
