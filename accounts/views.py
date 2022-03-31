@@ -232,8 +232,7 @@ class TeamMemberViewSet(viewsets.ModelViewSet, TourMixin):
             data = serializer.validated_data
         else:
             return Response(serializer.errors, status=400)
-        data['expert_id'] = request.user.id
-        instance = TeamMember.objects.create(**data)
+        instance = TeamMember.objects.create(expert_id = request.user.id, **data)
         return Response(TeamMemberSerializer(instance).data, status=201)
     
     def perform_update(self, serializer):
