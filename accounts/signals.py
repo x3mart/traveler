@@ -48,7 +48,8 @@ def team_member_post_save(instance, **kwargs):
 
 @receiver(post_delete, sender=TeamMember)
 def team_member_post_delete(instance, **kwargs):
-    delete_image(instance._current_avatar)
+    if not instance.is_expert:
+        delete_image(instance._current_avatar)
 
 @receiver(post_init, sender=Customer)
 def team_member_post_init(instance, **kwargs):
