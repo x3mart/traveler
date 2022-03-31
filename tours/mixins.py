@@ -2,6 +2,7 @@ from django.forms import model_to_dict
 from django.db import models
 from django.shortcuts import get_object_or_404
 from uritemplate import partial
+from geoplaces.models import City
 from tours.models import TourAccomodation, TourPropertyType, TourType
 from accounts.models import Expert, TeamMember
 from languages.models import Language
@@ -11,7 +12,7 @@ from tours.serializers import ImageSerializer, WallpaperSerializer
 
 NOT_MODERATED_FIELDS = {'is_active', 'on_moderation', 'vacants_number', 'is_draft', 'discount_starts', 'discount_finish', 'discount_in_prc', 'discount', 'sold', 'watched'} 
 CHECBOX_SET = {'is_guaranteed', 'is_active', 'postpay_on_start_day', 'scouting', 'animals_not_exploited', 'month_recurrent', 'flight_included', 'babies_alowed', 'on_moderation', 'week_recurrent', 'is_draft', 'instant_booking'}
-EXCLUDED_FK_FIELDS = {'tour_basic', 'wallpaper', 'team_member'}
+EXCLUDED_FK_FIELDS = {'tour_basic', 'wallpaper', 'team_member', 'start_region' 'finish_region' 'start_country' 'finish_country' 'start_russian_region' 'finish_russian_region' 'start_city' 'finish_city'}
 
 class TourMixin():
     def check_set_tour_field_for_moderation(self, instance, field):
@@ -90,6 +91,32 @@ class TourMixin():
                 setattr(instance, 'team_member', TeamMember.objects.get(pk=fk_id))
             else:
                 setattr(instance, field, None)
+            start_city = request.data.get('start_city')
+            finish_city = request.data.get('finish_city')
+            if start_city and start_city.get('id'):
+                city = City.objects.get(pk=start_city.get('id'))
+                country = city.country
+                country_region = city.country_region
+                region = country.region
+                setattr(instance, 'start_city', city)
+                setattr(instance, 'start_region', region)
+                setattr(instance, 'start_russian_region', country_region)
+                setattr(instance, 'start_country', country)
+            elif start_city and not start_city.get('id'):
+                city = City.objects.get(pk=start_city.get('id'))
+                setattr(instance, 'start_city', city)
+            if finish_city and finish_city.get('id'):
+                city = City.objects.get(pk=finish_city.get('id'))
+                country = city.country
+                country_region = city.country_region
+                region = country.region
+                setattr(instance, 'finish_city', city)
+                setattr(instance, 'finish_region', region)
+                setattr(instance, 'finish_russian_region', country_region)
+                setattr(instance, 'finish_country', country)
+            elif finish_city and not finish_city.get('id'):
+                city = City.objects.get(pk=finish_city.get('id'))
+                setattr(instance, 'finish_city', city)
         return instance
     
     def check_postpay_days_before_start(self, data):
