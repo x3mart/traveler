@@ -13,7 +13,7 @@ class CitySerializer(serializers.ModelSerializer):
 
     def get_full_name(self, obj):
         country = f' ({obj.country})' if obj.country else ''
-        region = f' ({obj.region})' if obj.region else ''
+        region = f' ({obj.country_region})' if obj.country_region else ''
         return obj.name + region + country
 
 class CountryRegionSerializer(serializers.ModelSerializer):
