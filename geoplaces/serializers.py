@@ -6,10 +6,15 @@ from geoplaces.models import City, Country, Region, CountryRegion
 class CitySerializer(serializers.ModelSerializer):
     country = serializers.StringRelatedField(many=False)
     country_region = serializers.StringRelatedField(many=False)
+    full_name = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = City
         fields = '__all__'
 
+    def get_full_name(self, obj):
+        country = f' ({obj.country})' if obj.country else ''
+        region = f' ({obj.region})' if obj.region else ''
+        return obj.name + region + country
 
 class CountryRegionSerializer(serializers.ModelSerializer):
     class Meta:
