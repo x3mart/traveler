@@ -23,6 +23,7 @@ import threading
 from django.template.loader import render_to_string
 from templated_mail.mail import BaseEmailMessage
 from django.contrib.auth.tokens import default_token_generator
+from tours.mixins import TourMixin
 
 
 class ConfirmEmailThread(threading.Thread, BaseEmailMessage):
@@ -128,7 +129,7 @@ class UserViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return super().get_queryset()
     
-class ExpertViewSet(viewsets.ModelViewSet):
+class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
     queryset = Expert.objects.all()
     serializer_class = ExpertSerializer
     permission_classes = [ExpertPermission]
@@ -151,7 +152,8 @@ class ExpertViewSet(viewsets.ModelViewSet):
     
     def perform_update(self, serializer):
         if self.request.data.get('languages'):
-            pass 
+            expert = self.get_object()
+            self.set_languages(self.request, expert) 
         return super().perform_update(serializer)
 
     @action(['get', 'put', 'patch', 'delete'], detail=False)
@@ -233,6 +235,12 @@ class TeamMemberViewSet(viewsets.ModelViewSet):
         data['expert_id'] = request.user.id
         instance = TeamMember.objects.create(**data)
         return Response(TeamMemberSerializer(instance).data, status=201)
+    
+    def perform_update(self, serializer):
+        if self.request.data.get('languages'):
+            expert = self.get_object()
+            self.set_languages(self.request, expert) 
+        return super().perform_update(serializer)
     
     @action(['patch', 'delete'], detail=True)
     def avatar(self, request, *args, **kwargs):
