@@ -2,7 +2,7 @@ from datetime import date
 from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
 
-from geoplaces.serializers import CitySerializer, CountrySerializer, RegionSerializer, CountryRegionSerializer
+from geoplaces.serializers import CityFullNameSerializer, CitySerializer, CountrySerializer, RegionSerializer, CountryRegionSerializer
 from .models import Tour, TourAccomodation, TourPropertyType, TourType
 from currencies.serializers import CurrencySerializer
 from accounts.serializers import ExpertListSerializer, TeamMemberSerializer
@@ -149,8 +149,8 @@ class TourSerializer(serializers.ModelSerializer):
     finish_country = CountrySerializer(many=False, read_only=True)
     start_russian_region = CountryRegionSerializer(many=False, read_only=True)
     finish_russian_region = CountryRegionSerializer(many=False, read_only=True)
-    start_city = CitySerializer(many=False, read_only=True)
-    finish_city = CitySerializer(many=False, read_only=True)
+    start_city = CityFullNameSerializer(many=False, read_only=True)
+    finish_city = CityFullNameSerializer(many=False, read_only=True)
     
 
     class Meta:
