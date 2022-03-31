@@ -39,6 +39,6 @@ class TeamMemberPermission(permissions.BasePermission):
         return request.auth and hasattr(request.user, 'expert')          
 
     def has_object_permission(self, request, view, obj):
-        if view.action in ['destroy', 'update', 'partial_update',]:
-            return obj.expert.id == request.user.id
+        # if view.action in ['destroy', 'update', 'partial_update',]:
+        #     return obj.expert.id == request.user.id
         return True
