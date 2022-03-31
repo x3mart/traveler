@@ -251,7 +251,6 @@ class TeamMemberViewSet(viewsets.ModelViewSet, TourMixin):
             team_member.avatar = data['avatar']
             team_member.save()
         elif request.method == 'DELETE':
-            team_member = TeamMember.objects.get(pk=request.user.id)
             team_member.avatar = None
             team_member.save()
         return Response(TeamMemberSerializer(team_member, context={'request':request}).data, status=status.HTTP_200_OK)
