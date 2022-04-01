@@ -162,6 +162,7 @@ class TourSerializer(serializers.ModelSerializer):
             'is_draft': {'required': False,},
             'flight_included': {'required': False,},
             'duration': {'required': False, 'read_only':True},
+            'postpay_days_before_start':  {'required': False, 'read_only':True},
         }
 
     def get_tmb_wallpaper(self, obj):
