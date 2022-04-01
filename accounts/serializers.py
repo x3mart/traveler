@@ -16,13 +16,13 @@ def check_password(self):
     re_password = request.data.get('re_password')
     password = request.data.get('password')
     if not password:
-        raise serializers.ValidationError(_('Укажите пароль'))
+        raise serializers.ValidationError({'password':[_('Укажите пароль')]})
     if password != re_password:
-        raise serializers.ValidationError(_('Пароли должны совпадать'))
+        raise serializers.ValidationError({'password':[_('Пароли должны совпадать')]})
     try:
         validators.validate_password(password)
     except exceptions.ValidationError as exc:
-        raise serializers.ValidationError(str(exc))
+        raise serializers.ValidationError({'password':str(exc)})
     return password
 
 class EmailActivationSerializer(UidAndTokenSerializer):
