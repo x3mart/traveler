@@ -214,7 +214,7 @@ class CustomerViewSet(viewsets.ModelViewSet):
         is_staff = self.request.auth and self.request.user.is_staff
         if self.action in ['me', 'create', 'update', 'partial_update'] or (is_staff and self.action != 'list'):
             return CustomerMeSerializer
-        return super().get_serializer_class()
+        return CustomerSerializer
 
 class TeamMemberViewSet(viewsets.ModelViewSet, TourMixin):
     queryset = TeamMember.objects.all()
