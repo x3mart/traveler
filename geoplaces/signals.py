@@ -37,6 +37,8 @@ def tour_type_post_init(instance, **kwargs):
 @receiver(post_save, sender=City)
 def tour_type_post_save(instance, **kwargs):
     image_processing(instance.image, instance._current_img, 350, 240)
+    # if instance.country:
+
 
 @receiver(post_delete, sender=City)
 def tour_type_post_delete(instance, **kwargs):
