@@ -80,7 +80,6 @@ class TourMixin():
     
     def set_fk_fields(self, request, instance):
         fk_fields = {field.name for field in instance._meta.get_fields() if isinstance(field, models.ForeignKey)} - EXCLUDED_FK_FIELDS
-        print(fk_fields)
         for field in fk_fields:
             model = instance._meta.get_field(field).remote_field.model       
             if request.data.get(field) is not None:
@@ -91,32 +90,33 @@ class TourMixin():
                 setattr(instance, 'team_member', TeamMember.objects.get(pk=fk_id))
             else:
                 setattr(instance, field, None)
-            start_city = request.data.get('start_city')
-            finish_city = request.data.get('finish_city')
-            if start_city and start_city.get('id'):
-                city = City.objects.get(pk=start_city.get('id'))
-                country = city.country
-                country_region = city.country_region
-                region = country.region if country else None
-                setattr(instance, 'start_city', city)
-                setattr(instance, 'start_region', region)
-                setattr(instance, 'start_russian_region', country_region)
-                setattr(instance, 'start_country', country)
-            elif start_city and not start_city.get('id'):
-                city = City.objects.create(name=start_city.get('full_name'))
-                setattr(instance, 'start_city', city)
-            if finish_city and finish_city.get('id'):
-                city = City.objects.get(pk=finish_city.get('id'))
-                country = city.country
-                country_region = city.country_region
-                region = country.region if country else None
-                setattr(instance, 'finish_city', city)
-                setattr(instance, 'finish_region', region)
-                setattr(instance, 'finish_russian_region', country_region)
-                setattr(instance, 'finish_country', country)
-            elif finish_city and finish_city.get('id') :
-                city = City.objects.create(name=finish_city.get('full_name'))
-                setattr(instance, 'finish_city', city)
+        start_city = request.data.get('start_city')
+        finish_city = request.data.get('finish_city')
+        if start_city and start_city.get('id'):
+            city = City.objects.get(pk=start_city.get('id'))
+            country = city.country
+            country_region = city.country_region
+            region = country.region if country else None
+            setattr(instance, 'start_city', city)
+            setattr(instance, 'start_region', region)
+            setattr(instance, 'start_russian_region', country_region)
+            setattr(instance, 'start_country', country)
+        elif start_city and not start_city.get('id'):
+            city = City.objects.create(name=start_city.get('full_name'))
+            setattr(instance, 'start_city', city)
+            print(city)
+        if finish_city and finish_city.get('id'):
+            city = City.objects.get(pk=finish_city.get('id'))
+            country = city.country
+            country_region = city.country_region
+            region = country.region if country else None
+            setattr(instance, 'finish_city', city)
+            setattr(instance, 'finish_region', region)
+            setattr(instance, 'finish_russian_region', country_region)
+            setattr(instance, 'finish_country', country)
+        elif finish_city and not finish_city.get('id') :
+            city = City.objects.create(name=finish_city.get('full_name'))
+            setattr(instance, 'finish_city', city)
         return instance
     
     def check_postpay_days_before_start(self, data):
