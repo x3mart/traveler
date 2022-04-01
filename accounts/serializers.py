@@ -120,7 +120,7 @@ class ExpertMeSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         validated_data['is_expert'] = True
         
-        if validated_data.get('password'):
+        if validated_data.get('password') is not None:
             check_password(self)
             password = validated_data.pop('password')
             instance.set_password(password)
