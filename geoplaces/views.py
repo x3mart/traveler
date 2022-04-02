@@ -75,14 +75,9 @@ class CityViewSet(viewsets.ModelViewSet):
             return None
         if self.action == 'list' and self.request.query_params.get('search'):
             search = self.request.query_params.get('search')
-            # vector = SearchVector('name')
-            # query = SearchQuery(search)
             qs = City.objects.annotate(distance=TrigramDistance('name', search),).filter(distance__lte=0.7).order_by('distance').prefetch_related('country', 'country_region')
             return qs
         return super().get_queryset()
-
-    def get_queryset(self):
-        return super().get_queryset().prefetch_related('country', 'country_region')
     
     def filter_queryset(self, queryset):
         return super().filter_queryset(queryset)[:200]
