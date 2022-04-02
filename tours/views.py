@@ -64,40 +64,35 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
     
     @action(['post', 'patch'], detail=True)
     def propertyimages(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.check_set_tour_field_for_moderation(instance, 'tour_property_images')
         if request.method == 'POST':
             instance, data = self.get_instance_image_data(request)
             image = instance.tour_property_images.create(expert=instance.tour_basic.expert, tour_basic =instance.tour_basic, **data)
             images = instance.tour_property_images.all()
-            self.check_set_tour_field_for_moderation(instance, 'tour_property_images')
             return Response(ImageSerializer(images, context={'request': request}, many=True).data, status=201)
         if request.method == 'PATCH':
-            request.data.pop('image', None)
-            instance, data = self.get_instance_image_data(request)
-            image = TourPropertyImage.objects.get(pk=data['id'])
+            image = TourPropertyImage.objects.get(pk=request.data.get('id'))
             instance.tour_property_images.remove(image)
-            self.check_set_tour_field_for_moderation(instance, 'tour_property_images')
-            images = instance.tour_property_images.all()
             return Response({}, status=204)
     
     @action(['post', 'patch'], detail=True)
     def gallary(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.check_set_tour_field_for_moderation(instance, 'tour_images')
         if request.method == 'POST':
             instance, data = self.get_instance_image_data(request)
             image = instance.tour_images.create(expert=instance.tour_basic.expert, tour_basic =instance.tour_basic, **data)
-            images = instance.tour_images.all()
-            self.check_set_tour_field_for_moderation(instance, 'tour_images')
+            images = instance.tour_images.all()           
             return Response(ImageSerializer(images, context={'request': request}, many=True).data, status=200)
         if request.method == 'PATCH':
-            request.data.pop('image', None)
-            instance, data = self.get_instance_image_data(request)
-            image = TourImage.objects.get(pk=data['id'])
+            image = TourImage.objects.get(pk=request.data.get('id'))
             instance.tour_images.remove(image)
-            self.check_set_tour_field_for_moderation(instance, 'tour_images')
-            images = instance.tour_images.all()
             return Response({}, status=204)
     
     @action(['post', 'delete'], detail=True)
     def wallpaper(self, request, *args, **kwargs):
+        instance = self.get_object()
         if request.method == 'POST':
             instance, data = self.get_instance_wallpaper_data(request)
             image = TourWallpaper.objects.create(expert=instance.tour_basic.expert, tour_basic =instance.tour_basic, **data)
@@ -105,7 +100,6 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
             instance.save()
             return Response(WallpaperSerializer(image, context={'request': request}).data, status=201)
         if request.method == 'DELETE':
-            instance = self.get_object()
             instance.wallpaper = None
             instance.save()
             return Response({}, status=200)
