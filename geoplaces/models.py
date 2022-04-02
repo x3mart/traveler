@@ -3,6 +3,8 @@ from django.utils.translation import gettext_lazy as _
 from django.template.defaultfilters import slugify
 from unidecode import unidecode
 import os
+from django.contrib.postgres.indexes import GinIndex
+from django.contrib.postgres.search import SearchVector, SearchVectorField
 
 # Create your models here.
 def geo_path(instance, filename):
@@ -43,11 +45,15 @@ class City(models.Model):
     country_region = models.ForeignKey('CountryRegion', on_delete=models.CASCADE, related_name='cities', verbose_name=_('Регион Страны'), null=True, blank=True)
     image = models.ImageField(_("Фото"), upload_to=geo_path, max_length=255, null=True, blank=True)
     alt =  models.CharField(_('alt текст'), max_length=255, null=True, blank=True)
+    search_vector = models.CharField(null=True, editable=False, max_length=100)
 
     def __str__(self):
         return self.name
     
     class Meta:
+        indexes = [
+            GinIndex(fields=['name'], name='search_vector_idx', opclasses=['gin_trgm_ops'])
+        ]
         verbose_name = _('Город')
         verbose_name_plural = _('Города')
 

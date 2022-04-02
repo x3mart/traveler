@@ -1,6 +1,7 @@
 from rest_framework import viewsets
 import requests
 import time
+from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector, TrigramSimilarity, TrigramDistance
 from traveler.settings import VK_ACCESS_TOKEN
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -63,11 +64,22 @@ class CityViewSet(viewsets.ModelViewSet):
     queryset = City.objects.all()
     serializer_class = CityFullNameSerializer
     permission_classes = [AllowAny]
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['country', 'country_region']
-    search_fields = ['@name', '^name']
-    ordering_fields = ['name',]
-    ordering = ['name']  
+    # filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    # filterset_fields = ['country', 'country_region']
+    # search_fields = ['@name', '^name']
+    # ordering_fields = ['name',]
+    # ordering = ['name'] 
+
+    def get_queryset(self):
+        if self.action == 'list' and not self.request.query_params.get('search'):
+            return None
+        if self.action == 'list' and self.request.query_params.get('search'):
+            search = self.request.query_params.get('search')
+            # vector = SearchVector('name')
+            # query = SearchQuery(search)
+            qs = City.objects.annotate(distance=TrigramDistance('name', search),).filter(distance__lte=0.7).order_by('distance').prefetch_related('country', 'country_region')
+            return qs
+        return super().get_queryset()
 
     def get_queryset(self):
         return super().get_queryset().prefetch_related('country', 'country_region')
