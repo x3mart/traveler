@@ -11,10 +11,10 @@ class CitySerializer(serializers.ModelSerializer):
 
 class CityFullNameSerializer(serializers.ModelSerializer):
     full_name = serializers.SerializerMethodField(read_only=True)
-    rank = serializers.FloatField(read_only=True)
+    distance = serializers.FloatField(read_only=True)
     class Meta:
         model = City
-        fields = ['id', 'full_name', 'rank']
+        fields = ['id', 'full_name', 'distance']
 
     def get_full_name(self, obj):
         country = f' ({obj.country})' if obj.country else ''
