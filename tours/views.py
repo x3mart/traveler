@@ -77,7 +77,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
             instance.tour_property_images.remove(image)
             self.check_set_tour_field_for_moderation(instance, 'tour_property_images')
             images = instance.tour_property_images.all()
-            return Response(ImageSerializer(images, context={'request': request}, many=True).data, status=200)
+            return Response({}, status=204)
     
     @action(['post', 'patch'], detail=True)
     def gallary(self, request, *args, **kwargs):
