@@ -94,7 +94,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
             instance.tour_images.remove(image)
             self.check_set_tour_field_for_moderation(instance, 'tour_images')
             images = instance.tour_images.all()
-            return Response(ImageSerializer(images, context={'request': request}, many=True).data, status=200)
+            return Response({}, status=204)
     
     @action(['post', 'delete'], detail=True)
     def wallpaper(self, request, *args, **kwargs):
