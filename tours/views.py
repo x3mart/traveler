@@ -70,7 +70,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
             images = instance.tour_property_images.all()
             self.check_set_tour_field_for_moderation(instance, 'tour_property_images')
             return Response(ImageSerializer(images, context={'request': request}, many=True).data, status=201)
-        if request.method == 'DELETE':
+        if request.method == 'PATCH':
             request.data.pop('image', None)
             instance, data = self.get_instance_image_data(request)
             image = TourPropertyImage.objects.get(pk=data['id'])
@@ -87,7 +87,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
             images = instance.tour_images.all()
             self.check_set_tour_field_for_moderation(instance, 'tour_images')
             return Response(ImageSerializer(images, context={'request': request}, many=True).data, status=200)
-        if request.method == 'DELETE':
+        if request.method == 'PATCH':
             request.data.pop('image', None)
             instance, data = self.get_instance_image_data(request)
             image = TourImage.objects.get(pk=data['id'])
