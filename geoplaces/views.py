@@ -69,6 +69,12 @@ class CityViewSet(viewsets.ModelViewSet):
     ordering_fields = ['name',]
     ordering = ['name']  
 
+    def get_queryset(self):
+        return super().get_queryset().prefetch_related('country', 'country_region')
+    
+    def filter_queryset(self, queryset):
+        return super().filter_queryset(queryset)[:100]
+
 
 def get_vk_countries():
     url = 'https://api.vk.com/method/database.getCountries'
