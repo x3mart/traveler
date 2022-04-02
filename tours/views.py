@@ -136,8 +136,8 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         instance.watched = None
         instance.save()
         self.copy_tour_mtm(old_instance, instance)
-        qs = Tour.objects.prefetch_related('tour_basic', 'start_country', 'currency').only('id', 'name', 'start_date', 'finish_date', 'start_country', 'price', 'cost', 'discount', 'on_moderation', 'is_active', 'is_draft', 'duration', 'sold', 'watched', 'currency', 'tour_basic', 'wallpaper').filter(tour_basic__expert_id=self.request.user.id).order_by('-id')
-        return Response(TourListSerializer(qs, context={'request': request}, many=True).data, status=201)
+        tour = Tour.objects.get(pk=instance.id)
+        return Response(TourListSerializer(tour, context={'request': request}, many=False).data, status=201)
     
     @action(['get'], detail=True)
     def preview(self, request, *args, **kwargs):
