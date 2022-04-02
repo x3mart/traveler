@@ -62,7 +62,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
             instance._prefetched_objects_cache = {}
         return Response(TourSerializer(instance, context={'request': request}).data, status=201)
     
-    @action(['post', 'delete'], detail=True)
+    @action(['post', 'patch'], detail=True)
     def propertyimages(self, request, *args, **kwargs):
         if request.method == 'POST':
             instance, data = self.get_instance_image_data(request)
@@ -79,7 +79,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
             images = instance.tour_property_images.all()
             return Response(ImageSerializer(images, context={'request': request}, many=True).data, status=200)
     
-    @action(['post', 'delete'], detail=True)
+    @action(['post', 'patch'], detail=True)
     def gallary(self, request, *args, **kwargs):
         if request.method == 'POST':
             instance, data = self.get_instance_image_data(request)
