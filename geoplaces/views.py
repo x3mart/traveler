@@ -73,7 +73,7 @@ class CityViewSet(viewsets.ModelViewSet):
         return super().get_queryset().prefetch_related('country', 'country_region')
     
     def filter_queryset(self, queryset):
-        return super().filter_queryset(queryset)[:100]
+        return super().filter_queryset(queryset)[:200]
 
 
 def get_vk_countries():
