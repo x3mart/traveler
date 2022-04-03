@@ -75,7 +75,7 @@ class CityViewSet(viewsets.ModelViewSet):
             return None
         if self.action == 'list' and self.request.query_params.get('search'):
             search = self.request.query_params.get('search')
-            qs = City.objects.annotate(rank=TrigramSimilarity('name', search) - TrigramDistance('name', search),).filter(distance__lte=0.7, similarity__gt=0.3).order_by('distance').prefetch_related('country', 'country_region')
+            qs = City.objects.annotate(rank=TrigramSimilarity('name', search) - TrigramDistance('name', search),).filter(rank__gte=0.1).order_by('-rank').prefetch_related('country', 'country_region')
             return qs
         return super().get_queryset()
     

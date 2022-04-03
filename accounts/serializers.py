@@ -22,7 +22,7 @@ def check_password(self):
     try:
         validators.validate_password(password)
     except exceptions.ValidationError as exc:
-        raise serializers.ValidationError({'password':str(exc)})
+        raise serializers.ValidationError({'password':exc})
     return password
 
 class EmailActivationSerializer(UidAndTokenSerializer):
