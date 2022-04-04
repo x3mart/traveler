@@ -1,4 +1,5 @@
 from dataclasses import fields
+from email import message
 
 from languages.serializers import LanguageSerializer
 from .models import Customer, Expert, TeamMember, User
@@ -22,7 +23,7 @@ def check_password(self):
     try:
         validators.validate_password(password)
     except exceptions.ValidationError as exc:
-        raise serializers.ValidationError({'password':exc})
+        raise serializers.ValidationError({'password':exc.messages})
     return password
 
 class EmailActivationSerializer(UidAndTokenSerializer):
