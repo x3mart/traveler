@@ -8,7 +8,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.forms.models import model_to_dict
 from tours.filters import TourFilter
 from tours.mixins import TourMixin, NOT_MODERATED_FIELDS
-from tours.models import Tour, TourAccomodation, TourBasic, TourDayImage, TourGuestGuideImage, TourImage, TourPlanImage, TourPropertyImage, TourPropertyType, TourType, TourWallpaper
+from tours.models import Important, ImportantTitle, Tour, TourAccomodation, TourBasic, TourDayImage, TourGuestGuideImage, TourImage, TourPlanImage, TourPropertyImage, TourPropertyType, TourType, TourWallpaper
 from tours.permissions import TourPermission
 from tours.serializers import ImageSerializer, TourAccomodationSerializer, TourListSerializer, TourPreviewSerializer, TourPropertyTypeSerializer, TourSerializer, TourTypeSerializer, WallpaperSerializer
 
@@ -43,6 +43,8 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         data['is_draft'] = True
         tour_basic = TourBasic.objects.create(expert=self.get_expert(request))
         tour = Tour.objects.create(tour_basic=tour_basic, **data)
+        important = [Important(tour=tour, **ImportantTitle) for title in ImportantTitle.objects.values('title', 'required')]
+        Important.objects.bulk_create(important)
         return Response(TourSerializer(tour).data, status=201)
     
     def update(self, request, *args, **kwargs):

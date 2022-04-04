@@ -178,6 +178,27 @@ class TourWallpaper(models.Model):
         verbose_name_plural = _('Обложки тура')
         ordering = ['id']
 
+class ImportantTitle(models.Model):
+    title = models.CharField(_('Заголовок'), max_length=150, null=True, blank=True)
+    required = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = _('Важно знать')
+        verbose_name_plural = _('Важно знать')
+        ordering = ['id']
+
+
+class Important(models.Model):
+    title = models.CharField(_('Заголовок'), max_length=150, null=True, blank=True)
+    body = models.TextField(_('Текст'), null=True, blank=True)
+    required = models.BooleanField(default=False)
+    tour = models.ForeignKey("Tour", on_delete=models.CASCADE, related_name='important_to_know', null=True, blank=True )
+
+    class Meta:
+        ordering = ['id']
 
 class Tour(models.Model):
     tour_basic = models.ForeignKey("TourBasic", verbose_name=_('Основа тура'), on_delete=models.CASCADE, related_name='tours', null=True, blank=True)
