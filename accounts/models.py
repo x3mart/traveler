@@ -81,6 +81,7 @@ class Expert(User):
     visited_countries = models.CharField(_('Посещенные страны'), max_length=255, null=True, blank=True)
     about = RichTextField(_('О себе'), null=True, blank=True)
     video = models.URLField(_('Ссылка на видео'), max_length=255, null=True, blank=True)
+    commission = models.PositiveIntegerField(_('Комиссия'), default=15)
     email_confirmed = models.BooleanField(_('Email подтвержден'), default=False)
     phone_confirmed = models.BooleanField(_('Телефон подтвержден'), default=False)
     docs_confirmed = models.BooleanField(_('Документы подтверждены'), default=False)
