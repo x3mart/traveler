@@ -26,7 +26,7 @@ class Region(models.Model):
 
 class Country(models.Model):
     name = models.CharField(_('Название'), max_length=255)
-    foreign_id = models.IntegerField(_('Сторонний ключ'), null=True, blank=True)
+    counry_code = models.CharField(_('Краткое название'), null=True, blank=True, max_length=20)
     region = models.ForeignKey('Region', on_delete=models.CASCADE, related_name='countries', verbose_name=_('Регион Мира'), null=True, blank=True)
     image = models.ImageField(_("Фото"), upload_to=geo_path, max_length=255, null=True, blank=True)
     alt =  models.CharField(_('alt текст'), max_length=255, null=True, blank=True)
@@ -34,7 +34,7 @@ class Country(models.Model):
     def __str__(self):
         return self.name
     
-    class Meta:
+    class Meta: 
         verbose_name = _('Страна')
         verbose_name_plural = _('Страны')
 
@@ -52,7 +52,7 @@ class City(models.Model):
     
     class Meta:
         indexes = [
-            GinIndex(fields=['name'], name='search_vector_idx', opclasses=['gin_trgm_ops'])
+            GinIndex(fields=['name_ru'], name='search_vector_idx', opclasses=['gin_trgm_ops']),
         ]
         verbose_name = _('Город')
         verbose_name_plural = _('Города')
@@ -77,3 +77,9 @@ class VKCity(models.Model):
     foreign_id = models.IntegerField(_('Сторонний ключ'), null=True, blank=True)
     country = models.ForeignKey('Country', on_delete=models.CASCADE, related_name='vkcities', verbose_name=_('Страна'), null=True, blank=True)
     country_region = models.ForeignKey('CountryRegion', on_delete=models.CASCADE, related_name='vkcities', verbose_name=_('Регион Страны'), null=True, blank=True)
+
+class VKCityEn(models.Model):
+    name = models.CharField(_('Название'), max_length=255)
+    foreign_id = models.IntegerField(_('Сторонний ключ'), null=True, blank=True)
+    country = models.ForeignKey('Country', on_delete=models.CASCADE, related_name='vkcities_en', verbose_name=_('Страна'), null=True, blank=True)
+    country_region = models.ForeignKey('CountryRegion', on_delete=models.CASCADE, related_name='vkcities_en', verbose_name=_('Регион Страны'), null=True, blank=True)

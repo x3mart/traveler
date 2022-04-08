@@ -3,7 +3,7 @@ from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
 
 from geoplaces.serializers import CityFullNameSerializer, CitySerializer, CountrySerializer, RegionSerializer, CountryRegionSerializer
-from .models import Tour, TourAccomodation, TourPropertyType, TourType
+from .models import Important, Tour, TourAccomodation, TourPropertyType, TourType
 from currencies.serializers import CurrencySerializer
 from accounts.serializers import ExpertListSerializer, TeamMemberSerializer
 from languages.serializers import LanguageSerializer
@@ -45,7 +45,13 @@ class TourTypeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-TOUR_FIELDS = ('id', 'rating', 'reviews_count', 'name', 'wallpaper', 'tmb_wallpaper', 'basic_type', 'additional_types', 'start_region', 'finish_region', 'start_country', 'finish_country', 'start_russian_region', 'finish_russian_region', 'start_city', 'finish_city', 'description', 'plan', 'cancellation_terms', 'difficulty_level', 'difficulty_description', 'tour_property_types', 'accomodation', 'tour_property_images', 'comfort_level', 'babies_alowed', 'animals_not_exploited', 'start_date', 'finish_date', 'start_time', 'finish_time', 'direct_link', 'instant_booking', 'members_number', 'team_member', 'guest_guide', 'price_comment', 'prepay_amount', 'prepay_in_prc', 'prepay_currency', 'postpay_on_start_day', 'postpay_days_before_start', 'currency', 'price', 'cost', 'discount_starts', 'discount_finish', 'discount_in_prc', 'discount', 'languages', 'is_guaranteed', 'flight_included', 'scouting', 'tour_images', 'tour_days', 'main_impressions', 'tour_included_services', 'tour_excluded_services', 'tour_addetional_services','hotel_name', 'age_starts', 'age_ends', 'media_link', 'week_recurrent', 'month_recurrent', 'vacants_number', 'on_moderation', 'is_active', 'is_draft', 'air_tickets', 'duration', 'sold', 'watched', 'guest_requirements', 'important_to_know_comments') 
+class ImportantSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Important
+        fields = '__all__'
+
+
+TOUR_FIELDS = ('id', 'rating', 'reviews_count', 'name', 'wallpaper', 'tmb_wallpaper', 'basic_type', 'additional_types', 'start_region', 'finish_region', 'start_country', 'finish_country', 'start_russian_region', 'finish_russian_region', 'start_city', 'finish_city', 'description', 'plan', 'cancellation_terms', 'difficulty_level', 'difficulty_description', 'tour_property_types', 'accomodation', 'tour_property_images', 'comfort_level', 'babies_alowed', 'animals_not_exploited', 'start_date', 'finish_date', 'start_time', 'finish_time', 'direct_link', 'instant_booking', 'members_number', 'team_member', 'guest_guide', 'price_comment', 'prepay_amount', 'prepay_in_prc', 'prepay_currency', 'postpay_on_start_day', 'postpay_days_before_start', 'currency', 'price', 'cost', 'discount_starts', 'discount_finish', 'discount_in_prc', 'discount', 'languages', 'is_guaranteed', 'flight_included', 'scouting', 'tour_images', 'tour_days', 'main_impressions', 'tour_included_services', 'tour_excluded_services', 'tour_addetional_services','hotel_name', 'age_starts', 'age_ends', 'media_link', 'week_recurrent', 'month_recurrent', 'vacants_number', 'on_moderation', 'is_active', 'is_draft', 'air_tickets', 'duration', 'sold', 'watched', 'guest_requirements', 'important_to_know') 
 
 
 class LanguageImageListingField(serializers.RelatedField):
@@ -82,6 +88,7 @@ class TourPreviewSerializer(serializers.ModelSerializer):
     start_time = serializers.SerializerMethodField(read_only=True)
     finish_time = serializers.SerializerMethodField(read_only=True)
     price = serializers.SerializerMethodField(read_only=True)
+    important_to_know = ImportantSerializer(read_only=True, many=True)
 
     class Meta:
         model = Tour
@@ -151,6 +158,7 @@ class TourSerializer(serializers.ModelSerializer):
     finish_russian_region = CountryRegionSerializer(many=False, read_only=True)
     start_city = CityFullNameSerializer(many=False, read_only=True)
     finish_city = CityFullNameSerializer(many=False, read_only=True)
+    important_to_know = ImportantSerializer(read_only=True, many=True)
     
 
     class Meta:

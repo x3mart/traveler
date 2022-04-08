@@ -1,3 +1,4 @@
+from encodings import utf_8
 from django.shortcuts import redirect
 from rest_framework.decorators import action
 from accounts.permissions import TeamMemberPermission, UserPermission, CustomerPermission, ExpertPermission
@@ -24,6 +25,11 @@ from django.template.loader import render_to_string
 from templated_mail.mail import BaseEmailMessage
 from django.contrib.auth.tokens import default_token_generator
 from tours.mixins import TourMixin
+import random
+import json
+from traveler.settings import WRITE_KEY, KEY_NEWTEL
+from utils.times import get_timestamp_str
+import hashlib
 
 
 class ConfirmEmailThread(threading.Thread, BaseEmailMessage):
@@ -188,6 +194,24 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
         expert = Expert.objects.get(pk=serializer.user.id)
         expert.email_confirmed = True
         expert.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    @action(["post"], detail=False)
+    def send_confirmation_call(self, request, *args, **kwargs):
+        user = request.user
+
+        data = json.dumps({
+            "dstNumber":str(user.phone).lstrip('+'),
+            "pin":str(random.randint(1000,9999)),
+        })
+        time = get_timestamp_str()
+        token_str = f"call-password/start-password-call\n{time}\n{KEY_NEWTEL}\n{data}\n{WRITE_KEY}".encode('utf-8')
+        print(token_str)
+        token = KEY_NEWTEL + time + hashlib.sha256(token_str).hexdigest()
+        print(token)
+        headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
+        response = requests.post('https://api.new-tel.net/call-password/start-password-call', data=data, headers=headers)
+        print(response.json())
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 

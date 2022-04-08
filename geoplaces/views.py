@@ -1,3 +1,5 @@
+import json
+from unicodedata import name
 from rest_framework import viewsets
 import requests
 import time
@@ -75,7 +77,7 @@ class CityViewSet(viewsets.ModelViewSet):
             return None
         if self.action == 'list' and self.request.query_params.get('search'):
             search = self.request.query_params.get('search')
-            qs = City.objects.annotate(rank=TrigramSimilarity('name', search) - TrigramDistance('name', search),).filter(rank__gte=0.1).order_by('-rank').prefetch_related('country', 'country_region')
+            qs = City.objects.annotate(rank=TrigramSimilarity('name', search) - TrigramDistance('name', search),).filter(rank__gte=0.01).order_by('-rank').prefetch_related('country', 'country_region')
             return qs
         return super().get_queryset()
     
@@ -104,6 +106,24 @@ def get_vk_countries():
         country['foreign_id'] = item['id']
         Country.objects.get_or_create(**country)
     return Country.objects.count()
+
+def get_vk_some(method, region_id=None, lang='en', country=1):
+    url = f'https://api.vk.com/method/database.{method}'
+    vk_data = {
+        'v':'5.131',
+        'count':10,
+        'need_all':1,
+        'access_token':VK_ACCESS_TOKEN,
+        'lang':lang,
+        'region_id':region_id,
+        'country_id':country
+    }
+    vk_response = requests.post(url, data=vk_data)
+    error = vk_response.json().get('error', None)
+    if error:
+        return print(error)
+    print(vk_response.json().get('response'))
+    return None
 
 def get_vk_country_regions():
     url = 'https://api.vk.com/method/database.getRegions'
@@ -180,3 +200,42 @@ def set_russian_cities():
             cities.append(City(**city))
         City.objects.bulk_create(cities)
     return country.cities.count()
+
+
+def parse_country_json():
+    with open('pb_country.json', 'r') as data:
+        countries = json.load(data)['countries']
+        print(len(countries))
+        locations = {country["location"] for country in countries if country["location"] != ''}
+        regions = [Region(name=location) for location in locations]
+        Region.objects.bulk_create(regions)
+        countries_w_region = []
+        for region in Region.objects.all():
+            countries_w_region += [Country(name=country['name'], name_en=country['english'], counry_code=country['id'], region=region) for country in countries if country["location"] == region.name and country["id"] != 'RU' and country["id"] != 'UA']
+        countries_wo_region = [Country(name=country['name'], name_en=country['english'], counry_code=country['id']) for country in countries if country["location"] == '' and country["id"] != 'RU' and country["id"] != 'UA']
+        countries = countries_w_region + countries_wo_region
+        Country.objects.bulk_create(countries)
+        print(Country.objects.count())
+
+def parse_city_json():
+    with open('pb_city.json', 'r') as data:
+        cities = json.load(data)['cities']
+        alphabet=set('абвгдеёжзийклмнопрстуфхцчшщъыьэюя')
+        cities = [city for city in cities if city["country"] != "RU" and city["country"] != "UA" and not alphabet.isdisjoint(city["name"].lower())]
+        for country in Country.objects.exclude(counry_code='RU').exclude(counry_code='UA'):
+            cities_w_country = list({city['name']:city for city in cities if city["country"] == country.counry_code}.values()) 
+            cities_w_country = [City(country=country, name=city['name'], name_en=city['english'], foreign_id=city['id']) for city in cities_w_country]
+            City.objects.bulk_create(cities_w_country)
+            print(len(cities_w_country))
+            print(country.name)
+
+def set_distinct_city():
+    for city in City.objects.all():
+        cs = City.objects.filter(name=city.name).filter(country=city.country).filter(country_region=city.country_region)
+        if cs.count() > 1:
+            cs.exclude(pk=city.id).delete()
+            print(city.name)
+            print(cs.count())
+
+
+
