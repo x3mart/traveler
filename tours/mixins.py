@@ -104,7 +104,6 @@ class TourMixin():
         elif start_city and not start_city.get('id'):
             city = City.objects.create(name=start_city.get('full_name'))
             setattr(instance, 'start_city', city)
-            print(city)
         if finish_city and finish_city.get('id'):
             city = City.objects.get(pk=finish_city.get('id'))
             country = city.country
