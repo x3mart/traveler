@@ -64,7 +64,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     @property
     def full_name(self):
-        return f'{self.first_name} {self.last_name}'
+        first = self.first_name if self.first_name else '--'
+        last = self.last_name if self.last_name else ''
+        return f'{first} {last}'
     
     @property
     def tmb_avatar(self):
@@ -115,9 +117,10 @@ class TeamMember(models.Model):
         verbose_name_plural = _('Члены команды')
         ordering = ['expert' ,'-id']
     
-    @property
     def full_name(self):
-        return f'{self.first_name} {self.last_name}'
+        first = self.first_name if self.first_name else '--'
+        last = self.last_name if self.last_name else ''
+        return f'{first} {last}'
     
     @property
     def tmb_avatar(self):
