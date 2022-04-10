@@ -73,7 +73,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         return get_tmb_path(self.avatar.url) if self.avatar else None
 
     def __str__(self):
-        return self.full_name if self.full_name else '--'
+        return self.full_name
     
     
 class Expert(User):
@@ -117,6 +117,7 @@ class TeamMember(models.Model):
         verbose_name_plural = _('Члены команды')
         ordering = ['expert' ,'-id']
     
+    @property
     def full_name(self):
         first = self.first_name if self.first_name else '--'
         last = self.last_name if self.last_name else ''
@@ -127,7 +128,7 @@ class TeamMember(models.Model):
         return get_tmb_path(self.avatar.url) if self.avatar else None
     
     def __str__(self):
-        return self.full_name if self.full_name else '--'
+        return self.full_name
 
 
 class Customer(User):
