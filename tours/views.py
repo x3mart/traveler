@@ -59,7 +59,6 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         instance = self.set_mtm_fields(request, instance)
         instance = self.set_fk_fields(request, instance)
         instance = self.set_model_fields(data, instance)
-        print(instance.prepay_in_prc)
         if instance.start_date and instance.finish_date and instance.start_date > instance.finish_date:
             errors['start_date'] = [_("Стартовая дата не может быть больше конечной")]
         if instance.prepay_amount and instance.prepay_in_prc and instance.prepay_amount < 15:
