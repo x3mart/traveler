@@ -182,7 +182,7 @@ class TourMixin():
                 data.pop(item)
         data = self.check_postpay_days_before_start(data)
         if self.request.data.get('prepay_in_prc') is not None:
-            data['prepay_in_prc'] = int(self.request.data.get('prepay_in_prc'))
+            data['prepay_in_prc'] = self.request.data.get('prepay_in_prc')
         for key, value in data.items():
             setattr(instance, key, value)
         return instance
