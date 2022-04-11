@@ -56,7 +56,9 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         instance_dict = model_to_dict(instance, exclude=NOT_MODERATED_FIELDS)
         instance = self.set_mtm_fields(request, instance)
         instance = self.set_fk_fields(request, instance)
-        instance = self.set_model_fields(data, instance)    
+        instance = self.set_model_fields(data, instance)
+        if request.data.get('section'):
+            instance = self.check_required_fieds(instance, request.data.get('section'))    
         if instance_dict != model_to_dict(instance, exclude=NOT_MODERATED_FIELDS) and instance.is_active:
             instance.is_active = False
             instance.on_moderation = True

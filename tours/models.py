@@ -4,6 +4,7 @@ from django.template.defaultfilters import default, slugify
 from unidecode import unidecode
 import os
 from ckeditor_uploader.fields import RichTextUploadingField
+from django.contrib.postgres.fields import ArrayField
 from ckeditor.fields import RichTextField
 from utils.images import get_tmb_path
 
@@ -272,6 +273,7 @@ class Tour(models.Model):
     guest_guide = models.JSONField(_("Приглашенный гид"), null=True, blank=True)
     guest_requirements = RichTextField(_('Требования к гостю'), null=True, blank=True)
     important_to_know_comments = RichTextField(_('Важно знать (коментарии)'), null=True, blank=True)
+    completed_sections = ArrayField(base_field=models.CharField(max_length=200, null=True), default=list, blank=True)
 
     class Meta:
         verbose_name = _('Тур')

@@ -3,6 +3,8 @@ from django.db import models
 from django.shortcuts import get_object_or_404
 from uritemplate import partial
 from geoplaces.models import City
+from django.utils.translation import gettext_lazy as _
+from rest_framework.serializers import ValidationError
 from tours.models import TourAccomodation, TourPropertyType, TourType
 from accounts.models import Expert, TeamMember
 from languages.models import Language
@@ -13,8 +15,35 @@ from tours.serializers import ImageSerializer, WallpaperSerializer
 NOT_MODERATED_FIELDS = {'is_active', 'on_moderation', 'vacants_number', 'is_draft', 'discount_starts', 'discount_finish', 'discount_in_prc', 'discount', 'sold', 'watched'} 
 CHECBOX_SET = {'is_guaranteed', 'is_active', 'postpay_on_start_day', 'scouting', 'animals_not_exploited', 'month_recurrent', 'flight_included', 'babies_alowed', 'on_moderation', 'week_recurrent', 'is_draft', 'instant_booking'}
 EXCLUDED_FK_FIELDS = {'tour_basic', 'wallpaper', 'team_member', 'start_region', 'finish_region', 'start_country', 'finish_country', 'start_russian_region', 'finish_russian_region', 'start_city', 'finish_city'}
+TOUR_REQUIRED_FIELDS = {
+    'main': ['name', 'wallpaper', 'members_number', 'vacants_number', 'basic_type', 'team_member'],
+    'review': ['description',],
+    'prices': ['currency', 'price', 'prepay_amount', 'prepay_in_prc', 'cancellation_terms', 'air_tickets', 'tour_excluded_services', 'tour_included_services'],
+    'gallery': ['tour_images'],
+    'route': ['start_city', 'finish_city', 'start_date', 'finish_date', 'start_time', 'finish_time'],
+    'accommodation': ['tour_property_types', 'accomodation', 'tour_property_images'],
+    'details': ['difficulty_level', 'comfort_level', 'languages', 'age_starts', 'age_ends']
+}
+
+MTM_FIELDS = ['additional_types', 'tour_property_types', 'accomodation', 'tour_property_images', 'languages', 'tour_images',]
+
 
 class TourMixin():
+    def check_required_fieds(self, instance, section):
+        section_required_fields = TOUR_REQUIRED_FIELDS.get(section)
+        empty_fields = [field for field in section_required_fields if not getattr(instance, field) or not hasattr(instance, field)]
+        empty_mtm_fields = [field for field in set(section_required_fields).intersection(MTM_FIELDS) if not getattr(instance, field).exists()]
+        errors = {}
+        for field in empty_fields + empty_mtm_fields:
+            errors[field] = [_("Обязательное поле")]
+        if errors:
+            raise ValidationError(errors)
+        if not instance.completed_sections:
+            instance.completed_sections = [section]
+        elif section not in instance.completed_sections:
+            instance.completed_sections.append('section')
+        return instance
+
     def check_set_tour_field_for_moderation(self, instance, field):
         if field not in NOT_MODERATED_FIELDS and instance.is_active:
             instance.is_active = False

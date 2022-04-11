@@ -163,7 +163,7 @@ class TourSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tour
-        fields = TOUR_FIELDS
+        fields = TOUR_FIELDS + ('completed_sections',)
         extra_kwargs = {
             'animals_not_exploited': {'required': False,},
             'instant_booking': {'required': False,}, 
