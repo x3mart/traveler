@@ -6,6 +6,8 @@ from rest_framework import filters
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from django.forms.models import model_to_dict
+from django.utils.translation import gettext_lazy as _
+from rest_framework.serializers import ValidationError
 from tours.filters import TourFilter
 from tours.mixins import TourMixin, NOT_MODERATED_FIELDS
 from tours.models import Important, ImportantTitle, Tour, TourAccomodation, TourBasic, TourDayImage, TourGuestGuideImage, TourImage, TourPlanImage, TourPropertyImage, TourPropertyType, TourType, TourWallpaper
@@ -44,11 +46,11 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         tour_basic = TourBasic.objects.create(expert=self.get_expert(request))
         tour = Tour.objects.create(tour_basic=tour_basic, **data)
         important = [Important(tour=tour, **title) for title in ImportantTitle.objects.values('title', 'required')]
-        print(important)
         Important.objects.bulk_create(important)
         return Response(TourSerializer(tour).data, status=201)
     
     def update(self, request, *args, **kwargs):
+        errors = {}
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             data = serializer.validated_data
@@ -57,10 +59,19 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         instance = self.set_mtm_fields(request, instance)
         instance = self.set_fk_fields(request, instance)
         instance = self.set_model_fields(data, instance)
+        print(instance.prepay_in_prc)
+        if instance.start_date and instance.finish_date and instance.start_date > instance.finish_date:
+            errors['start_date'] = [_("Стартовая дата не может быть больше конечной")]
+        if instance.prepay_amount and instance.prepay_in_prc and instance.prepay_amount < 15:
+            errors['prepay_amount'] = [_("Предоплата не может быть меньше 15%")]
+        elif instance.prepay_amount and instance.price and not instance.prepay_in_prc and instance.prepay_amount < instance.price*0.15:
+            errors['prepay_amount'] = [_("Предоплата не может быть меньше") + f" {round(instance.price*0.15)} {instance.currency.short_name if instance.currency else ''}"]
         if instance.on_moderation:
             instance.is_draft = False
         if request.data.get('section'):
-            instance = self.check_required_fieds(instance, request.data.get('section'))    
+            instance, errors = self.check_required_fieds(instance, request.data.get('section'), errors)
+        if errors:
+            raise ValidationError(errors)  
         if instance_dict != model_to_dict(instance, exclude=NOT_MODERATED_FIELDS) and instance.is_active:
             instance.is_active = False
             instance.on_moderation = True

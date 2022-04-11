@@ -4,7 +4,6 @@ from django.shortcuts import get_object_or_404
 from uritemplate import partial
 from geoplaces.models import City
 from django.utils.translation import gettext_lazy as _
-from rest_framework.serializers import ValidationError
 from tours.models import TourAccomodation, TourPropertyType, TourType
 from accounts.models import Expert, TeamMember
 from languages.models import Language
@@ -29,22 +28,22 @@ MTM_FIELDS = ['additional_types', 'tour_property_types', 'accomodation', 'tour_p
 
 
 class TourMixin():
-    def check_required_fieds(self, instance, section):
+    def check_required_fieds(self, instance, section, errors={}):
         if section == 'important':
             pass
         section_required_fields = TOUR_REQUIRED_FIELDS.get(section)
         empty_fields = [field for field in section_required_fields if not getattr(instance, field) or not hasattr(instance, field)]
         empty_mtm_fields = [field for field in set(section_required_fields).intersection(MTM_FIELDS) if not getattr(instance, field).exists()]
-        errors = {}
         for field in empty_fields + empty_mtm_fields:
-            errors[field] = [_("Обязательное поле")]
-        if errors:
-            raise ValidationError(errors)
+            if errors.get(field):
+                errors[field].append(_("Обязательное поле"))
+            else:
+                errors[field] = [_("Обязательное поле")]
         if not instance.completed_sections:
             instance.completed_sections = [section]
         elif section not in instance.completed_sections:
             instance.completed_sections.append('section')
-        return instance
+        return (instance, errors)
 
     def check_set_tour_field_for_moderation(self, instance, field):
         if field not in NOT_MODERATED_FIELDS and instance.is_active:
@@ -182,6 +181,9 @@ class TourMixin():
             for item in not_sended_checbox:
                 data.pop(item)
         data = self.check_postpay_days_before_start(data)
+        print(self.request.data)
+        if self.request.data.get('prepay_in_prc') is not None:
+            data['prepay_in_prc'] = self.request.data.get('prepay_in_prc')
         for key, value in data.items():
             setattr(instance, key, value)
         return instance
