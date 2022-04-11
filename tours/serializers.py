@@ -1,7 +1,6 @@
 from datetime import date
 from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
-
 from geoplaces.serializers import CityFullNameSerializer, CitySerializer, CountrySerializer, RegionSerializer, CountryRegionSerializer
 from .models import Important, Tour, TourAccomodation, TourPropertyType, TourType
 from currencies.serializers import CurrencySerializer
@@ -159,11 +158,12 @@ class TourSerializer(serializers.ModelSerializer):
     start_city = CityFullNameSerializer(many=False, read_only=True)
     finish_city = CityFullNameSerializer(many=False, read_only=True)
     important_to_know = ImportantSerializer(read_only=True, many=True)
+    required_fields = serializers.ListField(read_only=True)
     
 
     class Meta:
         model = Tour
-        fields = TOUR_FIELDS + ('completed_sections',)
+        fields = TOUR_FIELDS + ('completed_sections', 'required_fields')
         extra_kwargs = {
             'animals_not_exploited': {'required': False,},
             'instant_booking': {'required': False,}, 

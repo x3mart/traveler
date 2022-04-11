@@ -1,3 +1,4 @@
+from dataclasses import field
 from datetime import timedelta, datetime
 from rest_framework.decorators import action
 from django.db.models.query import Prefetch
@@ -9,7 +10,7 @@ from django.forms.models import model_to_dict
 from django.utils.translation import gettext_lazy as _
 from rest_framework.serializers import ValidationError
 from tours.filters import TourFilter
-from tours.mixins import TourMixin, NOT_MODERATED_FIELDS
+from tours.mixins import TourMixin, NOT_MODERATED_FIELDS, TOUR_REQUIRED_FIELDS
 from tours.models import Important, ImportantTitle, Tour, TourAccomodation, TourBasic, TourDayImage, TourGuestGuideImage, TourImage, TourPlanImage, TourPropertyImage, TourPropertyType, TourType, TourWallpaper
 from tours.permissions import TourPermission
 from tours.serializers import ImageSerializer, TourAccomodationSerializer, TourListSerializer, TourPreviewSerializer, TourPropertyTypeSerializer, TourSerializer, TourTypeSerializer, WallpaperSerializer
@@ -47,6 +48,8 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         tour = Tour.objects.create(tour_basic=tour_basic, **data)
         important = [Important(tour=tour, **title) for title in ImportantTitle.objects.values('title', 'required')]
         Important.objects.bulk_create(important)
+        for value in TOUR_REQUIRED_FIELDS:
+            tour.required_fields += TOUR_REQUIRED_FIELDS[value]
         return Response(TourSerializer(tour).data, status=201)
     
     def update(self, request, *args, **kwargs):
@@ -75,6 +78,9 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
             instance.is_active = False
             instance.on_moderation = True
         instance.save()
+        instance.required_fields = []
+        for value in TOUR_REQUIRED_FIELDS:
+            instance.required_fields += TOUR_REQUIRED_FIELDS[value]
         if getattr(instance, '_prefetched_objects_cache', None):
             instance._prefetched_objects_cache = {}
         return Response(TourSerializer(instance, context={'request': request}).data, status=201)
