@@ -108,11 +108,9 @@ class TourMixin():
             if request.data.get(field) is not None:
                 fk_id = request.data.get(field)['id']
                 setattr(instance, field, model.objects.get(pk=fk_id))
-            if request.data.get('team_member') is not None:
-                fk_id = request.data.get('team_member')['id']
-                setattr(instance, 'team_member', TeamMember.objects.get(pk=fk_id))
-            else:
-                setattr(instance, field, None)
+        if request.data.get('team_member') is not None:
+            fk_id = request.data.get('team_member')['id']
+            setattr(instance, 'team_member', TeamMember.objects.get(pk=fk_id))
         start_city = request.data.get('start_city')
         finish_city = request.data.get('finish_city')
         if start_city and start_city.get('id'):
