@@ -62,10 +62,6 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         instance = self.set_model_fields(data, instance)
         if instance.start_date and instance.finish_date and instance.start_date > instance.finish_date:
             errors['start_date'] = [_("Стартовая дата не может быть больше конечной")]
-        if instance.prepay_amount and instance.prepay_in_prc and instance.prepay_amount < 15:
-            errors['prepay_amount'] = [_("Предоплата не может быть меньше 15%")]
-        elif instance.prepay_amount and instance.price and not instance.prepay_in_prc and instance.prepay_amount < instance.price*0.15:
-            errors['prepay_amount'] = [_("Предоплата не может быть меньше") + f" {round(instance.price*0.15)} {instance.currency.short_name if instance.currency else ''}"]
         if instance.on_moderation:
             instance.is_draft = False
         if request.data.get('section'):

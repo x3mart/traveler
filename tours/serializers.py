@@ -89,8 +89,8 @@ class TourPreviewSerializer(serializers.ModelSerializer):
     team_member = TeamMemberSerializer(many=False, read_only=True)
     tmb_wallpaper = serializers.SerializerMethodField(read_only=True)
     wallpaper = serializers.SerializerMethodField(read_only=True)
-    prepay_in_prc = serializers.SerializerMethodField(read_only=True)
-    discount_in_prc = serializers.SerializerMethodField(read_only=True)
+    # prepay_in_prc = serializers.SerializerMethodField(read_only=True)
+    # discount_in_prc = serializers.SerializerMethodField(read_only=True)
     rating = serializers.DecimalField(max_digits=2,decimal_places=1, source='tour_basic.rating',read_only=True)
     reviews_count = serializers.IntegerField(source='tour_basic.reviews_count',read_only=True)
     direct_link = serializers.BooleanField(source='tour_basic.direct_link', read_only=True)
@@ -131,11 +131,11 @@ class TourPreviewSerializer(serializers.ModelSerializer):
         else:
             return obj.price
 
-    def get_prepay_in_prc(self, obj): 
-        return 1 if obj.prepay_in_prc else 0
+    # def get_prepay_in_prc(self, obj): 
+    #     return 1 if obj.prepay_in_prc else 0
     
-    def get_discount_in_prc(self, obj): 
-        return 1 if obj.discount_in_prc else 0
+    # def get_discount_in_prc(self, obj): 
+    #     return 1 if obj.discount_in_prc else 0
 
 
 class TourSerializer(serializers.ModelSerializer):
@@ -153,8 +153,8 @@ class TourSerializer(serializers.ModelSerializer):
     tour_excluded_services = serializers.SerializerMethodField(read_only=True)
     tmb_wallpaper = serializers.SerializerMethodField(read_only=True)
     wallpaper = serializers.SerializerMethodField(read_only=True)
-    prepay_in_prc = serializers.SerializerMethodField(read_only=True)
-    discount_in_prc = serializers.SerializerMethodField(read_only=True)
+    # prepay_in_prc = serializers.SerializerMethodField(read_only=True)
+    # discount_in_prc = serializers.SerializerMethodField(read_only=True)
     postpay_on_start_day = serializers.BooleanField(required=False)
     rating = serializers.DecimalField(max_digits=2,decimal_places=1, source='tour_basic.rating',read_only=True)
     reviews_count = serializers.IntegerField(source='tour_basic.reviews_count',read_only=True)
@@ -210,11 +210,11 @@ class TourSerializer(serializers.ModelSerializer):
         else:
             return "" 
 
-    def get_prepay_in_prc(self, obj): 
-        return 1 if obj.prepay_in_prc else 0
+    # def get_prepay_in_prc(self, obj): 
+    #     return 1 if obj.prepay_in_prc else 0
     
-    def get_discount_in_prc(self, obj): 
-        return 1 if obj.discount_in_prc else 0
+    # def get_discount_in_prc(self, obj): 
+        # return 1 if obj.discount_in_prc else 0
     
     def get_required_fields(self, obj):
         required_fields = []

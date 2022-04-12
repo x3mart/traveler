@@ -1,3 +1,4 @@
+# from itertools import count
 from django.forms import model_to_dict
 from django.db import models
 from django.shortcuts import get_object_or_404
@@ -23,9 +24,10 @@ class TourMixin():
     def check_required_fieds(self, instance, section, errors={}):
         if section == 'important':
             pass
-        print(instance.currency)
         section_required_fields = TOUR_REQUIRED_FIELDS.get(section)
         empty_fields = [field for field in section_required_fields if not getattr(instance, field) or not hasattr(instance, field)]
+        if self.request.data.get('prepay_in_prc') is not None and section == 'prices':
+            pop = empty_fields.pop(empty_fields.count('prepay_in_prc') - 1)
         empty_mtm_fields = [field for field in set(section_required_fields).intersection(MTM_FIELDS) if not getattr(instance, field).exists()]
         for field in empty_fields + empty_mtm_fields:
             if errors.get(field):
@@ -36,6 +38,10 @@ class TourMixin():
             instance.completed_sections = [section]
         elif section not in instance.completed_sections:
             instance.completed_sections.append('section')
+        if section == 'prices' and instance.prepay_amount and instance.prepay_in_prc and instance.prepay_amount < 15:
+            errors['prepay_amount'] = [_("Предоплата не может быть меньше 15%")]
+        elif section == 'prices' and instance.prepay_amount and instance.price and not instance.prepay_in_prc and instance.prepay_amount < instance.price*0.15:
+            errors['prepay_amount'] = [_("Предоплата не может быть меньше") + f" {round(instance.price*0.15)} {instance.currency.short_name if instance.currency else ''}"]
         return (instance, errors)
 
     def check_set_tour_field_for_moderation(self, instance, field):
