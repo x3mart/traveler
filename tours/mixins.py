@@ -35,7 +35,7 @@ class TourMixin():
         if not instance.completed_sections:
             instance.completed_sections = [section]
         elif section not in instance.completed_sections:
-            instance.completed_sections.append('section')
+            instance.completed_sections.append(section)
         if section == 'prices' and instance.prepay_amount and instance.prepay_in_prc and instance.prepay_amount < 15:
             errors['prepay_amount'] = [_("Предоплата не может быть меньше 15%")]
         elif section == 'prices' and instance.prepay_amount and instance.price and not instance.prepay_in_prc and instance.prepay_amount < instance.price*0.15:
