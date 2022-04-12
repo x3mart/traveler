@@ -94,7 +94,7 @@ class TourMixin():
     def set_mtm_from_str(self, request, field):
         field = request.data.get(field).rstrip(';')
         new_list = field.split(';')
-        new_list = [x.strip for x in new_list if x]
+        new_list = [x.strip() for x in new_list if x]
         return new_list 
     
     def get_expert(self, request):
