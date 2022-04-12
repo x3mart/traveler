@@ -24,11 +24,8 @@ class TourMixin():
     def check_required_fieds(self, instance, section, errors={}):
         if section == 'important':
             pass
-        print(instance.tour_included_services)
         section_required_fields = TOUR_REQUIRED_FIELDS.get(section)
         empty_fields = [field for field in section_required_fields if not getattr(instance, field) or not hasattr(instance, field)]
-        if self.request.data.get('prepay_in_prc') is not None and section == 'prices':
-            pop = empty_fields.pop(empty_fields.count('prepay_in_prc') - 1)
         empty_mtm_fields = [field for field in set(section_required_fields).intersection(MTM_FIELDS) if not getattr(instance, field).exists()]
         for field in empty_fields + empty_mtm_fields:
             if errors.get(field):
@@ -98,8 +95,6 @@ class TourMixin():
         field = request.data.get(field).rstrip(';')
         new_list = field.split(';')
         new_list = [x.strip for x in new_list if x]
-        # print(test_list)
-        # new_list = list(map(lambda x: x.strip(), new_list))
         return new_list 
     
     def get_expert(self, request):
