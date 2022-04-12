@@ -9,6 +9,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.forms.models import model_to_dict
 from django.utils.translation import gettext_lazy as _
 from rest_framework.serializers import ValidationError
+from currencies.models import Currency
 from tours.filters import TourFilter
 from tours.mixins import TourMixin, NOT_MODERATED_FIELDS, TOUR_REQUIRED_FIELDS
 from tours.models import Important, ImportantTitle, Tour, TourAccomodation, TourBasic, TourDayImage, TourGuestGuideImage, TourImage, TourPlanImage, TourPropertyImage, TourPropertyType, TourType, TourWallpaper
@@ -45,7 +46,8 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
             data = serializer.validated_data
         data['is_draft'] = True
         tour_basic = TourBasic.objects.create(expert=self.get_expert(request))
-        tour = Tour.objects.create(tour_basic=tour_basic, **data)
+        currency = Currency.objects.order_by('id').first()
+        tour = Tour.objects.create(currency=currency, tour_basic=tour_basic, **data)
         important = [Important(tour=tour, **title) for title in ImportantTitle.objects.values('title', 'required')]
         Important.objects.bulk_create(important)
         return Response(TourSerializer(tour).data, status=201)
