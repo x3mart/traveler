@@ -24,6 +24,7 @@ class TourMixin():
     def check_required_fieds(self, instance, section, errors={}):
         if section == 'important':
             pass
+        print(instance.tour_included_services)
         section_required_fields = TOUR_REQUIRED_FIELDS.get(section)
         empty_fields = [field for field in section_required_fields if not getattr(instance, field) or not hasattr(instance, field)]
         if self.request.data.get('prepay_in_prc') is not None and section == 'prices':
@@ -96,7 +97,9 @@ class TourMixin():
     def set_mtm_from_str(self, request, field):
         field = request.data.get(field).rstrip(';')
         new_list = field.split(';')
-        new_list = list(map(lambda x: x.strip(), new_list))
+        new_list = [x.strip for x in new_list if x]
+        # print(test_list)
+        # new_list = list(map(lambda x: x.strip(), new_list))
         return new_list 
     
     def get_expert(self, request):
