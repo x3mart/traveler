@@ -56,7 +56,7 @@ TOUR_FIELDS = ('id', 'rating', 'reviews_count', 'name', 'wallpaper', 'tmb_wallpa
 TOUR_REQUIRED_FIELDS = {
     'main': ['name', 'wallpaper', 'members_number', 'vacants_number', 'basic_type', 'team_member'],
     'review': ['description',],
-    'prices': ['currency', 'price', 'prepay_amount', 'prepay_in_prc', 'cancellation_terms', 'air_tickets', 'tour_excluded_services', 'tour_included_services'],
+    'prices': ['currency', 'price', 'prepay_amount', 'prepay_in_prc', 'cancellation_terms', 'air_tickets', 'tour_included_services', 'tour_excluded_services', 'tour_included_services'],
     'gallery': ['tour_images'],
     'route': ['start_city', 'finish_city', 'start_date', 'finish_date', 'start_time', 'finish_time'],
     'accommodation': ['tour_property_types', 'accomodation', 'tour_property_images'],

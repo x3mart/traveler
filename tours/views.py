@@ -76,7 +76,6 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
             instance.is_active = False
             instance.on_moderation = True
         instance.save()
-        instance.required_fields = []
         if getattr(instance, '_prefetched_objects_cache', None):
             instance._prefetched_objects_cache = {}
         return Response(TourSerializer(instance, context={'request': request}).data, status=201)
