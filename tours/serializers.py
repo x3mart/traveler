@@ -53,6 +53,16 @@ class ImportantSerializer(serializers.ModelSerializer):
 TOUR_FIELDS = ('id', 'rating', 'reviews_count', 'name', 'wallpaper', 'tmb_wallpaper', 'basic_type', 'additional_types', 'start_region', 'finish_region', 'start_country', 'finish_country', 'start_russian_region', 'finish_russian_region', 'start_city', 'finish_city', 'description', 'plan', 'cancellation_terms', 'difficulty_level', 'difficulty_description', 'tour_property_types', 'accomodation', 'tour_property_images', 'comfort_level', 'babies_alowed', 'animals_not_exploited', 'start_date', 'finish_date', 'start_time', 'finish_time', 'direct_link', 'instant_booking', 'members_number', 'team_member', 'guest_guide', 'price_comment', 'prepay_amount', 'prepay_in_prc', 'prepay_currency', 'postpay_on_start_day', 'postpay_days_before_start', 'currency', 'price', 'cost', 'discount_starts', 'discount_finish', 'discount_in_prc', 'discount', 'languages', 'is_guaranteed', 'flight_included', 'scouting', 'tour_images', 'tour_days', 'main_impressions', 'tour_included_services', 'tour_excluded_services', 'tour_addetional_services','hotel_name', 'age_starts', 'age_ends', 'media_link', 'week_recurrent', 'month_recurrent', 'vacants_number', 'on_moderation', 'is_active', 'is_draft', 'air_tickets', 'duration', 'sold', 'watched', 'guest_requirements', 'important_to_know') 
 
 
+TOUR_REQUIRED_FIELDS = {
+    'main': ['name', 'wallpaper', 'members_number', 'vacants_number', 'basic_type', 'team_member'],
+    'review': ['description',],
+    'prices': ['currency', 'price', 'prepay_amount', 'prepay_in_prc', 'cancellation_terms', 'air_tickets', 'tour_excluded_services', 'tour_included_services'],
+    'gallery': ['tour_images'],
+    'route': ['start_city', 'finish_city', 'start_date', 'finish_date', 'start_time', 'finish_time'],
+    'accommodation': ['tour_property_types', 'accomodation', 'tour_property_images'],
+    'details': ['difficulty_level', 'comfort_level', 'languages', 'age_starts', 'age_ends']
+}
+
 class LanguageImageListingField(serializers.RelatedField):
     def to_representation(self, value):
         return get_image_uri(self, value)
@@ -158,7 +168,7 @@ class TourSerializer(serializers.ModelSerializer):
     start_city = CityFullNameSerializer(many=False, read_only=True)
     finish_city = CityFullNameSerializer(many=False, read_only=True)
     important_to_know = ImportantSerializer(read_only=True, many=True)
-    required_fields = serializers.ListField(read_only=True)
+    required_fields = serializers.SerializerMethodField(read_only=True)
     
 
     class Meta:
@@ -205,6 +215,12 @@ class TourSerializer(serializers.ModelSerializer):
     
     def get_discount_in_prc(self, obj): 
         return 1 if obj.discount_in_prc else 0
+    
+    def get_required_fields(self, obj):
+        required_fields = []
+        for value in TOUR_REQUIRED_FIELDS:
+            required_fields += TOUR_REQUIRED_FIELDS[value]
+        return required_fields
 
 
 class TourListSerializer(serializers.ModelSerializer):

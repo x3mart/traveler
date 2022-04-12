@@ -8,21 +8,13 @@ from tours.models import TourAccomodation, TourPropertyType, TourType
 from accounts.models import Expert, TeamMember
 from languages.models import Language
 from currencies.models import Currency
-from tours.serializers import ImageSerializer, WallpaperSerializer
+from tours.serializers import ImageSerializer, WallpaperSerializer, TOUR_REQUIRED_FIELDS
 
 
 NOT_MODERATED_FIELDS = {'is_active', 'on_moderation', 'vacants_number', 'is_draft', 'discount_starts', 'discount_finish', 'discount_in_prc', 'discount', 'sold', 'watched'} 
 CHECBOX_SET = {'is_guaranteed', 'is_active', 'postpay_on_start_day', 'scouting', 'animals_not_exploited', 'month_recurrent', 'flight_included', 'babies_alowed', 'on_moderation', 'week_recurrent', 'is_draft', 'instant_booking'}
 EXCLUDED_FK_FIELDS = {'tour_basic', 'wallpaper', 'team_member', 'start_region', 'finish_region', 'start_country', 'finish_country', 'start_russian_region', 'finish_russian_region', 'start_city', 'finish_city'}
-TOUR_REQUIRED_FIELDS = {
-    'main': ['name', 'wallpaper', 'members_number', 'vacants_number', 'basic_type', 'team_member'],
-    'review': ['description',],
-    'prices': ['currency', 'price', 'prepay_amount', 'prepay_in_prc', 'cancellation_terms', 'air_tickets', 'tour_excluded_services', 'tour_included_services'],
-    'gallery': ['tour_images'],
-    'route': ['start_city', 'finish_city', 'start_date', 'finish_date', 'start_time', 'finish_time'],
-    'accommodation': ['tour_property_types', 'accomodation', 'tour_property_images'],
-    'details': ['difficulty_level', 'comfort_level', 'languages', 'age_starts', 'age_ends']
-}
+
 
 MTM_FIELDS = ['additional_types', 'tour_property_types', 'accomodation', 'tour_property_images', 'languages', 'tour_images',]
 

@@ -48,9 +48,6 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         tour = Tour.objects.create(tour_basic=tour_basic, **data)
         important = [Important(tour=tour, **title) for title in ImportantTitle.objects.values('title', 'required')]
         Important.objects.bulk_create(important)
-        tour.required_fields = []
-        for value in TOUR_REQUIRED_FIELDS:
-            tour.required_fields += TOUR_REQUIRED_FIELDS[value]
         return Response(TourSerializer(tour).data, status=201)
     
     def update(self, request, *args, **kwargs):
@@ -80,8 +77,6 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
             instance.on_moderation = True
         instance.save()
         instance.required_fields = []
-        for value in TOUR_REQUIRED_FIELDS:
-            instance.required_fields += TOUR_REQUIRED_FIELDS[value]
         if getattr(instance, '_prefetched_objects_cache', None):
             instance._prefetched_objects_cache = {}
         return Response(TourSerializer(instance, context={'request': request}).data, status=201)
