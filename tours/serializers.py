@@ -131,7 +131,7 @@ class TourPreviewSerializer(serializers.ModelSerializer):
         if obj.price and obj.discount and obj.discount_starts and  obj.discount_finish and obj.discount_starts < date.today() and  obj.discount_finish > date.today():
             return obj.price - obj.price*(obj.discount/100) if obj.prepay_in_prc else obj.price - obj.discount
         else:
-            return obj.price
+            return None
 
     def get_book_price(self, obj): 
         if obj.price:
