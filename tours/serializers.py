@@ -63,10 +63,6 @@ TOUR_REQUIRED_FIELDS = {
     'details': ['difficulty_level', 'comfort_level', 'languages', 'age_starts', 'age_ends']
 }
 
-class LanguageImageListingField(serializers.RelatedField):
-    def to_representation(self, value):
-        return get_image_uri(self, value)
-
 
 class TourPreviewSerializer(serializers.ModelSerializer):
     basic_type = serializers.StringRelatedField(many=False, read_only=True)
@@ -83,14 +79,12 @@ class TourPreviewSerializer(serializers.ModelSerializer):
     accomodation = serializers.StringRelatedField(many=True, read_only=True)
     tour_property_images = ImageSerializer(many=True, read_only=True)
     tour_images = ImageSerializer(many=True, read_only=True)
-    languages = LanguageImageListingField(many=True, read_only=True)
+    languages = LanguageSerializer(many=True, read_only=True)
     currency = CurrencySerializer(many=False, read_only=True)
     expert = ExpertListSerializer(many=False, read_only=True, source='tour_basic.expert')
     team_member = TeamMemberSerializer(many=False, read_only=True)
     tmb_wallpaper = serializers.SerializerMethodField(read_only=True)
     wallpaper = serializers.SerializerMethodField(read_only=True)
-    # prepay_in_prc = serializers.SerializerMethodField(read_only=True)
-    # discount_in_prc = serializers.SerializerMethodField(read_only=True)
     rating = serializers.DecimalField(max_digits=2,decimal_places=1, source='tour_basic.rating',read_only=True)
     reviews_count = serializers.IntegerField(source='tour_basic.reviews_count',read_only=True)
     direct_link = serializers.BooleanField(source='tour_basic.direct_link', read_only=True)
@@ -159,8 +153,6 @@ class TourSerializer(serializers.ModelSerializer):
     tour_excluded_services = serializers.SerializerMethodField(read_only=True)
     tmb_wallpaper = serializers.SerializerMethodField(read_only=True)
     wallpaper = serializers.SerializerMethodField(read_only=True)
-    # prepay_in_prc = serializers.SerializerMethodField(read_only=True)
-    # discount_in_prc = serializers.SerializerMethodField(read_only=True)
     postpay_on_start_day = serializers.BooleanField(required=False)
     rating = serializers.DecimalField(max_digits=2,decimal_places=1, source='tour_basic.rating',read_only=True)
     reviews_count = serializers.IntegerField(source='tour_basic.reviews_count',read_only=True)
@@ -215,12 +207,6 @@ class TourSerializer(serializers.ModelSerializer):
             return '; '.join(obj.tour_excluded_services)
         else:
             return "" 
-
-    # def get_prepay_in_prc(self, obj): 
-    #     return 1 if obj.prepay_in_prc else 0
-    
-    # def get_discount_in_prc(self, obj): 
-        # return 1 if obj.discount_in_prc else 0
     
     def get_required_fields(self, obj):
         required_fields = []
