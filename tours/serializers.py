@@ -58,7 +58,7 @@ TOUR_REQUIRED_FIELDS = {
     'review': ['description',],
     'prices': ['currency', 'price', 'prepay_amount', 'cancellation_terms', 'air_tickets', 'tour_included_services', 'tour_excluded_services',],
     'gallery': ['tour_images'],
-    'route': ['start_city', 'finish_city', 'start_date', 'finish_date', 'start_time', 'finish_time'],
+    'route': ['start_city', 'finish_city', 'start_date', 'finish_date'],
     'accommodation': ['tour_property_types', 'accomodation', 'tour_property_images'],
     'details': ['difficulty_level', 'comfort_level', 'languages', 'age_starts', 'age_ends']
 }
