@@ -134,7 +134,7 @@ class TourPreviewSerializer(serializers.ModelSerializer):
         return None
     
     def get_daily_price(self, obj):
-        discounted_price = self.get_discounted_price(self, obj)
+        discounted_price = self.get_discounted_price(obj)
         if discounted_price:
             return round(discounted_price/obj.duration)
         if obj.price and obj.duration: 
