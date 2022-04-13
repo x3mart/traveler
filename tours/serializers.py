@@ -96,12 +96,14 @@ class TourPreviewSerializer(serializers.ModelSerializer):
     direct_link = serializers.BooleanField(source='tour_basic.direct_link', read_only=True)
     start_time = serializers.SerializerMethodField(read_only=True)
     finish_time = serializers.SerializerMethodField(read_only=True)
-    price = serializers.SerializerMethodField(read_only=True)
+    discounted_price = serializers.SerializerMethodField(read_only=True)
+    book_price = serializers.SerializerMethodField(read_only=True)
+    daily_price = serializers.SerializerMethodField(read_only=True)
     important_to_know = ImportantSerializer(read_only=True, many=True)
 
     class Meta:
         model = Tour
-        fields = TOUR_FIELDS + ('expert', 'cost')
+        fields = TOUR_FIELDS + ('expert', 'cost', 'discounted_price', 'book_price', 'daily_price')
 
     def get_tmb_wallpaper(self, obj):
         if obj.wallpaper: 
@@ -125,17 +127,21 @@ class TourPreviewSerializer(serializers.ModelSerializer):
         else:
             return None
     
-    def get_price(self, obj):
+    def get_discounted_price(self, obj):
         if obj.price and obj.discount and obj.discount_starts and  obj.discount_finish and obj.discount_starts < date.today() and  obj.discount_finish > date.today():
             return obj.price - obj.price*(obj.discount/100) if obj.prepay_in_prc else obj.price - obj.discount
         else:
             return obj.price
 
-    # def get_prepay_in_prc(self, obj): 
-    #     return 1 if obj.prepay_in_prc else 0
+    def get_book_price(self, obj): 
+        if obj.price:
+            return round(obj.price*obj.prepay_amount/100) + 1 if obj.prepay_in_prc else obj.prepay_amount
+        return None
     
-    # def get_discount_in_prc(self, obj): 
-    #     return 1 if obj.discount_in_prc else 0
+    def get_daily_price(self, obj):
+        if obj.price: 
+            return round(obj.price/obj.duration)
+        return None
 
 
 class TourSerializer(serializers.ModelSerializer):
