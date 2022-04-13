@@ -256,7 +256,7 @@ class Tour(models.Model):
     scouting = models.BooleanField(_('Разведка'), default=False, null=True, blank=True)
     age_starts = models.PositiveIntegerField(_('Мин возраст участника тура'), default=15, null=True, blank=True)
     age_ends = models.PositiveIntegerField(_('Мин возраст участника тура'), default=85, null=True, blank=True)
-    media_link = models.URLField(_('Ссылка на видео тура'), max_length=150, null=True, blank=True)
+    media_link = models.URLField(_('Ссылка на видео тура'), max_length=255, null=True, blank=True)
     air_tickets = models.TextField(_('Авиабилеты'), null=True, blank=True)
     watched = models.PositiveIntegerField(_('Просмотры'), null=True, blank=True)
     sold = models.PositiveIntegerField(_('Продажи'), null=True, blank=True)
