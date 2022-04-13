@@ -139,7 +139,7 @@ class TourPreviewSerializer(serializers.ModelSerializer):
         return None
     
     def get_daily_price(self, obj):
-        if obj.price: 
+        if obj.price and obj.duration: 
             return round(obj.price/obj.duration)
         return None
 
