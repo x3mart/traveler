@@ -50,17 +50,18 @@ class ImportantSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-TOUR_FIELDS = ('id', 'rating', 'reviews_count', 'name', 'wallpaper', 'tmb_wallpaper', 'basic_type', 'additional_types', 'start_region', 'finish_region', 'start_country', 'finish_country', 'start_russian_region', 'finish_russian_region', 'start_city', 'finish_city', 'description', 'plan', 'cancellation_terms', 'difficulty_level', 'difficulty_description', 'tour_property_types', 'accomodation', 'tour_property_images', 'comfort_level', 'babies_alowed', 'animals_not_exploited', 'start_date', 'finish_date', 'start_time', 'finish_time', 'direct_link', 'instant_booking', 'members_number', 'team_member', 'guest_guide', 'price_comment', 'prepay_amount', 'prepay_in_prc', 'prepay_currency', 'postpay_on_start_day', 'postpay_days_before_start', 'currency', 'price', 'cost', 'discount_starts', 'discount_finish', 'discount_in_prc', 'discount', 'languages', 'is_guaranteed', 'flight_included', 'scouting', 'tour_images', 'tour_days', 'main_impressions', 'tour_included_services', 'tour_excluded_services', 'tour_addetional_services','hotel_name', 'age_starts', 'age_ends', 'media_link', 'week_recurrent', 'month_recurrent', 'vacants_number', 'on_moderation', 'is_active', 'is_draft', 'air_tickets', 'duration', 'sold', 'watched', 'guest_requirements', 'important_to_know') 
+TOUR_FIELDS = ('id', 'rating', 'reviews_count', 'name', 'wallpaper', 'tmb_wallpaper', 'basic_type', 'additional_types', 'start_region', 'finish_region', 'start_country', 'finish_country', 'start_russian_region', 'finish_russian_region', 'start_city', 'finish_city', 'description', 'plan', 'cancellation_terms', 'difficulty_level', 'difficulty_description', 'tour_property_types', 'accomodation', 'tour_property_images', 'comfort_level', 'babies_alowed', 'animals_not_exploited', 'start_date', 'finish_date', 'start_time', 'finish_time', 'direct_link', 'instant_booking', 'members_number', 'team_member', 'guest_guide', 'price_comment', 'prepay_amount', 'prepay_in_prc', 'prepay_currency', 'postpay_on_start_day', 'postpay_days_before_start', 'currency', 'price', 'cost', 'discount_starts', 'discount_finish', 'discount_in_prc', 'discount', 'languages', 'is_guaranteed', 'flight_included', 'scouting', 'tour_images', 'tour_days', 'main_impressions', 'tour_included_services', 'tour_excluded_services', 'tour_addetional_services','hotel_name', 'age_starts', 'age_ends', 'media_link', 'week_recurrent', 'month_recurrent', 'vacants_number', 'on_moderation', 'is_active', 'is_draft', 'air_tickets', 'duration', 'sold', 'watched', 'guest_requirements', 'take_with', 'key_features', 'new_to_see') 
 
 
 TOUR_REQUIRED_FIELDS = {
     'main': ['name', 'wallpaper', 'members_number', 'vacants_number', 'basic_type', 'team_member'],
     'review': ['description',],
-    'prices': ['currency', 'price', 'prepay_amount', 'cancellation_terms', 'air_tickets', 'tour_included_services', 'tour_excluded_services',],
+    'prices': ['currency', 'price', 'prepay_amount', 'cancellation_terms', 'air_tickets', 'tour_included_services', 'tour_excluded_services'],
     'gallery': ['tour_images'],
     'route': ['start_city', 'finish_city', 'start_date', 'finish_date'],
     'accommodation': ['tour_property_types', 'accomodation', 'tour_property_images'],
-    'details': ['difficulty_level', 'comfort_level', 'languages', 'age_starts', 'age_ends']
+    'details': ['difficulty_level', 'comfort_level', 'languages', 'age_starts', 'age_ends'],
+    'important': ['take_with']
 }
 
 
@@ -93,7 +94,7 @@ class TourPreviewSerializer(serializers.ModelSerializer):
     discounted_price = serializers.SerializerMethodField(read_only=True)
     book_price = serializers.SerializerMethodField(read_only=True)
     daily_price = serializers.SerializerMethodField(read_only=True)
-    important_to_know = ImportantSerializer(read_only=True, many=True)
+    # important_to_know = ImportantSerializer(read_only=True, many=True)
 
     class Meta:
         model = Tour
@@ -165,7 +166,7 @@ class TourSerializer(serializers.ModelSerializer):
     finish_russian_region = CountryRegionSerializer(many=False, read_only=True)
     start_city = CityFullNameSerializer(many=False, read_only=True)
     finish_city = CityFullNameSerializer(many=False, read_only=True)
-    important_to_know = ImportantSerializer(read_only=True, many=True)
+    # important_to_know = ImportantSerializer(read_only=True, many=True)
     required_fields = serializers.SerializerMethodField(read_only=True)
     
 
