@@ -22,7 +22,6 @@ MTM_FIELDS = ['additional_types', 'tour_property_types', 'accomodation', 'tour_p
 
 class TourMixin():
     def check_required_fieds(self, instance, current_section=None, errors={}):
-        print(TOUR_REQUIRED_FIELDS.keys())
         for section in TOUR_REQUIRED_FIELDS.keys():
             section_required_fields = TOUR_REQUIRED_FIELDS.get(section)
             empty_fields = [field for field in section_required_fields if not getattr(instance, field) or not hasattr(instance, field)]
