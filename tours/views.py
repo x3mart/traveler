@@ -64,8 +64,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
             errors['start_date'] = [_("Стартовая дата не может быть больше конечной")]
         if instance.on_moderation:
             instance.is_draft = False
-        if request.data.get('section'):
-            instance, errors = self.check_required_fieds(instance, request.data.get('section'), errors)
+        instance, errors = self.check_required_fieds(instance, request.data.get('section'), errors)
         if errors:
             raise ValidationError(errors)  
         if instance_dict != model_to_dict(instance, exclude=NOT_MODERATED_FIELDS) and instance.is_active:

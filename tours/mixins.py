@@ -21,22 +21,28 @@ MTM_FIELDS = ['additional_types', 'tour_property_types', 'accomodation', 'tour_p
 
 
 class TourMixin():
-    def check_required_fieds(self, instance, section, errors={}):
-        section_required_fields = TOUR_REQUIRED_FIELDS.get(section)
-        empty_fields = [field for field in section_required_fields if not getattr(instance, field) or not hasattr(instance, field)]
-        empty_mtm_fields = [field for field in set(section_required_fields).intersection(MTM_FIELDS) if not getattr(instance, field).exists()]
-        for field in empty_fields + empty_mtm_fields:
-            if errors.get(field):
-                errors[field].append(_("Обязательное поле"))
-            else:
-                errors[field] = [_("Обязательное поле")]
-        if not instance.completed_sections:
-            instance.completed_sections = [section]
-        elif section not in instance.completed_sections:
-            instance.completed_sections.append(section)
-        if section == 'prices' and instance.prepay_amount and instance.prepay_in_prc and instance.prepay_amount < 15:
+    def check_required_fieds(self, instance, current_section=None, errors={}):
+        print(TOUR_REQUIRED_FIELDS.keys())
+        for section in TOUR_REQUIRED_FIELDS.keys():
+            section_required_fields = TOUR_REQUIRED_FIELDS.get(section)
+            empty_fields = [field for field in section_required_fields if not getattr(instance, field) or not hasattr(instance, field)]
+            empty_mtm_fields = [field for field in set(section_required_fields).intersection(MTM_FIELDS) if not getattr(instance, field).exists()]
+            empty_fields = empty_fields + empty_mtm_fields
+            for field in empty_fields:
+                if errors.get(field) and section == current_section:
+                    errors[field].append(_("Обязательное поле"))
+                elif not errors.get(field) and section == current_section:
+                    errors[field] = [_("Обязательное поле")]
+            if not instance.completed_sections and not empty_fields:
+                instance.completed_sections = [section]
+            elif section not in instance.completed_sections and not empty_fields:
+                instance.completed_sections.append(section)
+            elif section in instance.completed_sections and empty_fields:
+                instance.completed_sections.pop(instance.completed_sections.count(section)-1)
+        
+        if instance.prepay_amount and instance.prepay_in_prc and instance.prepay_amount < 15:
             errors['prepay_amount'] = [_("Предоплата не может быть меньше 15%")]
-        elif section == 'prices' and instance.prepay_amount and instance.price and not instance.prepay_in_prc and instance.prepay_amount < instance.price*0.15:
+        elif instance.prepay_amount and instance.price and not instance.prepay_in_prc and instance.prepay_amount < instance.price*0.15:
             errors['prepay_amount'] = [_("Предоплата не может быть меньше") + f" {round(instance.price*0.15) + 1} {instance.currency.short_name if instance.currency else ''}"]
         return (instance, errors)
 
@@ -187,11 +193,10 @@ class TourMixin():
         tour_property_images = old_instance.tour_property_images.all()
         languages = old_instance.languages.all()
         tour_images = old_instance.tour_images.all()
-        important_to_know = old_instance.important_to_know.all()
         instance.additional_types.add(*additional_types)
         instance.tour_property_types.add(*tour_property_types)
         instance.accomodation.add(*accomodation)
         instance.tour_property_images.add(*tour_property_images)
         instance.languages.add(*languages)
         instance.tour_images.add(*tour_images)
-        instance.important_to_know.add(*important_to_know)
+        
