@@ -4,13 +4,14 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework import permissions
 import requests
 from django.template.loader import render_to_string
+from django.contrib.auth import authenticate
 from .models import *
 from .serializers import *
 from traveler.settings import TG_URL
 
 
 # Create your views here.
-COMMANDS_LIST = ('start',)
+COMMANDS_LIST = ('start', 'login')
 
 def get_tg_account(user):
     tg_account, created = TelegramAccount.objects.get_or_create(tg_id=user['id'])
@@ -26,19 +27,19 @@ def get_tg_account(user):
 @permission_classes((permissions.AllowAny,))
 def tg_update_handler(request):
     # response = SendMessage(chat_id=1045490278, text='update').send()
-    try:
-        update = Update(request.data)
-        if hasattr(update,'message'):
-            response = SendMessage(chat_id=update.get_chat(), text=update.get_chat()).send()
-            update.message_dispatcher()
-        elif hasattr(update,'callback_query'):
-            update.callback_dispatcher()
+    # try:
+    update = Update(request.data)
+    if hasattr(update,'message'):
+        response = SendMessage(chat_id=update.get_chat(), text=update.get_chat()).send()
+        update.message_dispatcher()
+    elif hasattr(update,'callback_query'):
+        update.callback_dispatcher()
         # method = "sendMessage"
         # send_message = SendMessage(chat_id=1045490278, text=f'{request.data}')
         # data = SendMessageSerializer(send_message).data
         # requests.post(TG_URL + method, data)
-    except:
-       response2 = SendMessage(chat_id=1045490278, text='response').send()
+    # except:
+    #    response2 = SendMessage(chat_id=1045490278, text='response').send()
     return Response({}, status=200)
 
 class Update():
@@ -113,6 +114,11 @@ class Update():
                 text = render_to_string('start.html', {})
             reply_markup = ReplyMarkup().get_markup(command, self.tg_account)
             response = SendMessage(chat_id, text, reply_markup).send()
+        elif command == 'login':
+            self.tg_account.await_reply = True
+            self.tg_account.reply_type = 'email'
+            self.tg_account.save()
+            response = SendMessage(chat_id, 'Введите email').send()
         else:
             response = None
         return response
@@ -120,6 +126,33 @@ class Update():
     def await_despatcher(self, text, command=None, args=None):
         chat_id = self.get_chat()
         message = self.get_message()
+        if self.tg_account.reply_type =='email':
+            self.tg_account.reply_type = 'password'
+            self.tg_account.reply_1 = text.strip()
+            self.tg_account.save()
+            response = SendMessage(chat_id=self.message.chat.id, text='Введите пароль').send()
+        elif self.tg_account.reply_type =='password':
+            account = authenticate(email=self.tg_account.reply_1, password=text.strip())
+            reply_markup = ReplyMarkup().get_markup('start', self.tg_account)
+            if account is not None:
+                self.tg_account.account = account
+                text = render_to_string('start_for_auth.html', {'account': account})
+                reply_markup = ReplyMarkup().get_markup('start', self.tg_account)
+                response = SendMessage(chat_id=self.message.chat.id, text=text, reply_markup=reply_markup).send()
+                response = requests.post(TG_URL + 'deleteMessage', data={'chat_id':self.message.chat.id, 'message_id': self.message.message_id})
+            else:
+                response = SendMessage(chat_id=self.message.chat.id, text='Учетные данные не верны', reply_markup=reply_markup).send()
+            self.tg_account.await_reply = False
+            self.tg_account.reply_type = None
+            self.tg_account.reply_1 = None
+            self.tg_account.save()
+        else:
+            response = self.command_dispatcher('message', command, args) if command else None 
+            self.tg_account.await_reply = False
+            self.tg_account.reply_1 = None
+            self.tg_account.reply_type = None
+            self.tg_account.save()    
+        return response
 
 
 class CallbackQuery():
