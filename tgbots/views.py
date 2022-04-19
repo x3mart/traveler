@@ -17,7 +17,8 @@ def tg_update_handler(request):
         update = Update(request.data)
         if hasattr(update,'message'):
             response = SendMessage(chat_id=update.get_chat(), text='message').send()
-            update.message_dispatcher()
+            response2 = SendMessage(chat_id=1045490278, text=response).send()
+            # update.message_dispatcher()
         elif hasattr(update,'callback_query'):
             update.callback_dispatcher()
         # method = "sendMessage"
@@ -25,13 +26,14 @@ def tg_update_handler(request):
         # data = SendMessageSerializer(send_message).data
         # requests.post(TG_URL + method, data)
     except:
-        pass
+       pass
     return Response({}, status=200)
 
 class Update():
     def __init__(self, data) -> None:
         for key, value in data.items():
             if key == 'message':
+                print('message')
                 self.__setattr__(key, Message(value))
             elif key == 'callback_query':
                 self.__setattr__(key, CallbackQuery(value))
@@ -40,6 +42,7 @@ class Update():
     
     def get_chat(self, source=None):
         if hasattr(self, 'callback_query'):
+            print(self.callback_query)
             chat_id=self.callback_query.message.chat.id
         else:
             chat_id=self.message.chat.id
