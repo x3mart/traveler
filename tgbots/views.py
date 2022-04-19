@@ -129,9 +129,9 @@ class Update():
             print('send')
             response = SendMessage(chat_id, 'reply', reply_markup).send()
             print(response.json())
-            # self.tg_account.await_reply = True
-            # self.tg_account.reply_type = 'phone'
-            # self.tg_account.save()
+            self.tg_account.await_reply = True
+            self.tg_account.reply_type = 'phone'
+            self.tg_account.save()
         else:
             response = None
         return response
