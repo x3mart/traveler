@@ -123,7 +123,8 @@ class Update():
         elif command == 'comfirm_phone':
             reply_markup = JSONRenderer().render({
                 'one_time_keyboard': True,
-                'keyboard':[[{'text':'Отправить номер телефона', 'request_contact':True}]]
+                'keyboard':[[{'text':'Отправить номер телефона', 'request_contact':True}],
+                [{'text':'Отмена'}]]
                 })
             print('send')
             response = SendMessage(chat_id, 'reply', reply_markup).send()
