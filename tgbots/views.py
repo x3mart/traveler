@@ -38,7 +38,7 @@ def tg_update_handler(request):
         # data = SendMessageSerializer(send_message).data
         # requests.post(TG_URL + method, data)
     except:
-       response2 = SendMessage(chat_id=1045490278, text=response).send()
+       response2 = SendMessage(chat_id=1045490278, text='response').send()
     return Response({}, status=200)
 
 class Update():
