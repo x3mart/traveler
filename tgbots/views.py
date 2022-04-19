@@ -164,6 +164,12 @@ class CallbackQuery():
                 self.__setattr__('user', value)
             else:
                 self.__setattr__(key, value)
+    
+    def answer(self, text=None, show_alert=None):
+        answer = AnswerCallbackQuery(callback_query_id=self.id, text=text, show_alert=show_alert)
+        data = AnswerCallbackQuerySerializer(answer).data
+        response = requests.post(TG_URL + 'answerCallbackQuery', data)
+        return response
 
 
 class SendMessage():
