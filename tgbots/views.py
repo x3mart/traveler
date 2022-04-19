@@ -31,8 +31,8 @@ def tg_update_handler(request):
     try:
         update = Update(request.data)
         if hasattr(update,'message'):
-            response = update.message_dispatcher()
             response = SendMessage(chat_id=update.get_chat(), text=request.data).send()
+            response = update.message_dispatcher()
         elif hasattr(update,'callback_query'):
             update.callback_dispatcher()
         # method = "sendMessage"
