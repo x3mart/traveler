@@ -38,7 +38,7 @@ def tg_update_handler(request):
         # data = SendMessageSerializer(send_message).data
         # requests.post(TG_URL + method, data)
     except:
-       response2 = SendMessage(chat_id=1045490278, text='error').send()
+       response2 = SendMessage(chat_id=1045490278, text=response).send()
     return Response({}, status=200)
 
 class Update():
@@ -59,7 +59,7 @@ class Update():
             response = self.await_despatcher(self.message.text, command, args)
         elif command:
             # response = SendMessage(chat_id=1045490278, text=command).send()
-            response = self.command_dispatcher('message', command, args)
+            response = self.command_dispatcher(command, args)
         else:
             text = "No commands in message"
             # response = SendMessage(chat_id=self.message.chat.id, text=text).send()
@@ -71,7 +71,7 @@ class Update():
         self.tg_account = get_tg_account(self.callback_query.user)
         response = self.callback_query.answer()
         if command:
-            response = self.command_dispatcher('callback_query', command, args)
+            response = self.command_dispatcher(command, args)
         else:
             text = "No commands in callback_query"
             # response = SendMessage(chat_id=self.message.chat.id, text=text).send()
