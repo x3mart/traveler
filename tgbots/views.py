@@ -30,8 +30,8 @@ def tg_update_handler(request):
     try:
         update = Update(request.data)
         if hasattr(update,'message'):
-            response = SendMessage(chat_id=update.get_chat(), text=update.get_chat()).send()
-            update.message_dispatcher()
+            response = update.message_dispatcher()
+            response = SendMessage(chat_id=update.get_chat(), text=response).send()
         elif hasattr(update,'callback_query'):
             update.callback_dispatcher()
         # method = "sendMessage"
@@ -75,7 +75,7 @@ class Update():
             response = self.command_dispatcher(command, args)
         else:
             text = "No commands in callback_query"
-            # response = SendMessage(chat_id=self.message.chat.id, text=text).send()
+            response = SendMessage(chat_id=self.message.chat.id, text=text).send()
             response = None
         return response
     
