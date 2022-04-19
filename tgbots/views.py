@@ -64,8 +64,8 @@ class Update():
             response = self.command_dispatcher(command, args)
         else:
             text = "No commands in message"
-            # response = SendMessage(chat_id=self.message.chat.id, text=text).send()
-            response = None
+            response = SendMessage(chat_id=self.message.chat.id, text=text).send()
+            # response = None
         return response
     
     def callback_dispatcher(self):
@@ -77,7 +77,7 @@ class Update():
         else:
             text = "No commands in callback_query"
             response = SendMessage(chat_id=self.message.chat.id, text=text).send()
-            response = None
+            # response = None
         return response
     
     def command_handler(self, text):
