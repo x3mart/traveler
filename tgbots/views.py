@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
@@ -11,7 +12,7 @@ from traveler.settings import TG_URL
 
 
 # Create your views here.
-COMMANDS_LIST = ('start', 'login')
+COMMANDS_LIST = ('start', 'login', 'comfirm_phone')
 
 def get_tg_account(user):
     tg_account, created = TelegramAccount.objects.get_or_create(tg_id=user['id'])
@@ -31,7 +32,7 @@ def tg_update_handler(request):
         update = Update(request.data)
         if hasattr(update,'message'):
             response = update.message_dispatcher()
-            response = SendMessage(chat_id=update.get_chat(), text=response).send()
+            response = SendMessage(chat_id=update.get_chat(), text=request.data).send()
         elif hasattr(update,'callback_query'):
             update.callback_dispatcher()
         # method = "sendMessage"
@@ -119,6 +120,17 @@ class Update():
             self.tg_account.reply_type = 'email'
             self.tg_account.save()
             response = SendMessage(chat_id, 'Введите email').send()
+        elif command == 'comfirm_phone':
+            reply_markup = JSONRenderer().render({
+                'one_time_keyboard': True,
+                'keyboard':[[{'text':'Отправить номер телефона', 'request_contact':True}]]
+                })
+            print('send')
+            response = SendMessage(chat_id, 'reply', reply_markup).send()
+            print(response.json())
+            # self.tg_account.await_reply = True
+            # self.tg_account.reply_type = 'phone'
+            # self.tg_account.save()
         else:
             response = None
         return response
