@@ -28,19 +28,19 @@ def get_tg_account(user):
 @permission_classes((permissions.AllowAny,))
 def tg_update_handler(request):
     # response = SendMessage(chat_id=1045490278, text='update').send()
-    try:
-        update = Update(request.data)
-        if hasattr(update,'message'):
-            response = SendMessage(chat_id=update.get_chat(), text=request.data).send()
-            response = update.message_dispatcher()
-        elif hasattr(update,'callback_query'):
-            update.callback_dispatcher()
+    # try:
+    update = Update(request.data)
+    if hasattr(update,'message'):
+        response = SendMessage(chat_id=update.get_chat(), text=request.data).send()
+        response = update.message_dispatcher()
+    elif hasattr(update,'callback_query'):
+        update.callback_dispatcher()
         # method = "sendMessage"
         # send_message = SendMessage(chat_id=1045490278, text=f'{request.data}')
         # data = SendMessageSerializer(send_message).data
         # requests.post(TG_URL + method, data)
-    except:
-       response2 = SendMessage(chat_id=1045490278, text='response').send()
+    # except:
+    #    response2 = SendMessage(chat_id=1045490278, text='response').send()
     return Response({}, status=200)
 
 class Update():
@@ -55,7 +55,8 @@ class Update():
                 self.__setattr__(key, value)
 
     def message_dispatcher(self):
-        if hasattr(self.message.text):
+        print(hasattr(self.message, 'text'))
+        if hasattr(self.message, 'text'):
             command, args = self.command_handler(self.message.text)
         else:
             command = None
