@@ -55,7 +55,11 @@ class Update():
                 self.__setattr__(key, value)
 
     def message_dispatcher(self):
-        command, args = self.command_handler(self.message.text)
+        if hasattr(self.message.text):
+            command, args = self.command_handler(self.message.text)
+        else:
+            command = None
+            self.message.text = None
         self.tg_account = get_tg_account(self.message.user)
         if self.tg_account.await_reply:
             response = self.await_despatcher(self.message.text, command, args)
@@ -136,7 +140,7 @@ class Update():
             response = None
         return response
     
-    def await_despatcher(self, text, command=None, args=None):
+    def await_despatcher(self, text=None, command=None, args=None):
         chat_id = self.get_chat()
         message = self.get_message()
         if self.tg_account.reply_type =='email':
