@@ -131,9 +131,7 @@ class Update():
                 'keyboard':[[{'text':'Отправить номер телефона', 'request_contact':True}],
                 [{'text':'Отмена'}]]
                 })
-            print('send')
             response = SendMessage(chat_id, 'reply', reply_markup).send()
-            print(response.json())
             self.tg_account.await_reply = True
             self.tg_account.reply_type = 'phone'
             self.tg_account.save()
@@ -164,13 +162,13 @@ class Update():
             self.tg_account.reply_type = None
             self.tg_account.reply_1 = None
             self.tg_account.save()
-        if self.tg_account.reply_type =='phone':
+        elif self.tg_account.reply_type =='phone':
             self.tg_account.await_reply = False
             self.tg_account.reply_type = None
             self.tg_account.reply_1 = None
             self.tg_account.save()
-            # if self.tg_account.account.phone and self.tg_account.account.phone == message.contact['phone_number']:
-            #     response = SendMessage(chat_id=self.message.chat.id, text='SUPER').send()
+            if self.tg_account.account.phone and self.tg_account.account.phone == message.contact['phone_number']:
+                response = SendMessage(chat_id=self.message.chat.id, text='SUPER').send()
         else:
             response = self.command_dispatcher('message', command, args) if command else None 
             self.tg_account.await_reply = False
