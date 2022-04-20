@@ -165,12 +165,16 @@ class Update():
             self.tg_account.await_reply = False
             self.tg_account.reply_type = None
             self.tg_account.save()
-            if self.tg_account.account.phone and self.tg_account.account.phone == message.contact['phone_number']:
-                response = SendMessage(chat_id=self.message.chat.id, text='Номер телефона подтвержден').send()
+            if hasattr(message, 'text') and message.text == 'Отмена':
+                text='Действие отменено'
+            elif self.tg_account.account.phone and self.tg_account.account.phone == message.contact['phone_number']:
                 self.tg_account.account.expert.phone_confirmed = True
                 self.tg_account.account.expert.save()
+                text='Номер телефона подтвержден'
             else:
-                response = SendMessage(chat_id=self.message.chat.id, text='Номера телефонов не совпадают').send()
+                text='Номера телефонов не совпадают'
+            reply_markup = ReplyMarkup().get_markup('start', self.tg_account)
+            response = SendMessage(self.message.chat.id, text, reply_markup).send()
         else:
             response = self.command_dispatcher('message', command, args) if command else None 
             self.tg_account.await_reply = False
