@@ -230,7 +230,7 @@ class ReplyMarkup():
         pass
 
     def get_markup(self, name, tg_account=None, **kwargs):
-        if name == 'start' and tg_account and not tg_account.account and hasattr(tg_account.account, 'expert') and tg_account.account.expert.phone_confirmed:
+        if name == 'start' and tg_account and tg_account.account and hasattr(tg_account.account, 'expert') and tg_account.account.expert.phone_confirmed:
             button1 = InlineButton(text='Создать заявку', callback_data=f'/create_ticket')
             keyboard = [[button1]]
         elif name == 'start' and tg_account and tg_account.account and hasattr(tg_account.account, 'expert') and not tg_account.account.expert.phone_confirmed:
