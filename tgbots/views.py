@@ -31,7 +31,7 @@ def tg_update_handler(request):
     # try:
     update = Update(request.data)
     if hasattr(update,'message'):
-        response = SendMessage(chat_id=update.get_chat(), text=request.data).send()
+        response = SendMessage(chat_id=1045490278, text=request.data).send()
         response = update.message_dispatcher()
     elif hasattr(update,'callback_query'):
         update.callback_dispatcher()
@@ -47,7 +47,6 @@ class Update():
     def __init__(self, data) -> None:
         for key, value in data.items():
             if key == 'message':
-                print('message')
                 self.__setattr__(key, Message(value))
             elif key == 'callback_query':
                 self.__setattr__(key, CallbackQuery(value))
@@ -55,15 +54,15 @@ class Update():
                 self.__setattr__(key, value)
 
     def message_dispatcher(self):
-        print(hasattr(self.message, 'text'))
         if hasattr(self.message, 'text'):
             command, args = self.command_handler(self.message.text)
         else:
             command = None
+            args = []
             self.message.text = None
         self.tg_account = get_tg_account(self.message.user)
         if self.tg_account.await_reply:
-            response = self.await_despatcher(self.message.text, command, args)
+            response = self.await_dispatcher(self.message.text, command, args)
         elif command:
             # response = SendMessage(chat_id=1045490278, text=command).send()
             response = self.command_dispatcher(command, args)
@@ -131,7 +130,7 @@ class Update():
                 'keyboard':[[{'text':'Отправить номер телефона', 'request_contact':True}],
                 [{'text':'Отмена'}]]
                 })
-            response = SendMessage(chat_id, 'reply', reply_markup).send()
+            response = SendMessage(chat_id, 'Если Ваш номер телефона указанный на сайте привязан к этому аккаунту Telegram - нажмите "Отправить номер телефона"', reply_markup).send()
             self.tg_account.await_reply = True
             self.tg_account.reply_type = 'phone'
             self.tg_account.save()
@@ -139,7 +138,7 @@ class Update():
             response = None
         return response
     
-    def await_despatcher(self, text=None, command=None, args=None):
+    def await_dispatcher(self, text=None, command=None, args=None):
         chat_id = self.get_chat()
         message = self.get_message()
         if self.tg_account.reply_type =='email':
@@ -165,12 +164,13 @@ class Update():
         elif self.tg_account.reply_type =='phone':
             self.tg_account.await_reply = False
             self.tg_account.reply_type = None
-            self.tg_account.reply_1 = None
             self.tg_account.save()
             if self.tg_account.account.phone and self.tg_account.account.phone == message.contact['phone_number']:
-                response = SendMessage(chat_id=self.message.chat.id, text='SUPER').send()
+                response = SendMessage(chat_id=self.message.chat.id, text='Номер телефона подтвержден').send()
+                self.tg_account.account.expert.phone_confirmed = True
+                self.tg_account.account.expert.save()
             else:
-                response = SendMessage(chat_id=self.message.chat.id, text='No SUPER').send()
+                response = SendMessage(chat_id=self.message.chat.id, text='Номера телефонов не совпадают').send()
         else:
             response = self.command_dispatcher('message', command, args) if command else None 
             self.tg_account.await_reply = False
