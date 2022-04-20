@@ -169,6 +169,8 @@ class Update():
             self.tg_account.save()
             if self.tg_account.account.phone and self.tg_account.account.phone == message.contact['phone_number']:
                 response = SendMessage(chat_id=self.message.chat.id, text='SUPER').send()
+            else:
+                response = SendMessage(chat_id=self.message.chat.id, text='No SUPER').send()
         else:
             response = self.command_dispatcher('message', command, args) if command else None 
             self.tg_account.await_reply = False
