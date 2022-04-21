@@ -224,7 +224,7 @@ class TourListSerializer(serializers.ModelSerializer):
     currency = CurrencySerializer(many=False)
     start_country = serializers.StringRelatedField(many=False,)
     start_city = serializers.StringRelatedField(many=False,)
-    expert = ExpertListSerializer(many=False)
+    expert = ExpertListSerializer(many=False, source='tour_basic.expert')
 
     class Meta:
         model = Tour
