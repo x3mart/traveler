@@ -156,7 +156,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
     def preview(self, request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)
     
-    @action(['get'], detail=True)
+    @action(['get'], detail=False)
     def tour_set(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)    
 
