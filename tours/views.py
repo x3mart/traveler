@@ -1,4 +1,4 @@
-from dataclasses import field
+from django.db.models import F
 from datetime import timedelta, datetime
 from rest_framework.decorators import action
 from django.db.models.query import Prefetch
@@ -27,7 +27,11 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
     filterset_class = TourFilter
 
     def get_queryset(self):
-        if self.action in ['tour_set',]:
+        if self.action in ['list',]:
+            tour_basic = TourBasic.objects.prefetch_related('expert')
+            prefetchet_tour_basic = Prefetch(tour_basic, 'tour_basic')
+            qs = Tour.objects.prefetch_related('tour_basic', 'start_country', 'start_city', 'wallpaper').only('id', 'name', 'start_date', 'start_country', 'price', 'discount', 'duration', 'tour_basic', 'wallpaper').annotate(delay=F('postpay_days_before_start') + 3).filter(is_active=True).filter(tour_basic__direct_link=False).filter(start_date__gte=datetime.today())
+        elif self.action in ['tour_set',]:
             qs = Tour.objects.prefetch_related('tour_basic', 'start_country', 'currency').only('id', 'name', 'start_date', 'finish_date', 'start_country', 'price', 'cost', 'discount', 'on_moderation', 'is_active', 'is_draft', 'duration', 'sold', 'watched', 'currency', 'tour_basic', 'wallpaper').filter(tour_basic__expert_id=self.request.user.id).order_by('-id')
         else:
             qs = Tour.objects.prefetch_related('tour_basic', 'start_country', 'start_city', 'start_region', 'start_russian_region', 'finish_russian_region', 'finish_country', 'finish_city', 'finish_region', 'basic_type', 'additional_types', 'tour_property_types', 'tour_property_images', 'tour_images', 'languages', 'currency', 'prepay_currency', 'accomodation',)  
