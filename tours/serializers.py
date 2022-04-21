@@ -225,15 +225,31 @@ class TourListSerializer(serializers.ModelSerializer):
     start_country = serializers.StringRelatedField(many=False,)
     start_city = serializers.StringRelatedField(many=False,)
     expert = ExpertListSerializer(many=False, source='tour_basic.expert')
+    vacants_number = serializers.SerializerMethodField(read_only=True)
+    is_favourite = serializers.SerializerMethodField(read_only=True)
+    is_new = serializers.SerializerMethodField(read_only=True)
+    is_recomended = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Tour
-        fields = ['id', 'name', 'start_date', 'start_country', 'start_city', 'price', 'discount', 'duration', 'currency', 'tmb_wallpaper', 'expert']
+        fields = ['id', 'name', 'start_date', 'start_country', 'start_city', 'price', 'discount', 'duration', 'currency', 'tmb_wallpaper', 'expert', 'vacants_number']
     
     def get_tmb_wallpaper(self, obj):
         if obj.wallpaper: 
             return get_tmb_image_uri(self, obj.wallpaper)
         return None
+    
+    def get_vacants_number(self, obj):
+        return obj.vacants_number if obj.vacants_number < 5 else None
+    
+    def get_is_favourite(self, obj):
+        return  None
+    
+    def get_is_new(self, obj):
+        return  None
+    
+    def get_is_recomended(self, obj):
+        return  None
 
 
 class TourSetSerializer(serializers.ModelSerializer):
