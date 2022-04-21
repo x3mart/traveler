@@ -152,12 +152,13 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         tour = Tour.objects.get(pk=instance.id)
         return Response(TourListSerializer(tour, context={'request': request}, many=False).data, status=201)
     
-    @action(['tour_set'], detail=True)
+    @action(['get'], detail=True)
     def preview(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
-
-
-        
+        return super().retrieve(request, *args, **kwargs)
+    
+    @action(['get'], detail=True)
+    def tour_set(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)    
 
 class TourTypeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = TourType.objects.all()
