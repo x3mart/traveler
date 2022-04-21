@@ -6,13 +6,15 @@ from rest_framework import permissions
 import requests
 from django.template.loader import render_to_string
 from django.contrib.auth import authenticate
+
+from supports.models import ChatMessage, Ticket
 from .models import *
 from .serializers import *
 from traveler.settings import TG_URL
 
 
 # Create your views here.
-COMMANDS_LIST = ('start', 'login', 'comfirm_phone')
+COMMANDS_LIST = ('start', 'login', 'comfirm_phone', 'create_ticket')
 
 def get_tg_account(user):
     tg_account, created = TelegramAccount.objects.get_or_create(tg_id=user['id'])
@@ -134,6 +136,13 @@ class Update():
             self.tg_account.await_reply = True
             self.tg_account.reply_type = 'phone'
             self.tg_account.save()
+        elif command == 'create_ticket' and hasattr(self.tg_account.account, 'expert'):
+            ticket = Ticket.objects.create(expert=self.tg_account.account.expert, tg_chat=chat_id)
+            self.tg_account.await_reply = True
+            self.tg_account.reply_type = 'ticket'
+            self.tg_account.save()
+            text = render_to_string('ticket_created.html', {'ticket':ticket})
+            response = SendMessage(chat_id, text).send()
         else:
             response = None
         return response
@@ -167,7 +176,7 @@ class Update():
             self.tg_account.save()
             if hasattr(message, 'text') and message.text == 'Отмена':
                 text='Действие отменено'
-            elif self.tg_account.account.phone and self.tg_account.account.phone == message.contact['phone_number']:
+            elif self.tg_account.account.phone and self.tg_account.account.phone.lstrip('+') == message.contact['phone_number']:
                 self.tg_account.account.expert.phone_confirmed = True
                 self.tg_account.account.expert.save()
                 text='Номер телефона подтвержден'
@@ -175,6 +184,8 @@ class Update():
                 text='Номера телефонов не совпадают'
             reply_markup = ReplyMarkup().get_markup('start', self.tg_account)
             response = SendMessage(self.message.chat.id, text, reply_markup).send()
+        elif self.tg_account.reply_type =='ticket':
+            message = ChatMessage.objects.create(sender=self.tg_account.account.expert, tg_message=message.message_id, sender_chat_id=chat_id, text=message.text)
         else:
             response = self.command_dispatcher('message', command, args) if command else None 
             self.tg_account.await_reply = False
