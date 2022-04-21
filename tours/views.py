@@ -27,14 +27,14 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
     filterset_class = TourFilter
 
     def get_queryset(self):
-        if self.action in ['list',]:
+        if self.action in ['tour_set',]:
             qs = Tour.objects.prefetch_related('tour_basic', 'start_country', 'currency').only('id', 'name', 'start_date', 'finish_date', 'start_country', 'price', 'cost', 'discount', 'on_moderation', 'is_active', 'is_draft', 'duration', 'sold', 'watched', 'currency', 'tour_basic', 'wallpaper').filter(tour_basic__expert_id=self.request.user.id).order_by('-id')
         else:
             qs = Tour.objects.prefetch_related('tour_basic', 'start_country', 'start_city', 'start_region', 'start_russian_region', 'finish_russian_region', 'finish_country', 'finish_city', 'finish_region', 'basic_type', 'additional_types', 'tour_property_types', 'tour_property_images', 'tour_images', 'languages', 'currency', 'prepay_currency', 'accomodation',)  
         return qs
     
     def get_serializer_class(self):
-        if self.action in ['list',]:
+        if self.action in ['tour_set',]:
             return TourListSerializer
         elif self.action in ['preview',]:
             return TourPreviewSerializer
@@ -154,7 +154,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
     
     @action(['tour_set'], detail=True)
     def preview(self, request, *args, **kwargs):
-        return super().retrieve(request, *args, **kwargs)
+        return super().list(request, *args, **kwargs)
 
 
         
