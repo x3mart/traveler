@@ -7,14 +7,14 @@ import requests
 from django.template.loader import render_to_string
 from django.contrib.auth import authenticate
 
-from supports.models import ChatMessage, Ticket
+from supports.models import SupportChatMessage, Ticket
 from .models import *
 from .serializers import *
 from traveler.settings import TG_URL
 
 
 # Create your views here.
-COMMANDS_LIST = ('start', 'login', 'confirm_phone', 'create_ticket')
+COMMANDS_LIST = ('start', 'login', 'confirm_phone', 'create_ticket', 'cancel')
 
 def get_tg_account(user):
     tg_account, created = TelegramAccount.objects.get_or_create(tg_id=user['id'])
@@ -137,12 +137,18 @@ class Update():
             self.tg_account.reply_type = 'phone'
             self.tg_account.save()
         elif command == 'create_ticket' and hasattr(self.tg_account.account, 'expert'):
-            ticket = Ticket.objects.create(expert=self.tg_account.account.expert, tg_chat=chat_id)
             self.tg_account.await_reply = True
-            self.tg_account.reply_type = 'ticket'
+            self.tg_account.reply_type = 'create_ticket'
             self.tg_account.save()
-            text = render_to_string('ticket_created.html', {'ticket':ticket})
-            response = SendMessage(chat_id, text).send()
+            text = 'Опишите Вашу проблему.'
+            reply_markup = ReplyMarkup().get_markup(command, self.tg_account)
+            response = SendMessage(chat_id, text, reply_markup).send()
+        elif command == 'cancel' and self.tg_account.await_reply and self.tg_account.reply_type == 'create_ticket':
+            self.tg_account.await_reply = False
+            self.tg_account.reply_type = None
+            self.tg_account.save()
+            reply_markup = ReplyMarkup().get_markup('start', self.tg_account)
+            response = SendMessage(chat_id, 'Заявка отменена', reply_markup).send()
         else:
             response = None
         return response
@@ -176,7 +182,7 @@ class Update():
             self.tg_account.save()
             if hasattr(message, 'text') and message.text == 'Отмена':
                 text='Действие отменено'
-            elif self.tg_account.account.phone and self.tg_account.account.phone.lstrip('+') == message.contact['phone_number']:
+            elif self.tg_account.account.phone and str(self.tg_account.account.phone).lstrip('+') == message.contact['phone_number'].lstrip('+'):
                 self.tg_account.account.expert.phone_confirmed = True
                 self.tg_account.account.expert.save()
                 text='Номер телефона подтвержден'
@@ -184,8 +190,12 @@ class Update():
                 text='Номера телефонов не совпадают'
             reply_markup = ReplyMarkup().get_markup('start', self.tg_account)
             response = SendMessage(self.message.chat.id, text, reply_markup).send()
-        elif self.tg_account.reply_type =='ticket':
-            message = ChatMessage.objects.create(sender=self.tg_account.account.expert, tg_message=message.message_id, sender_chat_id=chat_id, text=message.text)
+        elif self.tg_account.reply_type =='create_ticket':
+            ticket = Ticket.objects.create(user=self.tg_account.account.expert, tg_chat=chat_id)
+            message = SupportChatMessage.objects.create(sender=self.tg_account.account.expert, tg_message=message.message_id, sender_chat_id=chat_id, text=message.text)
+            self.tg_account.reply_type =='ticket'
+            text = render_to_string('ticket_created.html', {'ticket':ticket})
+            response = SendMessage(chat_id, text).send()
         else:
             response = self.command_dispatcher('message', command, args) if command else None 
             self.tg_account.await_reply = False
@@ -248,6 +258,9 @@ class ReplyMarkup():
             button1 = InlineButton(text='Подтвердить телефон', callback_data=f'/confirm_phone')
             button2 = InlineButton(text='Создать заявку', callback_data=f'/create_ticket')
             keyboard = [[button1],[button2]]
+        elif name == 'create_ticket':
+            button1 = InlineButton(text='Отменить', callback_data=f'/cancel')
+            keyboard = [[button1]]
         else:
             button1 = InlineButton(text='Авторизация', callback_data=f'/login')
             keyboard = [[button1]]

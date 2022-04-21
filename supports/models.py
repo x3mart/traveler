@@ -11,7 +11,7 @@ class Ticket(models.Model):
     
 
 
-class ChatMessage(models.Model):
+class SupportChatMessage(models.Model):
     sender = models.ForeignKey('accounts.User', on_delete=models.PROTECT, verbose_name=_('Отправитель'), related_name='sender_messages', null=True, blank=True)
     reciever = models.ForeignKey('accounts.User', on_delete=models.PROTECT, verbose_name=_('Получатель'), related_name='reciever_messages', null=True, blank=True)
     tg_message = models.BigIntegerField(_('id tg сообщения'))
