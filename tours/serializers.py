@@ -223,6 +223,23 @@ class TourListSerializer(serializers.ModelSerializer):
     tmb_wallpaper = serializers.SerializerMethodField(read_only=True)
     currency = CurrencySerializer(many=False)
     start_country = serializers.StringRelatedField(many=False,)
+    start_city = serializers.StringRelatedField(many=False,)
+    expert = ExpertListSerializer(many=False)
+
+    class Meta:
+        model = Tour
+        fields = ['id', 'name', 'start_date', 'start_country', 'start_city', 'price', 'discount', 'duration', 'curency']
+    
+    def get_tmb_wallpaper(self, obj):
+        if obj.wallpaper: 
+            return get_tmb_image_uri(self, obj.wallpaper)
+        return None
+
+
+class TourSetSerializer(serializers.ModelSerializer):
+    tmb_wallpaper = serializers.SerializerMethodField(read_only=True)
+    currency = CurrencySerializer(many=False)
+    start_country = serializers.StringRelatedField(many=False,)
     rating = serializers.DecimalField(max_digits=2,decimal_places=1, source='tour_basic.rating')
     reviews_count = serializers.IntegerField(source='tour_basic.reviews_count')
 
