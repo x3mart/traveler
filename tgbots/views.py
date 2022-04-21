@@ -14,7 +14,7 @@ from traveler.settings import TG_URL
 
 
 # Create your views here.
-COMMANDS_LIST = ('start', 'login', 'comfirm_phone', 'create_ticket')
+COMMANDS_LIST = ('start', 'login', 'confirm_phone', 'create_ticket')
 
 def get_tg_account(user):
     tg_account, created = TelegramAccount.objects.get_or_create(tg_id=user['id'])
@@ -30,19 +30,19 @@ def get_tg_account(user):
 @permission_classes((permissions.AllowAny,))
 def tg_update_handler(request):
     # response = SendMessage(chat_id=1045490278, text='update').send()
-    try:
-        update = Update(request.data)
-        if hasattr(update,'message'):
-            response = SendMessage(chat_id=1045490278, text=request.data).send()
-            response = update.message_dispatcher()
-        elif hasattr(update,'callback_query'):
-            update.callback_dispatcher()
+    # try:
+    update = Update(request.data)
+    if hasattr(update,'message'):
+        response = SendMessage(chat_id=1045490278, text=request.data).send()
+        response = update.message_dispatcher()
+    elif hasattr(update,'callback_query'):
+        update.callback_dispatcher()
         # method = "sendMessage"
         # send_message = SendMessage(chat_id=1045490278, text=f'{request.data}')
         # data = SendMessageSerializer(send_message).data
         # requests.post(TG_URL + method, data)
-    except:
-       response2 = SendMessage(chat_id=1045490278, text='response').send()
+    # except:
+    #    response2 = SendMessage(chat_id=1045490278, text='response').send()
     return Response({}, status=200)
 
 class Update():
@@ -126,7 +126,7 @@ class Update():
             self.tg_account.reply_type = 'email'
             self.tg_account.save()
             response = SendMessage(chat_id, 'Введите email').send()
-        elif command == 'comfirm_phone':
+        elif command == 'confirm_phone':
             reply_markup = JSONRenderer().render({
                 'one_time_keyboard': True,
                 'keyboard':[[{'text':'Отправить номер телефона', 'request_contact':True}],
@@ -245,7 +245,7 @@ class ReplyMarkup():
             button1 = InlineButton(text='Создать заявку', callback_data=f'/create_ticket')
             keyboard = [[button1]]
         elif name == 'start' and tg_account and tg_account.account and hasattr(tg_account.account, 'expert') and not tg_account.account.expert.phone_confirmed:
-            button1 = InlineButton(text='Подтвердить телефон', callback_data=f'/comfirm_phone')
+            button1 = InlineButton(text='Подтвердить телефон', callback_data=f'/confirm_phone')
             button2 = InlineButton(text='Создать заявку', callback_data=f'/create_ticket')
             keyboard = [[button1],[button2]]
         else:
