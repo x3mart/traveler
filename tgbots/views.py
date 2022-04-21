@@ -14,7 +14,7 @@ from traveler.settings import TG_URL
 
 
 # Create your views here.
-COMMANDS_LIST = ('start', 'login', 'confirm_phone', 'create_ticket', 'cancel')
+COMMANDS_LIST = ('start', 'login', 'confirm_phone', 'create_ticket', 'cancel', 'close_ticket')
 
 def get_tg_account(user):
     tg_account, created = TelegramAccount.objects.get_or_create(tg_id=user['id'])
@@ -149,6 +149,13 @@ class Update():
             self.tg_account.save()
             reply_markup = ReplyMarkup().get_markup('start', self.tg_account)
             response = SendMessage(chat_id, 'Заявка отменена', reply_markup).send()
+        elif command == 'close_ticket':
+            self.tg_account.await_reply = False
+            self.tg_account.reply_type = None
+            self.tg_account.save()
+            ticket = Ticket.objects.filter(user_id=self.tg_account.account_id).filter(status_in=[1,2]).order_by('-id').first()
+            reply_markup = ReplyMarkup().get_markup('start', self.tg_account)
+            response = SendMessage(chat_id, 'Заявка закрыта', reply_markup).send()
         else:
             response = None
         return response
@@ -198,7 +205,7 @@ class Update():
             text = render_to_string('ticket_created.html', {'ticket':ticket})
             response = SendMessage(chat_id, text).send()
         elif self.tg_account.reply_type =='ticket':
-            ticket = Ticket.objects.filter(user_id=self.tg_account.account_id).order_by('-id').first()
+            ticket = Ticket.objects.filter(user_id=self.tg_account.account_id).filter(status_in=[1,2]).order_by('-id').first()
             message = SupportChatMessage.objects.create(sender=self.tg_account.account.expert, tg_message=message.message_id, sender_chat_id=chat_id, text=message.text, ticket_id=ticket.id)
             response = None
         else:
