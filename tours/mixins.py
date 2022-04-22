@@ -149,13 +149,15 @@ class TourMixin():
         return instance
     
     def check_postpay_days_before_start(self, data):
+        postpay_days_before_start = self.request.data.get('postpay_days_before_start')
         if data.get('postpay_on_start_day'):
             data['postpay_days_before_start'] = timedelta(days=0)
-        elif not data.get('postpay_on_start_day') and not data.get('postpay_days_before_start'):
+        elif not data.get('postpay_on_start_day') and not postpay_days_before_start:
             data['postpay_on_start_day'] = True
             data['postpay_days_before_start'] = timedelta(days=0)
         else:
-            data['postpay_days_before_start'] = timedelta(days=data.get('postpay_days_before_start'))
+            postpay_days_before_start = postpay_days_before_start if postpay_days_before_start >= 5 else 5
+            data['postpay_days_before_start'] = timedelta(days=postpay_days_before_start)
             data['postpay_on_start_day'] = False
         return data
 
