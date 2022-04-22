@@ -1,5 +1,6 @@
-from django.db.models import F
+from django.db.models import F, BigIntegerField, ExpressionWrapper, IntegerField
 from datetime import timedelta, datetime
+from django.forms import DurationField
 from rest_framework.decorators import action
 from django.db.models.query import Prefetch
 from rest_framework import viewsets
@@ -30,7 +31,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         if self.action in ['list',]:
             tour_basic = TourBasic.objects.prefetch_related('expert')
             prefetchet_tour_basic = Prefetch('tour_basic', tour_basic)
-            qs = Tour.objects.prefetch_related(prefetchet_tour_basic, 'start_country', 'start_city', 'wallpaper', 'currency').only('id', 'name', 'start_date', 'start_country', 'start_city', 'price', 'discount', 'duration', 'tour_basic', 'wallpaper', 'vacants_number').filter(is_active=True).filter(tour_basic__direct_link=False).filter(start_date__gte=datetime.today())
+            qs = Tour.objects.prefetch_related(prefetchet_tour_basic, 'start_country', 'start_city', 'wallpaper', 'currency').only('id', 'name', 'start_date', 'start_country', 'start_city', 'price', 'discount', 'duration', 'tour_basic', 'wallpaper', 'vacants_number').annotate(delay=F('start_date') - datetime.today().date() - timedelta(days=3)).filter(is_active=True).filter(tour_basic__direct_link=False)
         elif self.action in ['tour_set',]:
             qs = Tour.objects.prefetch_related('tour_basic', 'start_country', 'currency').only('id', 'name', 'start_date', 'finish_date', 'start_country', 'price', 'cost', 'discount', 'on_moderation', 'is_active', 'is_draft', 'duration', 'sold', 'watched', 'currency', 'tour_basic', 'wallpaper').filter(tour_basic__expert_id=self.request.user.id).order_by('-id')
         else:

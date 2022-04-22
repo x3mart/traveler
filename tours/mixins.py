@@ -1,4 +1,5 @@
 # from itertools import count
+from datetime import timedelta
 from django.forms import model_to_dict
 from django.db import models
 from django.shortcuts import get_object_or_404
@@ -149,10 +150,13 @@ class TourMixin():
     
     def check_postpay_days_before_start(self, data):
         if data.get('postpay_on_start_day'):
-            data['postpay_days_before_start'] = 0
-        if not data.get('postpay_on_start_day') and not data.get('postpay_days_before_start'):
+            data['postpay_days_before_start'] = timedelta(days=0)
+        elif not data.get('postpay_on_start_day') and not data.get('postpay_days_before_start'):
             data['postpay_on_start_day'] = True
-            data['postpay_days_before_start'] = 0
+            data['postpay_days_before_start'] = timedelta(days=0)
+        else:
+            data['postpay_days_before_start'] = timedelta(days=data.get('postpay_days_before_start'))
+            data['postpay_on_start_day'] = False
         return data
 
     def set_mtm_fields(self, request, instance):       
