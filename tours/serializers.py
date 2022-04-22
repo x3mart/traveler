@@ -169,7 +169,7 @@ class TourSerializer(serializers.ModelSerializer):
     finish_russian_region = CountryRegionSerializer(many=False, read_only=True)
     start_city = CityFullNameSerializer(many=False, read_only=True)
     finish_city = CityFullNameSerializer(many=False, read_only=True)
-    # important_to_know = ImportantSerializer(read_only=True, many=True)
+    postpay_days_before_start = serializers.SerializerMethodField(read_only=True)
     required_fields = serializers.SerializerMethodField(read_only=True)
     
 
@@ -182,7 +182,6 @@ class TourSerializer(serializers.ModelSerializer):
             'is_draft': {'required': False,},
             'flight_included': {'required': False,},
             'duration': {'required': False, 'read_only':True},
-            'postpay_days_before_start':  {'required': False, 'read_only':True},
         }
 
     def get_tmb_wallpaper(self, obj):
@@ -217,6 +216,9 @@ class TourSerializer(serializers.ModelSerializer):
         for value in TOUR_REQUIRED_FIELDS:
             required_fields += TOUR_REQUIRED_FIELDS[value]
         return required_fields
+    
+    def get_postpay_days_before_start(self, obj):
+        return obj.postpay_days_before_start.days
 
 
 class TourListSerializer(serializers.ModelSerializer):
