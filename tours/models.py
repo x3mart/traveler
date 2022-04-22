@@ -9,6 +9,10 @@ from django.contrib.postgres.fields import ArrayField
 from ckeditor.fields import RichTextField
 from utils.images import get_tmb_path
 
+
+def get_booking_delay():
+    return timedelta(days=3)
+
 def get_mtm_tour_basic(obj):
     return obj.tours.first().tour_basic.id
 
@@ -277,6 +281,7 @@ class Tour(models.Model):
     key_features = RichTextField(_('Ключевые особенности'), null=True, blank=True)
     new_to_see = RichTextField(_('Что нового я увижу'), null=True, blank=True)
     completed_sections = ArrayField(base_field=models.CharField(max_length=200, null=True), default=list, blank=True)
+    booking_delay = models.DurationField(default=get_booking_delay)
 
     class Meta:
         verbose_name = _('Тур')

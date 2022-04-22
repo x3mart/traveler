@@ -25,13 +25,14 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
     permission_classes = [TourPermission]
     filter_backends = [filters.OrderingFilter, DjangoFilterBackend]
     ordering_fields = ['rating', 'id']
+    ordering = ['start_date']
     filterset_class = TourFilter
 
     def get_queryset(self):
         if self.action in ['list',]:
             tour_basic = TourBasic.objects.prefetch_related('expert')
             prefetchet_tour_basic = Prefetch('tour_basic', tour_basic)
-            qs = Tour.objects.prefetch_related(prefetchet_tour_basic, 'start_country', 'start_city', 'wallpaper', 'currency').only('id', 'name', 'start_date', 'start_country', 'start_city', 'price', 'discount', 'duration', 'tour_basic', 'wallpaper', 'vacants_number').annotate(delay=F('start_date') - datetime.today().date() - timedelta(days=3)).filter(is_active=True).filter(tour_basic__direct_link=False)
+            qs = Tour.objects.prefetch_related(prefetchet_tour_basic, 'start_country', 'start_city', 'wallpaper', 'currency').only('id', 'name', 'start_date', 'start_country', 'start_city', 'price', 'discount', 'duration', 'tour_basic', 'wallpaper', 'vacants_number', 'currency').annotate(start_difference=F('start_date') - F('postpay_days_before_start') - datetime.today().date()).filter(is_active=True).filter(tour_basic__direct_link=False).filter(start_difference__gte=F('booking_delay'))
         elif self.action in ['tour_set',]:
             qs = Tour.objects.prefetch_related('tour_basic', 'start_country', 'currency').only('id', 'name', 'start_date', 'finish_date', 'start_country', 'price', 'cost', 'discount', 'on_moderation', 'is_active', 'is_draft', 'duration', 'sold', 'watched', 'currency', 'tour_basic', 'wallpaper').filter(tour_basic__expert_id=self.request.user.id).order_by('-id')
         else:
