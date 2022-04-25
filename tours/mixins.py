@@ -105,11 +105,6 @@ class TourMixin():
     def get_expert(self, request):
         return get_object_or_404(Expert, pk=request.user.id)
     
-    def set_tour_direct_links(self, request, instance):
-        tour_basic = instance.tour_basic
-        tour_basic.direct_link = request.data.get('direct_link')
-        tour_basic.save()
-    
     def set_fk_fields(self, request, instance):
         fk_fields = {field.name for field in instance._meta.get_fields() if isinstance(field, models.ForeignKey)} - EXCLUDED_FK_FIELDS
         for field in fk_fields:
@@ -178,8 +173,6 @@ class TourMixin():
             instance.tour_included_services = self.set_mtm_from_str(request, 'tour_included_services')
         if request.data.get('tour_excluded_services') is not None:
             instance.tour_excluded_services = self.set_mtm_from_str(request, 'tour_excluded_services')
-        if request.data.get('direct_link') is not None:
-            self.set_tour_direct_links(request, instance)
         return instance
 
     def set_model_fields(self, data, instance):
