@@ -5,7 +5,7 @@ from tours.models import ImportantTitle, TourAccomodation, TourPropertyType, Tou
 # Register your models here.
 class TourAdmin(admin.ModelAdmin):
     readonly_fields=('start_city', 'finish_city')
-    list_display = ('name', 'tour_basic__expert__full_name', 'start_country', 'start_city', 'start_date', 'is_active', 'on_moderation', 'is_draft')
+    list_display = ('name', 'expert', 'start_country', 'start_city', 'start_date', 'is_active', 'on_moderation', 'is_draft')
     list_editable =('is_active', 'on_moderation', 'is_draft')
 
     def get_queryset(self, request):
@@ -14,6 +14,10 @@ class TourAdmin(admin.ModelAdmin):
         prefetch_tour_basic = Prefetch('tour_basic', tour_basic)
         qs = qs.prefetch_related(prefetch_tour_basic, 'start_country', 'start_city')
         return qs
+    
+    @admin.display(description='Эксперт')
+    def expert(self, obj):
+        return obj.full_name
 
 
 admin.site.register(Tour, TourAdmin)
