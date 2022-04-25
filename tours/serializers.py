@@ -229,6 +229,7 @@ class TourListSerializer(serializers.ModelSerializer):
     is_favourite = serializers.SerializerMethodField(read_only=True)
     is_new = serializers.SerializerMethodField(read_only=True)
     is_recomended = serializers.SerializerMethodField(read_only=True)
+    discount = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Tour
@@ -250,6 +251,12 @@ class TourListSerializer(serializers.ModelSerializer):
     
     def get_is_recomended(self, obj):
         return  None
+    
+    def get_discount(self, obj):
+        if obj.price and obj.discount and obj.discount_starts and  obj.discount_finish and obj.discount_starts < date.today() and  obj.discount_finish > date.today():
+            return obj.price - obj.price*(obj.discount/100) if obj.prepay_in_prc else obj.price - obj.discount
+        else:
+            return None
 
 
 class TourSetSerializer(serializers.ModelSerializer):
