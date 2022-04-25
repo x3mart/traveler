@@ -59,7 +59,6 @@ class TourBasic(models.Model):
     reviews_count = models.IntegerField(_('Кол-во отзывов'), default=0)
     rating = models.DecimalField(_('Рейтинг'), decimal_places=1, max_digits=2, null=True, blank=True)
     created_at = models.DateTimeField(_('Создан'), auto_now_add=True)
-    direct_link = models.BooleanField(_('Доступ по прямой ссылке'), default=False)
     is_active = models.BooleanField(default=False)
 
     class Meta:
@@ -282,6 +281,7 @@ class Tour(models.Model):
     new_to_see = RichTextField(_('Что нового я увижу'), null=True, blank=True)
     completed_sections = ArrayField(base_field=models.CharField(max_length=200, null=True), default=list, blank=True)
     booking_delay = models.DurationField(default=get_booking_delay)
+    direct_link = models.BooleanField(_('Доступ по прямой ссылке'), default=False)
 
     class Meta:
         verbose_name = _('Тур')
