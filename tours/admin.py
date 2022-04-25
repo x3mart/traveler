@@ -1,11 +1,19 @@
 from django.contrib import admin
-
-from tours.models import ImportantTitle, TourAccomodation, TourPropertyType, Tour, TourType
+from django.db.models.query import Prefetch
+from tours.models import ImportantTitle, TourAccomodation, TourPropertyType, Tour, TourType, TourBasic
 
 # Register your models here.
 class TourAdmin(admin.ModelAdmin):
     readonly_fields=('start_city', 'finish_city')
+    list_display = ('name', 'basic__expert__full_name', 'start_country', 'start_city', 'start_date', 'is_active', 'on_moderation', 'is_draft')
+    list_editable =('is_active', 'on_moderation', 'is_draft')
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        tour_basic = TourBasic.objects.prefetch_related('expert')
+        prefetch_tour_basic = Prefetch('tour_basic', tour_basic)
+        qs = qs.prefetch_related(prefetch_tour_basic, 'start_country', 'start_city')
+        return qs
 
 
 admin.site.register(Tour, TourAdmin)
