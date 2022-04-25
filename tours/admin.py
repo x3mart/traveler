@@ -17,7 +17,7 @@ class TourAdmin(admin.ModelAdmin):
     
     @admin.display(description='Эксперт')
     def expert(self, obj):
-        return obj.full_name
+        return obj.tour_basic.expert.full_name
 
 
 admin.site.register(Tour, TourAdmin)
