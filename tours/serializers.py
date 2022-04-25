@@ -123,7 +123,7 @@ class TourPreviewSerializer(serializers.ModelSerializer):
     
     def get_discounted_price(self, obj):
         if obj.price and obj.discount and obj.discount_starts and  obj.discount_finish and obj.discount_starts < date.today() and  obj.discount_finish > date.today():
-            return obj.price - obj.price*(obj.discount/100) if obj.prepay_in_prc else obj.price - obj.discount
+            return round(obj.price - obj.price*(obj.discount/100)) if obj.prepay_in_prc else obj.price - obj.discount
         else:
             return None
 
@@ -254,7 +254,7 @@ class TourListSerializer(serializers.ModelSerializer):
     
     def get_discount(self, obj):
         if obj.price and obj.discount and obj.discount_starts and  obj.discount_finish and obj.discount_starts < date.today() and  obj.discount_finish > date.today():
-            return obj.price - obj.price*(obj.discount/100) if obj.prepay_in_prc else obj.price - obj.discount
+            return round(obj.price - obj.price*(obj.discount/100)) if obj.prepay_in_prc else obj.price - obj.discount
         else:
             return None
 
