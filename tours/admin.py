@@ -5,7 +5,7 @@ from tours.models import ImportantTitle, TourAccomodation, TourPropertyType, Tou
 # Register your models here.
 class TourAdmin(admin.ModelAdmin):
     readonly_fields=('start_city', 'finish_city')
-    list_display = ('name', 'basic__expert__full_name', 'start_country', 'start_city', 'start_date', 'is_active', 'on_moderation', 'is_draft')
+    list_display = ('name', 'tour_basic__expert__full_name', 'start_country', 'start_city', 'start_date', 'is_active', 'on_moderation', 'is_draft')
     list_editable =('is_active', 'on_moderation', 'is_draft')
 
     def get_queryset(self, request):
