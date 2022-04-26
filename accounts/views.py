@@ -212,12 +212,9 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
         })
         time = get_timestamp_str()
         token_str = f"call-password/start-password-call\n{time}\n{KEY_NEWTEL}\n{data}\n{WRITE_KEY}".encode('utf-8')
-        print(token_str)
         token = KEY_NEWTEL + time + hashlib.sha256(token_str).hexdigest()
-        print(token)
         headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
         response = requests.post('https://api.new-tel.net/call-password/start-password-call', data=data, headers=headers)
-        print(response.json())
         return Response(status=status.HTTP_204_NO_CONTENT)
     
 
