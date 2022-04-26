@@ -1,11 +1,12 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
+from rest_framework.decorators import api_view
 # from bankdetails.serializers import BankTransactionSerializer, DebetCardSerializer
 from dadata import Dadata
 from traveler.settings import DADATA_API
 
 # # Create your views here.
-
+@api_view('POST')
 def get_bank(request):
     token = DADATA_API
     dadata = Dadata(token)
@@ -19,6 +20,7 @@ def get_bank(request):
     }
     return Response(data, status=200)
 
+@api_view('POST')
 def get_recipient(request):
     token = DADATA_API
     dadata = Dadata(token)
