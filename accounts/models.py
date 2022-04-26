@@ -105,7 +105,7 @@ class TeamMember(models.Model):
     last_name = models.CharField(_('Фамилия'), max_length=255, null=True, blank=True,)
     email = models.EmailField(_('email'), max_length=255, null=True, blank=True)
     avatar = models.ImageField(upload_to=user_avatar_path, null=True, blank=True,)
-    languages = models.ManyToManyField("languages.Language" ,verbose_name=_('Языки'), blank=True, related_name='team_member')
+    phone = PhoneNumberField(_('Телефон'), null=True, blank=True, )
     about = models.TextField(_('О себе'), null=True, blank=True)
     expert = models.ForeignKey('Expert', on_delete=models.CASCADE, null=True, blank=True, verbose_name=_('Эксперт'), related_name='team_members')
     is_active = models.BooleanField(default=True)
