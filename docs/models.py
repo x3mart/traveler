@@ -8,3 +8,10 @@ class LegalDocument(models.Model):
     docs_subtitle = models.CharField(_('Подзаголовок'), max_length=255,  null=True, blank=True,)
     docs_meta_tag = models.TextField(_('Мета теги'), max_length=255,  null=True, blank=True,)
     docs_body = RichTextField(_('Текст'), null=True, blank=True,)
+
+    class Meta:
+        verbose_name = _('Юр документ')
+        verbose_name_plural = _('Юр документы')
+
+    def __str__(self):
+        return self.title if self.title else '--'
