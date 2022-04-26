@@ -14,4 +14,4 @@ class LegalDocument(models.Model):
         verbose_name_plural = _('Юр документы')
 
     def __str__(self):
-        return self.title if self.title else '--'
+        return self.docs_title if self.docs_title else '--'
