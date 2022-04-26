@@ -24,6 +24,8 @@ import threading
 from django.template.loader import render_to_string
 from templated_mail.mail import BaseEmailMessage
 from django.contrib.auth.tokens import default_token_generator
+from bankdetails.models import BankTransaction, DebetCard
+from bankdetails.serializers import BankTransactionSerializer, DebetCardSerializer
 from tours.mixins import TourMixin
 import random
 import json
@@ -154,6 +156,10 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
             return ExpertMeSerializer
         if self.action == 'confirm_email':
             return EmailActivationSerializer
+        if self.action == 'debet_card':
+            return DebetCardSerializer
+        if self.action == 'bank_transaction':
+            return BankTransactionSerializer
         return super().get_serializer_class()
     
     def perform_update(self, serializer):
@@ -213,7 +219,29 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
         response = requests.post('https://api.new-tel.net/call-password/start-password-call', data=data, headers=headers)
         print(response.json())
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
 
+    @action(["patch"], detail=True)
+    def debet_card(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(data=request.data)
+        data = serializer.is_valid(raise_exception=True)
+        if instance.debet_card:
+            DebetCard.objects.filter(expert=instance).update(**data)
+        else:
+            instance.debet_card.create(**data)
+        return Response(serializer.data, status=201)
+    
+    @action(["patch"], detail=True)
+    def bank_transaction(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(data=request.data)
+        data = serializer.is_valid(raise_exception=True)
+        if instance.debet_card:
+            BankTransaction.objects.filter(expert=instance).update(**data)
+        else:
+            instance.bank_transaction.create(**data)
+        return Response(serializer.data, status=201)
 
 class CustomerViewSet(viewsets.ModelViewSet):
     queryset = Customer.objects.all()
