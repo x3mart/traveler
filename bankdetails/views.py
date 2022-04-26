@@ -6,7 +6,7 @@ from dadata import Dadata
 from traveler.settings import DADATA_API
 
 # # Create your views here.
-@api_view('POST')
+@api_view(['POST'])
 def get_bank(request):
     token = DADATA_API
     dadata = Dadata(token)
@@ -20,7 +20,7 @@ def get_bank(request):
     }
     return Response(data, status=200)
 
-@api_view('POST')
+@api_view(['POST'])
 def get_recipient(request):
     token = DADATA_API
     dadata = Dadata(token)
@@ -29,9 +29,9 @@ def get_recipient(request):
         'recipient_name':result[0].get('value'),
         'recipient_inn':result[0]['data'].get('inn'),
         'recipient_kpp':result[0]['data'].get('kpp'),
-        'recipient_ogrn':result[0][data].get('ogrn'),
-        'recipient_status':result[0][data].get('state')['status'],
-        'recipient_registration_date':result[0][data].get('state')['registration_date']
+        'recipient_ogrn':result[0]['data'].get('ogrn'),
+        'recipient_status':result[0]['data'].get('state')['status'],
+        'recipient_registration_date':result[0]['data'].get('state')['registration_date']
     }
     return Response(data, status=200)
 
