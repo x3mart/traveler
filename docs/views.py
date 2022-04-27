@@ -5,7 +5,7 @@ from rest_framework.permissions import AllowAny
 
 
 # Create your views here.
-class LegalDocView(generics.ListAPIView):
-    queryset = LegalDocument.objects.all()
-    serializer_class = LegalDocSerializer
-    permission_classes = [AllowAny]
+# class LegalDocView(generics.RetriewAPIView):
+#     queryset = LegalDocument.objects.all()
+#     serializer_class = LegalDocSerializer
+#     permission_classes = [AllowAny]
