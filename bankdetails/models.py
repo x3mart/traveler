@@ -3,7 +3,7 @@ from django.db import models
 
 # Create your models here.
 class Bank(models.Model):
-    bank_bik = models.CharField(_('БИК'), max_length=255)
+    bank_bik = models.CharField(_('БИК'), max_length=9)
     bank_name = models.CharField(_('Название банка'), max_length=255)
     bank_account = models.CharField(_('Кор счет'), max_length=255)
     bank_inn = models.CharField(_('ИНН Банка'), max_length=255)
