@@ -23,17 +23,19 @@ def get_bank(request):
 
 @api_view(['POST'])
 def get_recipient(request):
+    data = {}
     token = DADATA_API
     dadata = Dadata(token)
     result = dadata.find_by_id("party", request.data.get('recipient_inn'))
-    data = {
-        'recipient_name':result[0].get('value'),
-        'recipient_inn':result[0]['data'].get('inn'),
-        'recipient_kpp':result[0]['data'].get('kpp'),
-        'recipient_ogrn':result[0]['data'].get('ogrn'),
-        'recipient_status':result[0]['data'].get('state')['status'],
-        'recipient_registration_date':datetime.fromtimestamp(result[0]['data'].get('state')['registration_date']/1000).date()
-    }
+    if result:
+        data = {
+            'recipient_name':result[0].get('value'),
+            'recipient_inn':result[0]['data'].get('inn'),
+            'recipient_kpp':result[0]['data'].get('kpp'),
+            'recipient_ogrn':result[0]['data'].get('ogrn'),
+            'recipient_status':result[0]['data'].get('state')['status'],
+            'recipient_registration_date':datetime.fromtimestamp(result[0]['data'].get('state')['registration_date']/1000).date()
+        }
     return Response(data, status=200)
 
 
