@@ -19,6 +19,8 @@ class Bank(models.Model):
 
 class DebetCard(Bank):
     recipient_full_name =  models.CharField(_('Получатель(ФИО)'), max_length=255)
+    expert = models.OneToOneField('accounts.Expert', verbose_name=_('expert'), related_name='debet_card', on_delete=models.PROTECT, null=True, blank=True)
+
 
     class Meta:
         verbose_name = _('Дебетовая карта')
@@ -33,6 +35,7 @@ class BankTransaction(Bank):
     recipient_kpp = models.CharField(_('КПП Получателя'), max_length=255, blank=True, null=True)
     recipient_status = models.CharField(_('Статус'), max_length=255)
     recipient_registration_date = models.DateField(_('Дата регистрации'), max_length=255, blank=True, null=True)
+    expert = models.OneToOneField('accounts.Expert', verbose_name=_('expert'), related_name='bank_transaction', on_delete=models.PROTECT, null=True, blank=True)
 
     class Meta:
         verbose_name = _('Банковский перевод')

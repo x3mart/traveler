@@ -226,18 +226,18 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
         if instance.debet_card:
             DebetCard.objects.filter(expert=instance).update(**data)
         else:
-            instance.debet_card.create(**data)
+            DebetCard.objects.create(**data, expert=instance)
         return Response(serializer.data, status=201)
     
     @action(["patch"], detail=True)
     def bank_transaction(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(data=request.data)
-        data = serializer.is_valid(raise_exception=True)
-        if instance.debet_card:
-            BankTransaction.objects.filter(expert=instance).update(**data)
+        serializer.is_valid(raise_exception=True)
+        if hasattr(instance, 'bank_transaction'):
+            BankTransaction.objects.filter(expert_id=instance.id).update(**serializer.data)
         else:
-            instance.bank_transaction.create(**data)
+            BankTransaction.objects.create(expert_id=instance.id, **serializer.data)
         return Response(serializer.data, status=201)
 
 class CustomerViewSet(viewsets.ModelViewSet):

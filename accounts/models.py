@@ -93,8 +93,6 @@ class Expert(User):
     tours_rating = models.DecimalField(_('Рейтинг туров'), decimal_places=1, max_digits=2, default=0)
     reviews_count = models.IntegerField(_('Кол-во отзывов'), default=0)
     tour_reviews_count = models.IntegerField(_('Кол-во отзывов о турах'), default=0)
-    debet_card = models.OneToOneField('bankdetails.DebetCard', verbose_name=_('Дебетовая карта'), related_name='expert', on_delete=models.PROTECT, null=True, blank=True)
-    bank_transaction = models.OneToOneField('bankdetails.BankTransaction', verbose_name=_('Банковский перевод'), related_name='expert', on_delete=models.PROTECT, null=True, blank=True)
 
     class Meta:
         verbose_name = _('Эксперт')

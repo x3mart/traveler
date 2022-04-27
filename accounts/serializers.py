@@ -1,5 +1,6 @@
 from dataclasses import fields
 from email import message
+from bankdetails.serializers import BankTransactionSerializer, DebetCardSerializer
 
 from languages.serializers import LanguageSerializer
 from .models import Customer, Expert, TeamMember, User
@@ -84,14 +85,14 @@ class ExpertListSerializer(serializers.ModelSerializer):
 class ExpertSerializer(serializers.ModelSerializer):
     tmb_avatar = serializers.SerializerMethodField(read_only=True)
     languages = LanguageSerializer(many=True, read_only=True)
+    debet_card = DebetCardSerializer(many=False, read_only=True)
+    bank_transaction = BankTransactionSerializer(many=False, read_only=True)
     class Meta:
         model = Expert
         fields = ('id', 'email', 'first_name', 'last_name', 'avatar', 'tmb_avatar', 'country', 'city', 'languages', 'visited_countries', 'about', 'email_confirmed', 'phone_confirmed', 'docs_confirmed', 'status_confirmed', 'rating', 'tours_count', 'tours_rating', 'reviews_count', 'tour_reviews_count', 'video', 'debet_card', 'bank_transaction')
         extra_kwargs = {
             'password': {'write_only': True, 'required': False,},
             'email': {'write_only': True, 'required': True,},
-            'debet_card': {'read_only': True, 'required': True,},
-            'bank_transaction': {'read_only': True, 'required': True,}
         }
             
     def get_tmb_avatar(self, obj): 
