@@ -31,7 +31,6 @@ def expert_post_save(instance, created, **kwargs):
     teammember.last_name = instance.last_name
     teammember.email = instance.email
     teammember.avatar = instance.avatar
-    teammember.languages.set(objs=instance.languages.all())
     teammember.about = instance.about
     teammember.save()
 

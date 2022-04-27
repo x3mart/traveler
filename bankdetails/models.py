@@ -21,7 +21,6 @@ class DebetCard(Bank):
     recipient_full_name =  models.CharField(_('Получатель(ФИО)'), max_length=255)
     expert = models.OneToOneField('accounts.Expert', verbose_name=_('expert'), related_name='debet_card', on_delete=models.PROTECT, null=True, blank=True)
 
-
     class Meta:
         verbose_name = _('Дебетовая карта')
         verbose_name_plural = _('Дебетовые карты')
