@@ -4,6 +4,8 @@ from ckeditor.fields import RichTextField
 
 # Create your models here.
 class LegalDocument(models.Model):
+    docs_name = models.CharField(_('Название'), max_length=255,  null=True, blank=True,)
+    docs_slug = models.CharField(_('slug'), max_length=255,  null=True, blank=True,)
     docs_title = models.CharField(_('Заголовок'), max_length=255,  null=True, blank=True,)
     docs_subtitle = models.CharField(_('Подзаголовок'), max_length=255,  null=True, blank=True,)
     docs_meta_tag = models.TextField(_('Мета теги'), max_length=255,  null=True, blank=True,)
@@ -12,6 +14,8 @@ class LegalDocument(models.Model):
     class Meta:
         verbose_name = _('Юр документ')
         verbose_name_plural = _('Юр документы')
+        ordering = ['docs_name']
+
 
     def __str__(self):
-        return self.docs_title if self.docs_title else '--'
+        return self.docs_name if self.docs_name else '--'

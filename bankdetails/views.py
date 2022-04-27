@@ -1,3 +1,4 @@
+from datetime import datetime
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -31,7 +32,7 @@ def get_recipient(request):
         'recipient_kpp':result[0]['data'].get('kpp'),
         'recipient_ogrn':result[0]['data'].get('ogrn'),
         'recipient_status':result[0]['data'].get('state')['status'],
-        'recipient_registration_date':result[0]['data'].get('state')['registration_date']
+        'recipient_registration_date':datetime.fromtimestamp(result[0]['data'].get('state')['registration_date']/1000).date()
     }
     return Response(data, status=200)
 
