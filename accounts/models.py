@@ -45,6 +45,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True)
     first_name = models.CharField(_('Имя'), max_length=255,  null=True, blank=True,)
     last_name = models.CharField(_('Фамилия'), max_length=255, null=True, blank=True,)
+    patronymic = models.CharField(_('Отчество'), max_length=255, null=True, blank=True,)
     avatar = models.ImageField(upload_to=user_avatar_path, null=True, blank=True,)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(_('Сотрудник'), default=False, )

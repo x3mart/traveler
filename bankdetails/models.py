@@ -29,9 +29,10 @@ class DebetCard(Bank):
 
 class BankTransaction(Bank):
     recipient_inn =  models.CharField(_('ИНН Получателя'), max_length=255)
+    recipient_name =  models.CharField(_('Наименование юр лица'), max_length=255, null=True, blank=True,)
     recipient_account = models.CharField(_('Р/С Получателя'), max_length=255)
-    recipient_registration_date = models.DateField(_('Дата регистрации'), max_length=255)
     recipient_ogrn = models.CharField(_('ОГРН Получателя'), max_length=255)
+    recipient_legal_address = models.CharField(_('Юр адрес'), max_length=255, null=True, blank=True,)
     recipient_kpp = models.CharField(_('КПП Получателя'), max_length=255, blank=True, null=True)
     recipient_status = models.CharField(_('Статус'), max_length=255)
     recipient_registration_date = models.DateField(_('Дата регистрации'), max_length=255, blank=True, null=True)
