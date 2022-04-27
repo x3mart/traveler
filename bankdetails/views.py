@@ -9,16 +9,18 @@ from traveler.settings import DADATA_API
 # # Create your views here.
 @api_view(['POST'])
 def get_bank(request):
+    data = {}
     token = DADATA_API
     dadata = Dadata(token)
     result = dadata.find_by_id("bank", request.data.get('bank_bik'))
-    data = {
-        'bank_bik':result[0]['data'].get('bic'),
-        'bank_name':result[0].get('value'),
-        'bank_account':result[0]['data'].get('correspondent_account'),
-        'bank_inn':result[0]['data'].get('inn'),
-        'bank_kpp':result[0]['data'].get('kpp')
-    }
+    if result:
+        data = {
+            'bank_bik':result[0]['data'].get('bic'),
+            'bank_name':result[0].get('value'),
+            'bank_account':result[0]['data'].get('correspondent_account'),
+            'bank_inn':result[0]['data'].get('inn'),
+            'bank_kpp':result[0]['data'].get('kpp')
+        }
     return Response(data, status=200)
 
 @api_view(['POST'])
