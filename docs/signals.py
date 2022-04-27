@@ -11,4 +11,4 @@ from unidecode import unidecode
 
 @receiver(pre_save, sender=LegalDocument)
 def tour_type_pre_save(instance, sender, **kwargs):
-    instance.docs_slug = slugify(unidecode(instance.name))
+    instance.docs_slug = slugify(unidecode(instance.docs_name))
