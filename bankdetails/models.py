@@ -14,7 +14,7 @@ class Bank(models.Model):
         abstract = True
     
     def __str__(self):
-        return self.expert.full_name
+        return self.expert.full_name if self.expert.full_name else '--'
 
 
 class DebetCard(Bank):
