@@ -231,18 +231,23 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
             DebetCard.objects.filter(expert=instance).update(billing_country=country, **serializer.data)
         else:
             DebetCard.objects.create(expert_id=instance.id, billing_country=country, **serializer.data)
-        return Response(serializer.data, status=201)
+        debet_card = DebetCard.objects.get(expert_id=instance.id)
+        return Response(DebetCardSerializer(debet_card), status=201)
     
     @action(["patch"], detail=True)
     def bank_transaction(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        country = request.data.get('billing_country')
+        if country:
+            country = Country.objects.get(pk=country['id'])
         if hasattr(instance, 'bank_transaction'):
             BankTransaction.objects.filter(expert_id=instance.id).update(**serializer.data)
         else:
             BankTransaction.objects.create(expert_id=instance.id, **serializer.data)
-        return Response(serializer.data, status=201)
+        bank_transaction = BankTransaction.objects.get(expert_id=instance.id)
+        return Response(BankTransactionSerializer(bank_transaction), status=201)
 
 class CustomerViewSet(viewsets.ModelViewSet):
     queryset = Customer.objects.all()

@@ -38,7 +38,7 @@ def tour_basic_post_save(instance, created, **kwargs):
 @receiver(post_save, sender=TourBasic)
 def tour_basic_post_save(instance, created, **kwargs):
     expert = instance.expert
-    expert.tours_count = Expert.objects.filter(pk=expert.id).aggregate(count=Count('tours', filter=Q(tours__is_active=True)&Q(tours__direct_link=False)))['count']
+    expert.tours_count = Expert.objects.filter(pk=expert.id).aggregate(count=Count('tours', filter=Q(tours__is_active=True)))['count']
     expert.save()
     
 
