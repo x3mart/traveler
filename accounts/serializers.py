@@ -112,10 +112,11 @@ class ExpertMeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Expert
-        fields = ('id', 'password', 'email', 'first_name', 'last_name', 'avatar', 'phone', 'tmb_avatar', 'country', 'city', 'languages', 'visited_countries', 'about', 'email_confirmed', 'phone_confirmed', 'docs_confirmed', 'status_confirmed', 'rating', 'tours_count', 'tours_rating', 'reviews_count', 'tour_reviews_count', 'video')
+        fields = ('id', 'password', 'email', 'first_name', 'last_name', 'avatar', 'phone', 'tmb_avatar', 'country', 'city', 'languages', 'visited_countries', 'about', 'email_confirmed', 'phone_confirmed', 'docs_confirmed', 'status_confirmed', 'rating', 'tours_count', 'tours_rating', 'reviews_count', 'tour_reviews_count', 'video', 'commission')
         extra_kwargs = {
             'password': {'write_only': True, 'required': False,},
             'avatar': {'read_only': True, 'required': False,},
+            'commission': {'read_only': True, 'required': False,},
         }
             
     def get_tmb_avatar(self, obj): 
