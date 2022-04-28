@@ -7,11 +7,11 @@ class DebetCardSerializer(serializers.ModelSerializer):
     billing_country = CountrySerializer(many=False, read_only=True)
     class Meta:
         model = DebetCard
-        exclude = 'expert'
+        exclude = ('expert',)
 
 
 class BankTransactionSerializer(serializers.ModelSerializer):
     billing_country = CountrySerializer(many=False, read_only=True)
     class Meta:
         model = BankTransaction
-        exclude = 'expert'
+        exclude = ('expert',)
