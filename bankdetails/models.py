@@ -3,6 +3,7 @@ from django.db import models
 
 # Create your models here.
 class Bank(models.Model):
+    billing_country = models.ForeignKey('geoplaces.Country', on_delete=models.PROTECT, verbose_name=_('Страна платежного адреса'), null=True, blank=True)
     bank_bik = models.CharField(_('БИК'), max_length=9)
     bank_name = models.CharField(_('Название банка'), max_length=255)
     bank_account = models.CharField(_('Кор счет'), max_length=255)

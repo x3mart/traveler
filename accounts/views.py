@@ -26,6 +26,7 @@ from templated_mail.mail import BaseEmailMessage
 from django.contrib.auth.tokens import default_token_generator
 from bankdetails.models import BankTransaction, DebetCard
 from bankdetails.serializers import BankTransactionSerializer, DebetCardSerializer
+from geoplaces.models import Country
 from tours.mixins import TourMixin
 import random
 import json
@@ -222,11 +223,14 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
     def debet_card(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(data=request.data)
-        data = serializer.is_valid(raise_exception=True)
+        serializer.is_valid(raise_exception=True)
+        country = request.data.get('billing_country')
+        if country:
+            country = Country.objects.get(pk=country['id'])
         if hasattr(instance, 'debet_card'):
-            DebetCard.objects.filter(expert=instance).update(**serializer.data)
+            DebetCard.objects.filter(expert=instance).update(billing_country=country, **serializer.data)
         else:
-            DebetCard.objects.create(expert_id=instance.id, **serializer.data)
+            DebetCard.objects.create(expert_id=instance.id, billing_country=country, **serializer.data)
         return Response(serializer.data, status=201)
     
     @action(["patch"], detail=True)
