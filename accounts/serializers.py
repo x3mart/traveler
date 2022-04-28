@@ -85,11 +85,10 @@ class ExpertListSerializer(serializers.ModelSerializer):
 class ExpertSerializer(serializers.ModelSerializer):
     tmb_avatar = serializers.SerializerMethodField(read_only=True)
     languages = LanguageSerializer(many=True, read_only=True)
-    debet_card = DebetCardSerializer(many=False, read_only=True)
-    bank_transaction = BankTransactionSerializer(many=False, read_only=True)
+    
     class Meta:
         model = Expert
-        fields = ('id', 'email', 'first_name', 'last_name', 'avatar', 'tmb_avatar', 'country', 'city', 'languages', 'visited_countries', 'about', 'email_confirmed', 'phone_confirmed', 'docs_confirmed', 'status_confirmed', 'rating', 'tours_count', 'tours_rating', 'reviews_count', 'tour_reviews_count', 'video', 'debet_card', 'bank_transaction')
+        fields = ('id', 'email', 'first_name', 'last_name', 'avatar', 'tmb_avatar', 'country', 'city', 'languages', 'visited_countries', 'about', 'email_confirmed', 'phone_confirmed', 'docs_confirmed', 'status_confirmed', 'rating', 'tours_count', 'tours_rating', 'reviews_count', 'tour_reviews_count', 'video')
         extra_kwargs = {
             'password': {'write_only': True, 'required': False,},
             'email': {'write_only': True, 'required': True,},
@@ -109,10 +108,12 @@ class ExpertSerializer(serializers.ModelSerializer):
 class ExpertMeSerializer(serializers.ModelSerializer):
     tmb_avatar = serializers.SerializerMethodField(read_only=True)
     languages = LanguageSerializer(many=True, read_only=True)
+    debet_card = DebetCardSerializer(many=False, read_only=True)
+    bank_transaction = BankTransactionSerializer(many=False, read_only=True)
 
     class Meta:
         model = Expert
-        fields = ('id', 'password', 'email', 'first_name', 'last_name', 'avatar', 'phone', 'tmb_avatar', 'country', 'city', 'languages', 'visited_countries', 'about', 'email_confirmed', 'phone_confirmed', 'docs_confirmed', 'status_confirmed', 'rating', 'tours_count', 'tours_rating', 'reviews_count', 'tour_reviews_count', 'video', 'commission')
+        fields = ('id', 'password', 'email', 'first_name', 'last_name', 'avatar', 'phone', 'tmb_avatar', 'country', 'city', 'languages', 'visited_countries', 'about', 'email_confirmed', 'phone_confirmed', 'docs_confirmed', 'status_confirmed', 'rating', 'tours_count', 'tours_rating', 'reviews_count', 'tour_reviews_count', 'video', 'commission', 'debet_card', 'bank_transaction')
         extra_kwargs = {
             'password': {'write_only': True, 'required': False,},
             'avatar': {'read_only': True, 'required': False,},
