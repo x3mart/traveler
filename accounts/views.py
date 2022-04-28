@@ -232,7 +232,7 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
         else:
             DebetCard.objects.create(expert_id=instance.id, billing_country=country, **serializer.data)
         debet_card = DebetCard.objects.get(expert_id=instance.id)
-        return Response(DebetCardSerializer(debet_card), status=201)
+        return Response(DebetCardSerializer(debet_card).data, status=201)
     
     @action(["patch"], detail=True)
     def bank_transaction(self, request, *args, **kwargs):
@@ -247,7 +247,7 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
         else:
             BankTransaction.objects.create(expert_id=instance.id, **serializer.data)
         bank_transaction = BankTransaction.objects.get(expert_id=instance.id)
-        return Response(BankTransactionSerializer(bank_transaction), status=201)
+        return Response(BankTransactionSerializer(bank_transaction).data, status=201)
 
 class CustomerViewSet(viewsets.ModelViewSet):
     queryset = Customer.objects.all()
