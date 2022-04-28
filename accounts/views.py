@@ -243,9 +243,9 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
         if country:
             country = Country.objects.get(pk=country['id'])
         if hasattr(instance, 'bank_transaction'):
-            BankTransaction.objects.filter(expert_id=instance.id).update(**serializer.data)
+            BankTransaction.objects.filter(expert_id=instance.id).update(billing_country=country, **serializer.data)
         else:
-            BankTransaction.objects.create(expert_id=instance.id, **serializer.data)
+            BankTransaction.objects.create(expert_id=instance.id, billing_country=country, **serializer.data)
         bank_transaction = BankTransaction.objects.get(expert_id=instance.id)
         return Response(BankTransactionSerializer(bank_transaction).data, status=201)
 
