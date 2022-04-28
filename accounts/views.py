@@ -224,9 +224,9 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
         serializer = self.get_serializer(data=request.data)
         data = serializer.is_valid(raise_exception=True)
         if hasattr(instance, 'debet_card'):
-            DebetCard.objects.filter(expert=instance).update(**data)
+            DebetCard.objects.filter(expert=instance).update(**serializer.data)
         else:
-            DebetCard.objects.create(**data, expert=instance)
+            DebetCard.objects.create(expert_id=instance.id, **serializer.data)
         return Response(serializer.data, status=201)
     
     @action(["patch"], detail=True)
