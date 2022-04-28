@@ -223,7 +223,7 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
         instance = self.get_object()
         serializer = self.get_serializer(data=request.data)
         data = serializer.is_valid(raise_exception=True)
-        if instance.debet_card:
+        if hasattr(instance, 'debet_card'):
             DebetCard.objects.filter(expert=instance).update(**data)
         else:
             DebetCard.objects.create(**data, expert=instance)
