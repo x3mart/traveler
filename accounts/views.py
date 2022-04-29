@@ -261,10 +261,19 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
         instance = self.get_object()
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        data = serializer.data
+        if request.data.get('residency'):
+            data['residency_id'] = request.data.get('residency')['id']
         if hasattr(instance, 'legal_verification'):
             Legal.objects.filter(expert_id=instance.id).update(**serializer.data)
         else:
             Legal.objects.create(expert_id=instance.id, **serializer.data)
+        legal_verification = Legal.objects.get(expert_id=instance.id)
+        if request.data.get('tours_countries'):
+            tours_countries = request.data.pop('tours_countries')
+            ids = map(lambda tour_country: tour_country.get('id'), tours_countries)
+            objects = TourMixin().get_mtm_objects(Country, ids)
+            legal_verification.tours_countries.set(objects)
         legal_verification = Legal.objects.get(expert_id=instance.id)
         return Response(LegalSerializer(legal_verification).data, status=201)
     
