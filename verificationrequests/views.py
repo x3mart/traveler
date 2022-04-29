@@ -2,15 +2,16 @@ from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 from rest_framework import permissions
 
-from verificationrequests.models import Legal
-from verificationrequests.serializers import LegalSerializer
+from verificationrequests.models import Legal, Scan
+from verificationrequests.serializers import LegalSerializer, ScanSerializer
+from accounts.models import Expert
 
 # Create your views here.
 class DocumentScanView(CreateAPIView):
-    queryset = Legal.objects.all()
-    serializer_class = LegalSerializer
+    queryset = Scan.objects.all()
+    serializer_class = ScanSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
-        expert = Legal.objects.get(pk=self.request.user.id)
+        expert = Expert.objects.get(pk=self.request.user.id)
         serializer.save(expert=expert)
