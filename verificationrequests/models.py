@@ -50,4 +50,8 @@ class Legal(VerificationRequest):
 
 class Scan(models.Model):
     file = models.FileField(upload_to='scans')
-    legal = models.ForeignKey('Legal', on_delete=models.CASCADE, verbose_name=_('Запрос на проверку юр лица'), related_name='scans')
+    expert = models.ForeignKey('accounts.Expert', on_delete=models.CASCADE, verbose_name=_('Эксперт'), related_name='scans', null=True, blank=True)
+
+    class Meta:
+        verbose_name = _('Скан документа')
+        verbose_name_plural = _('Сканы документов')

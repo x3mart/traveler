@@ -12,5 +12,5 @@ class DocumentScanView(CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
-        legal = Legal.objects.get(expert_id=self.request.user.id)
-        serializer.save(legal=legal)
+        expert = Legal.objects.get(pk=self.request.user.id)
+        serializer.save(expert=expert)
