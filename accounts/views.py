@@ -265,9 +265,9 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
         if request.data.get('residency'):
             data['residency_id'] = request.data.get('residency')['id']
         if hasattr(instance, 'legal_verification'):
-            Legal.objects.filter(expert_id=instance.id).update(**serializer.data)
+            Legal.objects.filter(expert_id=instance.id).update(**data)
         else:
-            Legal.objects.create(expert_id=instance.id, **serializer.data)
+            Legal.objects.create(expert_id=instance.id, **data)
         legal_verification = Legal.objects.get(expert_id=instance.id)
         if request.data.get('tours_countries'):
             tours_countries = request.data.pop('tours_countries')
