@@ -283,7 +283,7 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
         individual_verification = Individual.objects.get(expert_id=instance.id)
         if request.data.get('tours_countries'):
             tours_countries = request.data.pop('tours_countries')
-            ids = map(lambda tour_countries: tours_countries.get('id'), tours_countries)
+            ids = map(lambda tour_country: tour_country.get('id'), tours_countries)
             objects = TourMixin().get_mtm_objects(Country, ids)
             individual_verification.tours_countries.set(objects)
         individual_verification = Individual.objects.get(expert_id=instance.id)
