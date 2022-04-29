@@ -10,7 +10,7 @@ class VerificationRequest(models.Model):
     reviews_links = models.TextField(_('Ссылки на отзывы'), null=True, blank=True,)
     tours_countries = models.ManyToManyField('geoplaces.Country', verbose_name=_('В какие страны туры'), null=True, blank=True,)
     tours_links = models.TextField(_('Ссылки на туры'), null=True, blank=True,)
-    conflicts  = models.BooleanField(_('Были конфликты?'), default=False)
+    conflicts  = models.TextField(_('Были конфликты?'), max_length=6, default='No')
     conflicts_review = models.TextField(_('Описание конфликта'), null=True, blank=True,)
     legal_restrictions  = models.CharField(_('Были конфликты?'), max_length=6, null=True, blank=True,)
     legal_restrictions_review = models.TextField(_('Описание конфликта'), null=True, blank=True,)
