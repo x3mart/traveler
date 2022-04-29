@@ -3,12 +3,12 @@ from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
 class VerificationRequest(models.Model):
-    residency = models.ForeignKey('geoplaces.Country', verbose_name=_('Резидент'), on_delete=models.PROTECT, related_name="%(app_label)s_%(class)s_citizenship")
+    residency = models.ForeignKey('geoplaces.Country', verbose_name=_('Резидент'), on_delete=models.PROTECT, related_name="%(app_label)s_%(class)s_citizenship", null=True, blank=True,)
     license = models.CharField(_('Наличие лицензии'), max_length=6, null=True, blank=True,)
     commercial_tours  = models.CharField(_('Коммерческие туры'), max_length=6, null=True, blank=True,)
     commercial_tours_yearly = models.CharField(_('Туры в год'), max_length=6, null=True, blank=True,)
     reviews_links = models.TextField(_('Ссылки на отзывы'), null=True, blank=True,)
-    tours_countries = models.ManyToManyField('geoplaces.Country', verbose_name=_('В какие страны туры'))
+    tours_countries = models.ManyToManyField('geoplaces.Country', verbose_name=_('В какие страны туры'), null=True, blank=True,)
     tours_links = models.TextField(_('Ссылки на туры'), null=True, blank=True,)
     conflicts  = models.BooleanField(_('Были конфликты?'), default=False)
     conflicts_review = models.TextField(_('Описание конфликта'), null=True, blank=True,)
