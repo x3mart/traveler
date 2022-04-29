@@ -27,12 +27,15 @@ from django.contrib.auth.tokens import default_token_generator
 from bankdetails.models import BankTransaction, DebetCard
 from bankdetails.serializers import BankTransactionSerializer, DebetCardSerializer
 from geoplaces.models import Country
+from verificationrequests.models import Legal, Individual
 from tours.mixins import TourMixin
 import random
 import json
 from traveler.settings import WRITE_KEY, KEY_NEWTEL
 from utils.times import get_timestamp_str
 import hashlib
+
+from verificationrequests.serializers import IndividualSerializer, LegalSerializer
 
 
 class ConfirmEmailThread(threading.Thread, BaseEmailMessage):
@@ -161,6 +164,10 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
             return DebetCardSerializer
         if self.action == 'bank_transaction':
             return BankTransactionSerializer
+        if self.action == 'legal_verification':
+            return LegalSerializer
+        if self.action == 'individual_verification':
+            return IndividualSerializer
         return super().get_serializer_class()
     
     def perform_update(self, serializer):
@@ -248,6 +255,30 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
             BankTransaction.objects.create(expert_id=instance.id, billing_country=country, **serializer.data)
         bank_transaction = BankTransaction.objects.get(expert_id=instance.id)
         return Response(BankTransactionSerializer(bank_transaction).data, status=201)
+    
+    @action(["patch"], detail=True)
+    def legal_verification(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        if hasattr(instance, 'legal_verification'):
+            Legal.objects.filter(expert_id=instance.id).update(**serializer.data)
+        else:
+            Legal.objects.create(expert_id=instance.id, **serializer.data)
+        legal_verification = Legal.objects.get(expert_id=instance.id)
+        return Response(LegalSerializer(legal_verification).data, status=201)
+    
+    @action(["patch"], detail=True)
+    def individual_verification(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        if hasattr(instance, 'individual_verification'):
+            Individual.objects.filter(expert_id=instance.id).update(**serializer.data)
+        else:
+            Individual.objects.create(expert_id=instance.id, **serializer.data)
+        individual_verification = Individual.objects.get(expert_id=instance.id)
+        return Response(IndividualSerializer(individual_verification).data, status=201)
 
 class CustomerViewSet(viewsets.ModelViewSet):
     queryset = Customer.objects.all()

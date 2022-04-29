@@ -3,22 +3,17 @@ from django.utils.translation import gettext_lazy as _
 
 # Create your models here.
 class VerificationRequest(models.Model):
-    TOURS_NUMBER = [
-        (1, 'до 5'),
-        (2, '5-12'),
-        (3, '13-20'),
-        (4, '21-30'),
-        (5, '30+'),
-    ]
-    tour_operator_license = models.BooleanField(default=False)
-    had_commercial_tours  = models.BooleanField(default=False)
-    number_tours_per_year = models.PositiveIntegerField(_('Туры в год'), choices=TOURS_NUMBER, null=True, blank=True,)
-    countries = models.ManyToManyField('geoplaces.Country', verbose_name=_('В какие страны туры'))
-    other_sites = models.TextField(_('Ссылки на ресурсы'), null=True, blank=True,)
-    had_conflicts  = models.BooleanField(_('Были конфликты?'), default=False)
-    about_conflict = models.TextField(_('Описание конфликта'), null=True, blank=True,)
-    citizenship = models.ForeignKey('geoplaces.Country', verbose_name=_('Резидент'), on_delete=models.PROTECT, related_name="%(app_label)s_%(class)s_citizenship")
-    expert = models.ForeignKey('accounts.Expert', verbose_name=_('Эксперт'), on_delete=models.PROTECT)
+    residency = models.ForeignKey('geoplaces.Country', verbose_name=_('Резидент'), on_delete=models.PROTECT, related_name="%(app_label)s_%(class)s_citizenship")
+    license = models.BooleanField(default=False)
+    commercial_tours  = models.BooleanField(default=False)
+    commercial_tours_yearly = models.CharField(_('Туры в год'), max_length=6, null=True, blank=True,)
+    reviews_links = models.TextField(_('Ссылки на отзывы'), null=True, blank=True,)
+    tours_countries = models.ManyToManyField('geoplaces.Country', verbose_name=_('В какие страны туры'))
+    tours_links = models.TextField(_('Ссылки на туры'), null=True, blank=True,)
+    conflicts  = models.BooleanField(_('Были конфликты?'), default=False)
+    conflicts_review = models.TextField(_('Описание конфликта'), null=True, blank=True,)
+    legal_restrictions  = models.BooleanField(_('Были конфликты?'), default=False)
+    legal_restrictions_review = models.TextField(_('Описание конфликта'), null=True, blank=True,)
     aproved = models.BooleanField(default=False)
 
     class Meta:
@@ -33,6 +28,7 @@ class Individual(VerificationRequest):
     passport_code_issued_by = models.CharField(_('Паспорт код подразделения'), max_length=25,)
     passport_issued_by = models.CharField(_('Паспорт кем выдан'), max_length=255,)
     passport_date = models.DateField(_('Паспорт дата выдачи'))
+    expert = models.OneToOneField('accounts.Expert', verbose_name=_('Эксперт'), on_delete=models.PROTECT, related_name='individual_verification')
 
     class Meta:
         verbose_name = _('Запрос на проверку физ лицо')
@@ -44,6 +40,7 @@ class Legal(VerificationRequest):
     recipient_ogrn = models.CharField(_('ОГРН Получателя'), max_length=255)
     recipient_legal_address = models.CharField(_('Юр адрес'), max_length=255)
     recipient_real_address = models.CharField(_('Фактический адрес'), max_length=255)
+    expert = models.OneToOneField('accounts.Expert', verbose_name=_('Эксперт'), on_delete=models.PROTECT, related_name='legal_verification')
     
     
     class Meta:
