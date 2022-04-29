@@ -273,18 +273,19 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
         instance = self.get_object()
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        data = serializer.data
         if request.data.get('residency'):
-            serializer.data['residency_id'] = request.data.get('residency')['id']
+            data['residency_id'] = request.data.get('residency')['id']
         if hasattr(instance, 'individual_verification'):
-            Individual.objects.filter(expert_id=instance.id).update(**serializer.data)
+            Individual.objects.filter(expert_id=instance.id).update(**data)
         else:
             Individual.objects.create(expert_id=instance.id, **serializer.data)
         individual_verification = Individual.objects.get(expert_id=instance.id)
-        if request.data.get('tour_countries'):
-            tour_countries = request.data.pop('tour_countries')
-            ids = map(lambda tour_countries: tour_countries.get('id'), tour_countries)
+        if request.data.get('tours_countries'):
+            tours_countries = request.data.pop('tours_countries')
+            ids = map(lambda tour_countries: tours_countries.get('id'), tours_countries)
             objects = TourMixin().get_mtm_objects(Country, ids)
-            individual_verification.tour_countries.set(objects)
+            individual_verification.tours_countries.set(objects)
         individual_verification = Individual.objects.get(expert_id=instance.id)
         return Response(IndividualSerializer(individual_verification).data, status=201)
 
