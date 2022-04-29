@@ -1,4 +1,4 @@
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView, DestroyAPIView
 from rest_framework.response import Response
 from rest_framework import permissions
 
@@ -15,3 +15,9 @@ class DocumentScanView(CreateAPIView):
     def perform_create(self, serializer):
         expert = Expert.objects.get(pk=self.request.user.id)
         serializer.save(expert=expert)
+
+
+class DocumentScanDestroyView(DestroyAPIView):
+    queryset = Scan.objects.all()
+    serializer_class = ScanSerializer
+    permission_classes = [permissions.IsAuthenticated]
