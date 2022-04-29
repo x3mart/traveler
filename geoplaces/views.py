@@ -30,7 +30,7 @@ class RegionViewSet(viewsets.ModelViewSet):
         
 
 class CountryViewSet(viewsets.ModelViewSet):
-    queryset = Country.objects.all().order_by['name']
+    queryset = Country.objects.all().order_by('name')
     serializer_class = CountrySerializer
     permission_classes = [AllowAny]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
