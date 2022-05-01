@@ -9,7 +9,7 @@ class Ticket(models.Model):
         (2, 'В работе'),
         (3, 'Закрыта'),
     )
-    stuff = models.ForeignKey('accounts.User', on_delete=models.PROTECT, verbose_name=_('Сотрудник'), related_name='stuff_chats', null=True, blank=True)
+    staff = models.ForeignKey('accounts.User', on_delete=models.PROTECT, verbose_name=_('Сотрудник'), related_name='stuff_chats', null=True, blank=True)
     user = models.ForeignKey('accounts.User', on_delete=models.PROTECT, verbose_name=_('Пользователь'), related_name='user_chats')
     status = models.PositiveIntegerField(_('Статус'), default=1, choices=STATUSES)
     tg_chat = models.BigIntegerField(_('id tg чата'))

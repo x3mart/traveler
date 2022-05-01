@@ -1,4 +1,5 @@
 import json
+from django.dispatch import receiver
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
@@ -6,6 +7,7 @@ from rest_framework import permissions
 import requests
 from django.template.loader import render_to_string
 from django.contrib.auth import authenticate
+from accounts.models import User
 
 from supports.models import SupportChatMessage, Ticket
 from .models import *
@@ -14,7 +16,7 @@ from traveler.settings import TG_URL
 
 
 # Create your views here.
-COMMANDS_LIST = ('start', 'login', 'confirm_phone', 'create_ticket', 'cancel', 'close_ticket')
+COMMANDS_LIST = ('start', 'login', 'confirm_phone', 'create_ticket', 'cancel', 'close_ticket', 'set_to_staff', 'answer_to_user', 'proposal_to_close', 'close_ticket', 'show_last_messages', 'boss_got_new_ticket')
 
 def get_tg_account(user):
     tg_account, created = TelegramAccount.objects.get_or_create(tg_id=user['id'])
@@ -30,19 +32,19 @@ def get_tg_account(user):
 @permission_classes((permissions.AllowAny,))
 def tg_update_handler(request):
     response = SendMessage(chat_id=1045490278, text=request.data).send()
-    try:
-        update = Update(request.data)
-        if hasattr(update,'message'):
-            # response = SendMessage(chat_id=1045490278, text=request.data).send()
-            response = update.message_dispatcher()
-        elif hasattr(update,'callback_query'):
-            update.callback_dispatcher()
+    # try:
+    update = Update(request.data)
+    if hasattr(update,'message'):
+        # response = SendMessage(chat_id=1045490278, text=request.data).send()
+        response = update.message_dispatcher()
+    elif hasattr(update,'callback_query'):
+        update.callback_dispatcher()
         # method = "sendMessage"
         # send_message = SendMessage(chat_id=1045490278, text=f'{request.data}')
         # data = SendMessageSerializer(send_message).data
         # requests.post(TG_URL + method, data)
-    except:
-       response2 = SendMessage(chat_id=1045490278, text='response').send()
+    # except:
+    #    response2 = SendMessage(chat_id=1045490278, text='response').send()
     return Response({}, status=200)
 
 class Update():
@@ -149,6 +151,32 @@ class Update():
             self.tg_account.save()
             reply_markup = ReplyMarkup().get_markup('start', self.tg_account)
             response = SendMessage(chat_id, 'Заявка отменена', reply_markup).send()
+        elif command == 'set_to_staff':
+            ticket = Ticket.objects.get(pk=int(args[1]))
+            staff = User.objects.get(pk=int(args[0]))
+            user = ticket.user
+            ticket.staff = staff
+            ticket.status = 2
+            ticket.save()
+            response = SendMessage(user.telegram_account.tg_id, 'Заявка ушла в работу. Наш сотрудник ответит в ближайшее время').send()
+            messages = SupportChatMessage.objects.filter(ticket=ticket)
+            messages.update(receiver=staff)
+            response = SendMessage(staff.telegram_account.tg_id, f'Вам назначена заявка №{ticket.id} от {user.full_name}').send()
+            for chat_message in messages:
+                response = SendMessage(staff.telegram_account.tg_id, chat_message.text).send()
+            reply_markup = ReplyMarkup(ticket).get_markup('answer_to_user', self.tg_account)
+            response = SendMessage(staff.telegram_account.tg_id, f'{user.full_name} очень ждет вашего ответа', reply_markup).send()
+        elif command == 'answer_to_user':
+            ticket = Ticket.objects.get(pk=int(args[0]))
+            response = SendMessage(staff.telegram_account.tg_id, f'Введите сообщение для пользователя {ticket.user.full_name}', reply_markup).send()
+            self.tg_account.await_reply = True
+            self.tg_account.reply_type = 'answering'
+            self.tg_account.reply_1 = ticket.id
+            self.tg_account.save()
+        elif command == 'boss_got_new_ticket':
+            ticket = Ticket.objects.get(pk=args[0])
+            reply_markup = ReplyMarkup(ticket).get_markup(command, self.tg_account)
+            response = SendMessage(self.tg_account, f'Кого назначим на заявку №{ticket.id} от пользователя {ticket.user.full_name}?', reply_markup).send()
         else:
             response = None
         return response
@@ -192,20 +220,52 @@ class Update():
             response = SendMessage(self.message.chat.id, text, reply_markup).send()
         elif self.tg_account.reply_type =='create_ticket':
             ticket = Ticket.objects.create(user=self.tg_account.account.expert, tg_chat=chat_id)
-            message = SupportChatMessage.objects.create(sender=self.tg_account.account.expert, tg_message=message.message_id, sender_chat_id=chat_id, text=message.text, ticket=ticket)
+            chat_message = SupportChatMessage.objects.create(sender=self.tg_account.account.expert, tg_message=message.message_id, sender_chat_id=chat_id, text=message.text, ticket=ticket)
             self.tg_account.reply_type ='ticket'
             self.tg_account.save()
             text = render_to_string('ticket_created.html', {'ticket':ticket})
             response = SendMessage(chat_id, text).send()
+            bosses = TelegramAccount.objects.filter(account__groups__name='support_boss')
+            text = render_to_string('boss_new_ticket.html', {'ticket':ticket})
+            for boss in bosses:
+                reply_markup = ReplyMarkup(ticket=ticket).get_markup('boss_got_new_ticket', self.tg_account)
+                response = SendMessage(boss.tg_id, text, reply_markup).send()                
         elif self.tg_account.reply_type =='ticket' and not command:
             ticket = Ticket.objects.filter(user_id=self.tg_account.account_id).filter(status__in=[1,2]).order_by('-id').first()
-            message = SupportChatMessage.objects.create(sender=self.tg_account.account.expert, tg_message=message.message_id, sender_chat_id=chat_id, text=message.text, ticket_id=ticket.id)
-            response = None
+            chat_message = SupportChatMessage.objects.create(sender=self.tg_account.account.expert, tg_message=message.message_id, sender_chat_id=chat_id, text=message.text, ticket_id=ticket.id, receiver=ticket.staff)
+            if ticket.staff:
+                reply_markup = ReplyMarkup().get_markup('answer_to_user', self.tg_account)
+                text = render_to_string('message_from_user.html', {'ticket':ticket, 'message':message})
+                response = SendMessage(ticket.staff.telegram_account.tg_id, text, reply_markup).send()
+            else:
+                response = None
+        elif self.tg_account.reply_type =='answering' and not command:
+            ticket = Ticket.objects.get(pk=self.tg_account.reply_1)
+            chat_message = SupportChatMessage.objects.create(sender=self.tg_account.account, tg_message=message.message_id, sender_chat_id=chat_id, text=message.text, ticket_id=ticket.id, receiver=ticket.user)
+            reply_markup = ReplyMarkup().get_markup('answer_to_staff', self.tg_account)
+            text = render_to_string('message_from_staff.html', {'ticket':ticket, 'message':message})
+            response = SendMessage(ticket.user.telegram_account.tg_id, text, reply_markup).send()
+            self.tg_account.await_reply = False
+            self.tg_account.reply_type = None
+            self.tg_account.reply_1 = None
+            self.tg_account.save()
         elif self.tg_account.reply_type =='ticket' and command == 'close_ticket':
             self.tg_account.await_reply = False
             self.tg_account.reply_type = None
             self.tg_account.save()
             ticket = Ticket.objects.filter(user_id=self.tg_account.account_id).filter(status__in=[1,2]).order_by('-id').first()
+            ticket.status = 3
+            ticket.save()
+            reply_markup = ReplyMarkup().get_markup('start', self.tg_account)
+            response = SendMessage(chat_id, 'Заявка закрыта', reply_markup).send()
+        elif command == 'close_ticket':
+            self.tg_account.await_reply = False
+            self.tg_account.reply_type = None
+            self.tg_account.reply_1 = None
+            self.tg_account.save()
+            ticket = Ticket.objects.get(pk=int(args[0]))
+            ticket.status = 3
+            ticket.save()
             reply_markup = ReplyMarkup().get_markup('start', self.tg_account)
             response = SendMessage(chat_id, 'Заявка закрыта', reply_markup).send()
         else:
@@ -259,8 +319,8 @@ class SendMessage():
 
 
 class ReplyMarkup():
-    def __init__(self):
-        pass
+    def __init__(self, ticket=None):
+        self.ticket = ticket
 
     def get_markup(self, name, tg_account=None, **kwargs):
         if name == 'start' and tg_account and tg_account.account and hasattr(tg_account.account, 'expert') and tg_account.account.expert.phone_confirmed:
@@ -270,9 +330,33 @@ class ReplyMarkup():
             button1 = InlineButton(text='Подтвердить телефон', callback_data=f'/confirm_phone')
             button2 = InlineButton(text='Создать заявку', callback_data=f'/create_ticket')
             keyboard = [[button1],[button2]]
+        elif name == 'start' and tg_account and tg_account.account and tg_account.account.groups.filter(name='support_boss'):
+            new_tickets = Ticket.objects.filter(status__in=[1])
+            open_tickets = Ticket.objects.filter(status__in=[2]).filter(staff=tg_account.account)
+            keyboard = []
+            for ticket in new_tickets:
+                button = InlineButton(text=f'Новая аявка №{ticket.id}', callback_data=f'/boss_got_new_ticket {ticket.id}')
+                keyboard.append([button])
+            for ticket in open_tickets:
+                button = InlineButton(text=f'Открытая заявка №{ticket.id}', callback_data=f'/show_last_messages {ticket.id}')
+                keyboard.append([button])
         elif name == 'create_ticket':
             button1 = InlineButton(text='Отменить', callback_data=f'/cancel')
             keyboard = [[button1]]
+        elif name == 'boss_got_new_ticket':
+            staffs = User.objects.filter(groups__name='support_staff')
+            keyboard = []
+            for staff in staffs:
+                button = InlineButton(text=f'{staff.full_name}', callback_data=f'/set_to_staff {staff.id} {self.ticket.id}')
+                keyboard.append([button])
+        elif name == 'answer_to_user':
+            button1 = InlineButton(text=f'Ответить пользователю {self.ticket.user.full_name}', callback_data=f'/answer_to_user {self.ticket.id}')
+            button2 = InlineButton(text=f'Предложить закрыть заявку №{self.ticket.id}', callback_data=f'/proposal_to_close {self.ticket.id}')
+            button3 = InlineButton(text=f'Закрыть заявку №{self.ticket.id} самому', callback_data=f'/close_ticket {self.ticket.id}')
+            keyboard = [[button1], [button2], [button3]]
+        elif name == 'answer_to_staff':
+            button = InlineButton(text=f'Закрыть заявку №{self.ticket.id} самому', callback_data=f'/close_ticket {self.ticket.id}')
+            keyboard = [[button]]
         else:
             button1 = InlineButton(text='Авторизация', callback_data=f'/login')
             keyboard = [[button1]]

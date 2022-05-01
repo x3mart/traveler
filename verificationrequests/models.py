@@ -8,7 +8,7 @@ class VerificationRequest(models.Model):
     commercial_tours  = models.CharField(_('Коммерческие туры'), max_length=6, null=True, blank=True,)
     commercial_tours_yearly = models.CharField(_('Туры в год'), max_length=6, null=True, blank=True,)
     reviews_links = models.TextField(_('Ссылки на отзывы'), null=True, blank=True,)
-    tours_countries = models.ManyToManyField('geoplaces.Country', verbose_name=_('В какие страны туры'), null=True, blank=True,)
+    tours_countries = models.ManyToManyField('geoplaces.Country', verbose_name=_('В какие страны туры'), blank=True,)
     tours_links = models.TextField(_('Ссылки на туры'), null=True, blank=True,)
     conflicts  = models.TextField(_('Были конфликты?'), max_length=6, default='no')
     conflicts_review = models.TextField(_('Описание конфликта'), null=True, blank=True,)
