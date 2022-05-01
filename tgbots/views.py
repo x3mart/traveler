@@ -237,6 +237,7 @@ class Update():
                 reply_markup = ReplyMarkup().get_markup('answer_to_user', self.tg_account)
                 text = render_to_string('message_from_user.html', {'ticket':ticket, 'message':message})
                 response = SendMessage(ticket.staff.telegram_account.tg_id, text, reply_markup).send()
+                chat_message.reciever = ticket.staff
             else:
                 response = None
         elif self.tg_account.reply_type =='answering' and not command:
