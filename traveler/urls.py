@@ -51,6 +51,7 @@ urlpatterns = [
     path('api/', include('docs.urls')),
     path('api/', include('bankdetails.urls')),
     path('api/', include('verificationrequests.urls')),
+    path('api/', include('tgbots.urls')),
     # test google-oauth2
     path('account/profile/', RedirectSocial.as_view()),
     # temporary password recovery Must be deleted on production
