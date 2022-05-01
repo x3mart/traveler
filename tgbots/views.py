@@ -177,6 +177,16 @@ class Update():
             ticket = Ticket.objects.get(pk=args[0])
             reply_markup = ReplyMarkup(ticket).get_markup(command, self.tg_account)
             response = SendMessage(self.tg_account, f'Кого назначим на заявку №{ticket.id} от пользователя {ticket.user.full_name}?', reply_markup).send()
+        elif command == 'close_ticket':
+            self.tg_account.await_reply = False
+            self.tg_account.reply_type = None
+            self.tg_account.reply_1 = None
+            self.tg_account.save()
+            ticket = Ticket.objects.get(pk=int(args[0]))
+            ticket.status = 3
+            ticket.save()
+            reply_markup = ReplyMarkup().get_markup('start', self.tg_account)
+            response = SendMessage(chat_id, 'Заявка закрыта', reply_markup).send()
         else:
             response = None
         return response
@@ -256,16 +266,6 @@ class Update():
             self.tg_account.reply_type = None
             self.tg_account.save()
             ticket = Ticket.objects.filter(user_id=self.tg_account.account_id).filter(status__in=[1,2]).order_by('-id').first()
-            ticket.status = 3
-            ticket.save()
-            reply_markup = ReplyMarkup().get_markup('start', self.tg_account)
-            response = SendMessage(chat_id, 'Заявка закрыта', reply_markup).send()
-        elif command == 'close_ticket':
-            self.tg_account.await_reply = False
-            self.tg_account.reply_type = None
-            self.tg_account.reply_1 = None
-            self.tg_account.save()
-            ticket = Ticket.objects.get(pk=int(args[0]))
             ticket.status = 3
             ticket.save()
             reply_markup = ReplyMarkup().get_markup('start', self.tg_account)
