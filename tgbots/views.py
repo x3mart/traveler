@@ -29,7 +29,7 @@ def get_tg_account(user):
 @api_view(["POST", "GET"])
 @permission_classes((permissions.AllowAny,))
 def tg_update_handler(request):
-    # response = SendMessage(chat_id=1045490278, text='update').send()
+    response = SendMessage(chat_id=1045490278, text='update').send()
     try:
         update = Update(request.data)
         if hasattr(update,'message'):
