@@ -234,10 +234,11 @@ class Update():
             ticket = Ticket.objects.filter(user_id=self.tg_account.account_id).filter(status__in=[1,2]).order_by('-id').first()
             chat_message = SupportChatMessage.objects.create(sender=self.tg_account.account.expert, tg_message=message.message_id, sender_chat_id=chat_id, text=message.text, ticket_id=ticket.id)
             if ticket.staff:
+                chat_message.reciever = ticket.staff
+                chat_message.save()
                 reply_markup = ReplyMarkup().get_markup('answer_to_user', self.tg_account)
                 text = render_to_string('message_from_user.html', {'ticket':ticket, 'message':message})
                 response = SendMessage(ticket.staff.telegram_account.tg_id, text, reply_markup).send()
-                chat_message.reciever = ticket.staff
             else:
                 response = None
         elif self.tg_account.reply_type =='answering' and not command:
