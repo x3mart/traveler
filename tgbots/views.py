@@ -232,7 +232,7 @@ class Update():
                 response = SendMessage(boss.tg_id, text, reply_markup).send()                
         elif self.tg_account.reply_type =='ticket' and not command:
             ticket = Ticket.objects.filter(user_id=self.tg_account.account_id).filter(status__in=[1,2]).order_by('-id').first()
-            chat_message = SupportChatMessage.objects.create(sender=self.tg_account.account.expert, tg_message=message.message_id, sender_chat_id=chat_id, text=message.text, ticket_id=ticket.id, receiver=ticket.staff)
+            chat_message = SupportChatMessage.objects.create(sender=self.tg_account.account.expert, tg_message=message.message_id, sender_chat_id=chat_id, text=message.text, ticket_id=ticket.id)
             if ticket.staff:
                 reply_markup = ReplyMarkup().get_markup('answer_to_user', self.tg_account)
                 text = render_to_string('message_from_user.html', {'ticket':ticket, 'message':message})
