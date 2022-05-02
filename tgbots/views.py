@@ -188,14 +188,14 @@ class Update():
             response = SendMessage(ticket.user.tg_account.tg_id, 'Заявка №{ticket.id} закрыта', reply_markup).send()
             reply_markup = ReplyMarkup().get_markup('start', ticket.staff.tg_account)
             response = SendMessage(ticket.staff.tg_account, f'Заявка №{ticket.id} закрыта', reply_markup).send()
-        elif command == 'show_last_messages ':
+        elif command == 'show_last_messages':
             ticket = Ticket.objects.get(pk=int(args[0]))
             messages = SupportChatMessage.objects.filter(ticket=ticket).order_by('id')
             for chat_message in messages:
-                # text = render_to_string('message_from.html', {'message':chat_message})
-                response = SendMessage(chat_id, 'text').send()
-            # reply_markup = ReplyMarkup(ticket).get_markup('answer_to_user', self.tg_account)
-            # response = SendMessage(chat_id, '', reply_markup).send()
+                text = render_to_string('message_from.html', {'message':chat_message})
+                response = SendMessage(chat_id, text).send()
+            reply_markup = ReplyMarkup(ticket).get_markup('answer_to_user', self.tg_account)
+            response = SendMessage(chat_id, '', reply_markup).send()
         else:
             response = None
         return response
