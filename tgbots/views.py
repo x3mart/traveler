@@ -15,7 +15,7 @@ from traveler.settings import TG_URL
 
 
 # Create your views here.
-COMMANDS_LIST = ('start', 'login', 'confirm_phone', 'create_ticket', 'cancel', 'close_ticket', 'set_to_staff', 'answer_to_user', 'proposal_to_close', 'close_ticket', 'show_last_messages', 'boss_got_new_ticket')
+COMMANDS_LIST = ('start', 'login', 'confirm_phone', 'create_ticket', 'cancel', 'set_to_staff', 'answer_to_user', 'proposal_to_close', 'close_ticket', 'show_last_messages', 'boss_got_new_ticket')
 
 def get_tg_account(user):
     tg_account, created = TelegramAccount.objects.get_or_create(tg_id=user['id'])
@@ -30,20 +30,20 @@ def get_tg_account(user):
 @api_view(["POST", "GET"])
 @permission_classes((permissions.AllowAny,))
 def tg_update_handler(request):
-    response = SendMessage(chat_id=1045490278, text=request.data).send()
-    try:
-        update = Update(request.data)
-        if hasattr(update,'message'):
-            # response = SendMessage(chat_id=1045490278, text=request.data).send()
-            response = update.message_dispatcher()
-        elif hasattr(update,'callback_query'):
-            update.callback_dispatcher()
+    # response = SendMessage(chat_id=1045490278, text=request.data).send()
+    # try:
+    update = Update(request.data)
+    if hasattr(update,'message'):
+        # response = SendMessage(chat_id=1045490278, text=request.data).send()
+        response = update.message_dispatcher()
+    elif hasattr(update,'callback_query'):
+        update.callback_dispatcher()
         # method = "sendMessage"
         # send_message = SendMessage(chat_id=1045490278, text=f'{request.data}')
         # data = SendMessageSerializer(send_message).data
         # requests.post(TG_URL + method, data)
-    except:
-       response2 = SendMessage(chat_id=1045490278, text='response').send()
+    # except:
+    #    response2 = SendMessage(chat_id=1045490278, text='response').send()
     return Response({}, status=200)
 
 class Update():
@@ -177,18 +177,17 @@ class Update():
             reply_markup = ReplyMarkup(ticket).get_markup(command, self.tg_account)
             response = SendMessage(self.tg_account.tg_id, f'Кого назначим на заявку №{ticket.id} от пользователя {ticket.user.full_name}?', reply_markup).send()
         elif command == 'close_ticket':
-            response = SendMessage(chat_id, f'еуче', reply_markup).send()
             ticket = Ticket.objects.get(pk=int(args[0]))
-            ticket.user.tg_account.await_reply = False
-            ticket.user.tg_account.reply_type = None
-            ticket.user.tg_account.reply_1 = None
-            ticket.user.tg_account.save()
+            ticket.user.telegram_account.await_reply = False
+            ticket.user.telegram_account.reply_type = None
+            ticket.user.telegram_account.reply_1 = None
+            ticket.user.telegram_account.save()
             ticket.status = 3
             ticket.save()
-            reply_markup = ReplyMarkup().get_markup('start', ticket.user.tg_account)
-            response = SendMessage(ticket.user.tg_account.tg_id, 'Заявка №{ticket.id} закрыта', reply_markup).send()
-            reply_markup = ReplyMarkup().get_markup('start', ticket.staff.tg_account)
-            response = SendMessage(ticket.staff.tg_account, f'Заявка №{ticket.id} закрыта', reply_markup).send()
+            reply_markup = ReplyMarkup().get_markup('start', ticket.user.telegram_account)
+            response = SendMessage(ticket.user.telegram_account.tg_id, f'Заявка №{ticket.id} закрыта', reply_markup).send()
+            reply_markup = ReplyMarkup().get_markup('start', ticket.staff.telegram_account)
+            response = SendMessage(ticket.staff.telegram_account, f'Заявка №{ticket.id} закрыта', reply_markup).send()
         elif command == 'show_last_messages':
             ticket = Ticket.objects.get(pk=int(args[0]))
             messages = SupportChatMessage.objects.filter(ticket=ticket).order_by('id')
@@ -196,7 +195,7 @@ class Update():
                 text = render_to_string('message_from.html', {'message':chat_message})
                 response = SendMessage(chat_id, text).send()
             reply_markup = ReplyMarkup(ticket).get_markup('answer_to_user', self.tg_account)
-            response = SendMessage(chat_id, 'Будем отвечать?', reply_markup).send()
+            response = SendMessage(chat_id, 'Будем отвечать или закроем?', reply_markup).send()
         else:
             response = None
         return response
