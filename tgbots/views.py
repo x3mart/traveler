@@ -7,7 +7,7 @@ import requests
 from django.template.loader import render_to_string
 from django.contrib.auth import authenticate
 from accounts.models import User
-
+from datetime import timezone
 from supports.models import SupportChatMessage, Ticket
 from .models import *
 from .serializers import *
@@ -156,6 +156,7 @@ class Update():
             user = ticket.user
             ticket.staff = staff
             ticket.status = 2
+            ticket.accepted_at = timezone.now()
             ticket.save()
             response = SendMessage(user.telegram_account.tg_id, 'Заявка ушла в работу. Наш сотрудник ответит в ближайшее время').send()
             messages = SupportChatMessage.objects.filter(ticket=ticket)
@@ -183,6 +184,7 @@ class Update():
             ticket.user.telegram_account.reply_1 = None
             ticket.user.telegram_account.save()
             ticket.status = 3
+            ticket.closed_at = timezone.now()
             ticket.save()
             reply_markup = ReplyMarkup().get_markup('start', ticket.user.telegram_account)
             response = SendMessage(ticket.user.telegram_account.tg_id, f'Заявка №{ticket.id} закрыта', reply_markup).send()
