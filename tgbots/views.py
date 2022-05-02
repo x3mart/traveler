@@ -186,8 +186,9 @@ class Update():
             ticket.save()
             reply_markup = ReplyMarkup().get_markup('start', ticket.user.telegram_account)
             response = SendMessage(ticket.user.telegram_account.tg_id, f'Заявка №{ticket.id} закрыта', reply_markup).send()
-            reply_markup = ReplyMarkup().get_markup('start', ticket.staff.telegram_account)
-            response = SendMessage(ticket.staff.telegram_account, f'Заявка №{ticket.id} закрыта', reply_markup).send()
+            if ticket.staff:
+                reply_markup = ReplyMarkup().get_markup('start', ticket.staff.telegram_account)
+                response = SendMessage(ticket.staff.telegram_account, f'Заявка №{ticket.id} закрыта', reply_markup).send()
         elif command == 'show_last_messages':
             ticket = Ticket.objects.get(pk=int(args[0]))
             messages = SupportChatMessage.objects.filter(ticket=ticket).order_by('id')
