@@ -176,7 +176,7 @@ class Update():
         elif command == 'boss_got_new_ticket':
             ticket = Ticket.objects.get(pk=args[0])
             reply_markup = ReplyMarkup(ticket).get_markup(command, self.tg_account)
-            response = SendMessage(self.tg_account, f'Кого назначим на заявку №{ticket.id} от пользователя {ticket.user.full_name}?', reply_markup).send()
+            response = SendMessage(self.tg_account.tg_id, f'Кого назначим на заявку №{ticket.id} от пользователя {ticket.user.full_name}?', reply_markup).send()
         elif command == 'close_ticket':
             self.tg_account.await_reply = False
             self.tg_account.reply_type = None
