@@ -7,7 +7,7 @@ import requests
 from django.template.loader import render_to_string
 from django.contrib.auth import authenticate
 from accounts.models import User
-from datetime import timezone
+from django.utils import timezone
 from supports.models import SupportChatMessage, Ticket
 from .models import *
 from .serializers import *
