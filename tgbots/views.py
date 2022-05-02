@@ -177,15 +177,25 @@ class Update():
             reply_markup = ReplyMarkup(ticket).get_markup(command, self.tg_account)
             response = SendMessage(self.tg_account.tg_id, f'Кого назначим на заявку №{ticket.id} от пользователя {ticket.user.full_name}?', reply_markup).send()
         elif command == 'close_ticket':
-            self.tg_account.await_reply = False
-            self.tg_account.reply_type = None
-            self.tg_account.reply_1 = None
-            self.tg_account.save()
+            ticket.user.tg_account.await_reply = False
+            ticket.user.tg_account.reply_type = None
+            ticket.user.tg_account.reply_1 = None
+            ticket.user.tg_account.save()
             ticket = Ticket.objects.get(pk=int(args[0]))
             ticket.status = 3
             ticket.save()
-            reply_markup = ReplyMarkup().get_markup('start', self.tg_account)
-            response = SendMessage(chat_id, 'Заявка закрыта', reply_markup).send()
+            reply_markup = ReplyMarkup().get_markup('start', ticket.user.tg_account)
+            response = SendMessage(ticket.user.tg_account.tg_id, 'Заявка №{ticket.id} закрыта', reply_markup).send()
+            reply_markup = ReplyMarkup().get_markup('start', ticket.staff.tg_account)
+            response = SendMessage(ticket.staff.tg_account, f'Заявка №{ticket.id} закрыта', reply_markup).send()
+        elif command == 'show_last_messages ':
+            ticket = Ticket.objects.get(pk=int(args[0]))
+            messages = SupportChatMessage.objects.filter(ticket=ticket).order_by('id')
+            for chat_message in messages:
+                text = render_to_string('message_from.html', {'message':message})
+                response = SendMessage(chat_id, text).send()
+            reply_markup = ReplyMarkup(ticket).get_markup('answer_to_user', self.tg_account)
+            response = SendMessage(chat_id, '', reply_markup).send()
         else:
             response = None
         return response
@@ -260,15 +270,6 @@ class Update():
             self.tg_account.reply_type = None
             self.tg_account.reply_1 = None
             self.tg_account.save()
-        elif self.tg_account.reply_type =='ticket' and command == 'close_ticket':
-            self.tg_account.await_reply = False
-            self.tg_account.reply_type = None
-            self.tg_account.save()
-            ticket = Ticket.objects.filter(user_id=self.tg_account.account_id).filter(status__in=[1,2]).order_by('-id').first()
-            ticket.status = 3
-            ticket.save()
-            reply_markup = ReplyMarkup().get_markup('start', self.tg_account)
-            response = SendMessage(chat_id, 'Заявка закрыта', reply_markup).send()
         else:
             response = self.command_dispatcher(command, args) if command else None 
             self.tg_account.await_reply = False
@@ -352,11 +353,10 @@ class ReplyMarkup():
                 keyboard.append([button])
         elif name == 'answer_to_user':
             button1 = InlineButton(text=f'Ответить пользователю {self.ticket.user.full_name}', callback_data=f'/answer_to_user {self.ticket.id}')
-            button2 = InlineButton(text=f'Предложить закрыть заявку №{self.ticket.id}', callback_data=f'/proposal_to_close {self.ticket.id}')
-            button3 = InlineButton(text=f'Закрыть заявку №{self.ticket.id} самому', callback_data=f'/close_ticket {self.ticket.id}')
-            keyboard = [[button1], [button2], [button3]]
+            button2 = InlineButton(text=f'Закрыть заявку №{self.ticket.id}', callback_data=f'/close_ticket {self.ticket.id}')
+            keyboard = [[button1], [button2]]
         elif name == 'answer_to_staff':
-            button = InlineButton(text=f'Закрыть заявку №{self.ticket.id} самому', callback_data=f'/close_ticket {self.ticket.id}')
+            button = InlineButton(text=f'Закрыть заявку №{self.ticket.id}', callback_data=f'/close_ticket {self.ticket.id}')
             keyboard = [[button]]
         else:
             button1 = InlineButton(text='Авторизация', callback_data=f'/login')
