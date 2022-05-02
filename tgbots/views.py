@@ -168,7 +168,7 @@ class Update():
             response = SendMessage(staff.telegram_account.tg_id, f'{user.full_name} очень ждет вашего ответа', reply_markup).send()
         elif command == 'answer_to_user':
             ticket = Ticket.objects.get(pk=int(args[0]))
-            response = SendMessage(ticket.staff.telegram_account.tg_id, f'Введите сообщение для пользователя {ticket.user.full_name}', reply_markup).send()
+            response = SendMessage(ticket.staff.telegram_account.tg_id, f'Введите сообщение для пользователя {ticket.user.full_name}').send()
             self.tg_account.await_reply = True
             self.tg_account.reply_type = 'answering'
             self.tg_account.reply_1 = ticket.id
