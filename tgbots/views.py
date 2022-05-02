@@ -194,8 +194,8 @@ class Update():
             for chat_message in messages:
                 text = render_to_string('message_from.html', {'message':chat_message})
                 response = SendMessage(chat_id, text).send()
-            reply_markup = ReplyMarkup(ticket).get_markup('answer_to_user', self.tg_account)
-            response = SendMessage(chat_id, '', reply_markup).send()
+            # reply_markup = ReplyMarkup(ticket).get_markup('answer_to_user', self.tg_account)
+            # response = SendMessage(chat_id, '', reply_markup).send()
         else:
             response = None
         return response
