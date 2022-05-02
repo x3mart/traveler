@@ -136,3 +136,8 @@ class Customer(User):
     class Meta:
         verbose_name = _('Покупатели')
         verbose_name_plural = _('Покупатель')
+
+
+class PhoneConfirm(models.Model):
+    user = models.ForeignKey('accounts.User', on_delete=models.CASCADE, related_name='phone_confirms')
+    code = models.CharField(max_length=4)

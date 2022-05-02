@@ -4,7 +4,7 @@ from rest_framework.decorators import action
 from accounts.permissions import TeamMemberPermission, UserPermission, CustomerPermission, ExpertPermission
 from accounts.serializers import AvatarSerializer, CustomerMeSerializer, EmailActivationSerializer, ExpertListSerializer, ExpertMeSerializer, ExpertSerializer, TeamMemberSerializer, UserSerializer, CustomerSerializer
 from rest_framework import viewsets, status
-from accounts.models import Expert, TeamMember, User, Customer
+from accounts.models import Expert, PhoneConfirm, TeamMember, User, Customer
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -31,7 +31,7 @@ from verificationrequests.models import Legal, Individual
 from tours.mixins import TourMixin
 import random
 import json
-from traveler.settings import WRITE_KEY, KEY_NEWTEL
+from traveler.settings import FLASH_CALL
 from utils.times import get_timestamp_str
 import hashlib
 
@@ -210,21 +210,37 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
         expert.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
-    @action(["post"], detail=False)
+    @action(["post"], detail=True)
     def send_confirmation_call(self, request, *args, **kwargs):
-        user = request.user
-
-        data = json.dumps({
-            "dstNumber":str(user.phone).lstrip('+'),
-            "pin":str(random.randint(1000,9999)),
-        })
-        time = get_timestamp_str()
-        token_str = f"call-password/start-password-call\n{time}\n{KEY_NEWTEL}\n{data}\n{WRITE_KEY}".encode('utf-8')
-        token = KEY_NEWTEL + time + hashlib.sha256(token_str).hexdigest()
-        headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
-        response = requests.post('https://api.new-tel.net/call-password/start-password-call', data=data, headers=headers)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        user = self.get_object()
+        code =  str(random.randint(1000,9999))
+        data = json.dumps([{
+                        "channelType": "FLASHCALL",
+                        "senderName": "Santa",
+                        "destination": str(user.phone).lstrip('+'),
+                        "content": code
+                        }])
+        # time = get_timestamp_str()
+        # token_str = f"call-password/start-password-call\n{time}\n{KEY_NEWTEL}\n{data}\n{WRITE_KEY}".encode('utf-8')
+        # token = KEY_NEWTEL + time + hashlib.sha256(token_str).hexdigest()
+        headers = {"Authorization": FLASH_CALL, "Content-Type": "application/json"}
+        response = requests.post('https://direct.i-dgtl.ru/api/v1/message', data=data, headers=headers)
+        if not response.json().get('error'):
+            PhoneConfirm.objects.create(user_id=user.id, code=code)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({'errors':response.json().get('error')}, status=403)
     
+    @action(["post"], detail=True)
+    def check_confirmation_code(self, request, *args, **kwargs):
+        user = self.get_object()
+        confirme = user.phone_confirms.filter(code=request.data.get('code'))
+        if confirme.exists():
+            user.phone_confirmed = True
+            user.save()
+            user.phone_confirms.all().delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({'code':['Не верный код']})
+        
 
     @action(["patch"], detail=True)
     def debet_card(self, request, *args, **kwargs):
