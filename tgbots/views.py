@@ -252,7 +252,7 @@ class Update():
             else:
                 response = None
         elif self.tg_account.reply_type =='answering' and not command:
-            ticket = Ticket.objects.get(pk=self.tg_account.reply_1)
+            ticket = Ticket.objects.get(pk=int(self.tg_account.reply_1))
             chat_message = SupportChatMessage.objects.create(sender=self.tg_account.account, tg_message=message.message_id, sender_chat_id=chat_id, text=message.text, ticket_id=ticket.id, receiver=ticket.user)
             reply_markup = ReplyMarkup(ticket).get_markup('answer_to_staff', self.tg_account)
             text = render_to_string('message_from_staff.html', {'ticket':ticket, 'message':message})
