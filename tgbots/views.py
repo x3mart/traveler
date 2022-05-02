@@ -178,6 +178,7 @@ class Update():
             response = SendMessage(self.tg_account.tg_id, f'Кого назначим на заявку №{ticket.id} от пользователя {ticket.user.full_name}?', reply_markup).send()
         elif command == 'close_ticket':
             ticket = Ticket.objects.get(pk=int(args[0]))
+            response = SendMessage(chat_id, f'{ticket.id}', reply_markup).send()
             ticket.user.tg_account.await_reply = False
             ticket.user.tg_account.reply_type = None
             ticket.user.tg_account.reply_1 = None
@@ -195,7 +196,7 @@ class Update():
                 text = render_to_string('message_from.html', {'message':chat_message})
                 response = SendMessage(chat_id, text).send()
             reply_markup = ReplyMarkup(ticket).get_markup('answer_to_user', self.tg_account)
-            response = SendMessage(chat_id, '', reply_markup).send()
+            response = SendMessage(chat_id, 'Будем отвечать?', reply_markup).send()
         else:
             response = None
         return response
