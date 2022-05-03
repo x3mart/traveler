@@ -6,16 +6,31 @@ from rest_framework import permissions
 import requests
 from django.template.loader import render_to_string
 from django.contrib.auth import authenticate
-from accounts.models import User
+from accounts.models import PhoneConfirm, User
 from django.utils import timezone
 from supports.models import SupportChatMessage, Ticket
 from .models import *
 from .serializers import *
 from traveler.settings import TG_URL
+import threading
+from django.core.mail import send_mail
+import random
 
 
 # Create your views here.
 COMMANDS_LIST = ('start', 'login', 'confirm_phone', 'create_ticket', 'cancel', 'set_to_staff', 'answer_to_user', 'proposal_to_close', 'close_ticket', 'show_last_messages', 'boss_got_new_ticket')
+
+class ConfirmTGEmailThread(threading.Thread):
+    def __init__(self, user):
+        self.user = user
+        threading.Thread.__init__(self)
+    
+    def run(self):
+        code =  str(random.randint(100000,999999))
+        subject = 'Код подтверждения'
+        sended = send_mail(subject, f'Ваш код подтверждения {code}', 'x3mart@gmail.com', ['x3mart@gmail.com', self.user.email,])
+        if sended:
+            PhoneConfirm.objects.create(user_id=self.user.id, code=code)
 
 def get_tg_account(user):
     tg_account, created = TelegramAccount.objects.get_or_create(tg_id=user['id'])
@@ -127,16 +142,6 @@ class Update():
             self.tg_account.reply_type = 'email'
             self.tg_account.save()
             response = SendMessage(chat_id, 'Введите email').send()
-        elif command == 'confirm_phone':
-            reply_markup = JSONRenderer().render({
-                'one_time_keyboard': True,
-                'keyboard':[[{'text':'Отправить номер телефона', 'request_contact':True}],
-                [{'text':'Отмена'}]]
-                })
-            response = SendMessage(chat_id, 'Если Ваш номер телефона указанный на сайте привязан к этому аккаунту Telegram - нажмите "Отправить номер телефона"', reply_markup).send()
-            self.tg_account.await_reply = True
-            self.tg_account.reply_type = 'phone'
-            self.tg_account.save()
         elif command == 'create_ticket' and hasattr(self.tg_account.account, 'expert'):
             self.tg_account.await_reply = True
             self.tg_account.reply_type = 'create_ticket'
@@ -207,37 +212,50 @@ class Update():
         chat_id = self.get_chat()
         message = self.get_message()
         if self.tg_account.reply_type =='email':
-            self.tg_account.reply_type = 'password'
+            self.tg_account.reply_type = 'phone'
             self.tg_account.reply_1 = text.strip()
             self.tg_account.save()
-            response = SendMessage(chat_id=self.message.chat.id, text='Введите пароль').send()
-        elif self.tg_account.reply_type =='password':
-            account = authenticate(email=self.tg_account.reply_1, password=text.strip())
+            reply_markup = JSONRenderer().render({
+                'one_time_keyboard': True,
+                'keyboard':[[{'text':'Отправить номер телефона', 'request_contact':True}],
+                [{'text':'Отмена'}]]
+                })
+            response = SendMessage(chat_id, 'Нажмите "Отправить номер телефона Если Ваш номер телефона указанный на сайте привязан к этому аккаунту Telegram - все будет хорошо! Если нет, то на ваш email, указанный при регистрации, будет от правлен код подтверждения"', reply_markup).send()
+        elif self.tg_account.reply_type =='phone':
+            account = User.objects.get(email=self.tg_account.reply_1)
             reply_markup = ReplyMarkup().get_markup('start', self.tg_account)
-            if account is not None:
-                self.tg_account.account = account
-                text = render_to_string('start_for_auth.html', {'account': account})
-                reply_markup = ReplyMarkup().get_markup('start', self.tg_account)
-                response = SendMessage(chat_id=self.message.chat.id, text=text, reply_markup=reply_markup).send()
-                response = requests.post(TG_URL + 'deleteMessage', data={'chat_id':self.message.chat.id, 'message_id': self.message.message_id})
-            else:
-                response = SendMessage(chat_id=self.message.chat.id, text='Учетные данные не верны', reply_markup=reply_markup).send()
             self.tg_account.await_reply = False
             self.tg_account.reply_type = None
             self.tg_account.reply_1 = None
-            self.tg_account.save()
-        elif self.tg_account.reply_type =='phone':
+            if hasattr(message, 'text') and message.text == 'Отмена':
+                text='Действие отменено'
+            elif account.phone and str(account.phone).lstrip('+') == message.contact['phone_number'].lstrip('+'):
+                self.tg_account.account = account
+                account.expert.phone_confirmed = True
+                account.expert.save()
+                text = render_to_string('start_for_auth.html', {'account': account})
+            else:
+                ConfirmTGEmailThread(account).start()
+                text='На почту отправлен код подтверждения'
+                reply_markup = None
+                self.tg_account.await_reply = True
+                self.tg_account.reply_type = 'code'
+                self.tg_account.reply_1 = account.email
+            self.tg_account.save()   
+            response = SendMessage(chat_id=self.message.chat.id, text=text, reply_markup=reply_markup).send()
+        elif self.tg_account.reply_type =='code':
+            account = User.objects.get(email=self.tg_account.reply_1)
+            confirm = account.phone_confirms.filter(code=message.text)
+            if confirm.exists():
+                self.tg_account.account = account
+                account.expert.phone_confirmed = True
+                account.expert.save()
+                text = render_to_string('start_for_auth.html', {'account': account})
+            else:
+                text = 'Код не верный'
             self.tg_account.await_reply = False
             self.tg_account.reply_type = None
             self.tg_account.save()
-            if hasattr(message, 'text') and message.text == 'Отмена':
-                text='Действие отменено'
-            elif self.tg_account.account.phone and str(self.tg_account.account.phone).lstrip('+') == message.contact['phone_number'].lstrip('+'):
-                self.tg_account.account.expert.phone_confirmed = True
-                self.tg_account.account.expert.save()
-                text='Номер телефона подтвержден'
-            else:
-                text='Номера телефонов не совпадают'
             reply_markup = ReplyMarkup().get_markup('start', self.tg_account)
             response = SendMessage(self.message.chat.id, text, reply_markup).send()
         elif self.tg_account.reply_type =='create_ticket':
@@ -331,10 +349,6 @@ class ReplyMarkup():
         if name == 'start' and tg_account and tg_account.account and hasattr(tg_account.account, 'expert') and tg_account.account.expert.phone_confirmed:
             button1 = InlineButton(text='Создать заявку', callback_data=f'/create_ticket')
             keyboard = [[button1]]
-        elif name == 'start' and tg_account and tg_account.account and hasattr(tg_account.account, 'expert') and not tg_account.account.expert.phone_confirmed:
-            button1 = InlineButton(text='Подтвердить телефон', callback_data=f'/confirm_phone')
-            button2 = InlineButton(text='Создать заявку', callback_data=f'/create_ticket')
-            keyboard = [[button1],[button2]]
         elif name == 'start' and tg_account and tg_account.account and tg_account.account.groups.filter(name='support_boss'):
             new_tickets = Ticket.objects.filter(status__in=[1])
             open_tickets = Ticket.objects.filter(status__in=[2]).filter(staff=tg_account.account)
