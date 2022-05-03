@@ -1,4 +1,5 @@
 from pyexpat import model
+from tabnanny import verbose
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -16,6 +17,15 @@ class Ticket(models.Model):
     created_at = models.DateTimeField(_('Создана'), auto_now_add=True)
     accepted_at = models.DateTimeField(_('Ушла в работу'), null=True, blank=True)
     closed_at = models.DateTimeField(_('Закрыта в'), null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Заявка в ТП'
+        verbose_name_plural = 'Заявки в ТП'
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f'Заявка №{self.id}'
+        
     
 
 class SupportChatMessage(models.Model):
