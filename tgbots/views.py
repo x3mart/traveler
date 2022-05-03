@@ -212,15 +212,19 @@ class Update():
         chat_id = self.get_chat()
         message = self.get_message()
         if self.tg_account.reply_type =='email':
-            self.tg_account.reply_type = 'phone'
-            self.tg_account.reply_1 = text.strip()
-            self.tg_account.save()
-            reply_markup = JSONRenderer().render({
-                'one_time_keyboard': True,
-                'keyboard':[[{'text':'Отправить номер телефона', 'request_contact':True}],
-                [{'text':'Отмена'}]]
-                })
-            response = SendMessage(chat_id, 'Нажмите "Отправить номер телефона Если Ваш номер телефона указанный на сайте привязан к этому аккаунту Telegram - все будет хорошо! Если нет, то на ваш email, указанный при регистрации, будет от правлен код подтверждения"', reply_markup).send()
+            account = User.objects.filter(email=text.strip())
+            if not account.exists():
+                response = SendMessage(chat_id, 'email в системе не зарегистрирован. Введите email:').send()
+            else:
+                self.tg_account.reply_type = 'phone'
+                self.tg_account.reply_1 = text.strip()
+                self.tg_account.save()
+                reply_markup = JSONRenderer().render({
+                    'one_time_keyboard': True,
+                    'keyboard':[[{'text':'Отправить номер телефона', 'request_contact':True}],
+                    [{'text':'Отмена'}]]
+                    })
+                response = SendMessage(chat_id, 'Нажмите "Отправить номер телефона Если Ваш номер телефона указанный на сайте привязан к этому аккаунту Telegram - все будет хорошо! Если нет, то на ваш email, указанный при регистрации, будет от правлен код подтверждения"', reply_markup).send()
         elif self.tg_account.reply_type =='phone':
             account = User.objects.get(email=self.tg_account.reply_1)
             reply_markup = ReplyMarkup().get_markup('start', self.tg_account)
