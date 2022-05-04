@@ -239,7 +239,7 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
             user.save()
             user.phone_confirms.all().delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
-        return Response({'code':['Не верный код']})
+        return Response({'code':['Неверный код'],}, status=403)
         
 
     @action(["patch"], detail=True)
