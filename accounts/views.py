@@ -168,6 +168,8 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
             return LegalSerializer
         if self.action == 'individual_verification':
             return IndividualSerializer
+        if self.action == 'send_confirmation_call':
+            return UserSerializer
         return super().get_serializer_class()
     
     def perform_update(self, serializer):
@@ -210,9 +212,14 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
         expert.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
-    @action(["post"], detail=True)
+    @action(["patch"], detail=True)
     def send_confirmation_call(self, request, *args, **kwargs):
         user = self.get_object()
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.data
+        user.phone = data['phone']
+        user.save()
         code =  str(random.randint(1000,9999))
         data = json.dumps([{
                         "channelType": "FLASHCALL",
