@@ -21,7 +21,7 @@ class Ticket(models.Model):
     class Meta:
         verbose_name = 'Заявка в ТП'
         verbose_name_plural = 'Заявки в ТП'
-        ordering = ['-created_at']
+        ordering = ['status', '-created_at']
     
     def __str__(self):
         return f'Заявка №{self.id}'
@@ -36,3 +36,6 @@ class SupportChatMessage(models.Model):
     text = models.TextField(_('Текст'), null=True, blank=True)
     ticket = models.ForeignKey('Ticket', on_delete=models.PROTECT, verbose_name=_('Заявка'), related_name='ticket_messages')
     created_at = models.DateTimeField(_('Создана'), auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.sender} {self.created_at.strftime("%d.%m.%Y, %H:%M:%S")}'

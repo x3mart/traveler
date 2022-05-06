@@ -116,7 +116,7 @@ class TeamMember(models.Model):
     class Meta:
         verbose_name = _('Член команды')
         verbose_name_plural = _('Члены команды')
-        ordering = ['expert' ,'-id']
+        ordering = ['-id', 'expert']
     
     @property
     def full_name(self):

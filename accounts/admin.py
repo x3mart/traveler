@@ -15,17 +15,20 @@ class UserCreationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('email', 'first_name_ru', 'last_name' , 'avatar', 'is_superuser', 'is_staff', 'is_active')
+        fields = ('email', 'first_name_ru', 'last_name' , 'avatar', 'is_superuser', 'is_active')
 
 class UserAdmin(UserAdmin, TranslationAdmin):
     add_form = UserCreationForm
     add_fieldsets = (None, {
             'classes': ('wide',),
-            'fields': ('email', 'first_name_ru', 'password1', 'password2', 'avatar', 'is_superuser', 'is_staff', 'is_active'),
+            'fields': ('email', 'first_name_ru', 'password1', 'password2', 'avatar', 'is_superuser', 'is_active'),
         }),
-    fieldsets = ((None, {'fields':('first_name', 'last_name', 'email', 'password', 'phone', 'avatar', 'is_staff', 'is_active', 'groups')}),)
+    fieldsets = ((None, {'fields':('first_name', 'last_name', 'email', 'password', 'phone', 'avatar', 'is_active', 'groups')}),)
     ordering = ('-id',)
-    list_display = ('email', 'full_name', 'is_staff')
+    list_display = ('email', 'full_name', 'is_superuser')
+
+    def get_queryset(self, request):
+        return User.objects.filter(is_staff=True)
 
 class ExpertCreationForm(UserCreationForm):
     class Meta:
@@ -49,8 +52,12 @@ class ExpertAdmin(UserAdmin, TranslationAdmin):
     
     get_avatar.short_description = 'Аватар'
 
+    def get_queryset(self, request):
+        return Expert.objects.all()
+
 class CustomerAdmin(UserAdmin, TranslationAdmin):
-    pass
+    def get_queryset(self, request):
+        return Customer.objects.all()
 
 admin.site.register(User, UserAdmin)
 admin.site.register(Expert, ExpertAdmin)
