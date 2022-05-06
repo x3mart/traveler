@@ -15,6 +15,8 @@ class TicketMessageInline(admin.TabularInline):
     def get_max_num(self, request, obj=None, **kwargs):
         return obj.ticket_messages.count()
 class TiketAdmin(admin.ModelAdmin):
+    fields = ('staff', 'user', 'status', 'created_at', 'accepted_at', 'closed_at')
+    readonly_fields = ('user', 'created_at',)
     list_display = ('__str__', 'user', 'staff', 'status_colored', 'created_at', 'accepted_at', 'closed_at') 
     list_filter = (('staff', admin.RelatedOnlyFieldListFilter), ('user', admin.RelatedOnlyFieldListFilter), 'status',)
     ordering = ['status', '-created_at']
