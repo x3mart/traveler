@@ -282,6 +282,7 @@ class Tour(models.Model):
     completed_sections = ArrayField(base_field=models.CharField(max_length=200, null=True), default=list, blank=True)
     booking_delay = models.DurationField(default=get_booking_delay)
     direct_link = models.BooleanField(_('Доступ по прямой ссылке'), default=False)
+    map = models.JSONField(_('Карта'), null=True, blank=True)
 
     class Meta:
         verbose_name = _('Тур')
