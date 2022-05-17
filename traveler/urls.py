@@ -52,6 +52,7 @@ urlpatterns = [
     path('api/', include('bankdetails.urls')),
     path('api/', include('verificationrequests.urls')),
     path('api/', include('tgbots.urls')),
+    path('chat/', include('chats.urls')),
     # test google-oauth2
     path('account/profile/', RedirectSocial.as_view()),
     # temporary password recovery Must be deleted on production
@@ -81,4 +82,4 @@ if settings.DEBUG:
         url(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
         path('__debug__/', include(debug_toolbar.urls)),
     ]
-urlpatterns += [re_path(r'^.*', TemplateView.as_view(template_name='index.html'))]
+# urlpatterns += [re_path(r'^.*', TemplateView.as_view(template_name='index.html'))]
