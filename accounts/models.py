@@ -51,6 +51,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(_('Сотрудник'), default=False, )
     is_expert = models.BooleanField(_('Эксперт'), default=False, )
     is_customer = models.BooleanField(_('Покупатель'), default=False, )
+    is_online = models.BooleanField(_('Сейчас на сайте'), default=False, )
     phone = PhoneNumberField(_('Телефон'), null=True, blank=True, )
 
     objects = AccountManager()

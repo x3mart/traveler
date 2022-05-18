@@ -1,20 +1,31 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
+from asgiref.sync import sync_to_async
 from django.forms.models import model_to_dict
 from accounts.models import User
+from chats.models import UserChat
 
 class ChatConsumer(AsyncWebsocketConsumer):
+
     @database_sync_to_async
-    def get_chat_user(self):
-        user = User.objects.get(pk=7)
-        print(model_to_dict(user, fields=['id', 'name']))
-        return model_to_dict(user, fields=['id', 'first_name'])
+    def get_chat(self):
+        return UserChat.objects.get(pk=self.room_name)
+    
+    @database_sync_to_async
+    def set_online_status_member_in_room(self, online=False):
+        if online:
+            self.chat.members_in_room.add(self.user)
+        else:
+            self.chat.members_in_room.remove(self.user)
+    
 
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = 'chat_%s' % self.room_name
-        self.user = await self.get_chat_user()
+        self.user = self.scope['user']
+        self.chat = await self.get_chat()
+        await self.set_online_status_member_in_room(online=True)
 
         # Join room group
         await self.channel_layer.group_add(
@@ -24,7 +35,23 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         await self.accept()
 
+        # await self.channel_layer.group_send(
+        #     'chat_notify',
+        #     {
+        #         'type': 'chat_message',
+        #         'message': 'self.channelss'
+        #     }
+        # )
+
     async def disconnect(self, close_code):
+        await self.set_online_status_member_in_room(online=False)
+        await self.channel_layer.group_send(
+            'chat_notify',
+            {
+                'type': 'chat_message',
+                'message': 'Diconect'
+            }
+        )
         # Leave room group
         await self.channel_layer.group_discard(
             self.room_group_name,
@@ -45,12 +72,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
             }
         )
 
+
     # Receive message from room group
     async def chat_message(self, event):
         message = event['message']
 
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
-            'message': f'{self.scope["query_string"]}',
-            'user': self.user,
+            'message': message
         }))
