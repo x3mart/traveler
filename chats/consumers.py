@@ -4,13 +4,23 @@ from channels.db import database_sync_to_async
 from asgiref.sync import sync_to_async
 from django.forms.models import model_to_dict
 from accounts.models import User
-from chats.models import UserChat
+from chats.models import ChatMessage, UserChat
+from chats.serializers import ChatMessageSerializer
 
 class ChatConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def get_chat(self):
         return UserChat.objects.get(pk=self.room_name)
+    
+    @database_sync_to_async
+    def get_old_messages(self):
+        messages = ChatMessage.objects.filter(room=self.room_name)
+        return ChatMessageSerializer(messages, many=True).data
+    
+    @database_sync_to_async
+    def save_message(self, message):
+        ChatMessage.objects.create(room=self.chat, author=self.user, text=message)
     
     @database_sync_to_async
     def set_online_status_member_in_room(self, online=False):
@@ -36,12 +46,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.accept()
 
         # await self.channel_layer.group_send(
-        #     'chat_notify',
+        #     self.room_group_name,
         #     {
         #         'type': 'chat_message',
-        #         'message': 'self.channelss'
+        #         'old_messages': await self.get_old_messages()
         #     }
         # )
+
+        await self.send(text_data=json.dumps({
+            'message':'',
+            'old_messages': await self.get_old_messages()
+        }))
 
     async def disconnect(self, close_code):
         await self.set_online_status_member_in_room(online=False)
@@ -71,6 +86,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'message': message
             }
         )
+        await self.save_message(message)
 
 
     # Receive message from room group
