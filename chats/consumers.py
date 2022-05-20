@@ -64,8 +64,8 @@ class ChatConsumer(WebsocketConsumer):
         # )
         
 
-    async def disconnect(self, close_code):
-        await self.set_online_status_member_in_room(online=False)
+    def disconnect(self, close_code):
+        self.set_online_status_member_in_room(online=False)
         # await self.channel_layer.group_send(
         #     'chat_notify',
         #     {
@@ -74,7 +74,7 @@ class ChatConsumer(WebsocketConsumer):
         #     }
         # )
         # Leave room group
-        await self.channel_layer.group_discard(
+        self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
         )
