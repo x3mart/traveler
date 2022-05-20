@@ -3,7 +3,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 from asgiref.sync import sync_to_async
 from django.forms.models import model_to_dict
-from accounts.models import User
+# from accounts.models import User
 from chats.models import ChatMessage, UserChat
 from chats.serializers import ChatMessageSerializer
 
