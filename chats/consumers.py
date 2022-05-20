@@ -53,10 +53,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
         #     }
         # )
 
-        # await self.send(text_data=json.dumps({
-        #     'message':'',
-        #     'old_messages': await self.get_old_messages()
-        # }))
+        await self.send(text_data=json.dumps({
+            'old_messages': await self.get_old_messages()
+        }))
 
     async def disconnect(self, close_code):
         await self.set_online_status_member_in_room(online=False)
