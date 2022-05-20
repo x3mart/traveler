@@ -3,11 +3,15 @@ from rest_framework import serializers
 
 from .models import ChatMessage, UserChat
 from accounts.models import User
+from utils.images import get_tmb_image_uri
 
 class RoomMembersSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'first_name', 'last_name', 'avatar')
+    
+    def get_avatar(self, obj): 
+        return get_tmb_image_uri(self, obj)
 
 class ChatMessageSerializer(serializers.ModelSerializer):
     created_at = serializers.SerializerMethodField()
