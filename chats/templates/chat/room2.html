@@ -20,10 +20,10 @@
         const chatSocket = new WebSocket(
             'wss://'
             + window.location.host
-            + '/wss/chat/'
+            + '/ws/chat/'
             + roomName
             + '/'
-            +'?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE1MTA1Njk2LCJqdGkiOiI1OTU4YWQ1M2MwYjY0N2U4ODUxZDdkZWU5MWJiZTA4OCIsInVzZXJfaWQiOjksInVzZXJfc3RhdHVzIjoic3RhZmYifQ.Vwo8quc4G4Je6E37XmOlVo4IS6B5uUPvKeaKrYexiWQ'
+            +'?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjYxNjk0ODMwLCJqdGkiOiIxOTFhODNiMDQ2Y2M0YzhlOWE2NDMxZTM5YTczYWIzZiIsInVzZXJfaWQiOjEwLCJ1c2VyX3N0YXR1cyI6ImV4cGVydHMifQ.oaRZA17uO_F_96rEeV5NSJcUd-weFQVYobL-35tfpCA'
         );
 
         chatSocket.onmessage = function(e) {
