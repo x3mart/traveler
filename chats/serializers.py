@@ -7,7 +7,7 @@ from accounts.models import User
 class RoomMembersSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'full_name')
+        fields = ('id', 'first_name', 'last_name', 'avatar')
 
 class ChatMessageSerializer(serializers.ModelSerializer):
     created_at = serializers.SerializerMethodField()
@@ -23,7 +23,7 @@ class ChatMessageSerializer(serializers.ModelSerializer):
 
 
 class UserChatSerializer(serializers.ModelSerializer):
-    room_members = RoomMembersSerializer(many=True, read_only=True)
+    room_members = serializers.SerializerMethodField()
     members_in_room = RoomMembersSerializer(many=True, read_only=True)
     last_message = serializers.SerializerMethodField()
     class Meta:
@@ -35,3 +35,6 @@ class UserChatSerializer(serializers.ModelSerializer):
         if last_message:
             return last_message.text
         return None
+    
+    def get_room_members(self, obj):
+        return RoomMembersSerializer(obj.room_members.filter(self.request.user), many=True).data
