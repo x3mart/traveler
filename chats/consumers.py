@@ -15,6 +15,7 @@ class ChatConsumer(WebsocketConsumer):
     
 
     def get_old_messages(self):
+        print('0')
         messages = ChatMessage.objects.filter(room=self.room_name).order_by('created_at')
         messages = ChatMessageSerializer(messages, many=True).data
         print('1')
@@ -49,12 +50,12 @@ class ChatConsumer(WebsocketConsumer):
 
         self.accept()
         print('2')
-        # for message in self.get_old_messages():
-        #     self.send(text_data=json.dumps({
-        #     'message': message['text'],
-        #     'created_at': message['created_at'],
-        #     'author': message['author']
-        #     }))
+        for message in self.get_old_messages():
+            self.send(text_data=json.dumps({
+            'message': message['text'],
+            'created_at': message['created_at'],
+            'author': message['author']
+            }))
         print('3')
         # await self.channel_layer.group_send(
         #     self.room_group_name,
