@@ -55,12 +55,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
         #         'message': 'Wellcome'
         #     }
         # )
-        for message in self.old_messages:
-            await self.send(text_data=json.dumps({
-            'message': message['text'],
-            'created_at': message['created_at'],
-            'author': message['author']
-            }))
+        # for message in self.old_messages:
+        #     await self.send(text_data=json.dumps({
+        #     'message': message['text'],
+        #     'created_at': message['created_at'],
+        #     'author': message['author']
+        #     }))
 
     async def disconnect(self, close_code):
         await self.set_online_status_member_in_room(online=False)
