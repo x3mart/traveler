@@ -1,6 +1,9 @@
 import os
 from datetime import datetime
 
+import django
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
+django.setup()
 
 import jwt
 from channels.auth import AuthMiddlewareStack
@@ -11,10 +14,7 @@ from channels.middleware import BaseMiddleware
 
 from accounts.models import User
 from django.db import close_old_connections
-import django
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
-django.setup()
 
 ALGORITHM = "HS256"
 
