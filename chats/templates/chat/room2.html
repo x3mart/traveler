@@ -18,9 +18,9 @@
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
 
         const chatSocket = new WebSocket(
-            'ws://'
+            'wss://'
             + window.location.host
-            + '/ws/chat/'
+            + '/wss/chat/'
             + roomName
             + '/'
             +'?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE1MTA1Njk2LCJqdGkiOiI1OTU4YWQ1M2MwYjY0N2U4ODUxZDdkZWU5MWJiZTA4OCIsInVzZXJfaWQiOjksInVzZXJfc3RhdHVzIjoic3RhZmYifQ.Vwo8quc4G4Je6E37XmOlVo4IS6B5uUPvKeaKrYexiWQ'
