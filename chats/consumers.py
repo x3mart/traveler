@@ -16,7 +16,8 @@ class ChatConsumer(WebsocketConsumer):
 
     def get_old_messages(self):
         print('0')
-        messages = ChatMessage.objects.filter(room=self.room_name).order_by('created_at')
+        print(self.room_name)
+        messages = ChatMessage.objects.filter(room=int(self.room_name)).order_by('created_at')
         print('1,5')
         messages = ChatMessageSerializer(messages, many=True).data
         print('1')
