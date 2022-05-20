@@ -38,4 +38,4 @@ class UserChatSerializer(serializers.ModelSerializer):
     
     def get_room_members(self, obj):
         request = self.context['request']
-        return RoomMembersSerializer(obj.room_members.all().exclude(user=request.user), many=True).data
+        return RoomMembersSerializer(obj.room_members.exclude(id=request.user.id), many=True).data
