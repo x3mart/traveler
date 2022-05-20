@@ -9,25 +9,25 @@ from chats.serializers import ChatMessageSerializer
 
 class ChatConsumer(AsyncWebsocketConsumer):
 
-    @database_sync_to_async
-    def get_chat(self):
-        return UserChat.objects.get(pk=self.room_name)
+    # @database_sync_to_async
+    # def get_chat(self):
+    #     return UserChat.objects.get(pk=self.room_name)
     
-    @database_sync_to_async
-    def get_old_messages(self):
-        messages = ChatMessage.objects.filter(room=self.room_name)
-        return ChatMessageSerializer(messages, many=True).data
+    # @database_sync_to_async
+    # def get_old_messages(self):
+    #     messages = ChatMessage.objects.filter(room=self.room_name)
+    #     return ChatMessageSerializer(messages, many=True).data
     
-    @database_sync_to_async
-    def save_message(self, message):
-        ChatMessage.objects.create(room=self.chat, author=self.user, text=message)
+    # @database_sync_to_async
+    # def save_message(self, message):
+    #     ChatMessage.objects.create(room=self.chat, author=self.user, text=message)
     
-    @database_sync_to_async
-    def set_online_status_member_in_room(self, online=False):
-        if online:
-            self.chat.members_in_room.add(self.user)
-        else:
-            self.chat.members_in_room.remove(self.user)
+    # @database_sync_to_async
+    # def set_online_status_member_in_room(self, online=False):
+    #     if online:
+    #         self.chat.members_in_room.add(self.user)
+    #     else:
+            # self.chat.members_in_room.remove(self.user)
     
 
     async def connect(self):
@@ -45,13 +45,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         await self.accept()
 
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'chat_message',
-                'message': 'Wellcome'
-            }
-        )
+        # await self.channel_layer.group_send(
+        #     self.room_group_name,
+        #     {
+        #         'type': 'chat_message',
+        #         'message': 'Wellcome'
+        #     }
+        # )
 
         # await self.send(text_data=json.dumps({
         #     'message':'',
@@ -59,14 +59,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # }))
 
     async def disconnect(self, close_code):
-        await self.set_online_status_member_in_room(online=False)
-        await self.channel_layer.group_send(
-            'chat_notify',
-            {
-                'type': 'chat_message',
-                'message': 'Diconect'
-            }
-        )
+        # await self.set_online_status_member_in_room(online=False)
+        # await self.channel_layer.group_send(
+        #     'chat_notify',
+        #     {
+        #         'type': 'chat_message',
+        #         'message': 'Diconect'
+        #     }
+        # )
         # Leave room group
         await self.channel_layer.group_discard(
             self.room_group_name,

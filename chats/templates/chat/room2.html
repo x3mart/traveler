@@ -18,7 +18,7 @@
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
 
         const chatSocket = new WebSocket(
-            'wss://'
+            'ws://'
             + window.location.host
             + '/ws/chat/'
             + roomName
@@ -31,8 +31,14 @@
             document.querySelector('#chat-log').value += (data.message + '\n');
         };
 
+        chatSocket.onerror = function(error) {
+            console.error(`[error] ${error.message}`);
+          };
+
         chatSocket.onclose = function(e) {
             console.error('Chat socket closed unexpectedly');
+            console.error(`${e.code}`);
+            console.error(`${e.reason}`);
         };
 
         document.querySelector('#chat-message-input').focus();
