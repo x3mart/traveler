@@ -16,6 +16,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def get_old_messages(self):
         messages = ChatMessage.objects.filter(room=self.room_name).order_by('created_at')
+        print('1')
         return ChatMessageSerializer(messages, many=True).data
     
     @database_sync_to_async
@@ -36,9 +37,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.room_group_name = 'chat_%s' % self.room_name
         self.user = self.scope['user']
         self.chat = await self.get_chat()
-        # await self.set_online_status_member_in_room(online=True)
-        # self.old_messages = await self.get_old_messages()
-        # print(json.dumps(self.old_messages))
+        await self.set_online_status_member_in_room(online=True)
+        self.old_messages = await self.get_old_messages()
+        print(2)
 
         # Join room group
         await self.channel_layer.group_add(
