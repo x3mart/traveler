@@ -18,7 +18,7 @@ class UserChatListCreateView(generics.ListCreateAPIView):
         else:
             chat = UserChat.objects.create()
             chat.room_members.add(request.user, chat_with)
-        return Response(UserChatSerializer(chat).data, status=200, context={'request':request})
+        return Response(UserChatSerializer(chat, context={'request':request}).data, status=200)
     
     def list(self, request):
         chats = UserChat.objects.filter(room_members__id=request.user.id)
