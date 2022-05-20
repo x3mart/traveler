@@ -21,7 +21,7 @@ class ChatConsumer(WebsocketConsumer):
         messages = ChatMessage.objects.filter(room=int(self.room_name)).order_by('created_at')
         print('1,5')
         print(messages)
-        # messages = ChatMessageSerializer(messages, many=True).data
+        messages = ChatMessageSerializer(messages, many=True).data
         print('11')
         return messages
 
