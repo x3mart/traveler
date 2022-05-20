@@ -21,7 +21,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def save_message(self, message):
         message = ChatMessage.objects.create(room=self.chat, author=self.user, text=message)
-        return ChatMessageSerializer(message, many=False).data
+        return message
     
     @database_sync_to_async
     def set_online_status_member_in_room(self, online=False):
@@ -78,7 +78,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
-        message = await self.save_message(message)
+        message2 = await self.save_message(message)
         # Send message to room group
         await self.channel_layer.group_send(
             self.room_group_name,
