@@ -22,7 +22,7 @@ class ChatConsumer(WebsocketConsumer):
         print('1,5')
         print(messages)
         # messages = ChatMessageSerializer(messages, many=True).data
-        print('1')
+        print('11')
         return messages
 
     
