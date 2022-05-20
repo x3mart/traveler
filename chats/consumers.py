@@ -54,7 +54,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # )
 
         await self.send(text_data=json.dumps({
-            'old_messages': await self.get_old_messages()
+            'old_messages': 'await self.get_old_messages()'
         }))
 
     async def disconnect(self, close_code):
