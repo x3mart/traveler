@@ -6,6 +6,7 @@ from accounts.models import User
 from utils.images import get_tmb_image_uri
 
 class RoomMembersSerializer(serializers.ModelSerializer):
+    avatar = serializers.SerializerMethodField()
     class Meta:
         model = User
         fields = ('id', 'first_name', 'last_name', 'avatar')
