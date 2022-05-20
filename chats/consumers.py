@@ -50,7 +50,9 @@ class ChatConsumer(WebsocketConsumer):
 
         self.accept()
         print('2')
-        for message in self.get_old_messages():
+        messages = self.get_old_messages()
+        print(messages)
+        for message in messages:
             self.send(text_data=json.dumps({
             'message': message['text'],
             'created_at': message['created_at'],
