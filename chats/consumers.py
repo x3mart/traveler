@@ -37,8 +37,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.user = self.scope['user']
         self.chat = await self.get_chat()
         await self.set_online_status_member_in_room(online=True)
-        self.old_messages = await self.get_old_messages()
-        print(json.dumps(self.old_messages))
+        # self.old_messages = await self.get_old_messages()
+        # print(json.dumps(self.old_messages))
 
         # Join room group
         await self.channel_layer.group_add(
