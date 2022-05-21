@@ -9,5 +9,5 @@ class ArticleSerializer(serializers.ModelSerializer):
         model = Article
         fields = '__all__'
     
-    def get_tmb_avatar(self, obj): 
+    def get_tmb_image(self, obj): 
         return get_tmb_image_uri(self, obj) 
