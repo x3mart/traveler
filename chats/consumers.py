@@ -100,7 +100,7 @@ class ChatConsumer(WebsocketConsumer):
             }
         )
         
-        # message = self.save_message(message)
+        message = self.save_message(message)
         # Send message to WebSocket
         self.send(text_data=json.dumps({
             'message': message

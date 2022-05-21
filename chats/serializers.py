@@ -15,8 +15,8 @@ class RoomMembersSerializer(serializers.ModelSerializer):
         return get_tmb_image_uri(self, obj)
 
 class ChatMessageSerializer(serializers.ModelSerializer):
-    created_at = serializers.SerializerMethodField()
-    author = RoomMembersSerializer(many=False, read_only=True)
+    # created_at = serializers.SerializerMethodField()
+    # author = RoomMembersSerializer(many=False, read_only=True)
     class Meta:
         model = ChatMessage
         fields = '__all__'
