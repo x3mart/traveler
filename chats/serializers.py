@@ -15,15 +15,15 @@ class RoomMembersSerializer(serializers.ModelSerializer):
         return get_tmb_image_uri(self, obj)
 
 class ChatMessageSerializer(serializers.ModelSerializer):
-    # created_at = serializers.SerializerMethodField()
+    created_at = serializers.SerializerMethodField()
     # author = RoomMembersSerializer(many=False, read_only=True)
     class Meta:
         model = ChatMessage
         fields = '__all__'
     
     def get_created_at(self, obj):
-        if (datetime.now() - obj.created_at).days <= 0:
-            return obj.created_at.strftime('%H:%M')
+        # if (datetime.now() - obj.created_at).days <= 0:
+        #     return obj.created_at.strftime('%H:%M')
         return obj.created_at.strftime('%d-%m-%Y %H:%M')
 
 
