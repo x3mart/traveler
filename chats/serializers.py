@@ -16,7 +16,7 @@ class RoomMembersSerializer(serializers.ModelSerializer):
 
 class ChatMessageSerializer(serializers.ModelSerializer):
     created_at = serializers.SerializerMethodField()
-    # author = RoomMembersSerializer(many=False, read_only=True)
+    author = RoomMembersSerializer(many=False, read_only=True)
     class Meta:
         model = ChatMessage
         fields = '__all__'
