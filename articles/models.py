@@ -3,6 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from django.template.defaultfilters import default, slugify
 from unidecode import unidecode
 import os
+from utils.images import get_tmb_path
 from ckeditor_uploader.fields import RichTextUploadingField
 
 # Create your models here.
@@ -25,6 +26,10 @@ class BaseAbstractArticle(models.Model):
     
     def __str__(self):
         return self.title
+    
+    @property
+    def tmb_image(self):
+        return get_tmb_path(self.image.url) if self.image else None
 
 
 class Article(BaseAbstractArticle):
