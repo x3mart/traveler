@@ -15,14 +15,8 @@ class ChatConsumer(WebsocketConsumer):
     
 
     def get_old_messages(self):
-        print('0')
-        print('suki')
-        print(self.room_name)
         messages = ChatMessage.objects.filter(room=int(self.room_name)).order_by('created_at')
-        print('1,5')
-        messages = ChatMessageSerializer(messages, many=True).data
-        print('11')
-        return messages
+        return ChatMessageSerializer(messages, many=True).data
 
     
     def save_message(self, message):
@@ -44,7 +38,7 @@ class ChatConsumer(WebsocketConsumer):
         self.user = self.scope['user']
         self.chat = self.get_chat()
         self.set_online_status_member_in_room(online=True)
-
+        
         # Join room group
         self.channel_layer.group_add(
             self.room_group_name,
@@ -52,7 +46,6 @@ class ChatConsumer(WebsocketConsumer):
         )
 
         self.accept()
-        print('2')
         messages = self.get_old_messages()
         # print(messages)
         for message in messages:
@@ -61,14 +54,6 @@ class ChatConsumer(WebsocketConsumer):
             'created_at': message['created_at'],
             'author': message['author']
             }))
-        print('3')
-        # await self.channel_layer.group_send(
-        #     self.room_group_name,
-        #     {
-        #         'type': 'chat_message',
-        #         'message': 'Wellcome'
-        #     }
-        # )
         
 
     def disconnect(self, close_code):

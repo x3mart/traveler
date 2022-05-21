@@ -96,11 +96,11 @@ def delete_tmb(image):
 
 def image_processing(img, current_img=None, crop_width=None, crop_height=None, tmb_width=None, tmb_height=None, aspectratio=None):
     if img and "/" not in img:
+        if tmb_width and tmb_height:
+            make_tmb(img.path, tmb_width, tmb_height)
         if crop_width and crop_height and not aspectratio:
             crop_image(img.path, crop_width, crop_height)
         if crop_width and crop_height and aspectratio:
             resize_with_aspectratio(img.path, crop_width, crop_height)
-        if tmb_width and tmb_height:
-            make_tmb(img.path, tmb_width, tmb_height)
         if current_img and current_img != img:
             delete_image(current_img)
