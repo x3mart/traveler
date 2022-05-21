@@ -54,14 +54,14 @@ class ChatConsumer(WebsocketConsumer):
 
         self.accept()
         print('2')
-        messages = self.get_old_messages()
-        print(messages)
-        for message in messages:
-            self.send(text_data=json.dumps({
-            'message': message['text'],
-            'created_at': message['created_at'],
-            'author': message['author']
-            }))
+        # messages = self.get_old_messages()
+        # print(messages)
+        # for message in messages:
+        #     self.send(text_data=json.dumps({
+        #     'message': message['text'],
+        #     'created_at': message['created_at'],
+        #     'author': message['author']
+        #     }))
         print('3')
         # await self.channel_layer.group_send(
         #     self.room_group_name,
