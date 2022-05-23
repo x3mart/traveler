@@ -13,6 +13,7 @@ class ChatMessage(models.Model):
     author = models.ForeignKey('accounts.User', on_delete=models.CASCADE, related_name='user_chat_messages')
     text = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['-created_at']

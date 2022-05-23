@@ -18,12 +18,12 @@
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
 
         const chatSocket = new WebSocket(
-            'wss://'
+            'ws://'
             + window.location.host
             + '/ws/chat/'
             + roomName
             + '/'
-            +'?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjYxOTM5ODUzLCJqdGkiOiI2MjA3MTEyZWJmMmE0ZGQzODg2NTEwZTk4MjYxZmU4YyIsInVzZXJfaWQiOjEwLCJ1c2VyX3N0YXR1cyI6ImV4cGVydHMifQ.gsUY_C7GlDBJpYpiuNGirekea24KTjvxpj_8mxlOWpE'
+            +'?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE1MTA1Njk2LCJqdGkiOiI1OTU4YWQ1M2MwYjY0N2U4ODUxZDdkZWU5MWJiZTA4OCIsInVzZXJfaWQiOjksInVzZXJfc3RhdHVzIjoic3RhZmYifQ.Vwo8quc4G4Je6E37XmOlVo4IS6B5uUPvKeaKrYexiWQ'
         );
 
         chatSocket.onmessage = function(e) {

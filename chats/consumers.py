@@ -15,12 +15,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
     
     @database_sync_to_async
     def get_old_messages(self):
+        ChatMessage.objects.filter(room=int(self.room_name)).filter(author=self.user).filter(is_read=False).update(is_read=True)
         messages = ChatMessage.objects.filter(room=int(self.room_name)).order_by('created_at')
         return ChatMessageSerializer(messages, many=True).data
 
     @database_sync_to_async   
     def save_message(self, message):
-        message = ChatMessage.objects.create(room=self.chat, author=self.user, text=message)
+        is_read = True if self.chat.members_in_room.count() > 1 else False
+        message = ChatMessage.objects.create(room=self.chat, author=self.user, text=message, is_read=is_read)
         return ChatMessageSerializer(message, many=False).data
         
     
@@ -52,7 +54,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
             await self.send(text_data=json.dumps({
             'message': message['text'],
             'created_at': message['created_at'],
-            'author': message['author']
+            'author': message['author'],
+            'is_read': message['is_read']
             }))
         
 
@@ -95,9 +98,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({
             'message': message['text'],
             'created_at': message['created_at'],
-            'author': message['author']
+            'author': message['author'],
+            'is_read': message['is_read']
         }))
-        print(message)
         # await self.send(text_data=json.dumps({
         #     'message': message
         # }))
