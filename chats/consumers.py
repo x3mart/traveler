@@ -46,7 +46,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.chat = await self.get_chat()
         await self.set_online_status_member_in_room(online=True)
         self.chatmate_status = await self.get_chatmate_status()
-        print(self.chatmate_status)
+        
         # Join room group
         await self.channel_layer.group_add(
             self.room_group_name,
@@ -76,14 +76,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
         await self.set_online_status_member_in_room(online=False)
-        # await self.channel_layer.group_send(
-        #     'chat_notify',
-        #     {
-        #         'type': 'chat_message',
-        #         'message': 'Diconect'
-        #     }
-        # )
-        # Leave room group
+
+        await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'chat_message',
+                    'command': 'set_unread'
+                }
+            )
+
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
@@ -109,7 +110,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def chat_message(self, event):
         if event.get('message'):
             message = event['message']
-
             # Send message to WebSocket
             await self.send(text_data=json.dumps({
                 'message': message['text'],
@@ -118,10 +118,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'is_read': message['is_read']
             }))
         elif event.get('command'):
+            # Send command to WebSocket
             await self.send(text_data=json.dumps({
-                'command': 'set_read'
+                'command': event['command']
             }))
-
-        # await self.send(text_data=json.dumps({
-        #     'message': message
-        # }))
