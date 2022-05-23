@@ -128,13 +128,13 @@ class NotificationConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def set_online_status(self, online=False):
-        User.objects.filter(pk=self.user.id).update(is_online=online)
+        User.objects.filter(pk=self.user['id']).update(is_online=online)
 
 
     async def connect(self):
-        self.room_name = self.scope['url_route']['kwargs']['room_name']
-        self.room_group_name = 'chat_%s' % self.room_name
         self.user = self.scope['user']
+        self.room_name = self.user['id']
+        self.room_group_name = 'chat_%s' % self.room_name
         self.chat = await self.get_chat()
 
         await self.channel_layer.group_add(
