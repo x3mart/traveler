@@ -49,7 +49,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
         await self.accept()
+        
         messages = await self.get_old_messages()
+
+        await self.send(text_data=json.dumps({
+            'command': 'set_read'
+            }))
+
         for message in messages:
             await self.send(text_data=json.dumps({
             'message': message['text'],
