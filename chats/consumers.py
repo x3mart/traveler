@@ -78,12 +78,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.set_online_status_member_in_room(online=False)
 
         await self.channel_layer.group_send(
-                self.room_group_name,
-                {
-                    'type': 'chat_message',
-                    'command': 'set_unread'
-                }
-            )
+            self.room_group_name,
+            {
+                'type': 'chat_message',
+                'command': 'set_unread'
+            }
+        )
 
         await self.channel_layer.group_discard(
             self.room_group_name,
@@ -143,6 +143,13 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         )
         await self.accept()
         await self.set_online_status(online=True)
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'chat_message',
+                'command': 'set_user_online'
+            }
+        )
     
 
     async def disconnect(self, close_code):
@@ -151,6 +158,13 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             self.channel_name       
         )
         await self.set_online_status(online=False)
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'chat_message',
+                'command': 'set_user_offline'
+            }
+        )
     
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
