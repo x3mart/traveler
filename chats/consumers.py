@@ -128,14 +128,19 @@ class NotificationConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def set_online_status(self, online=False):
-        User.objects.filter(pk=self.user['id']).update(is_online=online)
+        print(self.user)
+        User.objects.filter(pk=self.user.id).update(is_online=online)
 
 
     async def connect(self):
         self.user = self.scope['user']
-        self.room_name = self.user['id']
-        self.room_group_name = 'chat_%s' % self.room_name
-        self.chat = await self.get_chat()
+        print(self.user)
+        self.room_name = self.user.id
+        print(self.room_name)
+        self.room_group_name = 'notification_%s' % self.room_name
+        print(self.room_group_name)
+
+        # self.chat = await self.get_chat()
 
         await self.channel_layer.group_add(
             self.room_group_name,
@@ -157,14 +162,14 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             self.room_group_name,
             self.channel_name       
         )
-        await self.set_online_status(online=False)
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'chat_message',
-                'command': 'set_user_offline'
-            }
-        )
+        # await self.set_online_status(online=False)
+        # await self.channel_layer.group_send(
+        #     self.room_group_name,
+        #     {
+        #         'type': 'chat_message',
+        #         'command': 'set_user_offline'
+        #     }
+        # )
     
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)

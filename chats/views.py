@@ -30,7 +30,7 @@ def room(request, room_name):
         'room_name': room_name
     })
 
-def room2(request, room_name):
+def room2(request):
     return render(request, 'chat/room2.html', {
-        'room_name': room_name
+        'room_name': 1
     })
