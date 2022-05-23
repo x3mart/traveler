@@ -125,20 +125,21 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
 
 class NotificationConsumer(AsyncWebsocketConsumer):
+    @database_sync_to_async
+    def get_online_chatmates(self):
+        ids = map(lambda chat_room: chat_room.room_members.exclude(id=self.user.id).first().id, self.user.chat_rooms.all())
+        return list(ids)
+
 
     @database_sync_to_async
     def set_online_status(self, online=False):
-        print(self.user)
         User.objects.filter(pk=self.user.id).update(is_online=online)
 
 
     async def connect(self):
         self.user = self.scope['user']
-        print(self.user)
         self.room_name = self.user.id
-        print(self.room_name)
         self.room_group_name = 'notification_%s' % self.room_name
-        print(self.room_group_name)
 
         # self.chat = await self.get_chat()
 
@@ -148,16 +149,27 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         )
         await self.accept()
         await self.set_online_status(online=True)
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'chat_message',
-                'command': 'set_user_online'
-            }
-        )
+        self.online_chatmates = await self.get_online_chatmates()
+        for online_chatmate in self.online_chatmates:
+            await self.channel_layer.group_send(
+                f'notification_{online_chatmate}' ,
+                {
+                    'type': 'chat_message',
+                    'is_online': self.user.id
+                }
+            )      
     
-
     async def disconnect(self, close_code):
+        self.online_chatmates = await self.get_online_chatmates()
+        for online_chatmate in self.online_chatmates:
+            await self.channel_layer.group_send(
+                f'notification_{online_chatmate}' ,
+                {
+                    'type': 'chat_message',
+                    'is_offline': self.user.id
+                }
+            )
+
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name       
@@ -184,17 +196,12 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         )
     
     async def chat_message(self, event):
-        if event.get('message'):
-            message = event['message']
-            # Send message to WebSocket
+        if event.get('is_online'):
             await self.send(text_data=json.dumps({
-                'message': message['text'],
-                'created_at': message['created_at'],
-                'author': message['author'],
-                'is_read': message['is_read']
+                'is_online': event['is_online'],
             }))
-        elif event.get('command'):
+        elif event.get('is_offline'):
             # Send command to WebSocket
             await self.send(text_data=json.dumps({
-                'command': event['command']
+                'is_offline': event['is_offline']
             }))
