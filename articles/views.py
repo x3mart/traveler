@@ -7,3 +7,4 @@ from .models import Article
 class ArticleViewSet(ReadOnlyModelViewSet):
     queryset = Article.objects.filter(is_active=True)
     serializer_class = ArticleSerializer
+    lookup_field = 'slug'
