@@ -15,7 +15,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     
     @database_sync_to_async
     def get_old_messages(self):
-        ChatMessage.objects.filter(room=int(self.room_name)).filter(author=self.user).filter(is_read=False).update(is_read=True)
+        ChatMessage.objects.filter(room=int(self.room_name)).exclude(author=self.user).filter(is_read=False).update(is_read=True)
         messages = ChatMessage.objects.filter(room=int(self.room_name)).order_by('created_at')
         return ChatMessageSerializer(messages, many=True).data
 
