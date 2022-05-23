@@ -14,6 +14,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
         return UserChat.objects.get(pk=self.room_name)
     
     @database_sync_to_async
+    def get_chatmate_status(self):
+        return self.chat.members_in_room.count() > 1
+        
+    @database_sync_to_async
     def get_old_messages(self):
         ChatMessage.objects.filter(room=int(self.room_name)).exclude(author=self.user).filter(is_read=False).update(is_read=True)
         messages = ChatMessage.objects.filter(room=int(self.room_name)).order_by('created_at')
@@ -41,7 +45,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.user = self.scope['user']
         self.chat = await self.get_chat()
         await self.set_online_status_member_in_room(online=True)
-        
+        self.chatmate_status = await self.get_chatmate_status()
+        print(self.chatmate_status)
         # Join room group
         await self.channel_layer.group_add(
             self.room_group_name,
@@ -49,13 +54,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
         await self.accept()
-        
+
+        if self.chatmate_status:
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'chat_message',
+                    'command': 'set_read'
+                }
+            )
+
         messages = await self.get_old_messages()
-
-        await self.send(text_data=json.dumps({
-            'command': 'set_read'
-            }))
-
         for message in messages:
             await self.send(text_data=json.dumps({
             'message': message['text'],
@@ -98,15 +107,21 @@ class ChatConsumer(AsyncWebsocketConsumer):
         
     # Receive message from room group
     async def chat_message(self, event):
-        message = event['message']
+        if event.get('message'):
+            message = event['message']
 
-        # Send message to WebSocket
-        await self.send(text_data=json.dumps({
-            'message': message['text'],
-            'created_at': message['created_at'],
-            'author': message['author'],
-            'is_read': message['is_read']
-        }))
+            # Send message to WebSocket
+            await self.send(text_data=json.dumps({
+                'message': message['text'],
+                'created_at': message['created_at'],
+                'author': message['author'],
+                'is_read': message['is_read']
+            }))
+        elif event.get('command'):
+            await self.send(text_data=json.dumps({
+                'command': 'set_read'
+            }))
+
         # await self.send(text_data=json.dumps({
         #     'message': message
         # }))
