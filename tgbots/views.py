@@ -204,8 +204,8 @@ class Update():
             ticket.status = 3
             ticket.closed_at = timezone.now()
             ticket.save()
-            reply_markup = ReplyMarkup().get_markup('start', ticket.user.telegram_account)
-            response = SendMessage(ticket.user.telegram_account.tg_id, f'Заявка №{ticket.id} закрыта', reply_markup).send()
+            # reply_markup = ReplyMarkup().get_markup('start', ticket.user.telegram_account)
+            # response = SendMessage(ticket.user.telegram_account.tg_id, f'Заявка №{ticket.id} закрыта', reply_markup).send()
             if ticket.staff:
                 reply_markup = ReplyMarkup().get_markup('start', ticket.staff.telegram_account)
                 response = SendMessage(ticket.staff.telegram_account.tg_id, f'Заявка №{ticket.id} закрыта', reply_markup).send()
