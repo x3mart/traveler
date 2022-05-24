@@ -30,6 +30,7 @@ class TicketSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ticket
         fields = '__all__'
+        extra_kwargs = {'user': {'required': False}}
     
     def get_last_message(self, obj):
         last_message = obj.ticket_messages.last()
