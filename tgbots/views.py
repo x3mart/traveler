@@ -304,9 +304,10 @@ class Update():
             chat_message = SupportChatMessage.objects.create(author=self.tg_account.account, tg_message=message.message_id, sender_chat_id=chat_id, text=message.text, ticket_id=ticket.id,)
             reply_markup = ReplyMarkup(ticket).get_markup('answer_to_staff', self.tg_account)
             text = render_to_string('message_from_staff.html', {'ticket':ticket, 'message':message})
-            if ticket.user.telegram_account:
+            if hasattr(ticket.user, 'telegram_account'):
                 response = SendMessage(ticket.user.telegram_account.tg_id, text, reply_markup).send()
-            else: response = None
+            else: 
+                response = None
             self.send_message_to_support_chat(chat_message, ticket)
             self.tg_account.await_reply = False
             self.tg_account.reply_type = None
