@@ -178,7 +178,7 @@ class Update():
             ticket.save()
             # response = SendMessage(user.telegram_account.tg_id, 'Заявка ушла в работу. Наш сотрудник ответит в ближайшее время').send()
             messages = SupportChatMessage.objects.filter(ticket=ticket)
-            messages.update(receiver=staff)
+            # messages.update(receiver=staff)
             response = SendMessage(staff.telegram_account.tg_id, f'Вам назначена заявка №{ticket.id} от {user.full_name}').send()
             for chat_message in messages:
                 response = SendMessage(staff.telegram_account.tg_id, chat_message.text).send()
