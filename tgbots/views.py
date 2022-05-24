@@ -248,8 +248,9 @@ class Update():
                 text='Действие отменено'
             elif account.phone and str(account.phone).lstrip('+') == message.contact['phone_number'].lstrip('+'):
                 self.tg_account.account = account
-                account.expert.phone_confirmed = True
-                account.expert.save()
+                if hasattr(account, 'expert'):
+                    account.expert.phone_confirmed = True
+                    account.expert.save()
                 text = render_to_string('start_for_auth.html', {'account': account})
             else:
                 ConfirmTGEmailThread(account).start()
