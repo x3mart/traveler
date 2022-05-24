@@ -40,7 +40,7 @@ class SupportChatConsumer(AsyncWebsocketConsumer):
 
     @sync_to_async
     def send_to_support_tg_bot(self):
-        reply_markup = ReplyMarkup(self.ticket).get_markup('answer_to_user', self.user.telegram_account)
+        reply_markup = ReplyMarkup(self.ticket).get_markup('answer_to_user')
         text = render_to_string('message_from_user.html', {'ticket':self.ticket, 'message':self.message})
         SendMessage(self.ticket.staff.telegram_account.tg_id, text, reply_markup).send()
     
