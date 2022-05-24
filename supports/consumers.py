@@ -111,7 +111,7 @@ class SupportChatConsumer(AsyncWebsocketConsumer):
                 'message': self.message
             }
         )
-        if self.ticket.status == 2 and not self.message.author.is_staff:
+        if self.ticket.status == 2 and not self.user.is_staff:
             await self.send_to_support_tg_bot()
         
         
