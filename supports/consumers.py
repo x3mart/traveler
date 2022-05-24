@@ -28,7 +28,7 @@ class SupportChatConsumer(AsyncWebsocketConsumer):
     def save_message(self, message):
         # is_read = True if self.chat.members_in_room.count() > 1 else False
         is_read = True if self.ticket.status == 2 else False
-        message = SupportChatMessage.objects.create(room=self.chat, author=self.user, text=message, is_read=is_read)
+        message = SupportChatMessage.objects.create(ticket=self.ticket, author=self.user, text=message, is_read=is_read)
         return SupportChatMessageSerializer(message, many=False).data
         
     @database_sync_to_async
@@ -51,7 +51,7 @@ class SupportChatConsumer(AsyncWebsocketConsumer):
 
         self.user = self.scope['user']
         self.ticket = await self.get_ticket()
-        await self.set_online_status_member_in_room(online=True)
+        # await self.set_online_status_member_in_room(online=True)
         # self.chatmate_status = await self.get_chatmate_status()
         
         # Join room group
