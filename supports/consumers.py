@@ -20,8 +20,8 @@ class SupportChatConsumer(AsyncWebsocketConsumer):
         
     @database_sync_to_async
     def get_old_messages(self):
-        SupportChatMessage.objects.filter(pk=int(self.room_name)).exclude(author=self.user).filter(is_read=False).update(is_read=True)
-        messages = SupportChatMessage.objects.filter(room=int(self.room_name)).prefetch_related('author').order_by('created_at')
+        SupportChatMessage.objects.filter(ticket=self.ticket).exclude(author=self.user).filter(is_read=False).update(is_read=True)
+        messages = SupportChatMessage.objects.filter(ticket=self.ticket).prefetch_related('author').order_by('created_at')
         return SupportChatMessageSerializer(messages, many=True).data
 
     @database_sync_to_async   
