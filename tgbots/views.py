@@ -9,12 +9,15 @@ from django.contrib.auth import authenticate
 from accounts.models import PhoneConfirm, User
 from django.utils import timezone
 from supports.models import SupportChatMessage, Ticket
+from supports.serializers import SupportChatMessageSerializer
 from .models import *
 from .serializers import *
 from traveler.settings import TG_URL
 import threading
 from django.core.mail import send_mail
 import random
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
 
 # Create your views here.
@@ -126,6 +129,16 @@ class Update():
             message=self.message
         return message
     
+    def send_message_to_support_chat(self, chat_message, ticket):
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            f'supportchat_{ticket.id}',
+            {
+                'type': 'chat_message',
+                'message': SupportChatMessageSerializer(chat_message, many=False).data
+            }
+        ) 
+    
     def command_dispatcher(self, command, args=[]):
         chat_id = self.get_chat()
         message = self.get_message()
@@ -164,8 +177,8 @@ class Update():
             ticket.accepted_at = timezone.now()
             ticket.save()
             response = SendMessage(user.telegram_account.tg_id, 'Заявка ушла в работу. Наш сотрудник ответит в ближайшее время').send()
-            messages = SupportChatMessage.objects.filter(ticket=ticket)
-            messages.update(reciever=staff)
+            # messages = SupportChatMessage.objects.filter(ticket=ticket)
+            # messages.update(receiver=staff)
             response = SendMessage(staff.telegram_account.tg_id, f'Вам назначена заявка №{ticket.id} от {user.full_name}').send()
             for chat_message in messages:
                 response = SendMessage(staff.telegram_account.tg_id, chat_message.text).send()
@@ -264,7 +277,7 @@ class Update():
             response = SendMessage(self.message.chat.id, text, reply_markup).send()
         elif self.tg_account.reply_type =='create_ticket':
             ticket = Ticket.objects.create(user=self.tg_account.account.expert, tg_chat=chat_id)
-            chat_message = SupportChatMessage.objects.create(sender=self.tg_account.account.expert, tg_message=message.message_id, sender_chat_id=chat_id, text=message.text, ticket=ticket)
+            chat_message = SupportChatMessage.objects.create(author=self.tg_account.account.expert, tg_message=message.message_id, sender_chat_id=chat_id, text=message.text, ticket=ticket)
             self.tg_account.reply_type ='ticket'
             self.tg_account.save()
             text = render_to_string('ticket_created.html', {'ticket':ticket})
@@ -276,10 +289,10 @@ class Update():
                 response = SendMessage(boss.tg_id, text, reply_markup).send()                
         elif self.tg_account.reply_type =='ticket' and not command:
             ticket = Ticket.objects.filter(user_id=self.tg_account.account_id).filter(status__in=[1,2]).order_by('-id').first()
-            chat_message = SupportChatMessage.objects.create(sender=self.tg_account.account.expert, tg_message=message.message_id, sender_chat_id=chat_id, text=message.text, ticket_id=ticket.id)
+            chat_message = SupportChatMessage.objects.create(author=self.tg_account.account.expert, tg_message=message.message_id, sender_chat_id=chat_id, text=message.text, ticket_id=ticket.id)
             if ticket.staff:
-                chat_message.reciever = ticket.staff
-                chat_message.save()
+                # chat_message.receiver = ticket.staff
+                # chat_message.save()
                 reply_markup = ReplyMarkup(ticket).get_markup('answer_to_user', self.tg_account)
                 text = render_to_string('message_from_user.html', {'ticket':ticket, 'message':message})
                 response = SendMessage(ticket.staff.telegram_account.tg_id, text, reply_markup).send()
@@ -287,10 +300,13 @@ class Update():
                 response = None
         elif self.tg_account.reply_type =='answering' and not command:
             ticket = Ticket.objects.get(pk=int(self.tg_account.reply_1))
-            chat_message = SupportChatMessage.objects.create(sender=self.tg_account.account, tg_message=message.message_id, sender_chat_id=chat_id, text=message.text, ticket_id=ticket.id, reciever=ticket.user)
+            chat_message = SupportChatMessage.objects.create(author=self.tg_account.account, tg_message=message.message_id, sender_chat_id=chat_id, text=message.text, ticket_id=ticket.id,)
             reply_markup = ReplyMarkup(ticket).get_markup('answer_to_staff', self.tg_account)
             text = render_to_string('message_from_staff.html', {'ticket':ticket, 'message':message})
-            response = SendMessage(ticket.user.telegram_account.tg_id, text, reply_markup).send()
+            if ticket.user.telegram_account:
+                response = SendMessage(ticket.user.telegram_account.tg_id, text, reply_markup).send()
+            else: response = None
+            self.send_message_to_support_chat(chat_message, ticket)
             self.tg_account.await_reply = False
             self.tg_account.reply_type = None
             self.tg_account.reply_1 = None
