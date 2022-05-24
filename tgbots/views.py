@@ -82,6 +82,9 @@ class Update():
             args = []
             self.message.text = None
         self.tg_account = get_tg_account(self.message.user)
+        print('wow')
+        print(self.message.user)
+        print(self.tg_account)
         if self.tg_account.await_reply:
             response = self.await_dispatcher(self.message.text, command, args)
         elif command:
