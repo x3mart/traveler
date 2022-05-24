@@ -197,10 +197,10 @@ class Update():
             response = SendMessage(self.tg_account.tg_id, f'Кого назначим на заявку №{ticket.id} от пользователя {ticket.user.full_name}?', reply_markup).send()
         elif command == 'close_ticket':
             ticket = Ticket.objects.get(pk=int(args[0]))
-            ticket.user.telegram_account.await_reply = False
-            ticket.user.telegram_account.reply_type = None
-            ticket.user.telegram_account.reply_1 = None
-            ticket.user.telegram_account.save()
+            ticket.staff.telegram_account.await_reply = False
+            ticket.staff.telegram_account.reply_type = None
+            ticket.staff.telegram_account.reply_1 = None
+            ticket.staff.telegram_account.save()
             ticket.status = 3
             ticket.closed_at = timezone.now()
             ticket.save()
