@@ -161,6 +161,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
     
     async def disconnect(self, close_code):
         self.online_chatmates = await self.get_online_chatmates()
+        await self.set_online_status(online=False)
         for online_chatmate in self.online_chatmates:
             await self.channel_layer.group_send(
                 f'notification_{online_chatmate}' ,
