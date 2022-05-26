@@ -42,5 +42,5 @@ class TicketRetrieveSerializer(serializers.ModelSerializer):
     ticket_messages = SupportChatMessageSerializer(many=True, read_only=False)
     class Meta:
         model = Ticket
-        exclude = '__all__'
+        fields = '__all__'
 
