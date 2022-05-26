@@ -1,7 +1,7 @@
-from django.urls import path
+from rest_framework.routers import DefaultRouter
 
-from . import views
+from .views import TicketViewSet
 
-urlpatterns = [
-    path('support_tickets/', views.TicketListCreateRetrieveViewSet.as_view(), name='chat'),
-]
+router = DefaultRouter()
+router.register(r'support_tickets', TicketViewSet, basename='support_ticket')
+urlpatterns = router.urls

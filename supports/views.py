@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.template.loader import render_to_string
@@ -10,7 +10,11 @@ from tgbots.models import TelegramAccount
 from tgbots.views import ReplyMarkup, SendMessage
 
 # Create your views here.
-class TicketListCreateRetrieveViewSet(viewsets.ModelViewSet):
+class TicketViewSet(mixins.CreateModelMixin,
+                    mixins.ListModelMixin,
+                    mixins.RetrieveModelMixin,
+                    viewsets.GenericViewSet):
+                    
     queryset = Ticket.objects.all()
     serializer_class = TicketSerializer
     permission_classes = [IsAuthenticated]
