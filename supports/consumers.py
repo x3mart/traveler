@@ -17,6 +17,11 @@ class SupportChatConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def get_chatmate_status(self):
         return self.ticket.members_in_room.count() > 1
+    
+    @database_sync_to_async
+    def close_ticket(self):
+        self.ticket.status = 3
+        self.ticket.save()
         
     @database_sync_to_async
     def get_old_messages(self):
@@ -101,8 +106,12 @@ class SupportChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
-        if message.get('command') and message.get('command') == 'close_ticket':
-            pass
+        command = message.get('command')
+        if command and command == 'close_ticket':
+            who_close_ticket = 'Технической Поддержкой' if self.user.is_staff else 'Пользователем'
+            message = 'Заявка закрыта ' + who_close_ticket
+            await self.close_ticket()
+
         self.message = await self.save_message(message)
 
         # Send message to room group
@@ -113,8 +122,17 @@ class SupportChatConsumer(AsyncWebsocketConsumer):
                 'message': self.message
             }
         )
-        if self.ticket.status == 2 and not self.user.is_staff:
+        if self.ticket.status > 1 and not self.user.is_staff:
             await self.send_to_support_tg_bot()
+        
+        if command:
+            await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'chat_message',
+                'command': command
+            }
+        )
         
         
     # Receive message from room group
