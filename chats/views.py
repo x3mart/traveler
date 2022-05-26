@@ -7,7 +7,7 @@ from accounts.models import User
 
 # Create your views here.
 class UserChatListCreateView(generics.ListCreateAPIView):
-    queryset = UserChat.objects.all()[:25]
+    queryset = UserChat.objects.all()
     serializer = UserChatSerializer
 
     def create(self, request):
