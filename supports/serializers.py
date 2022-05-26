@@ -29,7 +29,7 @@ class TicketSerializer(serializers.ModelSerializer):
     last_message = serializers.SerializerMethodField()
     class Meta:
         model = Ticket
-        fields = ('tg_chat',)
+        fields = '__all__'
         extra_kwargs = {'user': {'required': False}}
     
     def get_last_message(self, obj):
@@ -42,5 +42,5 @@ class TicketRetrieveSerializer(serializers.ModelSerializer):
     ticket_messages = SupportChatMessageSerializer(many=True, read_only=False)
     class Meta:
         model = Ticket
-        exclude = ('tg_chat',)
+        exclude = '__all__'
 
