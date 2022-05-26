@@ -107,11 +107,12 @@ class SupportChatConsumer(AsyncWebsocketConsumer):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
         print(text_data)
-        command = text_data.get('command')
-        if command and command == 'close_ticket':
-            who_close_ticket = 'Технической Поддержкой' if self.user.is_staff else 'Пользователем'
-            message = 'Заявка закрыта ' + who_close_ticket
-            await self.close_ticket()
+        command = None
+        # command = text_data.get('command')
+        # if command and command == 'close_ticket':
+        #     who_close_ticket = 'Технической Поддержкой' if self.user.is_staff else 'Пользователем'
+        #     message = 'Заявка закрыта ' + who_close_ticket
+        #     await self.close_ticket()
 
         self.message = await self.save_message(message)
 
