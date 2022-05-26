@@ -145,7 +145,7 @@ class Update():
             f'supportchat_{ticket.id}',
             {
                 'type': 'chat_message',
-                'message': command
+                'command': command
             }
         ) 
     

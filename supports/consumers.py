@@ -126,14 +126,14 @@ class SupportChatConsumer(AsyncWebsocketConsumer):
         if self.ticket.status > 1 and not self.user.is_staff:
             await self.send_to_support_tg_bot()
         
-        if command:
-            await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'chat_message',
-                'command': command
-            }
-        )
+        # if command:
+        #     await self.channel_layer.group_send(
+        #     self.room_group_name,
+        #     {
+        #         'type': 'chat_message',
+        #         'command': command
+        #     }
+        # )
         
         
     # Receive message from room group
