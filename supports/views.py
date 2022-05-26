@@ -2,9 +2,10 @@ from rest_framework import generics, mixins
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.template.loader import render_to_string
+from django.db.models import Prefetch
 
 from supports.models import SupportChatMessage, Ticket
-from supports.serializers import TicketSerializer
+from supports.serializers import TicketRetrieveSerializer, TicketSerializer
 from tgbots.models import TelegramAccount
 from tgbots.views import ReplyMarkup, SendMessage
 
@@ -15,8 +16,19 @@ class TicketListCreateRetrieveViewSet(generics.ListCreateAPIView, mixins.Retriev
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        qs = super().get_queryset()
-        return qs.prefetch_related('user', 'staff')
+        qs = Ticket.objects.prefetch_related('user', 'staff')
+        if self.action == 'list':
+            return qs.filter(user=self.request.user)
+        if self.action == 'retrieve':
+            ticket_messages = SupportChatMessage.objects.prefetch_related('author')
+            prefetched_ticket_messages = Prefetch('ticket_messages', ticket_messages)
+            return qs.prefetch_related(prefetched_ticket_messages)
+        return qs
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return TicketRetrieveSerializer
+        return super().get_serializer_class()
 
     def create(self, request, *args, **kwargs):
         ticket = Ticket.objects.create(user=request.user)

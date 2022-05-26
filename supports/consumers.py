@@ -101,6 +101,8 @@ class SupportChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
+        if message.get('command') and message.get('command') == 'close_ticket':
+            pass
         self.message = await self.save_message(message)
 
         # Send message to room group
