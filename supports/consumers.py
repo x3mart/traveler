@@ -106,7 +106,7 @@ class SupportChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
-        command = None
+        # command = None
         # command = text_data.get('command')
         # if command and command == 'close_ticket':
         #     who_close_ticket = 'Технической Поддержкой' if self.user.is_staff else 'Пользователем'
