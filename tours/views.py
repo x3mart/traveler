@@ -1,6 +1,7 @@
 from django.db.models import F, Q
 from datetime import timedelta, datetime
 from django.forms import DurationField
+from django.shortcuts import redirect
 from rest_framework.decorators import action
 from django.db.models.query import Prefetch
 from rest_framework import viewsets
@@ -170,7 +171,24 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
     
     @action(['get'], detail=False)
     def tour_set(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)    
+        return super().list(request, *args, **kwargs) 
+
+    @action(['patch'], detail=True)
+    def aprove(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.on_moderation = False
+        instance.is_active = True
+        instance.save()
+        return redirect('https://traveler.market/admin/tours/moderatedtour/')
+    
+    @action(['patch'], detail=True)
+    def decline(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.on_moderation = False
+        instance.is_active = False
+        instance.is_draft = True
+        instance.save()
+        return redirect('https://traveler.market/admin/tours/moderatedtour/')
 
 
 class TourTypeViewSet(viewsets.ReadOnlyModelViewSet):
