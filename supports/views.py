@@ -54,6 +54,6 @@ class TicketViewSet(mixins.CreateModelMixin,
         who_close_ticket = 'Технической Поддержкой' if request.user.is_staff else 'Пользователем'
         message = 'Заявка закрыта ' + who_close_ticket
         message = SupportChatMessage.objects.create(author=request.user, text=message, ticket=ticket)
-        Update.send_message_to_support_chat(message, ticket)
+        # Update.send_message_to_support_chat(message, ticket)
         Update.send_command_to_support_chat('close_ticket', ticket)
         return Response(TicketRetrieveSerializer(ticket, context={'request':request}).data, status=200)
