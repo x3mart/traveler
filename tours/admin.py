@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.utils.html import format_html
+from utils import tokenizator
 from django.utils.safestring import mark_safe
 from django.db.models.query import Prefetch
 from tours.models import ImportantTitle, ModeratedTour, TourAccomodation, TourPropertyType, Tour, TourType, TourBasic
@@ -39,7 +39,7 @@ class ModeratedTourAdmin(admin.ModelAdmin):
     
     @admin.display(description='Название')
     def linked_name(self, obj):
-        return mark_safe(f'<a href="https://traveler.market/tours/{obj.id}/?token={self.request.user.id}">{obj.name}</a>')
+        return mark_safe(f'<a href="https://traveler.market/tours/{obj.id}/?token={tokenizator.create_token(self.request.user.id)}">{obj.name}</a>')
     
     @admin.display(description='Эксперт')
     def expert(self, obj):
