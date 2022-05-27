@@ -24,7 +24,7 @@ class TourAdmin(admin.ModelAdmin):
 
 class ModeratedTourAdmin(admin.ModelAdmin):
     readonly_fields=('start_city', 'finish_city')
-    list_display = ('name', 'expert', 'start_country', 'start_city', 'start_date', 'is_active', 'on_moderation', 'is_draft', 'direct_link')
+    list_display = ('linked_name', 'expert', 'start_country', 'start_city', 'start_date', 'is_active', 'on_moderation', 'is_draft', 'direct_link')
     # list_editable =('is_active', 'on_moderation', 'is_draft')
     list_filter = ('tour_basic__expert',)
     list_display_links = None
@@ -37,7 +37,7 @@ class ModeratedTourAdmin(admin.ModelAdmin):
         return qs
     
     @admin.display(description='Название')
-    def name(self, obj):
+    def linked_name(self, obj):
         return mark_safe(f'<a href="https://traveler.market/tours/{obj.id}>{obj.name}</a>')
     
     @admin.display(description='Эксперт')
