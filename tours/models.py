@@ -290,3 +290,10 @@ class Tour(models.Model):
     
     def __str__(self):
         return self.name if self.name else 'безымянный тур'
+    
+class ModeratedTour(Tour):
+    class Meta:
+        verbose_name = _('Тур на модерации')
+        verbose_name_plural = _('Туры на модерации')
+        proxy = True
+
