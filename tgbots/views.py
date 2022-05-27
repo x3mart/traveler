@@ -215,7 +215,7 @@ class Update():
             ticket.closed_at = timezone.now()
             ticket.save()
             chat_message = 'Заявка закрыта Технической Поддержкой'
-            chat_message = SupportChatMessage.objects.create(author=ticket.staff, text=message, ticket=ticket)
+            chat_message = SupportChatMessage.objects.create(author=ticket.staff, text=chat_message, ticket=ticket)
             self.send_message_to_support_chat(chat_message, ticket)
             self.send_command_to_support_chat('close_ticket', ticket)
             # reply_markup = ReplyMarkup().get_markup('start', ticket.user.telegram_account)
