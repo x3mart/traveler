@@ -173,7 +173,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
     def tour_set(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs) 
 
-    @action(['patch'], detail=True)
+    @action(['get'], detail=True)
     def aprove(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.on_moderation = False
@@ -181,7 +181,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         instance.save()
         return redirect('https://traveler.market/admin/tours/moderatedtour/')
     
-    @action(['patch'], detail=True)
+    @action(['get'], detail=True)
     def decline(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.on_moderation = False
