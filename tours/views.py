@@ -81,6 +81,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         instance.save()
         if instance.on_moderation and len(instance.completed_sections) < 8:
             instance.on_moderation = False
+            instance.save()
             return Response({'error': True, 'message': _('Не все обязательные поля тура заполнены')}, status=403)
         if getattr(instance, '_prefetched_objects_cache', None):
             instance._prefetched_objects_cache = {}
