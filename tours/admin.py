@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.html import format_html
 from django.db.models.query import Prefetch
 from tours.models import ImportantTitle, ModeratedTour, TourAccomodation, TourPropertyType, Tour, TourType, TourBasic
 
@@ -37,6 +38,10 @@ class ModeratedTourAdmin(admin.ModelAdmin):
     @admin.display(description='Эксперт')
     def expert(self, obj):
         return obj.tour_basic.expert.full_name
+    
+    @admin.display(description='Название')
+    def name(self, obj):
+        return format_html(f'<a href="https://traveler.market/tours/{obj.id}>{obj.name}</a>')
 
 
 admin.site.register(Tour, TourAdmin)
