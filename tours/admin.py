@@ -30,6 +30,7 @@ class ModeratedTourAdmin(admin.ModelAdmin):
     list_display_links = None
 
     def get_queryset(self, request):
+        self.request = request
         qs = super().get_queryset(request)
         tour_basic = TourBasic.objects.prefetch_related('expert')
         prefetch_tour_basic = Prefetch('tour_basic', tour_basic)
@@ -38,7 +39,7 @@ class ModeratedTourAdmin(admin.ModelAdmin):
     
     @admin.display(description='Название')
     def linked_name(self, obj):
-        return mark_safe(f'<a href="https://traveler.market/tours/{obj.id}/?token=">{obj.name}</a>')
+        return mark_safe(f'<a href="https://traveler.market/tours/{obj.id}/?token={self.request.user.id}">{obj.name}</a>')
     
     @admin.display(description='Эксперт')
     def expert(self, obj):
