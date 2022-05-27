@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from django.db.models.query import Prefetch
 from tours.models import ImportantTitle, ModeratedTour, TourAccomodation, TourPropertyType, Tour, TourType, TourBasic
 
@@ -23,7 +24,7 @@ class TourAdmin(admin.ModelAdmin):
 
 class ModeratedTourAdmin(admin.ModelAdmin):
     readonly_fields=('start_city', 'finish_city')
-    list_display = ('linked', 'expert', 'start_country', 'start_city', 'start_date', 'is_active', 'on_moderation', 'is_draft', 'direct_link')
+    list_display = ('name', 'expert', 'start_country', 'start_city', 'start_date', 'is_active', 'on_moderation', 'is_draft', 'direct_link')
     # list_editable =('is_active', 'on_moderation', 'is_draft')
     list_filter = ('tour_basic__expert',)
     list_display_links = None
@@ -35,13 +36,14 @@ class ModeratedTourAdmin(admin.ModelAdmin):
         qs = qs.prefetch_related(prefetch_tour_basic, 'start_country', 'start_city').filter(on_moderation=True)
         return qs
     
+    @admin.display(description='Название')
+    def name(self, obj):
+        return mark_safe(f'<a href="https://traveler.market/tours/{obj.id}>{obj.name}</a>')
+    
     @admin.display(description='Эксперт')
     def expert(self, obj):
         return obj.tour_basic.expert.full_name
     
-    @admin.display(description='Название')
-    def linked(self, obj):
-        return format_html(f'<a href="https://traveler.market/tours/{obj.id}>{obj.name}</a>')
 
 
 admin.site.register(Tour, TourAdmin)
