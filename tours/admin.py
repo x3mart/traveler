@@ -37,8 +37,8 @@ class ModeratedTourAdmin(admin.ModelAdmin):
         return qs
     
     @admin.display(description='Название')
-    def linked_name(self, obj, request):
-        return mark_safe(f'<a href="https://traveler.market/tours/{obj.id}/?token={request.user.id}">{obj.name}</a>')
+    def linked_name(self, obj):
+        return mark_safe(f'<a href="https://traveler.market/tours/{obj.id}/?token=">{obj.name}</a>')
     
     @admin.display(description='Эксперт')
     def expert(self, obj):
