@@ -87,7 +87,7 @@ class SupportChatConsumer(AsyncWebsocketConsumer):
         
 
     async def disconnect(self, close_code):
-        await self.set_online_status_member_in_room(online=False)
+        # await self.set_online_status_member_in_room(online=False)
 
         await self.channel_layer.group_send(
             self.room_group_name,
