@@ -79,6 +79,8 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
             instance.is_active = False
             instance.on_moderation = True
         instance.save()
+        if instance.on_moderation and len(instance.completed_sections) < 8:
+            return Response({'error': True, 'message': _('Не все обязательные поля тура заполнены')}, status=403)
         if getattr(instance, '_prefetched_objects_cache', None):
             instance._prefetched_objects_cache = {}
         return Response(TourSerializer(instance, context={'request': request}).data, status=201)
@@ -167,6 +169,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
     @action(['get'], detail=False)
     def tour_set(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)    
+
 
 class TourTypeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = TourType.objects.all()
