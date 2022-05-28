@@ -25,7 +25,7 @@ class UserAdmin(UserAdmin, TranslationAdmin):
         }),
     fieldsets = ((None, {'fields':('first_name', 'last_name', 'email', 'password', 'phone', 'avatar', 'is_active', 'groups')}),)
     ordering = ('-id',)
-    list_display = ('email', 'full_name', 'is_superuser')
+    list_display = ('email', 'full_name', 'is_superuser', 'is_staff')
 
     # def get_queryset(self, request):
     #     return User.objects.filter(is_staff=True)
