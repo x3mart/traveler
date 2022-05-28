@@ -153,4 +153,4 @@ class SupportChatConsumer(AsyncWebsocketConsumer):
                 'command': event['command']
             }))
         elif event.get('ticket_status'):
-            self.ticket.status = event['status']
+            self.ticket.status = event['ticket_status']
