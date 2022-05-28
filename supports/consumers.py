@@ -152,5 +152,5 @@ class SupportChatConsumer(AsyncWebsocketConsumer):
             await self.send(text_data=json.dumps({
                 'command': event['command']
             }))
-        elif event.get('ticket_status'):
-            self.ticket.status = event['ticket_status']
+        elif event.get('ticket_status_changed'):
+            self.ticket = await self.get_ticket()
