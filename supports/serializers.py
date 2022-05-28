@@ -14,7 +14,7 @@ class MessageAuthorSerializer(serializers.ModelSerializer):
 
 class SupportChatMessageSerializer(serializers.ModelSerializer):
     created_at = serializers.SerializerMethodField()
-    author = MessageAuthorSerializer(many=False, read_only=True)
+    author = serializers.SerializerMethodField()
     class Meta:
         model = SupportChatMessage
         fields = '__all__'
@@ -23,6 +23,11 @@ class SupportChatMessageSerializer(serializers.ModelSerializer):
         if (timezone.now() - obj.created_at).days <= 0:
             return obj.created_at.strftime('%H:%M')
         return obj.created_at.strftime('%d-%m-%Y %H:%M')
+    
+    def get_author(self, obj):
+        if obj.author.is_staff:
+            return {'id':0, 'first_name':'Техническая', 'last_name':'Поддержка', 'avatar':None, 'is_online':True}
+        return MessageAuthorSerializer(many=False)
 
 
 class TicketSerializer(serializers.ModelSerializer):

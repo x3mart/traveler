@@ -21,7 +21,7 @@ from asgiref.sync import async_to_sync
 
 
 # Create your views here.
-COMMANDS_LIST = ('start', 'login', 'confirm_phone', 'create_ticket', 'cancel', 'set_to_staff', 'answer_to_user', 'proposal_to_close', 'close_ticket', 'show_last_messages', 'boss_got_new_ticket')
+COMMANDS_LIST = ('status', 'start', 'login', 'confirm_phone', 'create_ticket', 'cancel', 'set_to_staff', 'answer_to_user', 'proposal_to_close', 'close_ticket', 'show_last_messages', 'boss_got_new_ticket')
 
 class ConfirmTGEmailThread(threading.Thread):
     def __init__(self, user):
@@ -88,7 +88,7 @@ class Update():
             # response = SendMessage(chat_id=1045490278, text=command).send()
             response = self.command_dispatcher(command, args)
         else:
-            text = "No commands in message"
+            text = "Введите команду или укажите получателя"
             response = SendMessage(chat_id=self.message.chat.id, text=text).send()
             # response = None
         return response
