@@ -1,17 +1,22 @@
 import jwt
 from datetime import datetime, timedelta
-
+from rest_framework_simplejwt import tokens
 from traveler import settings
+from accounts.models import User
 
 ALGORITHM = "HS256"
 access_token_jwt_subject = "access"
 
 
 def create_token(user_id: int) -> dict:
-    access_token_expires = timedelta(days=16)
-    return create_access_token(
-            data={"user_id": user_id}, expires_delta=access_token_expires
-        )
+    # access_token_expires = timedelta(days=16)
+    # return create_access_token(
+    #         data={"user_id": user_id}, expires_delta=access_token_expires
+    #     )
+    user = User.objects.get(pk=user_id)
+    token = tokens.RefreshToken.for_user(user)
+    print(str(token.access_token))
+    return str(token.access_token)
         
 
 
