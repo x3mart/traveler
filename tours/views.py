@@ -1,7 +1,7 @@
 from django.db.models import F, Q
 from datetime import timedelta, datetime
 from django.forms import DurationField
-from django.shortcuts import redirect
+from django.http import HttpResponseRedirect
 from rest_framework.decorators import action
 from django.db.models.query import Prefetch
 from rest_framework import viewsets
@@ -180,7 +180,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         instance.is_active = True
         instance.is_draft = False
         instance.save()
-        return redirect('https://traveler.market/admin/tours/moderatedtour/')
+        return HttpResponseRedirect(redirect_to='https://traveler.market/admin/tours/moderatedtour/')
     
     @action(['patch'], detail=True)
     def decline(self, request, *args, **kwargs):
@@ -189,7 +189,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         instance.is_active = False
         instance.is_draft = True
         instance.save()
-        return redirect('https://traveler.market/admin/tours/moderatedtour/')
+        return HttpResponseRedirect(redirect_to='https://traveler.market/admin/tours/moderatedtour/')
 
 
 class TourTypeViewSet(viewsets.ReadOnlyModelViewSet):
