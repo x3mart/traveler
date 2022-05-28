@@ -174,7 +174,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         return super().list(request, *args, **kwargs) 
 
     @action(['patch'], detail=True)
-    def aprove(self, request, *args, **kwargs):
+    def approve(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.on_moderation = False
         instance.is_active = True
