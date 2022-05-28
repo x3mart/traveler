@@ -26,7 +26,7 @@ class SupportChatMessageSerializer(serializers.ModelSerializer):
     
     def get_author(self, obj):
         if obj.author.is_staff:
-            return {'id':0, 'first_name':'Техническая', 'last_name':'Поддержка', 'avatar':None, 'is_online':True}
+            return {'id':0, 'first_name':'Техническая', 'last_name':'Поддержка', 'avatar':'/static/media/TM.932d97067015226dc97076b07d4184f1.svg', 'is_online':True}
         return MessageAuthorSerializer(obj.author, many=False).data
 
 
