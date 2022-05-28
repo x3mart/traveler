@@ -56,4 +56,7 @@ class TicketViewSet(mixins.CreateModelMixin,
         message = SupportChatMessage.objects.create(author=request.user, text=message, ticket=ticket)
         Update({'items':None}).send_message_to_support_chat(message, ticket)
         Update({'items':None}).send_command_to_support_chat('close_ticket', ticket)
+        if not request.user.is_staff:
+            reply_markup = ReplyMarkup(ticket=ticket).get_markup('start')
+            SendMessage(ticket.staff.telegram_account.tg_id, f'Заявка №{ticket.id} закрыта пользователем', reply_markup).send()
         return Response(TicketRetrieveSerializer(ticket, context={'request':request}).data, status=200)
