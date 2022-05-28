@@ -149,6 +149,16 @@ class Update():
             }
         ) 
     
+    def send_status_to_support_chat(self, ticket):
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            f'supportchat_{ticket.id}',
+            {
+                'type': 'chat_message',
+                'ticket_status': ticket.status
+            }
+        ) 
+    
     def command_dispatcher(self, command, args=[]):
         chat_id = self.get_chat()
         message = self.get_message()
@@ -186,6 +196,7 @@ class Update():
             ticket.status = 2
             ticket.accepted_at = timezone.now()
             ticket.save()
+            self.send_status_to_support_chat(ticket)
             # response = SendMessage(user.telegram_account.tg_id, 'Заявка ушла в работу. Наш сотрудник ответит в ближайшее время').send()
             messages = SupportChatMessage.objects.filter(ticket=ticket)
             # messages.update(receiver=staff)
@@ -218,6 +229,7 @@ class Update():
             chat_message = SupportChatMessage.objects.create(author=ticket.staff, text=chat_message, ticket=ticket)
             self.send_message_to_support_chat(chat_message, ticket)
             self.send_command_to_support_chat('close_ticket', ticket)
+            self.send_status_to_support_chat(ticket)
             # reply_markup = ReplyMarkup().get_markup('start', ticket.user.telegram_account)
             # response = SendMessage(ticket.user.telegram_account.tg_id, f'Заявка №{ticket.id} закрыта', reply_markup).send()
             if ticket.staff:

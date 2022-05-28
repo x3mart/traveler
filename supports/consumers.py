@@ -123,7 +123,7 @@ class SupportChatConsumer(AsyncWebsocketConsumer):
                 'message': self.message
             }
         )
-        if self.ticket.status > 1 and not self.user.is_staff:
+        if self.ticket.status == 2 and not self.user.is_staff:
             await self.send_to_support_tg_bot()
         
         # if command:
@@ -152,3 +152,5 @@ class SupportChatConsumer(AsyncWebsocketConsumer):
             await self.send(text_data=json.dumps({
                 'command': event['command']
             }))
+        elif event.get('ticket_status'):
+            self.ticket.status = event['status']
