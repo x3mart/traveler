@@ -1,6 +1,7 @@
 from django.db.models import F, Q
 from datetime import timedelta, datetime
 from django.forms import DurationField
+from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseRedirect
 from rest_framework.decorators import action
 from django.db.models.query import Prefetch
@@ -173,6 +174,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
     def tour_set(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs) 
 
+    @csrf_exempt
     @action(['patch'], detail=True)
     def approve(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -182,6 +184,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         instance.save()
         return HttpResponseRedirect(redirect_to='https://traveler.market/admin/tours/moderatedtour/')
     
+    @csrf_exempt
     @action(['patch'], detail=True)
     def decline(self, request, *args, **kwargs):
         instance = self.get_object()
