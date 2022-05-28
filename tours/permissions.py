@@ -5,8 +5,8 @@ class TourPermission(permissions.BasePermission):
     def has_permission(self, request, view):
         if view.action in ['create', 'tour_set']:
             return request.auth and hasattr(request.user, 'expert')
-        if view.action in ['aprove', 'decline']:
-            return request.auth and request.user.is_staff
+        # if view.action in ['aprove', 'decline']:
+        #     return request.auth and request.user.is_staff
         return True           
 
     def has_object_permission(self, request, view, obj):
