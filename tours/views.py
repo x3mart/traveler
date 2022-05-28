@@ -182,7 +182,8 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         instance.is_active = True
         instance.is_draft = False
         instance.save()
-        return HttpResponseRedirect(redirect_to='https://traveler.market/admin/tours/moderatedtour/')
+        return Response({}, status=200)
+        # return HttpResponseRedirect(redirect_to='https://traveler.market/admin/tours/moderatedtour/')
     
     @csrf_exempt
     @action(['patch'], detail=True)
