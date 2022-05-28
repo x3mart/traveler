@@ -27,8 +27,8 @@ class UserAdmin(UserAdmin, TranslationAdmin):
     ordering = ('-id',)
     list_display = ('email', 'full_name', 'is_superuser', 'is_staff')
 
-    # def get_queryset(self, request):
-    #     return User.objects.filter(is_staff=True)
+    def get_queryset(self, request):
+        return User.objects.filter(is_staff=True)
 
 class ExpertCreationForm(UserCreationForm):
     class Meta:
