@@ -174,7 +174,6 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
     def tour_set(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs) 
 
-    @csrf_exempt
     @action(['patch'], detail=True)
     def approve(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -183,9 +182,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         instance.is_draft = False
         instance.save()
         return Response({}, status=200)
-        # return HttpResponseRedirect(redirect_to='https://traveler.market/admin/tours/moderatedtour/')
     
-    @csrf_exempt
     @action(['patch'], detail=True)
     def decline(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -193,7 +190,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         instance.is_active = False
         instance.is_draft = True
         instance.save()
-        return HttpResponseRedirect(redirect_to='https://traveler.market/admin/tours/moderatedtour/')
+        return Response({}, status=200)
 
 
 class TourTypeViewSet(viewsets.ReadOnlyModelViewSet):
