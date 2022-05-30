@@ -32,14 +32,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
         is_read = True if self.chat.members_in_room.count() > 1 else False
         message = ChatMessage.objects.create(room=self.chat, author=self.user, text=message, is_read=is_read)
         message = ChatMessageSerializer(message, many=False).data
-        if not is_read:
-            self.channel_layer.group_send(
-                f'notification_{self.chatmate.id}',
-                {
-                    'type': 'chat_message',
-                    'new_message': self.user.id
-                }
-            )
         return message
         
     @database_sync_to_async
@@ -117,6 +109,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'message': self.message
             }
         )    
+
+        if not self.message.is_read:
+            await self.channel_layer.group_send(
+                f'notification_{self.chatmate.id}',
+                {
+                    'type': 'chat_message',
+                    'new_message': self.user.id
+                }
+            )
         
     # Receive message from room group
     async def chat_message(self, event):
