@@ -166,8 +166,9 @@ class CustomerMeSerializer(serializers.ModelSerializer):
         dadata = Dadata(DADATA_API, DADATA_SECRET)
         result = dadata.clean("name", validated_data['name'])
         if result:
-            validated_data['first_name'] = result[0].get('name')
-            validated_data['last_name'] = result[0].get('surname')
+            print(result)
+            validated_data['first_name'] = result.get('name')
+            validated_data['last_name'] = result.get('surname')
         customer = Customer(**validated_data)
         customer.set_password(password)
         customer.save()
