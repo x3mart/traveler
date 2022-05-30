@@ -64,7 +64,7 @@ class ChatMixins():
         async_to_sync(channel_layer.group_send)(
             f'notification_{user.id}',
             {
-                'type': 'notification',
+                'type': 'chat_message',
                 'new_chat': chat
             }
         )  
