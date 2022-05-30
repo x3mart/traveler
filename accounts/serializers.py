@@ -161,7 +161,7 @@ class CustomerMeSerializer(serializers.ModelSerializer):
         }
     
     def create(self, validated_data):
-        name = self.context['request']
+        name = self.context['request'].data.get('name')
         if not name:
             serializers.ValidationError({'name':[_('Пожалуйста представьтесь')]})
         password = check_password(self)
