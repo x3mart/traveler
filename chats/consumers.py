@@ -13,6 +13,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     def get_chat(self):
         return UserChat.objects.get(pk=self.room_name)
     
+    @database_sync_to_async
     def get_chatmate(self):
         return self.chat.room_members.exclude(id=self.user.id).first()
     
