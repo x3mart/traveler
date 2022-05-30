@@ -166,11 +166,14 @@ class CustomerMeSerializer(serializers.ModelSerializer):
             serializers.ValidationError({'name':[_('Пожалуйста представьтесь')]})
         password = check_password(self)
         validated_data['is_customer'] = True
-        dadata = Dadata(DADATA_API, DADATA_SECRET)
-        result = dadata.clean("name", name)
-        if result:
-            validated_data['first_name'] = result.get('name')
-            validated_data['last_name'] = result.get('surname')
+        if len(name.strip().split(' ')) > 2:
+            dadata = Dadata(DADATA_API, DADATA_SECRET)
+            result = dadata.clean("name", name)
+            if result:
+                validated_data['first_name'] = result.get('name')
+                validated_data['last_name'] = result.get('surname')
+        else:
+            validated_data['first_name'] = name
         customer = Customer(**validated_data)
         customer.set_password(password)
         customer.save()
