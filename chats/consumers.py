@@ -29,7 +29,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async   
     def save_message(self, message):
-        is_read = True if self.get_chatmate_status() else False
+        is_read = True if self.chat.members_in_room.count() > 1 else False
         print(is_read)
         message = ChatMessage.objects.create(room=self.chat, author=self.user, text=message, is_read=is_read)
         message = ChatMessageSerializer(message, many=False).data
