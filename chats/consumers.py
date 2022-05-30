@@ -58,7 +58,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.chat = await self.get_chat()
         await self.set_online_status_member_in_room(online=True)
         self.chatmate_status = await self.get_chatmate_status()
-        self.chatmate = await self.getchatmate()
+        self.chatmate = await self.get_chatmate()
         
         # Join room group
         await self.channel_layer.group_add(
