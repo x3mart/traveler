@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from chats.models import ChatMessage
+from chats.models import ChatMessage, UserChat
 
 # Register your models here.
 class TicketMessageInline(admin.TabularInline):
@@ -22,4 +22,5 @@ class UserChatAdmin(admin.ModelAdmin):
     ]
 
 
+admin.site.register(UserChat, UserChatAdmin)
 admin.site.register(ChatMessage)
