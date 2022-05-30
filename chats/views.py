@@ -2,11 +2,12 @@ from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.response import Response
 from chats.serializers import UserChatSerializer
+from utils.mixins import ChatMixins
 from .models import UserChat
 from accounts.models import User
 
 # Create your views here.
-class UserChatListCreateView(generics.ListCreateAPIView):
+class UserChatListCreateView(generics.ListCreateAPIView, ChatMixins):
     queryset = UserChat.objects.all()
     serializer = UserChatSerializer
 
@@ -18,6 +19,7 @@ class UserChatListCreateView(generics.ListCreateAPIView):
         else:
             chat = UserChat.objects.create()
             chat.room_members.add(request.user, chat_with)
+            self.send_new_chat_notification(chat_with, UserChatSerializer(chat, many=False, context={'request':request}).data)
         return Response(UserChatSerializer(chat, context={'request':request}).data, status=200)
     
     def list(self, request):

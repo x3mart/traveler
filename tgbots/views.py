@@ -1,23 +1,19 @@
-import json
-from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import permissions
 import requests
 from django.template.loader import render_to_string
-from django.contrib.auth import authenticate
 from accounts.models import PhoneConfirm, User
 from django.utils import timezone
 from supports.models import SupportChatMessage, Ticket
-from supports.serializers import SupportChatMessageSerializer
+from utils.mixins import ChatMixins
 from .models import *
 from .serializers import *
 from traveler.settings import TG_URL
 import threading
 from django.core.mail import send_mail
 import random
-from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
+
 
 
 # Create your views here.
@@ -64,7 +60,7 @@ def tg_update_handler(request):
     #    response2 = SendMessage(chat_id=1045490278, text='response').send()
     return Response({}, status=200)
 
-class Update():
+class Update(ChatMixins):
     def __init__(self, data) -> None:
         for key, value in data.items():
             if key == 'message':
@@ -128,36 +124,6 @@ class Update():
         else:
             message=self.message
         return message
-    
-    def send_message_to_support_chat(self, chat_message, ticket):
-        channel_layer = get_channel_layer()
-        async_to_sync(channel_layer.group_send)(
-            f'supportchat_{ticket.id}',
-            {
-                'type': 'chat_message',
-                'message': SupportChatMessageSerializer(chat_message, many=False).data
-            }
-        ) 
-    
-    def send_command_to_support_chat(self, command, ticket):
-        channel_layer = get_channel_layer()
-        async_to_sync(channel_layer.group_send)(
-            f'supportchat_{ticket.id}',
-            {
-                'type': 'chat_message',
-                'command': command
-            }
-        ) 
-    
-    def send_status_to_support_chat(self, ticket):
-        channel_layer = get_channel_layer()
-        async_to_sync(channel_layer.group_send)(
-            f'supportchat_{ticket.id}',
-            {
-                'type': 'chat_message',
-                'ticket_status_changed': ticket.status
-            }
-        ) 
     
     def command_dispatcher(self, command, args=[]):
         chat_id = self.get_chat()

@@ -13,6 +13,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
     def get_chat(self):
         return UserChat.objects.get(pk=self.room_name)
     
+    def get_chatmate(self):
+        return self.chat.room_members.exclude(id=self.user.id).first()
+    
     @database_sync_to_async
     def get_chatmate_status(self):
         return self.chat.members_in_room.count() > 1
@@ -25,9 +28,18 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async   
     def save_message(self, message):
-        is_read = True if self.chat.members_in_room.count() > 1 else False
+        is_read = True if self.get_chatmate_status() else False
         message = ChatMessage.objects.create(room=self.chat, author=self.user, text=message, is_read=is_read)
-        return ChatMessageSerializer(message, many=False).data
+        message = ChatMessageSerializer(message, many=False).data
+        if not is_read:
+            self.channel_layer.group_send(
+                f'notification_{self.chatmate.id}' ,
+                {
+                    'type': 'chat_message',
+                    'new_message': self.user.id
+                }
+            )
+        return message
         
     
     @database_sync_to_async
@@ -46,6 +58,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.chat = await self.get_chat()
         await self.set_online_status_member_in_room(online=True)
         self.chatmate_status = await self.get_chatmate_status()
+        self.chatmate = await self.getchatmate()
         
         # Join room group
         await self.channel_layer.group_add(
@@ -104,6 +117,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'message': self.message
             }
         )
+
+        self.chatmate_status = await self.channel_layer.group_channels()
         
         
     # Receive message from room group
@@ -205,4 +220,9 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             # Send command to WebSocket
             await self.send(text_data=json.dumps({
                 'is_offline': event['is_offline']
+            }))
+        elif event.get('new_chat'):
+            # Send command to WebSocket
+            await self.send(text_data=json.dumps({
+                'new_chat': event['new_chat']
             }))
