@@ -7,6 +7,13 @@ class UserChat(models.Model):
     room_members = models.ManyToManyField('accounts.User', related_name='chat_rooms')
     members_in_room = models.ManyToManyField('accounts.User', related_name='user_in_rooms')
 
+    class Meta:
+        verbose_name = _('Чат')
+        verbose_name_plural = _('Чаты')
+    
+    def __str__(self) -> str:
+        return f'{self.room_members.first().full_name} - {self.room_members.last().full_name}'
+
 
 class ChatMessage(models.Model):
     room = models.ForeignKey('UserChat', on_delete=models.CASCADE, related_name='room_messages')
