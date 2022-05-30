@@ -102,13 +102,14 @@ class ExpertSerializer(serializers.ModelSerializer):
         return get_tmb_image_uri(self, obj) 
     
     def create(self, validated_data):
+        request = self.context['request']
         password = check_password(self)
         validated_data['is_expert'] = True
         dadata = Dadata(DADATA_API, DADATA_SECRET)
-        result = dadata.clean("name", validated_data['name'])
+        result = dadata.clean("name", request.data['name'])
         if result:
-            validated_data['first_name'] = result[0].get('name')
-            validated_data['last_name'] = result[0].get('surname')
+            validated_data['first_name'] = result.get('name')
+            validated_data['last_name'] = result.get('surname')
         expert = Expert(**validated_data)
         expert.set_password(password)
         expert.save()
@@ -160,12 +161,14 @@ class CustomerMeSerializer(serializers.ModelSerializer):
         }
     
     def create(self, validated_data):
+        name = self.context['request']
+        if not name:
+            serializers.ValidationError({'name':[_('Пожалуйста представьтесь')]})
         password = check_password(self)
         validated_data['is_customer'] = True
         dadata = Dadata(DADATA_API, DADATA_SECRET)
-        result = dadata.clean("name", self.request.data['name'])
+        result = dadata.clean("name", name)
         if result:
-            print(result)
             validated_data['first_name'] = result.get('name')
             validated_data['last_name'] = result.get('surname')
         customer = Customer(**validated_data)
