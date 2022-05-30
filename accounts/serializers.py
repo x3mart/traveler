@@ -1,6 +1,8 @@
 from dataclasses import fields
 from email import message
 from bankdetails.serializers import BankTransactionSerializer, DebetCardSerializer
+from dadata import Dadata
+from traveler.settings import DADATA_API, DADATA_SECRET
 
 from languages.serializers import LanguageSerializer
 from verificationrequests.serializers import IndividualSerializer, LegalSerializer
@@ -102,6 +104,11 @@ class ExpertSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         password = check_password(self)
         validated_data['is_expert'] = True
+        dadata = Dadata(DADATA_API, DADATA_SECRET)
+        result = dadata.clean("name", validated_data['name'])
+        if result:
+            validated_data['first_name'] = result[0].get('name')
+            validated_data['last_name'] = result[0].get('surname')
         expert = Expert(**validated_data)
         expert.set_password(password)
         expert.save()
@@ -147,9 +154,10 @@ class AvatarSerializer(serializers.Serializer):
 class CustomerMeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
-        fields = ('id', 'first_name', 'last_name', 'email', 'password', 'avatar', 'phone')
+        fields = ('id', 'first_name', 'last_name', 'email', 'password', 'avatar', 'phone', 'name')
         extra_kwargs = {
             'password': {'write_only': True, 'required': False,},
+            'name': {'write_only': True, 'required': True,},
         }
     
     def create(self, validated_data):
