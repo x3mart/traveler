@@ -42,7 +42,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
             )
         return message
         
-    
     @database_sync_to_async
     def set_online_status_member_in_room(self, online=False):
         if online:
@@ -117,10 +116,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'type': 'chat_message',
                 'message': self.message
             }
-        )
-
-        self.chatmate_status = await self.channel_layer.group_channels()
-        
+        )    
         
     # Receive message from room group
     async def chat_message(self, event):
