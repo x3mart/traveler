@@ -3,7 +3,7 @@ from django.contrib import admin
 from chats.models import ChatMessage, UserChat
 
 # Register your models here.
-class TicketMessageInline(admin.TabularInline):
+class ChatMessageInline(admin.TabularInline):
     model = ChatMessage
     fields = ('text',)
     readonly_fields = ('text',)
@@ -16,9 +16,9 @@ class TicketMessageInline(admin.TabularInline):
 
 
 class UserChatAdmin(admin.ModelAdmin):
-    list_display = ('__str__')
+    list_display = ('__str__',)
     inlines = [
-        TicketMessageInline,
+        ChatMessageInline,
     ]
 
 
