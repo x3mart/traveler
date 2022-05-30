@@ -151,7 +151,14 @@ class CustomerMeSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'password': {'write_only': True, 'required': False,},
         }
-        
+    
+    def create(self, validated_data):
+        password = check_password(self)
+        validated_data['is_customer'] = True
+        customer = Customer(**validated_data)
+        customer.set_password(password)
+        customer.save()
+        return customer        
  
     def update(self, instance, validated_data):
         if validated_data.get('password') is not None:            
@@ -174,11 +181,3 @@ class CustomerSerializer(serializers.ModelSerializer):
     
     def get_tmb_avatar(self, obj): 
         return get_tmb_image_uri(self, obj)
-    
-    def create(self, validated_data):
-        password = check_password(self)
-        validated_data['is_customer'] = True
-        customer = Customer(**validated_data)
-        customer.set_password(password)
-        customer.save()
-        return customer
