@@ -30,11 +30,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async   
     def save_message(self, message):
         is_read = True if self.get_chatmate_status() else False
+        print(is_read)
         message = ChatMessage.objects.create(room=self.chat, author=self.user, text=message, is_read=is_read)
         message = ChatMessageSerializer(message, many=False).data
         if not is_read:
             self.channel_layer.group_send(
-                f'notification_{self.chatmate.id}' ,
+                f'notification_{self.chatmate.id}',
                 {
                     'type': 'chat_message',
                     'new_message': self.user.id
