@@ -30,7 +30,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async   
     def save_message(self, message):
         is_read = True if self.chat.members_in_room.count() > 1 else False
-        print(is_read)
         message = ChatMessage.objects.create(room=self.chat, author=self.user, text=message, is_read=is_read)
         message = ChatMessageSerializer(message, many=False).data
         if not is_read:
@@ -223,4 +222,9 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             # Send command to WebSocket
             await self.send(text_data=json.dumps({
                 'new_chat': event['new_chat']
+            }))
+        elif event.get('new_message'):
+            # Send command to WebSocket
+            await self.send(text_data=json.dumps({
+                'new_message': event['new_message']
             }))
