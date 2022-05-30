@@ -152,10 +152,9 @@ class AvatarSerializer(serializers.Serializer):
 
 
 class CustomerMeSerializer(serializers.ModelSerializer):
-    name = serializers.CharField(write_only=True, required=True)
     class Meta:
         model = Customer
-        fields = ('id', 'first_name', 'last_name', 'email', 'password', 'avatar', 'phone', 'name')
+        fields = ('id', 'first_name', 'last_name', 'email', 'password', 'avatar', 'phone',)
         extra_kwargs = {
             'password': {'write_only': True, 'required': False,},
         }
@@ -164,7 +163,7 @@ class CustomerMeSerializer(serializers.ModelSerializer):
         password = check_password(self)
         validated_data['is_customer'] = True
         dadata = Dadata(DADATA_API, DADATA_SECRET)
-        result = dadata.clean("name", validated_data['name'])
+        result = dadata.clean("name", self.request.data['name'])
         if result:
             print(result)
             validated_data['first_name'] = result.get('name')
