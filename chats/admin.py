@@ -17,7 +17,8 @@ class ChatMessageInline(admin.TabularInline):
 
 class UserChatAdmin(admin.ModelAdmin):
     list_display = ('__str__',)
-    fieldsets = ((None, None),)
+    fields = ('__str__',)
+    readonly_fields = ('__str__',)
     inlines = [
         ChatMessageInline,
     ]
