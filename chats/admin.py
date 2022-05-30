@@ -12,7 +12,7 @@ class ChatMessageInline(admin.TabularInline):
     show_change_link = False
 
     def get_max_num(self, request, obj=None, **kwargs):
-        return obj.ticket_messages.count()
+        return obj.room_messages.count()
 
 
 class UserChatAdmin(admin.ModelAdmin):
