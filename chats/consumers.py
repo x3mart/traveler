@@ -31,8 +31,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     def save_message(self, message):
         is_read = True if self.chat.members_in_room.count() > 1 else False
         message = ChatMessage.objects.create(room=self.chat, author=self.user, text=message, is_read=is_read)
-        message = ChatMessageSerializer(message, many=False).data
-        return message
+        return ChatMessageSerializer(message, many=False).data
         
     @database_sync_to_async
     def set_online_status_member_in_room(self, online=False):
@@ -110,14 +109,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
             }
         )    
 
-        if not self.message.is_read:
-            await self.channel_layer.group_send(
-                f'notification_{self.chatmate.id}',
-                {
-                    'type': 'chat_message',
-                    'new_message': self.user.id
-                }
-            )
+        # if not self.message.is_read:
+        #     await self.channel_layer.group_send(
+        #         f'notification_{self.chatmate.id}',
+        #         {
+        #             'type': 'chat_message',
+        #             'new_message': self.user.id
+        #         }
+        #     )
         
     # Receive message from room group
     async def chat_message(self, event):
