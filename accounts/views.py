@@ -1,4 +1,5 @@
-from encodings import utf_8
+from django.db.models import F, Q
+from datetime import timedelta, datetime
 from django.shortcuts import redirect
 from rest_framework.decorators import action
 from accounts.permissions import TeamMemberPermission, UserPermission, CustomerPermission, ExpertPermission
@@ -16,7 +17,7 @@ from rest_framework.response import Response
 import requests
 from rest_framework_simplejwt.settings import api_settings
 from django.contrib.auth.models import update_last_login
-from djoser.compat import get_user_email
+from django.db.models.query import Prefetch
 from djoser import utils
 from djoser.conf import settings
 from django.core.mail import send_mail
@@ -27,6 +28,7 @@ from django.contrib.auth.tokens import default_token_generator
 from bankdetails.models import BankTransaction, DebetCard
 from bankdetails.serializers import BankTransactionSerializer, DebetCardSerializer
 from geoplaces.models import Country
+from tours.models import Tour, TourBasic
 from verificationrequests.models import Legal, Individual
 from tours.mixins import TourMixin
 import random
@@ -177,6 +179,14 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
             expert = self.get_object()
             self.set_languages(self.request, expert) 
         return super().perform_update(serializer)
+    
+    def retrieve(self, request, *args, **kwargs):
+        tour_basic = TourBasic.objects.prefetch_related('expert')
+        prefetch_tour_basic = Prefetch('tour_basic', tour_basic)
+        expert_tours = Tour.objects.prefetch_related(prefetch_tour_basic, 'start_country', 'start_city', 'wallpaper', 'currency').only('id', 'name', 'start_date', 'start_country', 'start_city', 'price', 'discount', 'duration', 'tour_basic', 'wallpaper', 'vacants_number', 'currency').filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start')))[:3]
+        expert = self.get_object()
+        expert.expert_tours = expert_tours
+        return Response(ExpertSerializer(expert, many=False, context={'request':request}), status=200)
 
     @action(['get', 'put', 'patch', 'delete'], detail=False)
     def me(self, request, *args, **kwargs):
@@ -195,7 +205,7 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
             expert = Expert.objects.get(pk=request.user.id)
             expert.avatar = None
             expert.save()
-        return Response(ExpertSerializer(expert, context={'request':request}).data, status=status.HTTP_200_OK)
+        return Response(ExpertMeSerializer(expert, context={'request':request}).data, status=status.HTTP_200_OK)
     
     @action(["post"], detail=False)
     def send_confirmation_email(self, request, *args, **kwargs):
