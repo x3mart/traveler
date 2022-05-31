@@ -145,7 +145,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def set_online_status(self, online=False):
-        User.objects.filter(pk=self.user.id).update(is_online=online, last_visit = timezone.now())
+        User.objects.filter(pk=self.user.id).update(is_online=online, last_visit = timezone.localtime(timezone.now()))
 
     async def connect(self):
         self.user = self.scope['user']
