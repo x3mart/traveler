@@ -155,7 +155,7 @@ class ExpertSerializer(serializers.ModelSerializer):
     def get_registration_date(self, obj):
         if not obj.registration_date:
             return 'очень давно'
-        return obj.last_visit.strftime('%d-%B-%Y')
+        return obj.last_visit.strftime('%d-%B-%Yг.')
     
     def create(self, validated_data):
         request = self.context['request']
