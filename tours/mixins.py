@@ -251,6 +251,7 @@ class TourSerializerMixin():
             return round(obj.price - obj.price*(obj.discount/100)) if obj.prepay_in_prc else obj.price - obj.discount
         else:
             return None
+            
     def get_main_impressions(self, obj):
         if obj.main_impressions:
             return '; '.join(obj.main_impressions)

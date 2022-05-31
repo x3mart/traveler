@@ -1,9 +1,7 @@
-from dataclasses import fields
-from email import message
+from datetime import date
 from bankdetails.serializers import BankTransactionSerializer, DebetCardSerializer
 from dadata import Dadata
 from currencies.serializers import CurrencySerializer
-from tours.mixins import TourSerializerMixin
 from tours.models import Tour
 from traveler.settings import DADATA_API, DADATA_SECRET
 
@@ -39,7 +37,7 @@ class EmailActivationSerializer(UidAndTokenSerializer):
         return attrs
 
 
-class ExpertTourListSerializer(serializers.ModelSerializer, TourSerializerMixin):
+class ExpertTourListSerializer(serializers.ModelSerializer):
     tmb_wallpaper = serializers.SerializerMethodField(read_only=True)
     currency = CurrencySerializer(many=False)
     start_country = serializers.StringRelatedField(many=False,)
@@ -58,6 +56,24 @@ class ExpertTourListSerializer(serializers.ModelSerializer, TourSerializerMixin)
         if obj.wallpaper: 
             return get_tmb_image_uri(self, obj.wallpaper)
         return None
+    
+    def get_vacants_number(self, obj):
+            return obj.vacants_number if obj.vacants_number < 5 else None
+        
+    def get_is_favourite(self, obj):
+        return  None
+
+    def get_is_new(self, obj):
+        return  None
+
+    def get_is_recomended(self, obj):
+        return  None
+
+    def get_discount(self, obj):
+        if obj.price and obj.discount and obj.discount_starts and  obj.discount_finish and obj.discount_starts < date.today() and  obj.discount_finish > date.today():
+            return round(obj.price - obj.price*(obj.discount/100)) if obj.prepay_in_prc else obj.price - obj.discount
+        else:
+            return None
 
 
 class TeamMemberSerializer(serializers.ModelSerializer):
