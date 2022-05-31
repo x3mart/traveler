@@ -2,6 +2,7 @@ from datetime import date
 from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
 from geoplaces.serializers import CityFullNameSerializer, CitySerializer, CountrySerializer, RegionSerializer, CountryRegionSerializer
+from tours.mixins import TourSerializerMixin
 from .models import Important, Tour, TourAccomodation, TourPropertyType, TourType
 from currencies.serializers import CurrencySerializer
 from accounts.serializers import ExpertListSerializer, TeamMemberSerializer
@@ -65,7 +66,7 @@ TOUR_REQUIRED_FIELDS = {
 }
 
 
-class TourPreviewSerializer(serializers.ModelSerializer):
+class TourPreviewSerializer(serializers.ModelSerializer, TourSerializerMixin):
     basic_type = serializers.StringRelatedField(many=False, read_only=True)
     additional_types = serializers.StringRelatedField(many=True, read_only=True)
     start_region = serializers.StringRelatedField(many=False, read_only=True)
@@ -109,39 +110,7 @@ class TourPreviewSerializer(serializers.ModelSerializer):
             return get_image_uri(self, obj.wallpaper)
         return None
 
-    def get_start_time(self, obj):
-        if obj.start_time:
-            return obj.start_time.strftime('%H:%M')
-        else:
-            return None
-
-    def get_finish_time(self, obj):
-        if obj.finish_time:
-            return obj.finish_time.strftime('%H:%M')
-        else:
-            return None
-    
-    def get_discounted_price(self, obj):
-        if obj.price and obj.discount and obj.discount_starts and  obj.discount_finish and obj.discount_starts < date.today() and  obj.discount_finish > date.today():
-            return round(obj.price - obj.price*(obj.discount/100)) if obj.prepay_in_prc else obj.price - obj.discount
-        else:
-            return None
-
-    def get_book_price(self, obj): 
-        if obj.price:
-            return round(obj.price*obj.prepay_amount/100) + 1 if obj.prepay_in_prc else obj.prepay_amount
-        return None
-    
-    def get_daily_price(self, obj):
-        discounted_price = self.get_discounted_price(obj)
-        if discounted_price:
-            return round(discounted_price/obj.duration)
-        if obj.price and obj.duration: 
-            return round(obj.price/obj.duration)
-        return None
-
-
-class TourSerializer(serializers.ModelSerializer):
+class TourSerializer(serializers.ModelSerializer, TourSerializerMixin):
     basic_type = TourTypeSerializer(many=False, read_only=True)
     team_member = TeamMemberSerializer(many=False, read_only=True)
     additional_types = TourTypeSerializer(many=True, read_only=True)
@@ -191,35 +160,9 @@ class TourSerializer(serializers.ModelSerializer):
         if obj.wallpaper: 
             return get_image_uri(self, obj.wallpaper)
         return None
-    
-    def get_main_impressions(self, obj):
-        if obj.main_impressions:
-            return '; '.join(obj.main_impressions)
-        else:
-            return ""
-    def get_tour_included_services(self, obj): 
-        if obj.tour_included_services:
-            return '; '.join(obj.tour_included_services)
-        else:
-            return ""
-    
-    def get_tour_excluded_services(self, obj):
-        if obj.tour_excluded_services is not None:
-            return '; '.join(obj.tour_excluded_services)
-        else:
-            return "" 
-    
-    def get_required_fields(self, obj):
-        required_fields = []
-        for value in TOUR_REQUIRED_FIELDS:
-            required_fields += TOUR_REQUIRED_FIELDS[value]
-        return required_fields
-    
-    def get_postpay_days_before_start(self, obj):
-        return obj.postpay_days_before_start.days
 
 
-class TourListSerializer(serializers.ModelSerializer):
+class TourListSerializer(serializers.ModelSerializer, TourSerializerMixin):
     tmb_wallpaper = serializers.SerializerMethodField(read_only=True)
     currency = CurrencySerializer(many=False)
     start_country = serializers.StringRelatedField(many=False,)
@@ -239,27 +182,10 @@ class TourListSerializer(serializers.ModelSerializer):
         if obj.wallpaper: 
             return get_tmb_image_uri(self, obj.wallpaper)
         return None
-    
-    def get_vacants_number(self, obj):
-        return obj.vacants_number if obj.vacants_number < 5 else None
-    
-    def get_is_favourite(self, obj):
-        return  None
-    
-    def get_is_new(self, obj):
-        return  None
-    
-    def get_is_recomended(self, obj):
-        return  None
-    
-    def get_discount(self, obj):
-        if obj.price and obj.discount and obj.discount_starts and  obj.discount_finish and obj.discount_starts < date.today() and  obj.discount_finish > date.today():
-            return round(obj.price - obj.price*(obj.discount/100)) if obj.prepay_in_prc else obj.price - obj.discount
-        else:
-            return None
 
 
-class TourSetSerializer(serializers.ModelSerializer):
+
+class TourSetSerializer(serializers.ModelSerializer, TourSerializerMixin):
     tmb_wallpaper = serializers.SerializerMethodField(read_only=True)
     currency = CurrencySerializer(many=False)
     start_country = serializers.StringRelatedField(many=False,)

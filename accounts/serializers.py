@@ -2,6 +2,9 @@ from dataclasses import fields
 from email import message
 from bankdetails.serializers import BankTransactionSerializer, DebetCardSerializer
 from dadata import Dadata
+from currencies.serializers import CurrencySerializer
+from tours.mixins import TourSerializerMixin
+from tours.models import Tour
 from tours.serializers import TourListSerializer
 from traveler.settings import DADATA_API, DADATA_SECRET
 
@@ -35,6 +38,27 @@ class EmailActivationSerializer(UidAndTokenSerializer):
     def validate(self, attrs):
         attrs = super().validate(attrs)
         return attrs
+
+
+class ExpertTourListSerializer(serializers.ModelSerializer, TourSerializerMixin):
+    tmb_wallpaper = serializers.SerializerMethodField(read_only=True)
+    currency = CurrencySerializer(many=False)
+    start_country = serializers.StringRelatedField(many=False,)
+    start_city = serializers.StringRelatedField(many=False,)
+    vacants_number = serializers.SerializerMethodField(read_only=True)
+    is_favourite = serializers.SerializerMethodField(read_only=True)
+    is_new = serializers.SerializerMethodField(read_only=True)
+    is_recomended = serializers.SerializerMethodField(read_only=True)
+    discount = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = Tour
+        fields = ['id', 'name', 'start_date', 'start_country', 'start_city', 'price', 'discount', 'duration', 'currency', 'tmb_wallpaper', 'vacants_number', 'is_favourite', 'is_new', 'is_recomended']
+    
+    def get_tmb_wallpaper(self, obj):
+        if obj.wallpaper: 
+            return get_tmb_image_uri(self, obj.wallpaper)
+        return None
 
 
 class TeamMemberSerializer(serializers.ModelSerializer):
