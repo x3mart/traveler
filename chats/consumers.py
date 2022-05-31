@@ -3,6 +3,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer, WebsocketConsumer
 from channels.db import database_sync_to_async
 from asgiref.sync import sync_to_async
 from django.forms.models import model_to_dict
+from django.utils import timezone
 from accounts.models import User
 from chats.models import ChatMessage, UserChat
 from chats.serializers import ChatMessageSerializer
@@ -39,6 +40,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.chat.members_in_room.add(self.user)
         else:
             self.chat.members_in_room.remove(self.user)
+            self.user.last_visit = timezone.now()
+            self.user.save()
     
 
     async def connect(self):
