@@ -8,6 +8,7 @@ import os
 from traveler.settings import BASE_DIR
 from ckeditor.fields import RichTextField
 from utils.images import get_tmb_path
+from django.utils import timezone
 
 # Create your models here.
 def user_avatar_path(instance, filename):
@@ -52,8 +53,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_expert = models.BooleanField(_('Эксперт'), default=False, )
     is_customer = models.BooleanField(_('Покупатель'), default=False, )
     is_online = models.BooleanField(_('Сейчас на сайте'), default=False, )
-    registration_date = models.DateField(_('Дата регистрации'), null=True, blank=True,)
-    last_visit = models.DateTimeField(_('Последнее посещение'), null=True, blank=True,)
+    registration_date = models.DateField(_('Дата регистрации'), auto_now_add=True, null=True, blank=True,)
+    last_visit = models.DateTimeField(_('Последнее посещение'), default=timezone.now)
     phone = PhoneNumberField(_('Телефон'), null=True, blank=True, )
 
     objects = AccountManager()
