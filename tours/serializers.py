@@ -2,7 +2,7 @@ from datetime import date
 from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
 from geoplaces.serializers import CityFullNameSerializer, CitySerializer, CountrySerializer, RegionSerializer, CountryRegionSerializer
-from tours.mixins import TourSerializerMixin
+from utils.mixins import TourSerializerMixin
 from .models import Important, Tour, TourAccomodation, TourPropertyType, TourType
 from currencies.serializers import CurrencySerializer
 from accounts.serializers import ExpertListSerializer, TeamMemberSerializer
@@ -52,19 +52,6 @@ class ImportantSerializer(serializers.ModelSerializer):
 
 
 TOUR_FIELDS = ('id', 'rating', 'reviews_count', 'name', 'wallpaper', 'tmb_wallpaper', 'basic_type', 'additional_types', 'start_region', 'finish_region', 'start_country', 'finish_country', 'start_russian_region', 'finish_russian_region', 'start_city', 'finish_city', 'description', 'plan', 'cancellation_terms', 'difficulty_level', 'difficulty_description', 'tour_property_types', 'accomodation', 'tour_property_images', 'comfort_level', 'babies_alowed', 'animals_not_exploited', 'start_date', 'finish_date', 'start_time', 'finish_time', 'direct_link', 'instant_booking', 'members_number', 'team_member', 'guest_guide', 'price_comment', 'prepay_amount', 'prepay_in_prc', 'prepay_currency', 'postpay_on_start_day', 'postpay_days_before_start', 'currency', 'price', 'cost', 'discount_starts', 'discount_finish', 'discount_in_prc', 'discount', 'languages', 'is_guaranteed', 'flight_included', 'scouting', 'tour_images', 'tour_days', 'main_impressions', 'tour_included_services', 'tour_excluded_services', 'tour_addetional_services','hotel_name', 'age_starts', 'age_ends', 'media_link', 'week_recurrent', 'month_recurrent', 'vacants_number', 'on_moderation', 'is_active', 'is_draft', 'air_tickets', 'duration', 'sold', 'watched', 'guest_requirements', 'take_with', 'key_features', 'new_to_see', 'map') 
-
-
-TOUR_REQUIRED_FIELDS = {
-    'main': ['name', 'wallpaper', 'members_number', 'vacants_number', 'basic_type', 'team_member'],
-    'review': ['description',],
-    'prices': ['currency', 'price', 'prepay_amount', 'tour_included_services', 'tour_excluded_services', 'air_tickets', 'cancellation_terms'],
-    'gallery': ['tour_images'],
-    'route': ['start_date', 'finish_date', 'start_city', 'finish_city',],
-    'accommodation': ['tour_property_types', 'accomodation', 'tour_property_images'],
-    'details': ['languages', 'difficulty_level', 'comfort_level', 'age_starts', 'age_ends'],
-    'important': ['take_with']
-}
-
 
 class TourPreviewSerializer(serializers.ModelSerializer, TourSerializerMixin):
     basic_type = serializers.StringRelatedField(many=False, read_only=True)

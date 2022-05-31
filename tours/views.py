@@ -14,8 +14,9 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework.serializers import ValidationError
 from currencies.models import Currency
 from tours.filters import TourFilter
-from tours.mixins import TourMixin, NOT_MODERATED_FIELDS, TOUR_REQUIRED_FIELDS
-from tours.models import Important, ImportantTitle, Tour, TourAccomodation, TourBasic, TourDayImage, TourGuestGuideImage, TourImage, TourPlanImage, TourPropertyImage, TourPropertyType, TourType, TourWallpaper
+from tours.mixins import TourMixin
+from utils.constants import NOT_MODERATED_FIELDS
+from tours.models import Tour, TourAccomodation, TourBasic, TourDayImage, TourGuestGuideImage, TourImage, TourPlanImage, TourPropertyImage, TourPropertyType, TourType, TourWallpaper
 from tours.permissions import TourPermission
 from tours.serializers import ImageSerializer, TourAccomodationSerializer, TourListSerializer, TourPreviewSerializer, TourPropertyTypeSerializer, TourSerializer, TourTypeSerializer, WallpaperSerializer, TourSetSerializer
 

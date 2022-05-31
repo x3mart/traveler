@@ -1,11 +1,12 @@
 from rest_framework import serializers
 import django.contrib.auth.password_validation as validators
-from django.core import exceptions
+from datetime import date
 from django.db.models import F
 from tours.models import Tour
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from supports.serializers import SupportChatMessageSerializer
+from .constants import *
 
 
 # def check_password(self):
@@ -68,3 +69,81 @@ class ChatMixins():
                 'new_chat': chat
             }
         )  
+
+
+class TourSerializerMixin():
+    
+    def get_start_time(self, obj):
+        if obj.start_time:
+            return obj.start_time.strftime('%H:%M')
+        else:
+            return None
+
+    def get_finish_time(self, obj):
+        if obj.finish_time:
+            return obj.finish_time.strftime('%H:%M')
+        else:
+            return None
+    
+    def get_discounted_price(self, obj):
+        if obj.price and obj.discount and obj.discount_starts and  obj.discount_finish and obj.discount_starts < date.today() and  obj.discount_finish > date.today():
+            return round(obj.price - obj.price*(obj.discount/100)) if obj.prepay_in_prc else obj.price - obj.discount
+        else:
+            return None
+
+    def get_book_price(self, obj): 
+        if obj.price:
+            return round(obj.price*obj.prepay_amount/100) + 1 if obj.prepay_in_prc else obj.prepay_amount
+        return None
+    
+    def get_daily_price(self, obj):
+        discounted_price = self.get_discounted_price(obj)
+        if discounted_price:
+            return round(discounted_price/obj.duration)
+        if obj.price and obj.duration: 
+            return round(obj.price/obj.duration)
+        return None
+
+    def get_vacants_number(self, obj):
+            return obj.vacants_number if obj.vacants_number < 5 else None
+        
+    def get_is_favourite(self, obj):
+        return  None
+
+    def get_is_new(self, obj):
+        return  None
+
+    def get_is_recomended(self, obj):
+        return  None
+
+    def get_discount(self, obj):
+        if obj.price and obj.discount and obj.discount_starts and  obj.discount_finish and obj.discount_starts < date.today() and  obj.discount_finish > date.today():
+            return round(obj.price - obj.price*(obj.discount/100)) if obj.prepay_in_prc else obj.price - obj.discount
+        else:
+            return None
+
+    def get_main_impressions(self, obj):
+        if obj.main_impressions:
+            return '; '.join(obj.main_impressions)
+        else:
+            return ""
+    def get_tour_included_services(self, obj): 
+        if obj.tour_included_services:
+            return '; '.join(obj.tour_included_services)
+        else:
+            return ""
+    
+    def get_tour_excluded_services(self, obj):
+        if obj.tour_excluded_services is not None:
+            return '; '.join(obj.tour_excluded_services)
+        else:
+            return "" 
+    
+    def get_required_fields(self, obj):
+        required_fields = []
+        for value in TOUR_REQUIRED_FIELDS:
+            required_fields += TOUR_REQUIRED_FIELDS[value]
+        return required_fields
+    
+    def get_postpay_days_before_start(self, obj):
+        return obj.postpay_days_before_start.days
