@@ -131,6 +131,8 @@ class ExpertSerializer(serializers.ModelSerializer):
     languages = LanguageSerializer(many=True, read_only=True)
     team_members = TeamMemberSerializer(many=True, read_only=True)
     expert_tours = ExpertTourListSerializer(many=True, read_only=True)
+    last_visit = serializers.SerializerMethodField(read_only=True)
+    registration_date = serializers.SerializerMethodField(read_only=True)
     
     class Meta:
         model = Expert
