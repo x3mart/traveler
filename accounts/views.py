@@ -181,10 +181,10 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
         return super().perform_update(serializer)
     
     def retrieve(self, request, *args, **kwargs):
-        tour_basic = TourBasic.objects.prefetch_related('expert')
-        prefetch_tour_basic = Prefetch('tour_basic', tour_basic)
-        expert_tours = Tour.objects.prefetch_related(prefetch_tour_basic, 'start_country', 'start_city', 'wallpaper', 'currency').only('id', 'name', 'start_date', 'start_country', 'start_city', 'price', 'discount', 'duration', 'tour_basic', 'wallpaper', 'vacants_number', 'currency').filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start')))[:3]
         expert = self.get_object()
+        tour_basic = TourBasic.objects.all()
+        prefetch_tour_basic = Prefetch('tour_basic', tour_basic)
+        expert_tours = Tour.objects.prefetch_related(prefetch_tour_basic, 'start_country', 'start_city', 'wallpaper', 'currency').only('id', 'name', 'start_date', 'start_country', 'start_city', 'price', 'discount', 'duration', 'tour_basic', 'wallpaper', 'vacants_number', 'currency').filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start'))).filter(tour_basic__expert=expert)[:3]
         expert.expert_tours = expert_tours
         return Response(ExpertSerializer(expert, many=False, context={'request':request}).data, status=200)
 
