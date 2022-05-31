@@ -5,7 +5,6 @@ from dadata import Dadata
 from currencies.serializers import CurrencySerializer
 from tours.mixins import TourSerializerMixin
 from tours.models import Tour
-from tours.serializers import TourListSerializer
 from traveler.settings import DADATA_API, DADATA_SECRET
 
 from languages.serializers import LanguageSerializer
