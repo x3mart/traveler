@@ -186,7 +186,7 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
         expert_tours = Tour.objects.prefetch_related(prefetch_tour_basic, 'start_country', 'start_city', 'wallpaper', 'currency').only('id', 'name', 'start_date', 'start_country', 'start_city', 'price', 'discount', 'duration', 'tour_basic', 'wallpaper', 'vacants_number', 'currency').filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start')))[:3]
         expert = self.get_object()
         expert.expert_tours = expert_tours
-        return Response(ExpertSerializer(expert, many=False, context={'request':request}), status=200)
+        return Response(ExpertSerializer(expert, many=False, context={'request':request}).data, status=200)
 
     @action(['get', 'put', 'patch', 'delete'], detail=False)
     def me(self, request, *args, **kwargs):
