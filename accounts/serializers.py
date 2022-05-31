@@ -4,7 +4,7 @@ from dadata import Dadata
 from currencies.serializers import CurrencySerializer
 from tours.models import Tour
 from traveler.settings import DADATA_API, DADATA_SECRET
-
+from django.utils import timezone
 from languages.serializers import LanguageSerializer
 from verificationrequests.serializers import IndividualSerializer, LegalSerializer
 from .models import Customer, Expert, TeamMember, User
@@ -142,6 +142,18 @@ class ExpertSerializer(serializers.ModelSerializer):
             
     def get_tmb_avatar(self, obj): 
         return get_tmb_image_uri(self, obj) 
+    
+    def get_last_visit(self, obj):
+        if not obj.last_visit:
+            return 'Очень давно'
+        if (timezone.now() - obj.last_visit).days <= 0:
+            return obj.last_visit.strftime("%H:%M")
+        return obj.last_visit.strftime('%d-%m-%Y в %H:%M')
+    
+    def get_registration_date(self, obj):
+        if not obj.registration_date:
+            return 'Очень давно'
+        return obj.last_visit.strftime('%d-%m-%Y')
     
     def create(self, validated_data):
         request = self.context['request']
