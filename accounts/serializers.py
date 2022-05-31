@@ -89,10 +89,11 @@ class ExpertListSerializer(serializers.ModelSerializer):
 class ExpertSerializer(serializers.ModelSerializer):
     tmb_avatar = serializers.SerializerMethodField(read_only=True)
     languages = LanguageSerializer(many=True, read_only=True)
+    team_members = TeamMemberSerializer(many=True, read_only=True)
     
     class Meta:
         model = Expert
-        fields = ('id', 'email', 'first_name', 'last_name', 'avatar', 'tmb_avatar', 'country', 'city', 'languages', 'visited_countries', 'about', 'email_confirmed', 'phone_confirmed', 'docs_confirmed', 'status_confirmed', 'rating', 'tours_count', 'tours_rating', 'reviews_count', 'tour_reviews_count', 'video')
+        fields = ('id', 'email', 'first_name', 'last_name', 'avatar', 'tmb_avatar', 'country', 'city', 'languages', 'visited_countries', 'about', 'email_confirmed', 'phone_confirmed', 'docs_confirmed', 'status_confirmed', 'rating', 'tours_count', 'tours_rating', 'reviews_count', 'tour_reviews_count', 'video', 'team_members')
         extra_kwargs = {
             'password': {'write_only': True, 'required': False,},
             'email': {'write_only': True, 'required': True,},
