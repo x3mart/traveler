@@ -114,7 +114,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 f'notification_{self.chatmate.id}',
                 {
                     'type': 'chat_message',
-                    'new_message': UserChatSerializer(self.chat, many=False,).data
+                    'new_message': UserChatSerializer(self.chat, many=False, context={'user':self.user}).data
                 }
             )
         
