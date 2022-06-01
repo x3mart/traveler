@@ -158,7 +158,7 @@ class ExpertSerializer(serializers.ModelSerializer):
         return obj.last_visit.strftime('%d %B %Yг.')
     
     def get_team_members(self, obj):
-        return TeamMemberSerializer(obj.team_members.exclude(is_expert=True) , many=True, context={'request':self.context['request']})
+        return TeamMemberSerializer(obj.team_members.exclude(is_expert=True) , many=True, context={'request':self.context['request']}).data
     
     def create(self, validated_data):
         request = self.context['request']
