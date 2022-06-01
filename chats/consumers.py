@@ -16,7 +16,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     
     @database_sync_to_async
     def get_serialized_chat(self):
-        return UserChatSerializer(self.chat, many=False, context={'user':self.user}).data
+        return UserChatSerializer(self.chat, many=False, context={'user':self.chatmate}).data
     
     @database_sync_to_async
     def get_chatmate(self):
