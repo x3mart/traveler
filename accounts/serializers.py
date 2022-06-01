@@ -129,7 +129,7 @@ class ExpertListSerializer(serializers.ModelSerializer):
 class ExpertSerializer(serializers.ModelSerializer):
     tmb_avatar = serializers.SerializerMethodField(read_only=True)
     languages = LanguageSerializer(many=True, read_only=True)
-    team_members = TeamMemberSerializer(many=True, read_only=True)
+    team_members = serializers.SerializerMethodField(read_only=True)
     expert_tours = ExpertTourListSerializer(many=True, read_only=True)
     last_visit = serializers.SerializerMethodField(read_only=True)
     registration_date = serializers.SerializerMethodField(read_only=True)
@@ -156,6 +156,9 @@ class ExpertSerializer(serializers.ModelSerializer):
         if not obj.registration_date:
             return 'очень давно'
         return obj.last_visit.strftime('%d %B %Yг.')
+    
+    def get_team_members(self, obj):
+        return TeamMemberSerializer(obj.team_members.exclude(is_expert=True) , many=True, context={'request':self.context['request']})
     
     def create(self, validated_data):
         request = self.context['request']
