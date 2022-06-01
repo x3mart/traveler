@@ -181,7 +181,7 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
         return super().perform_update(serializer)
     
     @action(["get"], detail=True)
-    def detail(self, request, *args, **kwargs):
+    def details(self, request, *args, **kwargs):
         expert = self.get_object()
         tour_basic = TourBasic.objects.all()
         prefetch_tour_basic = Prefetch('tour_basic', tour_basic)
