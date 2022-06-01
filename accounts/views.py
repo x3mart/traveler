@@ -56,7 +56,7 @@ class ConfirmEmailThread(threading.Thread, BaseEmailMessage):
         context["site_name"] = self.request.META.get('HTTP_REFERER')
         context["url"] = settings.ACTIVATION_URL.format(**context)
         message_html = render_to_string("email_confirm.html", context)
-        send_mail(subject, "message", 'x3mart@gmail.com', ['x3mart@gmail.com', self.user.email,], html_message=message_html,)
+        send_mail(subject, "message", 'info@traveler.market', [self.user.email,], html_message=message_html,)
         # print(self.request.META.get('HTTP_REFERER'))
 
 
