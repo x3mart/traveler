@@ -109,7 +109,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             }
         )    
 
-        if not self.message.is_read:
+        if not self.message['is_read']:
             await self.channel_layer.group_send(
                 f'notification_{self.chatmate.id}',
                 {
