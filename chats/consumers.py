@@ -15,6 +15,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
         return UserChat.objects.get(pk=self.room_name)
     
     @database_sync_to_async
+    def get_serialized_chat(self):
+        return UserChatSerializer(self.chat, many=False, context={'user':self.user}).data
+    
+    @database_sync_to_async
     def get_chatmate(self):
         return self.chat.room_members.exclude(id=self.user.id).first()
     
@@ -114,7 +118,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 f'notification_{self.chatmate.id}',
                 {
                     'type': 'chat_message',
-                    'new_message': UserChatSerializer(self.chat, many=False, context={'user':self.user}).data
+                    'new_message': await self.get_serialized_chat()
                 }
             )
         
