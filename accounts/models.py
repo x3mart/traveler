@@ -82,6 +82,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     
 class Expert(User):
+    class PreferredPaymantMethod(models.IntegerChoices):
+        CARD = 1, _('Дебетовая карта')
+        BANK = 2, _('Банковский перевод')
+
     country = models.CharField(_('Страна'), max_length=100, null=True, blank=True)
     city  = models.CharField(_('Город'), max_length=100, null=True, blank=True)
     languages = models.ManyToManyField("languages.Language" ,verbose_name=_('Языки'), blank=True, related_name='expert')
@@ -98,6 +102,7 @@ class Expert(User):
     tours_rating = models.DecimalField(_('Рейтинг туров'), decimal_places=1, max_digits=2, default=0)
     reviews_count = models.IntegerField(_('Кол-во отзывов'), default=0)
     tour_reviews_count = models.IntegerField(_('Кол-во отзывов о турах'), default=0)
+    # preferred_payment_method = models.IntegerField(_('Способ выплаты'), default=1, choices=PreferredPaymantMethod.choices)
 
     class Meta:
         verbose_name = _('Эксперт')

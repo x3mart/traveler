@@ -356,6 +356,22 @@ class CustomerViewSet(viewsets.ModelViewSet):
         if self.action in ['me', 'create', 'update', 'partial_update'] or (is_staff and self.action != 'list'):
             return CustomerMeSerializer
         return CustomerSerializer
+    
+    @action(['patch', 'delete'], detail=False)
+    def avatar(self, request, *args, **kwargs):
+        if request.method == 'PATCH':
+            serializer = AvatarSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                data = serializer.validated_data
+            customer = Customer.objects.get(pk=request.user.id)
+            customer.avatar = data['avatar']
+            customer.save()
+        elif request.method == 'DELETE':
+            customer = Customer.objects.get(pk=request.user.id)
+            customer.avatar = None
+            customer.save()
+        return Response(CustomerMeSerializer(customer, context={'request':request}).data, status=status.HTTP_200_OK)
+    
 
 class TeamMemberViewSet(viewsets.ModelViewSet, TourMixin):
     queryset = TeamMember.objects.all()
