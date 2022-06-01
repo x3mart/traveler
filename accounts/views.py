@@ -53,7 +53,7 @@ class ConfirmEmailThread(threading.Thread, BaseEmailMessage):
         context["uid"] = utils.encode_uid(self.user.pk)
         context["token"] = default_token_generator.make_token(self.user)
         # context["domain"] = self.request.META.get('REMOTE_HOST')
-        context["site_name"] = self.request.META.get('HTTP_REFERER')
+        context["site_name"] = 'https://traveler.market/'
         context["url"] = settings.ACTIVATION_URL.format(**context)
         message_html = render_to_string("email_confirm.html", context)
         send_mail(subject, "message", 'info@traveler.market', [self.user.email,], html_message=message_html,)
