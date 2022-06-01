@@ -20,7 +20,7 @@ class UserChatListCreateView(generics.ListCreateAPIView, ChatMixins):
             chat = UserChat.objects.create()
             chat.room_members.add(request.user, chat_with)
             self.send_new_chat_notification(chat_with, UserChatSerializer(chat, many=False, context={'user':request.user}).data)
-        return Response(UserChatSerializer(chat, context={'request':request}).data, status=200)
+        return Response(UserChatSerializer(chat, context={'user':request.user}).data, status=200)
     
     def list(self, request):
         chats = UserChat.objects.filter(room_members__id=request.user.id)

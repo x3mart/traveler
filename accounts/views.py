@@ -180,7 +180,8 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
             self.set_languages(self.request, expert) 
         return super().perform_update(serializer)
     
-    def retrieve(self, request, *args, **kwargs):
+    @action(["get"], detail=True)
+    def detail(self, request, *args, **kwargs):
         expert = self.get_object()
         tour_basic = TourBasic.objects.all()
         prefetch_tour_basic = Prefetch('tour_basic', tour_basic)
