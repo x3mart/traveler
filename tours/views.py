@@ -33,9 +33,9 @@ class ModerationResultEmailThread(threading.Thread):
     
     def run(self):
         if self.tour.is_active:
-            send_mail('Ваш тур прошел проверку', f'Ваш тур "{self.tour.name}" прошел проверку и теперь активен', 'info@traveler.market', [self.user.email,])
+            send_mail('Ваш тур прошел проверку', f'Ваш тур "{self.tour.name}" (старт {self.tour.start_date.strftime("%d-%m-%Y")}) прошел проверку и теперь активен', 'info@traveler.market', [self.user.email,])
         else:
-            send_mail('Ваш тур не прошел проверку', f'Ваш тур "{self.tour.name}" не прошел проверку по следующей причине: \n \n{self.reason}', 'info@traveler.market', [self.user.email,])
+            send_mail('Ваш тур не прошел проверку', f'Ваш тур "{self.tour.name}" (старт {self.tour.start_date.strftime("%d-%m-%Y")}) не прошел проверку по следующей причине: \n \n{self.reason}', 'info@traveler.market', [self.user.email,])
 
 
 # Create your views here.
