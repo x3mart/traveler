@@ -6,7 +6,7 @@ from django.forms.models import model_to_dict
 from django.utils import timezone
 from accounts.models import User
 from chats.models import ChatMessage, UserChat
-from chats.serializers import ChatMessageSerializer
+from chats.serializers import ChatMessageSerializer, UserChatSerializer
 
 class ChatConsumer(AsyncWebsocketConsumer):
 
@@ -109,14 +109,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
             }
         )    
 
-        # if not self.message.is_read:
-        #     await self.channel_layer.group_send(
-        #         f'notification_{self.chatmate.id}',
-        #         {
-        #             'type': 'chat_message',
-        #             'new_message': self.user.id
-        #         }
-        #     )
+        if not self.message.is_read:
+            await self.channel_layer.group_send(
+                f'notification_{self.chatmate.id}',
+                {
+                    'type': 'chat_message',
+                    'new_message': UserChatSerializer(self.chat, many=False,).data
+                }
+            )
         
     # Receive message from room group
     async def chat_message(self, event):

@@ -19,12 +19,12 @@ class UserChatListCreateView(generics.ListCreateAPIView, ChatMixins):
         else:
             chat = UserChat.objects.create()
             chat.room_members.add(request.user, chat_with)
-            self.send_new_chat_notification(chat_with, UserChatSerializer(chat, many=False, context={'request':request}).data)
+            self.send_new_chat_notification(chat_with, UserChatSerializer(chat, many=False, context={'user':request.user}).data)
         return Response(UserChatSerializer(chat, context={'request':request}).data, status=200)
     
     def list(self, request):
         chats = UserChat.objects.filter(room_members__id=request.user.id)
-        serializer = UserChatSerializer(chats, many=True, context={'request':request})
+        serializer = UserChatSerializer(chats, many=True, context={'user':request.user})
         return Response(serializer.data)
 
 def room(request, room_name):
