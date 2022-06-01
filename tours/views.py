@@ -12,6 +12,9 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.forms.models import model_to_dict
 from django.utils.translation import gettext_lazy as _
 from rest_framework.serializers import ValidationError
+from django.template.loader import render_to_string
+import threading
+from django.core.mail import send_mail
 from currencies.models import Currency
 from tours.filters import TourFilter
 from tours.mixins import TourMixin
@@ -19,6 +22,20 @@ from utils.constants import NOT_MODERATED_FIELDS
 from tours.models import Tour, TourAccomodation, TourBasic, TourDayImage, TourGuestGuideImage, TourImage, TourPlanImage, TourPropertyImage, TourPropertyType, TourType, TourWallpaper
 from tours.permissions import TourPermission
 from tours.serializers import ImageSerializer, TourAccomodationSerializer, TourListSerializer, TourPreviewSerializer, TourPropertyTypeSerializer, TourSerializer, TourTypeSerializer, WallpaperSerializer, TourSetSerializer
+
+
+class ModerationResultEmailThread(threading.Thread):
+    def __init__(self, tour, reason=''):
+        self.user = tour.tour_basic.expert
+        self.tour = tour
+        self.reason = reason
+        threading.Thread.__init__(self)
+    
+    def run(self):
+        if self.tour.is_active:
+            send_mail('Ваш тур прошел проверку', f'Ваш тур "{self.tour.name}" прошел проверку и теперь активен', 'info@traveler.market', [self.user.email,])
+        else:
+            send_mail('Ваш тур прошел проверку', f'Ваш тур "{self.tour.name}" не прошел проверку по следующей причине: \n \n {self.reason}', 'info@traveler.market', [self.user.email,])
 
 
 # Create your views here.
@@ -182,6 +199,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         instance.is_active = True
         instance.is_draft = False
         instance.save()
+        ModerationResultEmailThread(instance).start()
         return Response({}, status=200)
     
     @action(['patch'], detail=True)
@@ -191,6 +209,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         instance.is_active = False
         instance.is_draft = True
         instance.save()
+        ModerationResultEmailThread(instance, reason=request.data.get('reason')).start()
         return Response({}, status=200)
 
 

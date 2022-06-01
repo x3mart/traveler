@@ -27,7 +27,7 @@ class ConfirmTGEmailThread(threading.Thread):
     def run(self):
         code =  str(random.randint(100000,999999))
         subject = 'Код подтверждения'
-        sended = send_mail(subject, f'Ваш код подтверждения {code}', 'x3mart@gmail.com', ['x3mart@gmail.com', self.user.email,])
+        sended = send_mail(subject, f'Ваш код подтверждения {code}', 'info@traveler.market', [self.user.email,])
         if sended:
             PhoneConfirm.objects.create(user_id=self.user.id, code=code)
 
