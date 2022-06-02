@@ -324,7 +324,7 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
             objects = TourMixin().get_mtm_objects(Country, ids)
             verification.tours_countries.set(objects)
         verification = VerificationRequest.objects.get(expert_id=instance.id)
-        if not instance.email_confirmed or not instance.phone_confirmed or not (hasattr(instance, 'bank_transaction') and hasattr(instance, 'debet_card')) or (instance.preferred_payment_method == 2 and (not instance.bank_transaction.scans.all().exists() or instance.bank_transaction.scans.count() < 2)):
+        if not instance.email_confirmed or not instance.phone_confirmed or (instance.preferred_payment_method == 2 and (not instance.bank_transaction.scans.all().exists() or instance.bank_transaction.scans.count() < 2)):
             return Response({'error': True, 'message': _('Убедитесь, что у Вас подтверждены телефон и email, заполнены реквизиты для желаемого способа выплаты и загружены необходимые документы')}, status=403)
         return Response(VerificationRequestlSerializer(verification).data, status=201)
     
