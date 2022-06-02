@@ -99,7 +99,7 @@ class TourPreviewSerializer(serializers.ModelSerializer, TourSerializerMixin):
         return None
     
     def get_decline_reasons(self, obj):
-        if not obj.is_active and obj.decline_reasons.all().exists:
+        if not obj.is_active and obj.decline_reasons.all().exists():
             return obj.decline_reasons.last().reason
         return None
             
