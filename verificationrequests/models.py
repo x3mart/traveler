@@ -7,9 +7,9 @@ class VerificationRequest(models.Model):
         YES = 'yes', _('Да')
         NO = 'no', _('Нет')
 
-    first_name = models.CharField(_('Имя'), max_length=255)
-    last_name = models.CharField(_('Фамилия'), max_length=255)
-    patronymic = models.CharField(_('Отчество'), max_length=255)
+    passport_first_name = models.CharField(_('Имя'), max_length=255)
+    passport_last_name = models.CharField(_('Фамилия'), max_length=255)
+    passport_patronymic = models.CharField(_('Отчество'), max_length=255)
     passport_series = models.CharField(_("Паспорт серия"), max_length=255)
     passport_number = models.CharField(_("Паспорт номер"), max_length=255)
     passport_code_issued_by = models.CharField(_('Паспорт код подразделения'), max_length=25,)
