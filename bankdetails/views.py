@@ -15,6 +15,7 @@ def get_bank(request):
     dadata = Dadata(token)
     result = dadata.find_by_id("bank", request.data.get('bank_bik'))
     payment_type = request.data.get('payment_type')
+    print(result)
     if result:
         data = {
             f'{payment_type}_bank_bik':result[0]['data'].get('bic'),
@@ -33,13 +34,13 @@ def get_recipient(request):
     result = dadata.find_by_id("party", request.data.get('recipient_inn'))
     if result:
         data = {
-            'recipient_name':result[0].get('value'),
-            'recipient_inn':result[0]['data'].get('inn'),
-            'recipient_kpp':result[0]['data'].get('kpp'),
-            'recipient_ogrn':result[0]['data'].get('ogrn'),
-            'recipient_status':result[0]['data'].get('state')['status'],
-            'recipient_legal_address':result[0]['data']['address']['data']['source'],
-            'recipient_registration_date':datetime.fromtimestamp(result[0]['data'].get('state')['registration_date']/1000).date()
+            'transaction_recipient_name':result[0].get('value'),
+            'transaction_recipient_inn':result[0]['data'].get('inn'),
+            'transaction_recipient_kpp':result[0]['data'].get('kpp'),
+            'transaction_recipient_ogrn':result[0]['data'].get('ogrn'),
+            'transaction_recipient_status':result[0]['data'].get('state')['status'],
+            'transaction_recipient_legal_address':result[0]['data']['address']['data']['source'],
+            'transaction_recipient_registration_date':datetime.fromtimestamp(result[0]['data'].get('state')['registration_date']/1000).date()
         }
     return Response(data, status=200)
 
