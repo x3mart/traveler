@@ -14,13 +14,14 @@ def get_bank(request):
     token = DADATA_API
     dadata = Dadata(token)
     result = dadata.find_by_id("bank", request.data.get('bank_bik'))
+    payment_type = request.data.get('payment_type')
     if result:
         data = {
-            'bank_bik':result[0]['data'].get('bic'),
-            'bank_name':result[0].get('value'),
-            'bank_account':result[0]['data'].get('correspondent_account'),
-            'bank_inn':result[0]['data'].get('inn'),
-            'bank_kpp':result[0]['data'].get('kpp')
+            f'{payment_type}_bank_bik':result[0]['data'].get('bic'),
+            f'{payment_type}_bank_name':result[0].get('value'),
+            f'{payment_type}_bank_account':result[0]['data'].get('correspondent_account'),
+            f'{payment_type}_bank_inn':result[0]['data'].get('inn'),
+            f'{payment_type}_bank_kpp':result[0]['data'].get('kpp')
         }
     return Response(data, status=200)
 
