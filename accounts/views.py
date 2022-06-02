@@ -27,8 +27,7 @@ from templated_mail.mail import BaseEmailMessage
 from django.contrib.auth.tokens import default_token_generator
 from bankdetails.models import BankTransaction, DebetCard, Scan
 from bankdetails.serializers import BankTransactionSerializer, DebetCardSerializer, ScanSerializer
-# from bankdetails.models import BankTransaction, DebetCard
-# from bankdetails.serializers import BankTransactionSerializer, DebetCardSerializer
+from django.utils.translation import gettext_lazy as _
 from geoplaces.models import Country
 from tours.models import Tour, TourBasic
 from tours.mixins import TourMixin
@@ -323,7 +322,8 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
             objects = TourMixin().get_mtm_objects(Country, ids)
             verification.tours_countries.set(objects)
         verification = VerificationRequest.objects.get(expert_id=instance.id)
-        return Response(VerificationRequestlSerializer(verification).data, status=201)
+        return Response({'error': True, 'message': _('Пора спать!!')}, status=403)
+        # return Response(VerificationRequestlSerializer(verification).data, status=201)
     
     # @action(["patch"], detail=True)
     # def individual_verification(self, request, *args, **kwargs):

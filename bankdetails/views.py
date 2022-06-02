@@ -1,10 +1,12 @@
 from datetime import datetime
 from rest_framework import viewsets
+from rest_framework.generics import CreateAPIView, DestroyAPIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-# from bankdetails.serializers import BankTransactionSerializer, DebetCardSerializer
+from rest_framework import permissions
 from dadata import Dadata
-# from bankdetails.models import Scan
+from bankdetails.models import BankTransaction, Scan
+from bankdetails.serializers import ScanSerializer
 from traveler.settings import DADATA_API
 
 # # Create your views here.
@@ -44,20 +46,20 @@ def get_recipient(request):
         }
     return Response(data, status=200)
 
-# class DocumentScanView(CreateAPIView):
-#     queryset = Scan.objects.all()
-#     serializer_class = ScanSerializer
-#     permission_classes = [permissions.IsAuthenticated]
+class DocumentScanView(CreateAPIView):
+    queryset = Scan.objects.all()
+    serializer_class = ScanSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
-#     def perform_create(self, serializer):
-#         expert = Expert.objects.get(pk=self.request.user.id)
-#         serializer.save(expert=expert)
+    def perform_create(self, serializer):
+        bank_transaction = BankTransaction.objects.get(expert=self.request.user.id)
+        serializer.save(bank_transaction=bank_transaction)
 
 
-# class DocumentScanDestroyView(DestroyAPIView):
-#     queryset = Scan.objects.all()
-#     serializer_class = ScanSerializer
-#     permission_classes = [permissions.IsAuthenticated]
+class DocumentScanDestroyView(DestroyAPIView):
+    queryset = Scan.objects.all()
+    serializer_class = ScanSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
 
 
