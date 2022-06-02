@@ -305,7 +305,7 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
             return Response({}, status=204)
     
     @action(["patch"], detail=True)
-    def legal_verification(self, request, *args, **kwargs):
+    def verification(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
