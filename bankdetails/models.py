@@ -34,7 +34,7 @@ class BankTransaction(models.Model):
     transaction_recipient_status = models.CharField(_('Статус'), max_length=255)
     transaction_recipient_registration_date = models.DateField(_('Дата регистрации'), max_length=255)
     transaction_payment_reason =  models.CharField(_('КПП Банка'), max_length=255)
-    expert = models.OneToOneField('accounts.Expert', on_delete=models.CASCADE, verbose_name=_('Эксперт'), related_name='scans', null=True, blank=True)
+    expert = models.OneToOneField('accounts.Expert', on_delete=models.CASCADE, verbose_name=_('Эксперт'), related_name='bank_transaction', null=True, blank=True)
     
     class Meta:
         verbose_name = _('Банковский перевод')
