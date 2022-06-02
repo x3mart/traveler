@@ -297,3 +297,10 @@ class ModeratedTour(Tour):
         verbose_name_plural = _('Туры на модерации')
         proxy = True
 
+
+class DeclineReason(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    reason = models.TextField(_('Причина отказа'))
+    tour = models.ForeignKey('Tour', on_delete=models.CASCADE, related_name='decline_reasons')
+    staff = models.ForeignKey('accounts.User', on_delete=models.CASCADE, related_name='decline_reasons')
+

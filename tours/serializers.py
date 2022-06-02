@@ -81,11 +81,12 @@ class TourPreviewSerializer(serializers.ModelSerializer, TourSerializerMixin):
     discounted_price = serializers.SerializerMethodField(read_only=True)
     book_price = serializers.SerializerMethodField(read_only=True)
     daily_price = serializers.SerializerMethodField(read_only=True)
+    decline_reasons = serializers.SerializerMethodField(read_only=True)
     # important_to_know = ImportantSerializer(read_only=True, many=True)
 
     class Meta:
         model = Tour
-        fields = TOUR_FIELDS + ('expert', 'cost', 'discounted_price', 'book_price', 'daily_price')
+        fields = TOUR_FIELDS + ('expert', 'cost', 'discounted_price', 'book_price', 'daily_price', 'decline_reasons')
 
     def get_tmb_wallpaper(self, obj):
         if obj.wallpaper: 
@@ -96,6 +97,12 @@ class TourPreviewSerializer(serializers.ModelSerializer, TourSerializerMixin):
         if obj.wallpaper: 
             return get_image_uri(self, obj.wallpaper)
         return None
+    
+    def get_decline_reasons(self, obj):
+        if not obj.is_active and obj.decline_reasons.all().exists:
+            return obj.decline_reasons.last().reason
+        return None
+            
 
 class TourSerializer(serializers.ModelSerializer, TourSerializerMixin):
     basic_type = TourTypeSerializer(many=False, read_only=True)
