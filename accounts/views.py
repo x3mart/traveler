@@ -170,8 +170,8 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
             return BankTransactionSerializer
         if self.action == 'scans':
             return ScanSerializer
-        # if self.action == 'individual_verification':
-        #     return IndividualSerializer
+        if self.action == 'verification':
+            return VerificationRequestlSerializer
         if self.action == 'send_confirmation_call':
             return UserSerializer
         return super().get_serializer_class()
