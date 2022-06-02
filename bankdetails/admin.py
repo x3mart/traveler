@@ -1,7 +1,7 @@
 from django.contrib import admin
 
-from bankdetails.models import BankTransaction, DebetCard
+# from bankdetails.models import BankTransaction, DebetCard
 
-# Register your models here.
-admin.site.register(DebetCard)
-admin.site.register(BankTransaction)
+# # Register your models here.
+# admin.site.register(DebetCard)
+# admin.site.register(BankTransaction)

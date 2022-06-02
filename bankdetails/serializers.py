@@ -1,17 +1,22 @@
 from rest_framework import serializers
 
-from bankdetails.models import BankTransaction, DebetCard
-from geoplaces.serializers import CountrySerializer
+from bankdetails.models import Scan, DebetCard, BankTransaction
+
+
+class ScanSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Scan
+        exclude = ('bank_transaction',)
+
 
 class DebetCardSerializer(serializers.ModelSerializer):
-    billing_country = CountrySerializer(many=False, read_only=True)
     class Meta:
         model = DebetCard
         exclude = ('expert',)
 
 
 class BankTransactionSerializer(serializers.ModelSerializer):
-    billing_country = CountrySerializer(many=False, read_only=True)
+    scans = ScanSerializer(many=True, read_only=True)
     class Meta:
         model = BankTransaction
         exclude = ('expert',)

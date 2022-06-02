@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 # from bankdetails.serializers import BankTransactionSerializer, DebetCardSerializer
 from dadata import Dadata
+# from bankdetails.models import Scan
 from traveler.settings import DADATA_API
 
 # # Create your views here.
@@ -40,6 +41,21 @@ def get_recipient(request):
             'recipient_registration_date':datetime.fromtimestamp(result[0]['data'].get('state')['registration_date']/1000).date()
         }
     return Response(data, status=200)
+
+# class DocumentScanView(CreateAPIView):
+#     queryset = Scan.objects.all()
+#     serializer_class = ScanSerializer
+#     permission_classes = [permissions.IsAuthenticated]
+
+#     def perform_create(self, serializer):
+#         expert = Expert.objects.get(pk=self.request.user.id)
+#         serializer.save(expert=expert)
+
+
+# class DocumentScanDestroyView(DestroyAPIView):
+#     queryset = Scan.objects.all()
+#     serializer_class = ScanSerializer
+#     permission_classes = [permissions.IsAuthenticated]
 
 
 

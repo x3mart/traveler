@@ -25,11 +25,12 @@ import threading
 from django.template.loader import render_to_string
 from templated_mail.mail import BaseEmailMessage
 from django.contrib.auth.tokens import default_token_generator
-from bankdetails.models import BankTransaction, DebetCard
-from bankdetails.serializers import BankTransactionSerializer, DebetCardSerializer
+from bankdetails.models import BankTransaction, DebetCard, Scan
+from bankdetails.serializers import BankTransactionSerializer, DebetCardSerializer, ScanSerializer
+# from bankdetails.models import BankTransaction, DebetCard
+# from bankdetails.serializers import BankTransactionSerializer, DebetCardSerializer
 from geoplaces.models import Country
 from tours.models import Tour, TourBasic
-from verificationrequests.models import Legal, Individual
 from tours.mixins import TourMixin
 import random
 import json
@@ -37,7 +38,8 @@ from traveler.settings import FLASH_CALL
 from utils.times import get_timestamp_str
 import hashlib
 
-from verificationrequests.serializers import IndividualSerializer, LegalSerializer
+from verificationrequests.models import VerificationRequest
+from verificationrequests.serializers import VerificationRequestlSerializer
 
 
 class ConfirmEmailThread(threading.Thread, BaseEmailMessage):
@@ -166,10 +168,10 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
             return DebetCardSerializer
         if self.action == 'bank_transaction':
             return BankTransactionSerializer
-        if self.action == 'legal_verification':
-            return LegalSerializer
-        if self.action == 'individual_verification':
-            return IndividualSerializer
+        if self.action == 'scans':
+            return ScanSerializer
+        # if self.action == 'individual_verification':
+        #     return IndividualSerializer
         if self.action == 'send_confirmation_call':
             return UserSerializer
         return super().get_serializer_class()
@@ -265,13 +267,12 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
         instance = self.get_object()
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        country = request.data.get('billing_country')
-        if country:
-            country = Country.objects.get(pk=country['id'])
         if hasattr(instance, 'debet_card'):
-            DebetCard.objects.filter(expert=instance).update(billing_country=country, **serializer.data)
+            DebetCard.objects.filter(expert=instance).update(**serializer.data)
         else:
-            DebetCard.objects.create(expert_id=instance.id, billing_country=country, **serializer.data)
+            DebetCard.objects.create(expert_id=instance.id, **serializer.data)
+        instance.preferred_payment_method = 1
+        instance.save()
         debet_card = DebetCard.objects.get(expert_id=instance.id)
         return Response(DebetCardSerializer(debet_card).data, status=201)
     
@@ -280,15 +281,28 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
         instance = self.get_object()
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        country = request.data.get('billing_country')
-        if country:
-            country = Country.objects.get(pk=country['id'])
         if hasattr(instance, 'bank_transaction'):
-            BankTransaction.objects.filter(expert_id=instance.id).update(billing_country=country, **serializer.data)
+            BankTransaction.objects.filter(expert_id=instance.id).update(**serializer.data)
         else:
-            BankTransaction.objects.create(expert_id=instance.id, billing_country=country, **serializer.data)
+            BankTransaction.objects.create(expert_id=instance.id, **serializer.data)
+        instance.preferred_payment_method = 2
+        instance.save()
         bank_transaction = BankTransaction.objects.get(expert_id=instance.id)
         return Response(BankTransactionSerializer(bank_transaction).data, status=201)
+    
+    @action(["post", "delete"], detail=True)
+    def scans(self, request, *args, **kwargs):
+        if request.method == 'POST':
+            serializer = ScanSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                data = serializer.validated_data
+            bank_transaction = BankTransaction.objects.get(expert=request.user.id)
+            scan = Scan.objects.create(bank_transaction=bank_transaction, **data)
+            return Response(ScanSerializer(scan, many=False), status=200)
+        elif request.method == 'DELETE':
+            expert = Expert.objects.get(pk=request.user.id)
+            expert.delete()
+            return Response({}, status=204)
     
     @action(["patch"], detail=True)
     def legal_verification(self, request, *args, **kwargs):
@@ -296,41 +310,39 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = serializer.data
-        if request.data.get('residency'):
-            data['residency_id'] = request.data.get('residency')['id']
-        if hasattr(instance, 'legal_verification'):
-            Legal.objects.filter(expert_id=instance.id).update(**data)
+        if hasattr(instance, 'verifications'):
+            VerificationRequest.objects.filter(expert_id=instance.id).update(**data)
         else:
-            Legal.objects.create(expert_id=instance.id, **data)
-        legal_verification = Legal.objects.get(expert_id=instance.id)
+            VerificationRequest.objects.create(expert_id=instance.id, **data)
+        verification = VerificationRequest.objects.get(expert_id=instance.id)
         if request.data.get('tours_countries'):
             tours_countries = request.data.pop('tours_countries')
             ids = map(lambda tour_country: tour_country.get('id'), tours_countries)
             objects = TourMixin().get_mtm_objects(Country, ids)
-            legal_verification.tours_countries.set(objects)
-        legal_verification = Legal.objects.get(expert_id=instance.id)
-        return Response(LegalSerializer(legal_verification).data, status=201)
+            verification.tours_countries.set(objects)
+        verification = VerificationRequest.objects.get(expert_id=instance.id)
+        return Response(VerificationRequestlSerializer(verification).data, status=201)
     
-    @action(["patch"], detail=True)
-    def individual_verification(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        data = serializer.data
-        if request.data.get('residency'):
-            data['residency_id'] = request.data.get('residency')['id']
-        if hasattr(instance, 'individual_verification'):
-            Individual.objects.filter(expert_id=instance.id).update(**data)
-        else:
-            Individual.objects.create(expert_id=instance.id, **serializer.data)
-        individual_verification = Individual.objects.get(expert_id=instance.id)
-        if request.data.get('tours_countries'):
-            tours_countries = request.data.pop('tours_countries')
-            ids = map(lambda tour_country: tour_country.get('id'), tours_countries)
-            objects = TourMixin().get_mtm_objects(Country, ids)
-            individual_verification.tours_countries.set(objects)
-        individual_verification = Individual.objects.get(expert_id=instance.id)
-        return Response(IndividualSerializer(individual_verification).data, status=201)
+    # @action(["patch"], detail=True)
+    # def individual_verification(self, request, *args, **kwargs):
+    #     instance = self.get_object()
+    #     serializer = self.get_serializer(data=request.data)
+    #     serializer.is_valid(raise_exception=True)
+    #     data = serializer.data
+    #     if request.data.get('residency'):
+    #         data['residency_id'] = request.data.get('residency')['id']
+    #     if hasattr(instance, 'individual_verification'):
+    #         Individual.objects.filter(expert_id=instance.id).update(**data)
+    #     else:
+    #         Individual.objects.create(expert_id=instance.id, **serializer.data)
+    #     individual_verification = Individual.objects.get(expert_id=instance.id)
+    #     if request.data.get('tours_countries'):
+    #         tours_countries = request.data.pop('tours_countries')
+    #         ids = map(lambda tour_country: tour_country.get('id'), tours_countries)
+    #         objects = TourMixin().get_mtm_objects(Country, ids)
+    #         individual_verification.tours_countries.set(objects)
+    #     individual_verification = Individual.objects.get(expert_id=instance.id)
+    #     return Response(IndividualSerializer(individual_verification).data, status=201)
 
 class CustomerViewSet(viewsets.ModelViewSet):
     queryset = Customer.objects.all()

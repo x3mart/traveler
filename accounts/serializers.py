@@ -6,7 +6,7 @@ from tours.models import Tour
 from traveler.settings import DADATA_API, DADATA_SECRET
 from django.utils import timezone
 from languages.serializers import LanguageSerializer
-from verificationrequests.serializers import IndividualSerializer, LegalSerializer
+from verificationrequests.serializers import VerificationRequestlSerializer
 from .models import Customer, Expert, TeamMember, User
 from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
@@ -179,12 +179,11 @@ class ExpertMeSerializer(serializers.ModelSerializer):
     languages = LanguageSerializer(many=True, read_only=True)
     debet_card = DebetCardSerializer(many=False, read_only=True)
     bank_transaction = BankTransactionSerializer(many=False, read_only=True)
-    legal_verification = LegalSerializer(many=False, read_only=True)
-    individual_verification = IndividualSerializer(many=False, read_only=True)
+    verifications = VerificationRequestlSerializer(many=False, read_only=True)
 
     class Meta:
         model = Expert
-        fields = ('id', 'password', 'email', 'first_name', 'last_name', 'avatar', 'phone', 'tmb_avatar', 'country', 'city', 'languages', 'visited_countries', 'about', 'email_confirmed', 'phone_confirmed', 'docs_confirmed', 'status_confirmed', 'rating', 'tours_count', 'tours_rating', 'reviews_count', 'tour_reviews_count', 'video', 'commission', 'debet_card', 'bank_transaction', 'legal_verification', 'individual_verification')
+        fields = ('id', 'password', 'email', 'first_name', 'last_name', 'avatar', 'phone', 'tmb_avatar', 'country', 'city', 'languages', 'visited_countries', 'about', 'email_confirmed', 'phone_confirmed', 'docs_confirmed', 'status_confirmed', 'rating', 'tours_count', 'tours_rating', 'reviews_count', 'tour_reviews_count', 'video', 'commission', 'verifications', 'debet_card', 'bank_transaction')
         extra_kwargs = {
             'password': {'write_only': True, 'required': False,},
             'avatar': {'read_only': True, 'required': False,},
@@ -226,11 +225,8 @@ class CustomerMeSerializer(serializers.ModelSerializer):
         password = check_password(self)
         validated_data['is_customer'] = True
         if len(name.strip().split(' ')) > 2:
-            dadata = Dadata(DADATA_API, DADATA_SECRET)
-            result = dadata.clean("name", name)
-            if result:
-                validated_data['first_name'] = result.get('name')
-                validated_data['last_name'] = result.get('surname')
+            validated_data['first_name'] = name.strip().split(' ')[0]
+            validated_data['last_name'] = name.strip().split(' ')[1]
         else:
             validated_data['first_name'] = name
         customer = Customer(**validated_data)
