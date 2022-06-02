@@ -30,7 +30,7 @@ class BankTransaction(models.Model):
     transaction_recipient_ogrn = models.CharField(_('ОГРН Получателя'), max_length=255)
     transaction_recipient_legal_address = models.CharField(_('Юр адрес'), max_length=255)
     transaction_recipient_real_address = models.CharField(_('Фактический адрес'), max_length=255)
-    transaction_recipient_kpp = models.CharField(_('КПП Получателя'), max_length=255)
+    # transaction_recipient_kpp = models.CharField(_('КПП Получателя'), max_length=255)
     transaction_recipient_status = models.CharField(_('Статус'), max_length=255)
     transaction_recipient_registration_date = models.DateField(_('Дата регистрации'), max_length=255)
     transaction_payment_reason =  models.CharField(_('КПП Банка'), max_length=255)
