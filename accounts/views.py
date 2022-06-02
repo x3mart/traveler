@@ -310,6 +310,8 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = serializer.data
+        if request.data.get('residency'):
+            data['residency_id'] = request.data.get('residency')['id']
         if hasattr(instance, 'verifications'):
             VerificationRequest.objects.filter(expert_id=instance.id).update(**data)
         else:

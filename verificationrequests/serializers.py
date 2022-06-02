@@ -7,6 +7,7 @@ from verificationrequests.models import VerificationRequest
 
 
 class VerificationRequestlSerializer(serializers.ModelSerializer):
+    residency = CountrySerializer(many=False, read_only=True)
     class Meta:
         model = VerificationRequest
         exclude = ('expert', 'aproved')

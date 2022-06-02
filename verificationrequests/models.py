@@ -16,7 +16,7 @@ class VerificationRequest(models.Model):
     passport_issued_by = models.CharField(_('Паспорт кем выдан'), max_length=255,)
     passport_date = models.DateField(_('Паспорт дата выдачи'))
     expert = models.OneToOneField('accounts.Expert', verbose_name=_('Эксперт'), on_delete=models.PROTECT, related_name='verifications')
-    # residency = models.ForeignKey('geoplaces.Country', verbose_name=_('Резидент'), on_delete=models.PROTECT, related_name="%(app_label)s_%(class)s_citizenship", null=True, blank=True,)
+    residency = models.ForeignKey('geoplaces.Country', verbose_name=_('Резидент'), on_delete=models.PROTECT, related_name="%(app_label)s_%(class)s_citizenship", null=True, blank=True,)
     license = models.CharField(_('Наличие лицензии'), max_length=3, choices=YesNoChoices.choices, default=YesNoChoices.YES)
     commercial_tours  = models.CharField(_('Коммерческие туры'), max_length=3, choices=YesNoChoices.choices, default=YesNoChoices.YES)
     # commercial_tours_yearly = models.CharField(_('Туры в год'), max_length=6, null=True, blank=True,)
