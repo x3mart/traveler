@@ -35,7 +35,7 @@ import random
 import json
 from traveler.settings import FLASH_CALL
 from utils.times import get_timestamp_str
-import hashlib
+from rest_framework import serializers
 
 from verificationrequests.models import VerificationRequest
 from verificationrequests.serializers import VerificationRequestlSerializer
@@ -287,6 +287,8 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
         instance.preferred_payment_method = 2
         instance.save()
         bank_transaction = BankTransaction.objects.get(expert_id=instance.id)
+        if not bank_transaction.scans.all().exists() or bank_transaction.scans.count() < 2:
+            raise serializers.ValidationError({'scans':[_('Сканы уставных документов (ИНН, ОГРН)')]})
         return Response(BankTransactionSerializer(bank_transaction).data, status=201)
     
     # @action(["post", "delete"], detail=True)
