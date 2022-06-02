@@ -288,7 +288,7 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
         instance.save()
         bank_transaction = BankTransaction.objects.get(expert_id=instance.id)
         if not bank_transaction.scans.all().exists() or bank_transaction.scans.count() < 2:
-            raise serializers.ValidationError({'scans':[_('Сканы уставных документов (ИНН, ОГРН)')]})
+            raise serializers.ValidationError({'scans':[_('Загрузите cканы уставных документов (ИНН, ОГРН)')]})
         return Response(BankTransactionSerializer(bank_transaction).data, status=201)
     
     # @action(["post", "delete"], detail=True)
