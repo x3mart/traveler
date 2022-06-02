@@ -132,11 +132,12 @@ class TourSerializer(serializers.ModelSerializer, TourSerializerMixin):
     finish_city = CityFullNameSerializer(many=False, read_only=True)
     postpay_days_before_start = serializers.SerializerMethodField(read_only=True)
     required_fields = serializers.SerializerMethodField(read_only=True)
+    decline_reasons = serializers.SerializerMethodField(read_only=True)
     
 
     class Meta:
         model = Tour
-        fields = TOUR_FIELDS + ('completed_sections', 'required_fields')
+        fields = TOUR_FIELDS + ('completed_sections', 'required_fields', 'decline_reasons')
         extra_kwargs = {
             'animals_not_exploited': {'required': False,},
             'instant_booking': {'required': False,}, 
@@ -153,6 +154,11 @@ class TourSerializer(serializers.ModelSerializer, TourSerializerMixin):
     def get_wallpaper(self, obj):
         if obj.wallpaper: 
             return get_image_uri(self, obj.wallpaper)
+        return None
+    
+    def get_decline_reasons(self, obj):
+        if not obj.is_active and obj.decline_reasons.all().exists():
+            return obj.decline_reasons.last().reason
         return None
 
 
