@@ -289,19 +289,19 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
         bank_transaction = BankTransaction.objects.get(expert_id=instance.id)
         return Response(BankTransactionSerializer(bank_transaction).data, status=201)
     
-    @action(["post", "delete"], detail=True)
-    def scans(self, request, *args, **kwargs):
-        if request.method == 'POST':
-            serializer = ScanSerializer(data=request.data)
-            if serializer.is_valid(raise_exception=True):
-                data = serializer.validated_data
-            bank_transaction = BankTransaction.objects.get(expert=request.user.id)
-            scan = Scan.objects.create(bank_transaction=bank_transaction, **data)
-            return Response(ScanSerializer(scan, many=False), status=200)
-        elif request.method == 'DELETE':
-            expert = Expert.objects.get(pk=request.user.id)
-            expert.delete()
-            return Response({}, status=204)
+    # @action(["post", "delete"], detail=True)
+    # def scans(self, request, *args, **kwargs):
+    #     if request.method == 'POST':
+    #         serializer = ScanSerializer(data=request.data)
+    #         if serializer.is_valid(raise_exception=True):
+    #             data = serializer.validated_data
+    #         bank_transaction = BankTransaction.objects.get(expert=request.user.id)
+    #         scan = Scan.objects.create(bank_transaction=bank_transaction, **data)
+    #         return Response(ScanSerializer(scan, many=False), status=200)
+    #     elif request.method == 'DELETE':
+    #         expert = Expert.objects.get(pk=request.user.id)
+    #         expert.delete()
+    #         return Response({}, status=204)
     
     @action(["patch"], detail=True)
     def verification(self, request, *args, **kwargs):
@@ -322,8 +322,9 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
             objects = TourMixin().get_mtm_objects(Country, ids)
             verification.tours_countries.set(objects)
         verification = VerificationRequest.objects.get(expert_id=instance.id)
-        return Response({'error': True, 'message': _('Пора спать!!')}, status=403)
-        # return Response(VerificationRequestlSerializer(verification).data, status=201)
+        if not instance.email_confirmed or not instance.phone_confirmed or not (hasattr(instance, 'bank_transaction') and hasattr(instance, 'debet_card')):
+            return Response({'error': True, 'message': _('Убедитесь, что у Вас подтверждены телефон и email, заполнены реквизиты для желаемого способа выплаты.')}, status=403)
+        return Response(VerificationRequestlSerializer(verification).data, status=201)
     
     # @action(["patch"], detail=True)
     # def individual_verification(self, request, *args, **kwargs):
