@@ -325,8 +325,8 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
             errors['legal_restrictions_review'] = [_("Обязательное поле")]
         # if errors:
         #     raise ValidationError(errors)
-        if not instance.email_confirmed or not instance.phone_confirmed or (instance.preferred_payment_method == 2 and (not (hasattr(instance, 'bank_transaction') or not instance.bank_transaction.scans.all().exists() or instance.bank_transaction.scans.count() < 2)) or (instance.preferred_payment_method == 1 and not hasattr(instance, 'debet_card')) ):
-            return Response({'error': True, 'message': _('Убедитесь, что у Вас подтверждены телефон и email, заполнены реквизиты для желаемого способа выплаты и загружены необходимые документы')}, status=403)
+        if errors or not instance.email_confirmed or not instance.phone_confirmed or (instance.preferred_payment_method == 2 and (not (hasattr(instance, 'bank_transaction') or not instance.bank_transaction.scans.all().exists() or instance.bank_transaction.scans.count() < 2)) or (instance.preferred_payment_method == 1 and not hasattr(instance, 'debet_card')) ):
+            return Response({'error': True, 'message': _('Убедитесь, что у Вас заполнены все поля, подтверждены телефон и email, заполнены реквизиты для желаемого способа выплаты и загружены необходимые документы')}, status=403)
         return Response(VerificationRequestlSerializer(verification).data, status=201)
 
 
