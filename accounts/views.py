@@ -300,6 +300,12 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = serializer.data
+        if data['commercial_tours'] == 'no':
+            data['commercial_tours_yearly'] = None
+        if data['conflicts'] == 'no':
+            data['conflicts_review'] = None
+        if data['legal_restrictions'] == 'no':
+            data['legal_restrictions_review'] = None
         if request.data.get('residency'):
             data['residency_id'] = request.data.get('residency')['id']
         if hasattr(instance, 'verifications'):
