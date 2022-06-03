@@ -1,6 +1,6 @@
 from django.db.models import F, Q
 from datetime import timedelta, datetime
-from django.forms import ValidationError
+from rest_framework.serializers import ValidationError
 from django.shortcuts import redirect
 from rest_framework.decorators import action
 from accounts.permissions import TeamMemberPermission, UserPermission, CustomerPermission, ExpertPermission
