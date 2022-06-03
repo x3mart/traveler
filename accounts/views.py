@@ -291,22 +291,10 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
             raise serializers.ValidationError({'scans':[_('Загрузите cканы уставных документов (ИНН, ОГРН)')]})
         return Response(BankTransactionSerializer(bank_transaction).data, status=201)
     
-    # @action(["post", "delete"], detail=True)
-    # def scans(self, request, *args, **kwargs):
-    #     if request.method == 'POST':
-    #         serializer = ScanSerializer(data=request.data)
-    #         if serializer.is_valid(raise_exception=True):
-    #             data = serializer.validated_data
-    #         bank_transaction = BankTransaction.objects.get(expert=request.user.id)
-    #         scan = Scan.objects.create(bank_transaction=bank_transaction, **data)
-    #         return Response(ScanSerializer(scan, many=False), status=200)
-    #     elif request.method == 'DELETE':
-    #         expert = Expert.objects.get(pk=request.user.id)
-    #         expert.delete()
-    #         return Response({}, status=204)
     
     @action(["patch"], detail=True)
     def verification(self, request, *args, **kwargs):
+        errors={}
         instance = self.get_object()
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -324,30 +312,20 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
             objects = TourMixin().get_mtm_objects(Country, ids)
             verification.tours_countries.set(objects)
         verification = VerificationRequest.objects.get(expert_id=instance.id)
+        if not verification.residency:
+            errors['residency'] = [_("Обязательное поле")]
+        if not verification.tours_countries.all().exists():
+            errors['tours_countries'] = [_("Обязательное поле")]
+        if verification.commercial_tours == 'yes' and not verification.commercial_tours_yearly:
+            errors['commercial_tours_yearly'] = [_("Обязательное поле")]
+        if verification.conflicts == 'yes' and not verification.conflicts_review:
+            errors['conflicts_review'] = [_("Обязательное поле")]
+        if verification.legal_restrictions == 'yes' and not verification.legal_restrictions_review:
+            errors['legal_restrictions_review'] = [_("Обязательное поле")]
         if not instance.email_confirmed or not instance.phone_confirmed or (instance.preferred_payment_method == 2 and (not (hasattr(instance, 'bank_transaction') or not instance.bank_transaction.scans.all().exists() or instance.bank_transaction.scans.count() < 2)) or (instance.preferred_payment_method == 1 and not hasattr(instance, 'debet_card')) ):
             return Response({'error': True, 'message': _('Убедитесь, что у Вас подтверждены телефон и email, заполнены реквизиты для желаемого способа выплаты и загружены необходимые документы')}, status=403)
         return Response(VerificationRequestlSerializer(verification).data, status=201)
-    
-    # @action(["patch"], detail=True)
-    # def individual_verification(self, request, *args, **kwargs):
-    #     instance = self.get_object()
-    #     serializer = self.get_serializer(data=request.data)
-    #     serializer.is_valid(raise_exception=True)
-    #     data = serializer.data
-    #     if request.data.get('residency'):
-    #         data['residency_id'] = request.data.get('residency')['id']
-    #     if hasattr(instance, 'individual_verification'):
-    #         Individual.objects.filter(expert_id=instance.id).update(**data)
-    #     else:
-    #         Individual.objects.create(expert_id=instance.id, **serializer.data)
-    #     individual_verification = Individual.objects.get(expert_id=instance.id)
-    #     if request.data.get('tours_countries'):
-    #         tours_countries = request.data.pop('tours_countries')
-    #         ids = map(lambda tour_country: tour_country.get('id'), tours_countries)
-    #         objects = TourMixin().get_mtm_objects(Country, ids)
-    #         individual_verification.tours_countries.set(objects)
-    #     individual_verification = Individual.objects.get(expert_id=instance.id)
-    #     return Response(IndividualSerializer(individual_verification).data, status=201)
+
 
 class CustomerViewSet(viewsets.ModelViewSet):
     queryset = Customer.objects.all()
