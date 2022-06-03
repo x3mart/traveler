@@ -216,6 +216,7 @@ class CustomerMeSerializer(serializers.ModelSerializer):
         fields = ('id', 'first_name', 'last_name', 'email', 'password', 'avatar', 'phone',)
         extra_kwargs = {
             'password': {'write_only': True, 'required': False,},
+            'avatar': {'read_only': True, 'required': False,},
         }
     
     def create(self, validated_data):
@@ -224,7 +225,7 @@ class CustomerMeSerializer(serializers.ModelSerializer):
             serializers.ValidationError({'name':[_('Пожалуйста представьтесь')]})
         password = check_password(self)
         validated_data['is_customer'] = True
-        if len(name.strip().split(' ')) > 2:
+        if len(name.strip().split(' ')) > 1:
             validated_data['first_name'] = name.strip().split(' ')[0]
             validated_data['last_name'] = name.strip().split(' ')[1]
         else:
