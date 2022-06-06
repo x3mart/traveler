@@ -30,15 +30,15 @@ class ChatMessageSerializer(serializers.ModelSerializer):
 class UserChatSerializer(serializers.ModelSerializer):
     room_members = serializers.SerializerMethodField()
     members_in_room = RoomMembersSerializer(many=True, read_only=True)
-    # last_message = serializers.SerializerMethodField()
+    last_message = serializers.SerializerMethodField()
     class Meta:
         model = UserChat
         fields = '__all__'
     
     def get_last_message(self, obj):
-        latest_message = obj.latest_message
-        if latest_message:
-            return latest_message.text
+        last_message = obj.last_message
+        if last_message:
+            return last_message
         return None
     
     def get_room_members(self, obj):
