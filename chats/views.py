@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.response import Response
+from django.db.models import OuterRef, Subquery
 from chats.serializers import UserChatSerializer
 from utils.mixins import ChatMixins
-from .models import UserChat
+from .models import ChatMessage, UserChat
 from accounts.models import User
 
 # Create your views here.
@@ -23,7 +24,8 @@ class UserChatListCreateView(generics.ListCreateAPIView, ChatMixins):
         return Response(UserChatSerializer(chat, context={'user':request.user}).data, status=200)
     
     def list(self, request):
-        chats = UserChat.objects.filter(room_members__id=request.user.id)
+        latest= ChatMessage.objects.filter(room=OuterRef('pk')).order_by('-created_at')
+        chats = UserChat.objects.filter(room_members__id=request.user.id).annotate(latest_message=Subquery(latest[:1]))
         serializer = UserChatSerializer(chats, many=True, context={'user':request.user})
         return Response(serializer.data)
 

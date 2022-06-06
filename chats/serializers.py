@@ -36,9 +36,9 @@ class UserChatSerializer(serializers.ModelSerializer):
         fields = '__all__'
     
     def get_last_message(self, obj):
-        last_message = obj.room_messages.last()
-        if last_message:
-            return last_message.text
+        latest_message = obj.latest_message
+        if latest_message:
+            return latest_message.text
         return None
     
     def get_room_members(self, obj):
