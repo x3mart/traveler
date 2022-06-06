@@ -25,7 +25,7 @@ class UserChatListCreateView(generics.ListCreateAPIView, ChatMixins):
     
     def list(self, request):
         latest= ChatMessage.objects.filter(room=OuterRef('pk')).order_by('-created_at')
-        chats = UserChat.objects.filter(room_members__id=request.user.id).annotate(last_message=Subquery(latest.values('text')[:1]))
+        chats = UserChat.objects.filter(room_members__id=request.user.id).annotate(last_message=Subquery(latest.values('text')[:1])).annotate(last_message_created_at=Subquery(latest.values('created_at')[:1])).order_by('-last_message_created_at')
         serializer = UserChatSerializer(chats, many=True, context={'user':request.user})
         return Response(serializer.data)
 
