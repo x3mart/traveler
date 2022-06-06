@@ -30,7 +30,7 @@ class ChatMessageSerializer(serializers.ModelSerializer):
 class UserChatSerializer(serializers.ModelSerializer):
     room_members = serializers.SerializerMethodField()
     members_in_room = RoomMembersSerializer(many=True, read_only=True)
-    last_message = serializers.SerializerMethodField()
+    # last_message = serializers.SerializerMethodField()
     class Meta:
         model = UserChat
         fields = '__all__'
