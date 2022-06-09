@@ -59,7 +59,7 @@ class TourDatesSerializer(serializers.Serializer):
     tour_date = serializers.SerializerMethodField()
 
     def get_tour_date(self, obj):
-        return f"{obj.start_date.strftime('%d-%m-%Y')} - {obj.finish_date.strftime('%d-%m-%Y')}"
+        return f"{obj.start_date.strftime('%d.%m.%Y')} - {obj.finish_date.strftime('%d.%m.%Y')}"
 
 
 class TourPreviewSerializer(serializers.ModelSerializer, TourSerializerMixin):
