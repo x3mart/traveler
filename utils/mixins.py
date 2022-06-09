@@ -147,3 +147,6 @@ class TourSerializerMixin():
     
     def get_postpay_days_before_start(self, obj):
         return obj.postpay_days_before_start.days
+    
+    def get_postpay_final_date(self, obj):
+        return (obj.start_date - obj.postpay_days_before_start).strftime('%d.%m.%Y')
