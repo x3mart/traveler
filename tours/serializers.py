@@ -53,6 +53,15 @@ class ImportantSerializer(serializers.ModelSerializer):
 
 TOUR_FIELDS = ('id', 'rating', 'reviews_count', 'name', 'wallpaper', 'tmb_wallpaper', 'basic_type', 'additional_types', 'start_region', 'finish_region', 'start_country', 'finish_country', 'start_russian_region', 'finish_russian_region', 'start_city', 'finish_city', 'description', 'plan', 'cancellation_terms', 'difficulty_level', 'difficulty_description', 'tour_property_types', 'accomodation', 'tour_property_images', 'comfort_level', 'babies_alowed', 'animals_not_exploited', 'start_date', 'finish_date', 'start_time', 'finish_time', 'direct_link', 'instant_booking', 'members_number', 'team_member', 'guest_guide', 'price_comment', 'prepay_amount', 'prepay_in_prc', 'prepay_currency', 'postpay_on_start_day', 'postpay_days_before_start', 'currency', 'price', 'cost', 'discount_starts', 'discount_finish', 'discount_in_prc', 'discount', 'languages', 'is_guaranteed', 'flight_included', 'scouting', 'tour_images', 'tour_days', 'main_impressions', 'tour_included_services', 'tour_excluded_services', 'tour_addetional_services','hotel_name', 'age_starts', 'age_ends', 'media_link', 'week_recurrent', 'month_recurrent', 'vacants_number', 'on_moderation', 'is_active', 'is_draft', 'air_tickets', 'duration', 'sold', 'watched', 'guest_requirements', 'take_with', 'key_features', 'new_to_see', 'map') 
 
+
+class TourDatesSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    tour_date = serializers.SerializerMethodField()
+
+    def get_tour_date(self, obj):
+        return f"{obj.start_date.strftime('%d-%m-%Y')} - {obj.finish_date.strftime('%d-%m-%Y')}"
+
+
 class TourPreviewSerializer(serializers.ModelSerializer, TourSerializerMixin):
     basic_type = serializers.StringRelatedField(many=False, read_only=True)
     additional_types = serializers.StringRelatedField(many=True, read_only=True)
@@ -82,11 +91,11 @@ class TourPreviewSerializer(serializers.ModelSerializer, TourSerializerMixin):
     book_price = serializers.SerializerMethodField(read_only=True)
     daily_price = serializers.SerializerMethodField(read_only=True)
     decline_reasons = serializers.SerializerMethodField(read_only=True)
-    # important_to_know = ImportantSerializer(read_only=True, many=True)
+    tour_dates = TourDatesSerializer(many=True, read_only=True)
 
     class Meta:
         model = Tour
-        fields = TOUR_FIELDS + ('expert', 'cost', 'discounted_price', 'book_price', 'daily_price', 'decline_reasons')
+        fields = TOUR_FIELDS + ('expert', 'cost', 'discounted_price', 'book_price', 'daily_price', 'decline_reasons', 'tour_dates')
 
     def get_tmb_wallpaper(self, obj):
         if obj.wallpaper: 

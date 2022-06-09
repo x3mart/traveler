@@ -21,7 +21,7 @@ class Order(models.Model):
     tour_price = models.PositiveIntegerField(_('Цена'))
     members_number = models.PositiveIntegerField(_('Количево участников'))
     cost = models.PositiveIntegerField(_('Стоимость тура'))
-    status = models.CharField(_('Статус'), max_length=15)
+    status = models.CharField(_('Статус'), max_length=15, choices=OrderStatus.choices, default=OrderStatus.PENDING)
 
 
     
