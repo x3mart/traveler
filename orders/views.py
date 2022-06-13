@@ -34,6 +34,7 @@ class OrderViewSet(viewsets.ModelViewSet):
     @action(['get'], detail=True)
     def new_order(self, request, *args, **kwargs):
         tour = self.get_object()
+        tour.id = None
         tour.customer = request.user
         tour.expert = tour.tour_basic.expert
         tour.tour_id = tour.id
