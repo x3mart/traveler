@@ -38,4 +38,4 @@ class OrderViewSet(viewsets.ModelViewSet):
         tour.expert = tour.tour_basic.expert
         tour.tour_id = tour.id
         tour.tour_name = tour.name
-        return Response(OrderSerializer(tour, many=False, context={'request':request}))
+        return Response(OrderSerializer(tour, many=False, context={'request':request}).data, status=200)
