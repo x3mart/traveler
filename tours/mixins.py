@@ -39,7 +39,7 @@ class TourMixin():
         if instance.prepay_amount and instance.prepay_in_prc and instance.prepay_amount < 15:
             errors['prepay_amount'] = [_("Предоплата не может быть меньше 15%")]
         elif instance.prepay_amount and instance.price and not instance.prepay_in_prc and instance.prepay_amount < instance.price*0.15:
-            errors['prepay_amount'] = [_("Предоплата не может быть меньше") + f" {math.ceil(instance.price*0.15)} {instance.currency.short_name if instance.currency else ''}"]
+            errors['prepay_amount'] = [_("Предоплата без учета скидки не может быть меньше") + f" {math.ceil(instance.price*0.15)} {instance.currency.short_name if instance.currency else ''}"]
         return (instance, errors)
 
     def check_set_tour_field_for_moderation(self, instance, field):
