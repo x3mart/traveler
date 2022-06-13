@@ -47,6 +47,6 @@ class OrderViewSet(viewsets.ModelViewSet):
         tour.tour_name = tour.name
         tour.tour_price = get_tour_discounted_price(tour) if get_tour_discounted_price(tour) else tour.price
         tour.tour_cost = tour.price*travelers_number
-        tour.prepay_amount = math.ceil(tour.cost*tour.prepay_amount/100)*travelers_number if tour.prepay_in_prc else tour.prepay_amount*travelers_number
-        tour.postpay = tour.cost - tour.prepay_amount
+        tour.prepay_amount = math.ceil(tour.tour_cost*tour.prepay_amount/100)*travelers_number if tour.prepay_in_prc else tour.prepay_amount*travelers_number
+        tour.postpay = tour.tour_cost - tour.prepay_amount
         return Response(OrderSerializer(tour, many=False, context={'request':request}).data, status=200)
