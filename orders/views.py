@@ -35,7 +35,7 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     @action(['get'], detail=True)
     def new_order(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+        serializer = self.get_serializer(data=request.params)
         if serializer.is_valid(raise_exception=True):
             data = serializer.validated_data
         travelers_number = data.get('validated_data')
