@@ -38,7 +38,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=request.query_params)
         if serializer.is_valid(raise_exception=True):
             data = serializer.validated_data
-        travelers_number = data.get('validated_data')
+        travelers_number = data.get('travelers_number')
         tour = self.get_object()
         tour.tour_id = tour.id
         tour.id = None
