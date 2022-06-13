@@ -23,7 +23,8 @@ class Order(models.Model):
     tour_finish_date = models.DateField(_('Дата завершения'))
     tour_price = models.PositiveIntegerField(_('Цена за место'))
     travelers_number = models.PositiveIntegerField(_('Количево участников'))
-    cost = models.PositiveIntegerField(_('Стоимость тура'))
+    tour_cost = models.PositiveIntegerField(_('Полная стоимость тура'), null=True, blank=True)
+    postpay = models.PositiveIntegerField(_('Размер постоплаты'), null=True, blank=True)
     postpay_final_date = models.DateField(_('Дата постоплаты'))
     status = models.CharField(_('Статус'), max_length=25, choices=OrderStatus.choices, default=OrderStatus.PENDING_CONFIRMATION)
     difficulty_level = models.PositiveIntegerField(_('Уровень сложности'))
@@ -31,6 +32,7 @@ class Order(models.Model):
     tour_excluded_services = models.JSONField(_("Не включенные услуги"))
     tour_included_services = models.JSONField(_("Включенные услуги"))
     created_at = models.DateTimeField(_('Создан'), auto_now_add=True)
+    duration = models.PositiveIntegerField(_("Продолжительность тура в днях"), null=True, blank=True)
 
     class Meta:
         verbose_name = _('Заказ')

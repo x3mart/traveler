@@ -1,3 +1,4 @@
+import math
 from rest_framework import serializers
 import django.contrib.auth.password_validation as validators
 from datetime import date
@@ -7,6 +8,7 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from supports.serializers import SupportChatMessageSerializer
 from .constants import *
+from .prices import get_tour_discounted_price, get_tour_book_price, get_tour_daily_price
 
 
 # def check_password(self):
@@ -86,23 +88,13 @@ class TourSerializerMixin():
             return None
     
     def get_discounted_price(self, obj):
-        if obj.price and obj.discount and obj.discount_starts and  obj.discount_finish and obj.discount_starts < date.today() and  obj.discount_finish > date.today():
-            return round(obj.price - obj.price*(obj.discount/100)) if obj.prepay_in_prc else obj.price - obj.discount
-        else:
-            return None
+        return get_tour_discounted_price(obj)
 
     def get_book_price(self, obj): 
-        if obj.price:
-            return round(obj.price*obj.prepay_amount/100) + 1 if obj.prepay_in_prc else obj.prepay_amount
-        return None
+        return get_tour_book_price(obj)
     
     def get_daily_price(self, obj):
-        discounted_price = self.get_discounted_price(obj)
-        if discounted_price:
-            return round(discounted_price/obj.duration)
-        if obj.price and obj.duration: 
-            return round(obj.price/obj.duration)
-        return None
+        return get_tour_daily_price(obj)
 
     def get_vacants_number(self, obj):
             return obj.vacants_number if obj.vacants_number < 5 else None
@@ -117,10 +109,7 @@ class TourSerializerMixin():
         return  None
 
     def get_discount(self, obj):
-        if obj.price and obj.discount and obj.discount_starts and  obj.discount_finish and obj.discount_starts < date.today() and  obj.discount_finish > date.today():
-            return round(obj.price - obj.price*(obj.discount/100)) if obj.prepay_in_prc else obj.price - obj.discount
-        else:
-            return None
+        return get_tour_discounted_price(obj)
 
     def get_main_impressions(self, obj):
         if obj.main_impressions:

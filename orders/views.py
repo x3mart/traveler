@@ -6,10 +6,12 @@ from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
 import threading
 from django.core.mail import send_mail
+import math
 
 from orders.models import Order
 from orders.serializers import OrderSerializer
 from tours.models import Tour
+from utils.prices import get_tour_discounted_price
 
 # Create your views here.
 class OrderViewSet(viewsets.ModelViewSet):
@@ -33,10 +35,18 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     @action(['get'], detail=True)
     def new_order(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            data = serializer.validated_data
+        travelers_number = data.get('validated_data')
         tour = self.get_object()
         tour.tour_id = tour.id
         tour.id = None
         tour.customer = request.user
         tour.expert = tour.tour_basic.expert
         tour.tour_name = tour.name
+        tour.price = get_tour_discounted_price(tour) if get_tour_discounted_price(tour) else tour.price
+        tour.cost = tour.price*travelers_number
+        tour.prepay_amount = math.ceil(tour.cost*tour.prepay_amount/100)*travelers_number if tour.prepay_in_prc else tour.prepay_amount*travelers_number
+        tour.postpay = tour.cost - tour.prepay_amount
         return Response(OrderSerializer(tour, many=False, context={'request':request}).data, status=200)

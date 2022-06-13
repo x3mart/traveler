@@ -3,7 +3,7 @@ from datetime import timedelta, date
 from django.forms import model_to_dict
 from django.db import models
 from django.shortcuts import get_object_or_404
-from uritemplate import partial
+import math
 from geoplaces.models import City
 from django.utils.translation import gettext_lazy as _
 from tours.models import TourAccomodation, TourPropertyType, TourType
@@ -39,7 +39,7 @@ class TourMixin():
         if instance.prepay_amount and instance.prepay_in_prc and instance.prepay_amount < 15:
             errors['prepay_amount'] = [_("Предоплата не может быть меньше 15%")]
         elif instance.prepay_amount and instance.price and not instance.prepay_in_prc and instance.prepay_amount < instance.price*0.15:
-            errors['prepay_amount'] = [_("Предоплата не может быть меньше") + f" {round(instance.price*0.15) + 1} {instance.currency.short_name if instance.currency else ''}"]
+            errors['prepay_amount'] = [_("Предоплата не может быть меньше") + f" {math.ceil(instance.price*0.15)} {instance.currency.short_name if instance.currency else ''}"]
         return (instance, errors)
 
     def check_set_tour_field_for_moderation(self, instance, field):
