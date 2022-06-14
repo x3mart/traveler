@@ -47,12 +47,12 @@ class OrderViewSet(viewsets.ModelViewSet):
         if not serializer.is_valid(raise_exception=False):
             print(serializer.validated_data)
             print(serializer.errors)
-        if serializer.is_valid(raise_exception=True):
+        if serializer.is_valid(raise_exception=False):
             data = serializer.validated_data
-        if not travelers:
-            raise ValidationError({'travelers': [_('Заполните данные о Путешественниках')]})
-        if not data.get('phone'):
-            raise ValidationError({'phone': [_('Обязательное поле')]})
+        # if not travelers:
+        #     raise ValidationError({'travelers': [_('Заполните данные о Путешественниках')]})
+        # if not data.get('phone'):
+        #     raise ValidationError({'phone': [_('Обязательное поле')]})
         order = self.get_object()
         costs = self.get_costs(data['travelers_number'], order.price, order.book_price, order.postpay)
         Order.objects.filter(pk=order.id).update(**data, **costs)
