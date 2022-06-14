@@ -187,7 +187,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
     @action(['get'], detail=True)
     def preview(self, request, *args, **kwargs):
         tour = self.get_object()
-        tour.tour_dates = Tour.objects.filter(tour_basic=tour.tour_basic).filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start'))).only('id', 'start_date', 'finish_date')
+        # tour.tour_dates = Tour.objects.filter(tour_basic=tour.tour_basic).filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start'))).only('id', 'start_date', 'finish_date')
         return Response(TourPreviewSerializer(tour, context={'request': request}, many=False).data, status=200)
     
     @action(['get'], detail=False)

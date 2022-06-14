@@ -8,6 +8,8 @@ import threading
 from django.core.mail import send_mail
 import math
 import locale
+from datetime import datetime
+from django.db.models import F, Q
 
 from orders.models import Order, Traveler
 from orders.serializers import OrderSerializer, TravelerSerializer
@@ -35,6 +37,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         initial_params = self.get_initional_params(data['tour'])
         costs = self.get_costs(data['travelers_number'], **initial_params)
         order = Order.objects.create(tour=data['tour'], travelers_number=data['travelers_number'], customer_id=request.user.id, **initial_params, **costs)
+        order.tour_dates = self.get_tour_dates(order.tour)
         return Response(OrderSerializer(order, many=False, context={'request':request}).data, status=201)
     
     def update(self, request, *args, **kwargs):
@@ -60,6 +63,7 @@ class OrderViewSet(viewsets.ModelViewSet):
             if serializer.is_valid():
                 Traveler.objects.create(order=order, **traveler_serializer.validated_data)
         order.refresh_from_db()
+        order.tour_dates = self.get_tour_dates(order.tour)
         return Response(OrderSerializer(order, many=False, context={'request':request}).data, status=200)
     
 
@@ -89,3 +93,6 @@ class OrderViewSet(viewsets.ModelViewSet):
             'book_cost': book_price*travelers_number,
             'full_postpay': postpay*travelers_number
         }
+    
+    def get_tour_dates(self, tour):
+        return Tour.objects.filter(tour_basic_id=tour.tour_basic.id).filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start'))).only('id', 'start_date', 'finish_date')
