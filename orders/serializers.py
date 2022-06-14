@@ -6,7 +6,7 @@ from .models import Order, Traveler
 class TravelerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Traveler
-        exclude = ('order',)
+        exclude = ('order', 'id')
 
 
 class TourDatesSerializer(serializers.Serializer):

@@ -40,7 +40,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         order = Order.objects.create(tour=data['tour'], travelers_number=data['travelers_number'], customer_id=request.user.id, **initial_params, **costs)
         travelers = []
         for i in range(order.travelers_number):
-            travelers.append(Traveler(order=order))
+            travelers.append(Traveler(order=order, index_number=i+1))
         Traveler.objects.bulk_create(travelers)
         order.refresh_from_db()
         order.tour_dates = self.get_tour_dates(order.tour)
