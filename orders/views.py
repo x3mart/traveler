@@ -32,9 +32,10 @@ class OrderViewSet(viewsets.ModelViewSet):
         serializer =self.get_serializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             data = serializer.validated_data
-        initial_params = self.get_initional_params(data['tour_id'])
+        tour = Tour.objects.get(pk=data['tour'])
+        initial_params = self.get_initional_params(tour)
         costs = self.get_costs(data['travelers_number'], **initial_params)
-        order = Order.objects.create(travelers_number=data['travelers_number'], customer_id=request.user.id, **initial_params, **costs)
+        order = Order.objects.create(tour=tour, travelers_number=data['travelers_number'], customer_id=request.user.id, **initial_params, **costs)
         return Response(OrderSerializer(order, many=False, context={'request':request}).data, status=201)
     
     def update(self, request, *args, **kwargs):
@@ -63,11 +64,11 @@ class OrderViewSet(viewsets.ModelViewSet):
         return Response(OrderSerializer(order, many=False, context={'request':request}).data, status=200)
     
 
-    def get_initional_params(self, tour_id):
+    def get_initional_params(self, tour):
         locale.setlocale(locale.LC_ALL, "ru_RU.utf8")
-        tour = Tour.objects.get(pk=tour_id)
+        
         return {
-            'tour_id':tour_id,
+            'tour_id':tour.id,
             'expert': tour.tour_basic.expert,
             'name': tour.name,
             'start_date': tour.start_date.strftime('%d %B %Y'),

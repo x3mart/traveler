@@ -18,7 +18,7 @@ class OrderSerializer(serializers.ModelSerializer):
             'customer':{'read_only': True, 'required': False},
             'expert':{'read_only': True, 'required': False},
             'name':{'read_only': True, 'required': False},
-            'tour_id':{'required': False},
+            'tour':{'required': False},
             'start_date':{'read_only': True, 'required': False},
             'finish_date':{'read_only': True, 'required': False},
             'price':{'read_only': True, 'required': False},
