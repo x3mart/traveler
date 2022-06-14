@@ -10,6 +10,7 @@ import math
 import locale
 from datetime import datetime
 from django.db.models import F, Q
+from django.utils.translation import gettext_lazy as _
 
 from orders.models import Order, Traveler
 from orders.serializers import OrderSerializer, TravelerSerializer
@@ -41,7 +42,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         return Response(OrderSerializer(order, many=False, context={'request':request}).data, status=201)
     
     def update(self, request, *args, **kwargs):
-        errors = []
+        errors = {}
         serializer =self.get_serializer(data=request.data)
         travelers = request.data.get('travelers')
         if serializer.is_valid(raise_exception=False):
@@ -51,18 +52,19 @@ class OrderViewSet(viewsets.ModelViewSet):
         if travelers:
             for traveler in travelers:
                 traveler_serializer = TravelerSerializer(data=traveler)
-                if not serializer.is_valid():
+                if not traveler_serializer.is_valid():
                     errors.append(serializer.errors)
-        
+        else:
+            errors['travelers'].append([_('Заполните данные о Путешественниках')])
         if errors:
-            return Response(errors, status=400)
+            raise ValidationError(errors)
         order = self.get_object()
         costs = self.get_costs(data['travelers_number'], order.price, order.book_price, order.postpay)
         Order.objects.filter(pk=order.id).update(**data, **costs)
         order.travelers.all().delete()
         for traveler in travelers:
             traveler_serializer = TravelerSerializer(data=traveler)
-            if serializer.is_valid():
+            if traveler_serializer.is_valid():
                 Traveler.objects.create(order=order, **traveler_serializer.validated_data)
         order.refresh_from_db()
         order.tour_dates = self.get_tour_dates(order.tour)
