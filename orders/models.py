@@ -37,6 +37,7 @@ class Order(models.Model):
     comfort_level = models.PositiveIntegerField(_('Уровень комфорта'), null=True, blank=True)
     tour_excluded_services = models.JSONField(_("Не включенные услуги"), null=True, blank=True)
     tour_included_services = models.JSONField(_("Включенные услуги"), null=True, blank=True)
+    languages = models.JSONField(_("Языки"), null=True, blank=True)
     created_at = models.DateTimeField(_('Создан'), auto_now_add=True)
     duration = models.PositiveIntegerField(_("Продолжительность тура в днях"), null=True, blank=True)
     phone = PhoneNumberField(_('Номер телефона'), null=True, blank=True)
