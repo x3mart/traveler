@@ -32,7 +32,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         if serializer.is_valid(raise_exception=True):
             data = serializer.validated_data
         initial_params = self.get_initional_params(data['tour_id'])
-        costs = self.get_costs(data['travelers_number'])
+        costs = self.get_costs(data['travelers_number'], **initial_params)
         order = Order.objects.create(customer=request.user, **initial_params, **costs)
         return Response(OrderSerializer(order, many=False, context={'request':request}).data, status=201)
     
