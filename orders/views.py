@@ -69,11 +69,11 @@ class OrderViewSet(viewsets.ModelViewSet):
             'expert': tour.tour_basic.expert,
             'tour_name': tour.name,
             'tour_price': get_tour_discounted_price(tour) if get_tour_discounted_price(tour) else tour.price,
-            'book_price': math.ceil(tour.tour_cost*tour.prepay_amount/100) if tour.prepay_in_prc else tour.prepay_amount,
+            'book_price': math.ceil(tour.price*tour.prepay_amount/100) if tour.prepay_in_prc else tour.prepay_amount,
             'postpay': tour.price - tour.prepay_amount
         }
     
-    def get_costs(travelers_number, tour_price, book_price, postpay, **kwargs):
+    def get_costs(self, travelers_number, tour_price, book_price, postpay, **kwargs):
         return {
             'tour_cost': tour_price*travelers_number,
             'book_cost': book_price*travelers_number,
