@@ -64,7 +64,7 @@ class OrderViewSet(viewsets.ModelViewSet):
     
 
     def get_initional_params(self, tour_id):
-        locale.setlocale(locale.LC_ALL, "ru")
+        locale.setlocale(locale.LC_ALL, "ru_RU.utf8")
         tour = Tour.objects.get(pk=tour_id)
         return {
             'tour_id':tour_id,
