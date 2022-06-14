@@ -59,7 +59,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         order = self.get_object()
         costs = self.get_costs(data['travelers_number'], order.price, order.book_price, order.postpay)
         Order.objects.filter(pk=order.id).update(**data, **costs)
-        order.travelers.delete()
+        order.travelers.all().delete()
         for traveler in travelers:
             traveler_serializer = TravelerSerializer(data=traveler)
             if serializer.is_valid():
