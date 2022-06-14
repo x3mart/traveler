@@ -68,6 +68,8 @@ class OrderViewSet(viewsets.ModelViewSet):
             'tour_id':tour_id,
             'expert': tour.tour_basic.expert,
             'tour_name': tour.name,
+            'tour_start_date': tour.start_date,
+            'tour_finish_date': tour.finish_date,
             'tour_price': get_tour_discounted_price(tour) if get_tour_discounted_price(tour) else tour.price,
             'book_price': math.ceil(tour.price*tour.prepay_amount/100) if tour.prepay_in_prc else tour.prepay_amount,
             'postpay': tour.price - tour.prepay_amount
