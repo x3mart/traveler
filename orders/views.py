@@ -66,7 +66,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         order.travelers.all().delete()
         for traveler in travelers:
             traveler_serializer = TravelerSerializer(data=traveler)
-            if traveler_serializer.is_valid():
+            if traveler_serializer.is_valid(raise_exception=True):
                 Traveler.objects.create(order=order, **traveler_serializer.validated_data)
         order.refresh_from_db()
         order.tour_dates = self.get_tour_dates(order.tour)
