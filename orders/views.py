@@ -39,7 +39,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         costs = self.get_costs(data['travelers_number'], **initial_params)
         order = Order.objects.create(tour=data['tour'], travelers_number=data['travelers_number'], customer_id=request.user.id, **initial_params, **costs)
         travelers = []
-        for i in range(order.travelers_nuber):
+        for i in range(order.travelers_number):
             travelers.append(Traveler(order=order))
         Traveler.objects.bulk_create(travelers)
         order.refresh_from_db()
