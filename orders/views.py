@@ -43,6 +43,7 @@ class OrderViewSet(viewsets.ModelViewSet):
     def update(self, request, *args, **kwargs):
         errors = []
         serializer =self.get_serializer(data=request.data)
+        travelers = request.data.get('travelers')
         if serializer.is_valid(raise_exception=False):
             data = serializer.validated_data
         else:
@@ -56,7 +57,6 @@ class OrderViewSet(viewsets.ModelViewSet):
         order = self.get_object()
         costs = self.get_costs(data['travelers_number'], order.price, order.book_price, order.postpay)
         Order.objects.filter(pk=order.id).update(**data, **costs)
-        travelers = request.data.get('travelers')
         order.travelers.delete()
         for traveler in travelers:
             traveler_serializer = TravelerSerializer(data=traveler)
@@ -83,8 +83,8 @@ class OrderViewSet(viewsets.ModelViewSet):
             'tour_excluded_services': tour.tour_excluded_services,
             'tour_included_services': tour.tour_included_services,
             'languages': list(tour.languages.all().values_list('name', flat=True)),
-            'start_date': tour.start_date.strftime('%d %B %Y'),
-            'finish_date': tour.finish_date.strftime('%d %B %Y'),
+            'start_date': tour.start_date.strftime('%d %B %Y (%A)'),
+            'finish_date': tour.finish_date.strftime('%d %B %Y (%A)'),
             'duration': tour.duration,
             'postpay_final_date': (tour.start_date - tour.postpay_days_before_start).strftime('%d %B %Y'),
             'price': get_tour_discounted_price(tour) if get_tour_discounted_price(tour) else tour.price,
