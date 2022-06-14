@@ -53,7 +53,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         if not serializer.is_valid():
             print(serializer.validated_data)
             print(serializer.errors)
-            errors.update(serializer.validated_data)
+            errors.update(serializer.errors)
             raise ValidationError(errors)
         if serializer.is_valid(raise_exception=True):
             data = serializer.validated_data
