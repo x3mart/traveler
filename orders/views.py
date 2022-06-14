@@ -8,8 +8,8 @@ import threading
 from django.core.mail import send_mail
 import math
 
-from orders.models import Order
-from orders.serializers import OrderSerializer
+from orders.models import Order, Traveler
+from orders.serializers import OrderSerializer, TravelerSerializer
 from tours.models import Tour
 from utils.prices import get_tour_discounted_price
 
@@ -24,29 +24,58 @@ class OrderViewSet(viewsets.ModelViewSet):
     # filterset_class = TourFilter
 
     def get_queryset(self):
-        if self.action == 'new_order':
-            return Tour.objects.all()
         return super().get_queryset()
     
 
     def create(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
-    
-
-    @action(['get'], detail=True)
-    def new_order(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.query_params)
+        serializer =self.get_serializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             data = serializer.validated_data
-        travelers_number = data.get('travelers_number')
-        tour = self.get_object()
-        tour.tour_id = tour.id
-        tour.id = None
-        tour.customer = request.user
-        tour.expert = tour.tour_basic.expert
-        tour.tour_name = tour.name
-        tour.tour_price = get_tour_discounted_price(tour) if get_tour_discounted_price(tour) else tour.price
-        tour.tour_cost = tour.price*travelers_number
-        tour.prepay_amount = math.ceil(tour.tour_cost*tour.prepay_amount/100)*travelers_number if tour.prepay_in_prc else tour.prepay_amount*travelers_number
-        tour.postpay = tour.tour_cost - tour.prepay_amount
-        return Response(OrderSerializer(tour, many=False, context={'request':request}).data, status=200)
+        initial_params = self.get_initional_params(data['tour_id'])
+        costs = self.get_costs(data['travelers_number'])
+        order = Order.objects.create(customer=request.user, **initial_params, **costs)
+        return Response(OrderSerializer(order, many=False, context={'request':request}).data, status=201)
+    
+    def update(self, request, *args, **kwargs):
+        errors = []
+        serializer =self.get_serializer(data=request.data)
+        if serializer.is_valid(raise_exception=False):
+            data = serializer.validated_data
+        else:
+            errors.append(serializer.errors)
+        for traveler in travelers:
+            traveler_serializer = TravelerSerializer(data=traveler)
+            if not serializer.is_valid():
+                errors.append(serializer.errors)
+        if errors.exists():
+            return Response(errors, status=400)
+        order = self.get_object()
+        costs = self.get_costs(data['travelers_number'], order.tour_price, order.book_price, order.postpay)
+        Order.objects.filter(pk=order.id).update(**data, **costs)
+        travelers = request.data.get('travelers')
+        order.travelers.delete()
+        for traveler in travelers:
+            traveler_serializer = TravelerSerializer(data=traveler)
+            if serializer.is_valid():
+                Traveler.objects.create(order=order, **traveler_serializer.validated_data)
+        order.refresh_from_db()
+        return Response(OrderSerializer(order, many=False, context={'request':request}).data, status=200)
+    
+
+    def get_initional_params(self, tour_id):
+        tour = Tour.objects.get(pk=tour_id)
+        return {
+            'tour_id':tour_id,
+            'expert': tour.tour_basic.expert,
+            'tour_name': tour.name,
+            'tour_price': get_tour_discounted_price(tour) if get_tour_discounted_price(tour) else tour.price,
+            'book_price': math.ceil(tour.tour_cost*tour.prepay_amount/100) if tour.prepay_in_prc else tour.prepay_amount,
+            'postpay': tour.tour_price - tour.prepay_amount
+        }
+    
+    def get_costs(travelers_number, tour_price, book_price, postpay, **kwargs):
+        return {
+            'tour_cost': tour_price*travelers_number,
+            'book_cost': book_price*travelers_number,
+            'full_postpay': postpay*travelers_number
+        }

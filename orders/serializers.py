@@ -1,11 +1,16 @@
-from pyexpat import model
-from attr import fields
 from rest_framework import serializers
 
-from .models import Order
+from .models import Order, Traveler
+
+
+class TravelerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Traveler
+        fields = '__all__'
 
 
 class OrderSerializer(serializers.ModelSerializer):
+    travelers = TravelerSerializer(many=True, read_only=True)
     class Meta:
         model = Order
         fields = '__all__'
@@ -27,3 +32,5 @@ class OrderSerializer(serializers.ModelSerializer):
             'tour_included_services':{'read_only': True, 'required': False},
             'created_at':{'read_only': True, 'required': False},
         }
+
+

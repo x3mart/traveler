@@ -9,6 +9,8 @@ def get_order_id():
 
 class Order(models.Model):
     class OrderStatus(models.TextChoices):
+        NEW_ORDER = 'new', _('Не оформлен')
+        CANCELLED_ORDER = 'cancelled_order', _('Отменен')
         PENDING_CONFIRMATION = 'pending_confirmation', _('Ожидает подтверждения')
         PENDING_PREPAYMENT = 'pending_prepayment', _('Ожидает_предоплаты')
         PREPAYMENT_OVERDUE = 'prepayment_overdue', _('Предоплата просрочена')
@@ -24,15 +26,19 @@ class Order(models.Model):
     tour_price = models.PositiveIntegerField(_('Цена за место'))
     travelers_number = models.PositiveIntegerField(_('Количево участников'))
     tour_cost = models.PositiveIntegerField(_('Полная стоимость тура'), null=True, blank=True)
-    postpay = models.PositiveIntegerField(_('Размер постоплаты'), null=True, blank=True)
+    book_price = models.PositiveIntegerField(_('Стоимость бронирования за место'), null=True, blank=True)
+    book_cost = models.PositiveIntegerField(_('Полная стоимость бронирования тура'), null=True, blank=True)
+    postpay = models.PositiveIntegerField(_('Размер постоплаты за место'), null=True, blank=True)
+    full_postpay = models.PositiveIntegerField(_('Полный размер постоплаты'), null=True, blank=True)
     postpay_final_date = models.DateField(_('Дата постоплаты'))
-    status = models.CharField(_('Статус'), max_length=25, choices=OrderStatus.choices, default=OrderStatus.PENDING_CONFIRMATION)
-    difficulty_level = models.PositiveIntegerField(_('Уровень сложности'))
-    comfort_level = models.PositiveIntegerField(_('Уровень комфорта'))
-    tour_excluded_services = models.JSONField(_("Не включенные услуги"))
-    tour_included_services = models.JSONField(_("Включенные услуги"))
+    status = models.CharField(_('Статус'), max_length=25, choices=OrderStatus.choices, default=OrderStatus.NEW_ORDER)
+    difficulty_level = models.PositiveIntegerField(_('Уровень сложности'), null=True, blank=True)
+    comfort_level = models.PositiveIntegerField(_('Уровень комфорта'), null=True, blank=True)
+    tour_excluded_services = models.JSONField(_("Не включенные услуги"), null=True, blank=True)
+    tour_included_services = models.JSONField(_("Включенные услуги"), null=True, blank=True)
     created_at = models.DateTimeField(_('Создан'), auto_now_add=True)
     duration = models.PositiveIntegerField(_("Продолжительность тура в днях"), null=True, blank=True)
+    phone = PhoneNumberField(_('Номер телефона'), null=True, blank=True)
 
     class Meta:
         verbose_name = _('Заказ')
@@ -52,10 +58,3 @@ class Traveler(models.Model):
         verbose_name_plural = _('Путешественники')
         ordering = ['id']
 
-class FirstTraveler(Traveler):
-    phone = PhoneNumberField(_('Номер телефона'))
-
-    class Meta:
-        verbose_name = _('Главный Путешественник')
-        verbose_name_plural = _('Главные Путешественники')
-        ordering = ['id']
