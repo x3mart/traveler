@@ -50,25 +50,21 @@ class OrderViewSet(viewsets.ModelViewSet):
         errors = {'field':[_('Какая то ошибка')]}
         serializer =self.get_serializer(data=request.data)
         travelers = request.data.get('travelers')
-        if not serializer.is_valid():
-            print(serializer.validated_data)
-            print(serializer.errors)
-            errors.update(serializer.errors)
-            raise ValidationError(errors)
         if serializer.is_valid(raise_exception=True):
             data = serializer.validated_data
-        # if not travelers:
-        #     raise ValidationError({'travelers': [_('Заполните данные о Путешественниках')]})
-        # if not data.get('phone'):
-        #     raise ValidationError({'phone': [_('Обязательное поле')]})
         order = self.get_object()
+        initial_params = self.get_initial_params(data['tour'])
         costs = self.get_costs(data['travelers_number'], order.price, order.book_price, order.postpay)
-        Order.objects.filter(pk=order.id).update(**data, **costs)
         order.travelers.all().delete()
         for traveler in travelers:
             traveler_serializer = TravelerSerializer(data=traveler)
             if traveler_serializer.is_valid(raise_exception=True):
                 Traveler.objects.create(order=order, **traveler_serializer.validated_data)
+        # if not travelers:
+        #     raise errors.update({'travelers': [_('Заполните данные о Путешественниках')]})
+        # if not data.get('phone'):
+        #     raise ValidationError({'phone': [_('Обязательное поле')]})
+        Order.objects.filter(pk=order.id).update(**data, **costs, **initial_params)
         order.refresh_from_db()
         order.tour_dates = self.get_tour_dates(order.tour)
         return Response(OrderSerializer(order, many=False, context={'request':request}).data, status=200)
