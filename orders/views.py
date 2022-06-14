@@ -7,6 +7,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 import threading
 from django.core.mail import send_mail
 import math
+import locale
 
 from orders.models import Order, Traveler
 from orders.serializers import OrderSerializer, TravelerSerializer
@@ -63,14 +64,15 @@ class OrderViewSet(viewsets.ModelViewSet):
     
 
     def get_initional_params(self, tour_id):
+        locale.setlocale(locale.LC_ALL, "ru")
         tour = Tour.objects.get(pk=tour_id)
         return {
             'tour_id':tour_id,
             'expert': tour.tour_basic.expert,
             'tour_name': tour.name,
-            'tour_start_date': tour.start_date.strftime('%d.%B.%Y'),
-            'tour_finish_date': tour.finish_date.strftime('%d.%B.%Y'),
-            'postpay_final_date': (tour.start_date - tour.postpay_days_before_start).strftime('%d.%B.%Y'),
+            'tour_start_date': tour.start_date.strftime('%d %B %Y'),
+            'tour_finish_date': tour.finish_date.strftime('%d %B %Y'),
+            'postpay_final_date': (tour.start_date - tour.postpay_days_before_start).strftime('%d %B %Y'),
             'tour_price': get_tour_discounted_price(tour) if get_tour_discounted_price(tour) else tour.price,
             'book_price': math.ceil(tour.price*tour.prepay_amount/100) if tour.prepay_in_prc else tour.prepay_amount,
             'postpay': tour.price - tour.prepay_amount
