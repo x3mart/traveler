@@ -45,10 +45,10 @@ class OrderViewSet(viewsets.ModelViewSet):
         errors = {'field':[_('Какая то ошибка')]}
         serializer =self.get_serializer(data=request.data)
         travelers = request.data.get('travelers')
-        if not serializer.is_valid():
-            print(serializer.validated_data)
-            errors.update(serializer.validated_data)
-            raise ValidationError(errors)
+        # if not serializer.is_valid():
+        #     print(serializer.validated_data)
+        #     errors.update(serializer.validated_data)
+        #     raise ValidationError(errors)
         if serializer.is_valid(raise_exception=False):
             data = serializer.validated_data
         # if not travelers:
