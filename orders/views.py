@@ -44,6 +44,9 @@ class OrderViewSet(viewsets.ModelViewSet):
     def update(self, request, *args, **kwargs):
         serializer =self.get_serializer(data=request.data)
         travelers = request.data.get('travelers')
+        if not serializer.is_valid(raise_exception=False):
+            print(serializer.validated_data)
+            print(serializer.errors)
         if serializer.is_valid(raise_exception=True):
             data = serializer.validated_data
         if not travelers:
