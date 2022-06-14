@@ -73,7 +73,7 @@ class OrderViewSet(viewsets.ModelViewSet):
             'comfort_level': tour.comfort_level,
             'tour_excluded_services': tour.tour_excluded_services,
             'tour_included_services': tour.tour_included_services,
-            'languages': tour.languages.all().values_list('name', flat=True),
+            'languages': list(tour.languages.all().value('name', flat=True)),
             'start_date': tour.start_date.strftime('%d %B %Y'),
             'finish_date': tour.finish_date.strftime('%d %B %Y'),
             'postpay_final_date': (tour.start_date - tour.postpay_days_before_start).strftime('%d %B %Y'),
