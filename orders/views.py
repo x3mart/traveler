@@ -37,7 +37,7 @@ class OrderViewSet(viewsets.ModelViewSet):
             data = serializer.validated_data
         initial_params = self.get_initial_params(data['tour'])
         costs = self.get_costs(data['travelers_number'], **initial_params)
-        order = Order.objects.create(tour=data['tour'], travelers_number=data['travelers_number'], customer_id=request.user.id, **initial_params, **costs)
+        order = Order.objects.create(email=request.user.email, tour=data['tour'], travelers_number=data['travelers_number'], customer_id=request.user.id, **initial_params, **costs)
         travelers = []
         for i in range(order.travelers_number):
             travelers.append(Traveler(order=order, index_number=i+1))
