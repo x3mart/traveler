@@ -6,7 +6,7 @@ from .models import Order, Traveler
 class TravelerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Traveler
-        fields = '__all__'
+        exclude = ('order',)
 
 
 class TourDatesSerializer(serializers.Serializer):
@@ -23,7 +23,7 @@ class OrderSerializer(serializers.ModelSerializer):
     vacants_number = serializers.IntegerField(read_only=True, source='tour.vacants_number') 
     instant_booking = serializers.BooleanField(read_only=True, source='tour.instant_booking')
     tour_dates = TourDatesSerializer(many=True, read_only=True)
-    
+
     class Meta:
         model = Order
         fields = '__all__'
