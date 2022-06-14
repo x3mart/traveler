@@ -54,7 +54,7 @@ class OrderViewSet(viewsets.ModelViewSet):
                 if not serializer.is_valid():
                     errors.append(serializer.errors)
         
-        if errors.exists():
+        if errors:
             return Response(errors, status=400)
         order = self.get_object()
         costs = self.get_costs(data['travelers_number'], order.price, order.book_price, order.postpay)
