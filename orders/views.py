@@ -33,7 +33,7 @@ class OrderViewSet(viewsets.ModelViewSet):
             data = serializer.validated_data
         initial_params = self.get_initional_params(data['tour_id'])
         costs = self.get_costs(data['travelers_number'], **initial_params)
-        order = Order.objects.create(customer=request.user, **initial_params, **costs)
+        order = Order.objects.create(customer_id=request.user.id, **initial_params, **costs)
         return Response(OrderSerializer(order, many=False, context={'request':request}).data, status=201)
     
     def update(self, request, *args, **kwargs):
