@@ -51,10 +51,10 @@ class OrderViewSet(viewsets.ModelViewSet):
         serializer =self.get_serializer(data=request.data)
         travelers = request.data.get('travelers')
         if not serializer.is_valid():
-             print(serializer.validated_data)
-             print(serializer.errors)
-        #     errors.update(serializer.validated_data)
-        #     raise ValidationError(errors)
+            print(serializer.validated_data)
+            print(serializer.errors)
+            errors.update(serializer.validated_data)
+            raise ValidationError(errors)
         if serializer.is_valid(raise_exception=True):
             data = serializer.validated_data
         # if not travelers:
