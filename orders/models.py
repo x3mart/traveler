@@ -49,10 +49,10 @@ class Order(models.Model):
 
 
 class Traveler(models.Model):
-    last_name = models.CharField(_('Фамилия'), max_length=50)   
-    middle_name = models.CharField(_('Отчество'), max_length=50)   
-    first_name = models.CharField(_('Имя'), max_length=50)
-    birth_date = models.DateField(_('Дата рождения'))
+    last_name = models.CharField(_('Фамилия'), max_length=50, null=True, blank=True)   
+    middle_name = models.CharField(_('Отчество'), max_length=50, null=True, blank=True)   
+    first_name = models.CharField(_('Имя'), max_length=50, null=True, blank=True)
+    birth_date = models.DateField(_('Дата рождения'), null=True, blank=True)
     order = models.ForeignKey('Order', on_delete=models.PROTECT, related_name='travelers', verbose_name=_('Заказ'))
 
     class Meta:
