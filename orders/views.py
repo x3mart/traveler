@@ -53,6 +53,8 @@ class OrderViewSet(viewsets.ModelViewSet):
             for traveler in travelers:
                 traveler_serializer = TravelerSerializer(data=traveler)
                 if not traveler_serializer.is_valid():
+                    print('wow')
+                    print(serializer.errors)
                     errors.update(serializer.errors)
         else:
             errors.update({'travelers': [_('Заполните данные о Путешественниках')]})
