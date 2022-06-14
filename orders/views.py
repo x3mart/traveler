@@ -66,6 +66,11 @@ class OrderViewSet(viewsets.ModelViewSet):
         order.tour_dates = self.get_tour_dates(order.tour)
         return Response(OrderSerializer(order, many=False, context={'request':request}).data, status=200)
     
+    def retrieve(self, request, *args, **kwargs):
+        order = self.get_object()
+        order.tour_dates = self.get_tour_dates(order.tour)
+        return Response(OrderSerializer(order, many=False, context={'request':request}).data, status=200)
+    
 
     def get_initional_params(self, tour):
         locale.setlocale(locale.LC_ALL, "ru_RU.utf8")
