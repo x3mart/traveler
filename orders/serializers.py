@@ -61,7 +61,8 @@ class OrderSerializer(serializers.ModelSerializer):
             'postpay':{'read_only': True, 'required': False},
             'book_cost':{'read_only': True, 'required': False},
             'full_postpay':{'read_only': True, 'required': False},
-            'languages':{'read_only': True, 'required': False}
+            'languages':{'read_only': True, 'required': False},
+            'duration':{'read_only': True, 'required': False}
         }
 
 
