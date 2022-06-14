@@ -48,10 +48,12 @@ class OrderViewSet(viewsets.ModelViewSet):
             data = serializer.validated_data
         else:
             errors.append(serializer.errors)
-        for traveler in travelers:
-            traveler_serializer = TravelerSerializer(data=traveler)
-            if not serializer.is_valid():
-                errors.append(serializer.errors)
+        if travelers:
+            for traveler in travelers:
+                traveler_serializer = TravelerSerializer(data=traveler)
+                if not serializer.is_valid():
+                    errors.append(serializer.errors)
+        
         if errors.exists():
             return Response(errors, status=400)
         order = self.get_object()
