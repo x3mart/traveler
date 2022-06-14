@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from .models import Order, Traveler
+from accounts.models import Expert, Customer
 
 
 class TravelerSerializer(serializers.ModelSerializer):
@@ -16,6 +17,23 @@ class TourDatesSerializer(serializers.Serializer):
     def get_tour_date(self, obj):
         return f"{obj.start_date.strftime('%d.%m.%Y')} - {obj.finish_date.strftime('%d.%m.%Y')}"
 
+class ExpertShortSerializer(serializers.Model):
+    class Meta:
+        model = Expert
+        fields = ('full_name', 'id')
+
+
+class ExpertShortSerializer(serializers.Model):
+    class Meta:
+        model = Expert
+        fields = ('full_name', 'id')
+
+
+class CustomerShortSerializer(serializers.Model):
+    class Meta:
+        model = Customer
+        fields = ('full_name', 'id')
+
 
 class OrderSerializer(serializers.ModelSerializer):
     travelers = TravelerSerializer(many=True, read_only=True)
@@ -23,13 +41,13 @@ class OrderSerializer(serializers.ModelSerializer):
     vacants_number = serializers.IntegerField(read_only=True, source='tour.vacants_number') 
     instant_booking = serializers.BooleanField(read_only=True, source='tour.instant_booking')
     tour_dates = TourDatesSerializer(many=True, read_only=True)
-
+    expert = ExpertShortSerializer(many=False, read_only=True, required=False)
+    customer = CustomerShortSerializer(many=False, read_only=True, required=False)
+    
     class Meta:
         model = Order
         fields = '__all__'
         extra_kwargs = {
-            'customer':{'read_only': True, 'required': False},
-            'expert':{'read_only': True, 'required': False},
             'name':{'read_only': True, 'required': False},
             'tour':{'required': False},
             'start_date':{'read_only': True, 'required': False},
