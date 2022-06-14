@@ -32,10 +32,9 @@ class OrderViewSet(viewsets.ModelViewSet):
         serializer =self.get_serializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             data = serializer.validated_data
-        tour = data['tour']
-        initial_params = self.get_initional_params(tour)
+        initial_params = self.get_initional_params(data['tour'])
         costs = self.get_costs(data['travelers_number'], **initial_params)
-        order = Order.objects.create(tour=tour, travelers_number=data['travelers_number'], customer_id=request.user.id, **initial_params, **costs)
+        order = Order.objects.create(tour=data['tour'], travelers_number=data['travelers_number'], customer_id=request.user.id, **initial_params, **costs)
         return Response(OrderSerializer(order, many=False, context={'request':request}).data, status=201)
     
     def update(self, request, *args, **kwargs):
@@ -66,11 +65,14 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     def get_initional_params(self, tour):
         locale.setlocale(locale.LC_ALL, "ru_RU.utf8")
-        
         return {
             'tour_id':tour.id,
             'expert': tour.tour_basic.expert,
             'name': tour.name,
+            'difficulty_level': tour.difficulty_level,
+            'comfort_level': tour.comfort_level,
+            'tour_excluded_services': tour.tour_excluded_services,
+            'tour_included_services': tour.tour_included_services,
             'start_date': tour.start_date.strftime('%d %B %Y'),
             'finish_date': tour.finish_date.strftime('%d %B %Y'),
             'postpay_final_date': (tour.start_date - tour.postpay_days_before_start).strftime('%d %B %Y'),

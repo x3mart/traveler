@@ -11,6 +11,10 @@ class TravelerSerializer(serializers.ModelSerializer):
 
 class OrderSerializer(serializers.ModelSerializer):
     travelers = TravelerSerializer(many=True, read_only=True)
+    members_number = serializers.IntegerField(read_only=True, source='tour.members_number')
+    vacants_number = serializers.IntegerField(read_only=True, source='tour.vacants_number') 
+    instant_booking = serializers.BooleanField(read_only=True, source='tour.instant_booking')
+    # languages = LanguageSerializer(many=True, read_only=True)
     class Meta:
         model = Order
         fields = '__all__'
