@@ -47,7 +47,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         return Response(OrderSerializer(order, many=False, context={'request':request}).data, status=201)
     
     def update(self, request, *args, **kwargs):
-        errors = {'field':[_('Какая то ошибка')]}
+        errors = {}
         serializer =self.get_serializer(data=request.data)
         travelers = request.data.get('travelers')
         if serializer.is_valid(raise_exception=True):
