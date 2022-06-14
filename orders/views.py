@@ -51,7 +51,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         if errors.exists():
             return Response(errors, status=400)
         order = self.get_object()
-        costs = self.get_costs(data['travelers_number'], order.tour_price, order.book_price, order.postpay)
+        costs = self.get_costs(data['travelers_number'], order.price, order.book_price, order.postpay)
         Order.objects.filter(pk=order.id).update(**data, **costs)
         travelers = request.data.get('travelers')
         order.travelers.delete()
@@ -69,18 +69,18 @@ class OrderViewSet(viewsets.ModelViewSet):
         return {
             'tour_id':tour_id,
             'expert': tour.tour_basic.expert,
-            'tour_name': tour.name,
-            'tour_start_date': tour.start_date.strftime('%d %B %Y'),
-            'tour_finish_date': tour.finish_date.strftime('%d %B %Y'),
+            'name': tour.name,
+            'start_date': tour.start_date.strftime('%d %B %Y'),
+            'finish_date': tour.finish_date.strftime('%d %B %Y'),
             'postpay_final_date': (tour.start_date - tour.postpay_days_before_start).strftime('%d %B %Y'),
-            'tour_price': get_tour_discounted_price(tour) if get_tour_discounted_price(tour) else tour.price,
+            'price': get_tour_discounted_price(tour) if get_tour_discounted_price(tour) else tour.price,
             'book_price': math.ceil(tour.price*tour.prepay_amount/100) if tour.prepay_in_prc else tour.prepay_amount,
             'postpay': tour.price - tour.prepay_amount
         }
     
-    def get_costs(self, travelers_number, tour_price, book_price, postpay, **kwargs):
+    def get_costs(self, travelers_number, price, book_price, postpay, **kwargs):
         return {
-            'tour_cost': tour_price*travelers_number,
+            'cost': price*travelers_number,
             'book_cost': book_price*travelers_number,
             'full_postpay': postpay*travelers_number
         }
