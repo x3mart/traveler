@@ -52,7 +52,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         if travelers:
             for traveler in travelers:
                 traveler_serializer = TravelerSerializer(data=traveler)
-                if not traveler_serializer.is_valid(raise_exception=False):
+                if not traveler_serializer.is_valid(raise_exception=True):
                     print('wow')
                     print(serializer.errors)
                     errors.update(serializer.errors)
