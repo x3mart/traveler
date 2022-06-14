@@ -52,6 +52,8 @@ class OrderViewSet(viewsets.ModelViewSet):
         travelers = request.data.get('travelers')
         if serializer.is_valid(raise_exception=True):
             data = serializer.validated_data
+        data.pop('travelers_number', None)
+        data['travelers_number'] = len(travelers)
         order = self.get_object()
         initial_params = self.get_initial_params(data['tour'])
         costs = self.get_costs(data['travelers_number'], order.price, order.book_price, order.postpay)
