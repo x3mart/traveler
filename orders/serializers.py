@@ -17,19 +17,13 @@ class TourDatesSerializer(serializers.Serializer):
     def get_tour_date(self, obj):
         return f"{obj.start_date.strftime('%d.%m.%Y')} - {obj.finish_date.strftime('%d.%m.%Y')}"
 
-class ExpertShortSerializer(serializers.Model):
+class ExpertShortSerializer(serializers.ModelSerializer):
     class Meta:
         model = Expert
         fields = ('full_name', 'id')
 
 
-class ExpertShortSerializer(serializers.Model):
-    class Meta:
-        model = Expert
-        fields = ('full_name', 'id')
-
-
-class CustomerShortSerializer(serializers.Model):
+class CustomerShortSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
         fields = ('full_name', 'id')
