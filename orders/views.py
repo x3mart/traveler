@@ -94,7 +94,7 @@ class OrderViewSet(viewsets.ModelViewSet):
             'postpay_final_date': (tour.start_date - tour.postpay_days_before_start).strftime('%d %B %Y'),
             'price': get_tour_discounted_price(tour) if get_tour_discounted_price(tour) else tour.price,
             'book_price': math.ceil(tour.price*tour.prepay_amount/100) if tour.prepay_in_prc else tour.prepay_amount,
-            'postpay': tour.price - tour.prepay_amount
+            'postpay': tour.price - math.ceil(tour.price*tour.prepay_amount/100) if tour.prepay_in_prc else tour.price - tour.prepay_amount
         }
     
     def get_costs(self, travelers_number, price, book_price, postpay, **kwargs):

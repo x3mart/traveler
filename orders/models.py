@@ -20,7 +20,6 @@ class Order(models.Model):
         
     customer = models.ForeignKey('accounts.Customer', on_delete=models.PROTECT, related_name='customers_orders', verbose_name=_('Покупатель'))
     expert = models.ForeignKey('accounts.Expert', on_delete=models.PROTECT, related_name='experts_orders', verbose_name=_('Эксперт'))
-    # tour_id =  models.BigIntegerField(_('ID Тура'))
     tour =  models.ForeignKey('tours.Tour', on_delete=models.PROTECT, related_name='tours_orders', verbose_name=_('Тур'))
     name = models.CharField(_('Название тура'), max_length=255)
     start_date = models.CharField(_('Дата начала'), max_length=50)

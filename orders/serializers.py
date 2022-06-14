@@ -56,6 +56,11 @@ class OrderSerializer(serializers.ModelSerializer):
             'tour_excluded_services':{'read_only': True, 'required': False},
             'tour_included_services':{'read_only': True, 'required': False},
             'created_at':{'read_only': True, 'required': False},
+            'currency':{'read_only': True, 'required': False},
+            'book_price':{'read_only': True, 'required': False},
+            'postpay':{'read_only': True, 'required': False},
+            'book_cost':{'read_only': True, 'required': False},
+            'full_postpay':{'read_only': True, 'required': False}
         }
 
 
