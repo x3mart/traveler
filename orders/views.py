@@ -48,14 +48,14 @@ class OrderViewSet(viewsets.ModelViewSet):
         if serializer.is_valid(raise_exception=False):
             data = serializer.validated_data
         else:
-            errors.append(serializer.errors)
+            errors.update(serializer.errors)
         if travelers:
             for traveler in travelers:
                 traveler_serializer = TravelerSerializer(data=traveler)
                 if not traveler_serializer.is_valid():
-                    errors.append(serializer.errors)
+                    errors.update(serializer.errors)
         else:
-            errors['travelers'].append([_('Заполните данные о Путешественниках')])
+            errors.update({'travelers': [_('Заполните данные о Путешественниках')]})
         if errors:
             raise ValidationError(errors)
         order = self.get_object()
