@@ -1,4 +1,5 @@
 from email.policy import default
+from locale import currency
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
@@ -22,8 +23,9 @@ class Order(models.Model):
     # tour_id =  models.BigIntegerField(_('ID Тура'))
     tour =  models.ForeignKey('tours.Tour', on_delete=models.PROTECT, related_name='tours_orders', verbose_name=_('Тур'))
     name = models.CharField(_('Название тура'), max_length=255)
-    start_date = models.CharField(_('Дата начала'), max_length=25)
-    finish_date = models.CharField(_('Дата завершения'), max_length=25)
+    start_date = models.CharField(_('Дата начала'), max_length=50)
+    finish_date = models.CharField(_('Дата завершения'), max_length=50)
+    currency = models.CharField(_('Знак валюты'), max_length=50, null=True, blank=True)
     price = models.PositiveIntegerField(_('Цена за место'))
     travelers_number = models.PositiveIntegerField(_('Количево участников'))
     cost = models.PositiveIntegerField(_('Полная стоимость тура'), null=True, blank=True)
@@ -31,7 +33,7 @@ class Order(models.Model):
     book_cost = models.PositiveIntegerField(_('Полная стоимость бронирования тура'), null=True, blank=True)
     postpay = models.PositiveIntegerField(_('Размер постоплаты за место'), null=True, blank=True)
     full_postpay = models.PositiveIntegerField(_('Полный размер постоплаты'), null=True, blank=True)
-    postpay_final_date = models.CharField(_('Дата постоплаты'), max_length=25)
+    postpay_final_date = models.CharField(_('Дата постоплаты'), max_length=50)
     status = models.CharField(_('Статус'), max_length=25, choices=OrderStatus.choices, default=OrderStatus.NEW_ORDER)
     difficulty_level = models.PositiveIntegerField(_('Уровень сложности'), null=True, blank=True)
     comfort_level = models.PositiveIntegerField(_('Уровень комфорта'), null=True, blank=True)

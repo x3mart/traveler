@@ -78,6 +78,7 @@ class OrderViewSet(viewsets.ModelViewSet):
     def get_initial_params(self, tour):
         locale.setlocale(locale.LC_ALL, "ru_RU.utf8")
         return {
+            'currency':tour.curency.sign,
             'expert': tour.tour_basic.expert,
             'name': tour.name,
             'difficulty_level': tour.difficulty_level,
