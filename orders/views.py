@@ -35,31 +35,21 @@ class OrderViewSet(viewsets.ModelViewSet):
         serializer =self.get_serializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             data = serializer.validated_data
-        initial_params = self.get_initional_params(data['tour'])
+        initial_params = self.get_initial_params(data['tour'])
         costs = self.get_costs(data['travelers_number'], **initial_params)
         order = Order.objects.create(tour=data['tour'], travelers_number=data['travelers_number'], customer_id=request.user.id, **initial_params, **costs)
         order.tour_dates = self.get_tour_dates(order.tour)
         return Response(OrderSerializer(order, many=False, context={'request':request}).data, status=201)
     
     def update(self, request, *args, **kwargs):
-        errors = {}
         serializer =self.get_serializer(data=request.data)
         travelers = request.data.get('travelers')
-        if serializer.is_valid(raise_exception=False):
+        if serializer.is_valid(raise_exception=True):
             data = serializer.validated_data
-        else:
-            errors.update(serializer.errors)
-        if travelers:
-            for traveler in travelers:
-                traveler_serializer = TravelerSerializer(data=traveler)
-                if not traveler_serializer.is_valid(raise_exception=True):
-                    print('wow')
-                    print(serializer.errors)
-                    errors.update(serializer.errors)
-        else:
-            errors.update({'travelers': [_('Заполните данные о Путешественниках')]})
-        if errors:
-            raise ValidationError(errors)
+        if not travelers:
+            raise ValidationError({'travelers': [_('Заполните данные о Путешественниках')]})
+        if not data.get('phone'):
+            raise ValidationError({'phone': [_('Обязательное поле')]})
         order = self.get_object()
         costs = self.get_costs(data['travelers_number'], order.price, order.book_price, order.postpay)
         Order.objects.filter(pk=order.id).update(**data, **costs)
@@ -78,7 +68,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         return Response(OrderSerializer(order, many=False, context={'request':request}).data, status=200)
     
 
-    def get_initional_params(self, tour):
+    def get_initial_params(self, tour):
         locale.setlocale(locale.LC_ALL, "ru_RU.utf8")
         return {
             'tour_id':tour.id,
