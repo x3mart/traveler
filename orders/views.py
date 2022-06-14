@@ -20,7 +20,7 @@ class OrderViewSet(viewsets.ModelViewSet):
     # permission_classes = [OrderPermission]
     filter_backends = [filters.OrderingFilter, DjangoFilterBackend]
     ordering_fields = ['created_at', 'id', 'status']
-    ordering = ['start_date']
+    ordering = ['tour_start_date']
     # filterset_class = TourFilter
 
     def get_queryset(self):
