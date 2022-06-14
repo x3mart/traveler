@@ -43,7 +43,7 @@ class Order(models.Model):
     created_at = models.DateTimeField(_('Создан'), auto_now_add=True)
     duration = models.PositiveIntegerField(_("Продолжительность тура в днях"), null=True, blank=True)
     phone = PhoneNumberField(_('Номер телефона'), null=True, blank=True)
-    phone = models.EmailField(_('email'), null=True, blank=True)
+    email = models.EmailField(_('email'), null=True, blank=True)
 
     class Meta:
         verbose_name = _('Заказ')
