@@ -44,11 +44,12 @@ class OrderViewSet(viewsets.ModelViewSet):
     def update(self, request, *args, **kwargs):
         serializer =self.get_serializer(data=request.data)
         travelers = request.data.get('travelers')
-        if not serializer.is_valid(raise_exception=False):
-            print(serializer.validated_data)
-            print(serializer.errors)
+        # if not serializer.is_valid(raise_exception=False):
+        #     print(serializer.validated_data)
+        #     print(serializer.errors)
         if serializer.is_valid(raise_exception=False):
             data = serializer.validated_data
+            print(data['tour'])
         # if not travelers:
         #     raise ValidationError({'travelers': [_('Заполните данные о Путешественниках')]})
         # if not data.get('phone'):
