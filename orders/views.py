@@ -76,6 +76,7 @@ class OrderViewSet(viewsets.ModelViewSet):
             'languages': list(tour.languages.all().values_list('name', flat=True)),
             'start_date': tour.start_date.strftime('%d %B %Y'),
             'finish_date': tour.finish_date.strftime('%d %B %Y'),
+            'duration': tour.duration,
             'postpay_final_date': (tour.start_date - tour.postpay_days_before_start).strftime('%d %B %Y'),
             'price': get_tour_discounted_price(tour) if get_tour_discounted_price(tour) else tour.price,
             'book_price': math.ceil(tour.price*tour.prepay_amount/100) if tour.prepay_in_prc else tour.prepay_amount,
