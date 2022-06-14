@@ -49,7 +49,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         #     print(serializer.validated_data)
         #     errors.update(serializer.validated_data)
         #     raise ValidationError(errors)
-        if serializer.is_valid(raise_exception=False):
+        if serializer.is_valid(raise_exception=True):
             data = serializer.validated_data
         # if not travelers:
         #     raise ValidationError({'travelers': [_('Заполните данные о Путешественниках')]})
