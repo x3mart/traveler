@@ -121,9 +121,8 @@ class OrderViewSet(viewsets.ModelViewSet):
     def check_traveler_fields(self, traveler):
         traveler_errors = {}
         fields = [field.name for field in Traveler._meta.get_fields()]
-        print(fields)
         for field in fields:
-            if not hasattr(traveler, field):
+            if not getattr(traveler, field):
                 print(field)
                 traveler_errors.update({field:[_('Обязательное поле')]})
         return traveler_errors
