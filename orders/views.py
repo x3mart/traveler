@@ -18,7 +18,7 @@ from utils.prices import get_tour_discounted_price
 
 # Create your views here.
 class OrderViewSet(viewsets.ModelViewSet):
-    queryset = Order.objects.prefetch_related('tour', 'expert', 'customer', 'currency', 'travelers')
+    queryset = Order.objects.prefetch_related('tour', 'expert', 'customer', 'travelers')
     serializer_class = OrderSerializer
     # permission_classes = [OrderPermission]
     filter_backends = [filters.OrderingFilter, DjangoFilterBackend]
