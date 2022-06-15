@@ -139,6 +139,4 @@ class OrderListSerializer(serializers.ModelSerializer):
     def get_list_actions_for_expert(self, order):
         if order.status == 'pending_confirmation':
             return [{'action': 'aprove/', 'title': 'Подтвердить', 'color':'#2aa2d6'}, {'action':'decline/', 'title': 'Отказать', 'color':'#404040'}]
-        if order.status == 'pending_prepayment':
-            return [{'action':'fullpaymet/', 'title': 'Отменить', 'color':'#404040'}]
         return None
