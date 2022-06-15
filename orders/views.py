@@ -12,13 +12,13 @@ from django.db.models import F, Q
 from django.utils.translation import gettext_lazy as _
 
 from orders.models import Order, Traveler
-from orders.serializers import OrderSerializer, TravelerSerializer
+from orders.serializers import OrderListSerializer, OrderSerializer, TravelerSerializer
 from tours.models import Tour
 from utils.prices import get_tour_discounted_price
 
 # Create your views here.
 class OrderViewSet(viewsets.ModelViewSet):
-    queryset = Order.objects.all()
+    queryset = Order.objects.prefetch_related('tour', 'expert', 'customer', 'currency', 'travelers')
     serializer_class = OrderSerializer
     # permission_classes = [OrderPermission]
     filter_backends = [filters.OrderingFilter, DjangoFilterBackend]
@@ -28,6 +28,11 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return super().get_queryset()
+    
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return OrderListSerializer
+        return super().get_serializer_class()
     
 
     def create(self, request, *args, **kwargs):

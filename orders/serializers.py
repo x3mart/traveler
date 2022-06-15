@@ -74,3 +74,14 @@ class OrderSerializer(serializers.ModelSerializer):
         }
 
 
+class OrderListSerializer(serializers.ModelSerializer):
+    expert = ExpertShortSerializer(many=False, read_only=True, required=False)
+    customer = CustomerShortSerializer(many=False, read_only=True, required=False)
+    start_date = DateWithVerboseMonth(read_only=True)
+    finish_date = DateWithVerboseMonth(read_only=True)
+    postpay_final_date = DateWithVerboseMonth(read_only=True)
+    status = serializers.CharField(read_only=True, source='get_status_display')
+    
+    class Meta:
+        model = Order
+        fields = ('id', 'expert', 'customer', 'start_date', 'finish_date', 'postpay_final_date', 'status', 'name', 'travelers_number', 'currency', 'cost', 'book_cost', 'book_price')
