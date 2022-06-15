@@ -48,7 +48,7 @@ class OrderSerializer(serializers.ModelSerializer):
     start_date = DateWithVerboseMonthAndWeekday(read_only=True)
     finish_date = DateWithVerboseMonthAndWeekday(read_only=True)
     postpay_final_date = DateWithVerboseMonth(read_only=True)
-    actions = serializers.JSONField(read_only=True)
+    actions = serializers.SerializerMethodField(read_only=True)
     
     class Meta:
         model = Order
