@@ -7,7 +7,6 @@ from django_filters.rest_framework import DjangoFilterBackend
 import threading
 from django.core.mail import send_mail
 import math
-import locale
 from datetime import datetime
 from django.db.models import F, Q
 from django.utils.translation import gettext_lazy as _
@@ -73,7 +72,6 @@ class OrderViewSet(viewsets.ModelViewSet):
     
 
     def get_initial_params(self, tour):
-        locale.setlocale(locale.LC_ALL, "ru_RU.utf8")
         return {
             'currency':tour.currency.sign,
             'expert': tour.tour_basic.expert,
@@ -83,10 +81,10 @@ class OrderViewSet(viewsets.ModelViewSet):
             'tour_excluded_services': tour.tour_excluded_services,
             'tour_included_services': tour.tour_included_services,
             'languages': list(tour.languages.all().values_list('name', flat=True)),
-            'start_date': tour.start_date.strftime('%d %B %Y (%A)'),
-            'finish_date': tour.finish_date.strftime('%d %B %Y (%A)'),
+            'start_date': tour.start_date,
+            'finish_date': tour.finish_date,
             'duration': tour.duration,
-            'postpay_final_date': (tour.start_date - tour.postpay_days_before_start).strftime('%d %B %Y'),
+            'postpay_final_date': (tour.start_date - tour.postpay_days_before_start),
             'price': get_tour_discounted_price(tour) if get_tour_discounted_price(tour) else tour.price,
             'book_price': math.ceil(tour.price*tour.prepay_amount/100) if tour.prepay_in_prc else tour.prepay_amount,
             'postpay': tour.price - math.ceil(tour.price*tour.prepay_amount/100) if tour.prepay_in_prc else tour.price - tour.prepay_amount

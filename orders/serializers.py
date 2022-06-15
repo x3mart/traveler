@@ -29,6 +29,14 @@ class CustomerShortSerializer(serializers.ModelSerializer):
         fields = ('full_name', 'id')
 
 
+class DateWithVerboseMonthAndWeekday(serializers.Field):
+    def to_representation(self, value):
+        return value.strftime('%d %B %Y (%A)')
+
+class DateWithVerboseMonth(serializers.Field):
+    def to_representation(self, value):
+        return value.strftime('%d %B %Y')
+
 class OrderSerializer(serializers.ModelSerializer):
     travelers = TravelerSerializer(many=True, read_only=True)
     members_number = serializers.IntegerField(read_only=True, source='tour.members_number')
@@ -37,6 +45,9 @@ class OrderSerializer(serializers.ModelSerializer):
     tour_dates = TourDatesSerializer(many=True, read_only=True)
     expert = ExpertShortSerializer(many=False, read_only=True, required=False)
     customer = CustomerShortSerializer(many=False, read_only=True, required=False)
+    start_date = DateWithVerboseMonthAndWeekday(read_only=True)
+    finish_date = DateWithVerboseMonthAndWeekday(read_only=True)
+    postpay_final_date = DateWithVerboseMonth(read_only=True)
     
     class Meta:
         model = Order
@@ -44,12 +55,9 @@ class OrderSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'name':{'read_only': True, 'required': False},
             'tour':{'required': False},
-            'start_date':{'read_only': True, 'required': False},
-            'finish_date':{'read_only': True, 'required': False},
             'price':{'read_only': True, 'required': False},
             'travelers_number':{'required': False},
             'cost':{'read_only': True, 'required': False},
-            'postpay_final_date':{'read_only': True, 'required': False},
             'status':{'required': False},
             'difficulty_level':{'read_only': True, 'required': False},
             'comfort_level':{'read_only': True, 'required': False},
