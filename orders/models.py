@@ -10,13 +10,13 @@ def get_order_id():
 
 class Order(models.Model):
     class OrderStatus(models.TextChoices):
-        NEW_ORDER = 'new', _('Не оформлен')
+        NEW_ORDER = 'new', _('Черновик')
         CANCELLED_ORDER = 'cancelled_order', _('Отменен')
         FORM_COMPLETED = 'form_completed', _('Форма заполнена')
         PENDING_CONFIRMATION = 'pending_confirmation', _('Ожидает подтверждения')
-        PENDING_PREPAYMENT = 'pending_prepayment', _('Ожидает_предоплаты')
+        PENDING_PREPAYMENT = 'pending_prepayment', _('Ожидает предоплаты')
         PREPAYMENT_OVERDUE = 'prepayment_overdue', _('Предоплата просрочена')
-        PREPAYMENT = 'prepayment', _('Предоплата внесена')
+        PREPAYMENT = 'prepayment', _('Забронирован')
         FULLPAYMENT = 'fullpayment', _('Оплачено полностью')
         
     customer = models.ForeignKey('accounts.Customer', on_delete=models.PROTECT, related_name='customers_orders', verbose_name=_('Покупатель'))

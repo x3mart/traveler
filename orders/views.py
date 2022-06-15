@@ -68,11 +68,13 @@ class OrderViewSet(viewsets.ModelViewSet):
         Order.objects.filter(pk=order.id).update(**data, **costs, **initial_params)
         order.refresh_from_db()
         order.tour_dates = self.get_tour_dates(order.tour)
+        order.actions = self.get_actions(order)
         return Response(OrderSerializer(order, many=False, context={'request':request}).data, status=200)
     
     def retrieve(self, request, *args, **kwargs):
         order = self.get_object()
         order.tour_dates = self.get_tour_dates(order.tour)
+        order.actions = self.get_actions(order)
         return Response(OrderSerializer(order, many=False, context={'request':request}).data, status=200)
     
 
@@ -105,9 +107,8 @@ class OrderViewSet(viewsets.ModelViewSet):
     def get_tour_dates(self, tour):
         return Tour.objects.filter(tour_basic_id=tour.tour_basic.id).filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start'))).only('id', 'start_date', 'finish_date')
 
-    def check_form_fields(self, data, order):
+    def check_form_fields(self, data, order, errors):
         travelers_errors = []
-        errors = {}
         if not data.get('email'):
             errors.update({'email': [_('Обязательное поле')]})
         if not data.get('phone'):
@@ -130,11 +131,59 @@ class OrderViewSet(viewsets.ModelViewSet):
         return traveler_errors
     
     def get_status(self, data, order):
-        if data['status'] == order.status:
-            return data['status']
+        errors = {}
         if data['status'] == 'form_completed':
-            errors = self.check_form_fields(data, order)
-            if not errors:
-                return data['status']
-            else:
-                raise ValidationError(errors)
+            errors.update(self.check_form_fields(data, order, errors))
+        if errors:
+            raise ValidationError(errors)
+        return data['status']
+    
+    def get_actions(self, order):
+        user = self.request.user
+        if self.action == 'list' and hasattr(user, 'expert'):
+            return self.get_list_actions_for_expert(order)
+        if self.action == 'list' and hasattr(user, 'customer'):
+            return self.get_list_actions_for_customer(order)
+        if self.action == 'retrieve' and hasattr(user, 'expert'):
+            return self.get_retrieve_actions_for_expert(order)
+        if self.action == 'retrieve' and hasattr(user, 'customer'):
+            return self.get_retrieve_actions_for_customer(order)
+        
+    
+    def get_list_actions_for_customer(self, order):
+        if order.status == 'new':
+            return [{'action':'remove/', 'title': 'Отменить', 'color':'#404040'}]
+        if order.status == 'pending_confirmation':
+            return [{'action':'remove/', 'title': 'Отменить', 'color':'#404040'}]
+        if order.status == 'pending_prepayment':
+            return [{'action': 'book/', 'title': 'Забронировать', 'color':'#2aa2d6'}, {'action':'cancel/', 'title': 'Отменить', 'color':'#404040'}]
+        if order.status == 'prepayment':
+            return [{'action': 'fullpayment/', 'title': 'Оплатить все', 'color':'#2aa2d6'}, {'action':'cancel/', 'title': 'Отменить', 'color':'#404040'}]
+        return None
+        
+    
+    def get_list_actions_for_expert(self, order):
+        if order.status == 'pending_confirmation':
+            return [{'action': 'aprove/', 'title': 'Подтвердить', 'color':'#2aa2d6'}, {'action':'decline/', 'title': 'Отказать', 'color':'#404040'}]
+        if order.status == 'pending_prepayment':
+            return [{'action':'fullpaymet/', 'title': 'Отменить', 'color':'#404040'}]
+        return None
+
+    def get_retrieve_actions_for_customer(self, order):
+        if order.status == 'new' and not order.tour.instant_booking:
+            return [{'action':'ask_confirmation/', 'title': 'Хочу поехать!', 'color':'button-success'}]
+        if order.status == 'new' and order.tour.instant_booking:
+            return [{'action':'book/', 'title': 'Забронировать', 'color':'button-success'}]
+        if order.status == 'pending_confirmation':
+            return [{'action':'remove/', 'title': 'Отменить', 'color':'button-danger'}]
+        if order.status == 'pending_prepayment':
+            return [{'action': 'book/', 'title': 'Забронировать', 'color':'button-success'}, {'action':'cancel/', 'title': 'Отменить', 'color':'button-danger'}]
+        if order.status == 'prepayment':
+            return [{'action': 'fullpayment/', 'title': 'Оплатить все', 'color':'button-success'}]
+        return None
+        
+    
+    def get_retrieve_actions_for_expert(self, order):
+        if order.status == 'pending_confirmation':
+            return [{'action': 'aprove/', 'title': 'Подтвердить', 'color':'button-success'}, {'action':'decline/', 'title': 'Отказать'}]
+        return None
