@@ -111,14 +111,14 @@ class OrderViewSet(viewsets.ModelViewSet):
             errors.update({'phone': [_('Обязательное поле')]})
         travelers = order.travelers.all()
         for traveler in travelers:
-            traveler_errors = self.check_traveler_fields(traveler, errors)
+            traveler_errors = self.check_traveler_fields(traveler)
             if traveler_errors:
                 travelers_errors.append({'index_number':traveler.index_number, 'errors':traveler_errors})
         if travelers_errors.exists():
             errors.update({'travelers':travelers_errors})
         return errors
     
-    def check_traveler_fields(self, traveler,):
+    def check_traveler_fields(self, traveler):
         traveler_errors = {}
         fields = [field.name for field in Traveler._meta.get_fields()]
         for field in fields:
