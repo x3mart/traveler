@@ -12,6 +12,7 @@ class Order(models.Model):
     class OrderStatus(models.TextChoices):
         NEW_ORDER = 'new', _('Не оформлен')
         CANCELLED_ORDER = 'cancelled_order', _('Отменен')
+        FORM_COMPLETED = 'form_completed', _('Форма заполнена')
         PENDING_CONFIRMATION = 'pending_confirmation', _('Ожидает подтверждения')
         PENDING_PREPAYMENT = 'pending_prepayment', _('Ожидает_предоплаты')
         PREPAYMENT_OVERDUE = 'prepayment_overdue', _('Предоплата просрочена')

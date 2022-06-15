@@ -47,12 +47,10 @@ class OrderViewSet(viewsets.ModelViewSet):
         return Response(OrderSerializer(order, many=False, context={'request':request}).data, status=201)
     
     def update(self, request, *args, **kwargs):
-        errors = {}
         serializer =self.get_serializer(data=request.data)
         travelers = request.data.get('travelers')
         if serializer.is_valid(raise_exception=True):
             data = serializer.validated_data
-        data.pop('travelers_number', None)
         data['travelers_number'] = len(travelers)
         order = self.get_object()
         initial_params = self.get_initial_params(data['tour'])
@@ -62,10 +60,7 @@ class OrderViewSet(viewsets.ModelViewSet):
             traveler_serializer = TravelerSerializer(data=traveler)
             if traveler_serializer.is_valid(raise_exception=True):
                 Traveler.objects.create(order=order, **traveler_serializer.validated_data)
-        # if not travelers:
-        #     raise errors.update({'travelers': [_('Заполните данные о Путешественниках')]})
-        # if not data.get('phone'):
-        #     raise ValidationError({'phone': [_('Обязательное поле')]})
+        data['status'] = self.get_status(data['status'], order)
         Order.objects.filter(pk=order.id).update(**data, **costs, **initial_params)
         order.refresh_from_db()
         order.tour_dates = self.get_tour_dates(order.tour)
@@ -106,3 +101,37 @@ class OrderViewSet(viewsets.ModelViewSet):
     
     def get_tour_dates(self, tour):
         return Tour.objects.filter(tour_basic_id=tour.tour_basic.id).filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start'))).only('id', 'start_date', 'finish_date')
+
+    def check_form_fields(self, order):
+        travelers_errors = []
+        errors = {}
+        if not order.email:
+            errors.update({'email': [_('Обязательное поле')]})
+        if not order.phone:
+            errors.update({'phone': [_('Обязательное поле')]})
+        travelers = order.travelers.all()
+        for traveler in travelers:
+            traveler_errors = self.check_traveler_fields(traveler, errors)
+            if traveler_errors:
+                travelers_errors.append({'index_number':traveler.index_number, 'errors':traveler_errors})
+        if travelers_errors.exists():
+            errors.update({'travelers':travelers_errors})
+        return errors
+    
+    def check_traveler_fields(self, traveler,):
+        traveler_errors = {}
+        fields = [field.name for field in Traveler._meta.get_fields()]
+        for field in fields:
+            if not hasattr(traveler, field):
+                traveler_errors.update({field:[_('Обязательное поле')]})
+        return traveler_errors
+    
+    def get_status(self, status, order):
+        if status == order.status:
+            return status
+        if status == 'form_completed':
+            errors = self.check_form_fields(order)
+            if not errors:
+                return status
+            else:
+                raise ValidationError(errors)
