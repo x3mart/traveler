@@ -48,6 +48,7 @@ class OrderSerializer(serializers.ModelSerializer):
     start_date = DateWithVerboseMonthAndWeekday(read_only=True)
     finish_date = DateWithVerboseMonthAndWeekday(read_only=True)
     postpay_final_date = DateWithVerboseMonth(read_only=True)
+    actions = serializers.JSONField(read_only=True)
     
     class Meta:
         model = Order
@@ -82,7 +83,8 @@ class OrderListSerializer(serializers.ModelSerializer):
     postpay_final_date = DateWithVerboseMonth(read_only=True)
     status = serializers.CharField(read_only=True, source='get_status_display')
     travelers = travelers = TravelerSerializer(many=True, read_only=True)
+    actions = serializers.JSONField(read_only=True)
     
     class Meta:
         model = Order
-        fields = ('id', 'expert', 'customer', 'start_date', 'finish_date', 'postpay_final_date', 'status', 'name', 'travelers_number', 'currency', 'cost', 'book_cost', 'book_price', 'travelers')
+        fields = ('id', 'expert', 'customer', 'start_date', 'finish_date', 'postpay_final_date', 'status', 'name', 'travelers_number', 'currency', 'cost', 'book_cost', 'book_price', 'travelers', 'actions')
