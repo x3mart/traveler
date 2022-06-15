@@ -83,7 +83,7 @@ class OrderListSerializer(serializers.ModelSerializer):
     postpay_final_date = DateWithVerboseMonth(read_only=True)
     status = serializers.CharField(read_only=True, source='get_status_display')
     travelers = travelers = TravelerSerializer(many=True, read_only=True)
-    actions = serializers.JSONField(read_only=True)
+    actions = serializers.SerializerMethodField(read_only=True)
     
     class Meta:
         model = Order
