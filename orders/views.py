@@ -60,7 +60,7 @@ class OrderViewSet(viewsets.ModelViewSet):
             traveler_serializer = TravelerSerializer(data=traveler)
             if traveler_serializer.is_valid(raise_exception=True):
                 Traveler.objects.create(order=order, **traveler_serializer.validated_data)
-        data['status'] = self.get_status(data['status'], order)
+        data['status'] = self.get_status(data, order)
         Order.objects.filter(pk=order.id).update(**data, **costs, **initial_params)
         order.refresh_from_db()
         order.tour_dates = self.get_tour_dates(order.tour)
@@ -102,12 +102,12 @@ class OrderViewSet(viewsets.ModelViewSet):
     def get_tour_dates(self, tour):
         return Tour.objects.filter(tour_basic_id=tour.tour_basic.id).filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start'))).only('id', 'start_date', 'finish_date')
 
-    def check_form_fields(self, order):
+    def check_form_fields(self, data, order):
         travelers_errors = []
         errors = {}
-        if not order.email:
+        if not data.get('email'):
             errors.update({'email': [_('Обязательное поле')]})
-        if not order.phone:
+        if not data.get('phone'):
             errors.update({'phone': [_('Обязательное поле')]})
         travelers = order.travelers.all()
         for traveler in travelers:
@@ -123,16 +123,15 @@ class OrderViewSet(viewsets.ModelViewSet):
         fields = [field.name for field in Traveler._meta.get_fields()]
         for field in fields:
             if not getattr(traveler, field):
-                print(field)
                 traveler_errors.update({field:[_('Обязательное поле')]})
         return traveler_errors
     
-    def get_status(self, status, order):
-        if status == order.status:
-            return status
-        if status == 'form_completed':
-            errors = self.check_form_fields(order)
+    def get_status(self, data, order):
+        if data['status'] == order.status:
+            return data['status']
+        if data['status'] == 'form_completed':
+            errors = self.check_form_fields(data, order)
             if not errors:
-                return status
+                return data['status']
             else:
                 raise ValidationError(errors)
