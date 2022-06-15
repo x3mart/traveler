@@ -114,7 +114,7 @@ class OrderViewSet(viewsets.ModelViewSet):
             traveler_errors = self.check_traveler_fields(traveler)
             if traveler_errors:
                 travelers_errors.append({'index_number':traveler.index_number, 'errors':traveler_errors})
-        if travelers_errors.exists():
+        if travelers_errors:
             errors.update({'travelers':travelers_errors})
         return errors
     
