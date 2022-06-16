@@ -72,7 +72,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         orders =  self.get_queryset()
         return Response(OrderListSerializer(orders, many=True, context={'request':request}).data, status=200)
     
-    @action(['patch'], detail=True)
+    @action(['post'], detail=True)
     def book(self, request, *args, **kwargs):
         order, data = self.update_order(request, *args, **kwargs)
         self.check_form_fields(data, order)
@@ -82,7 +82,7 @@ class OrderViewSet(viewsets.ModelViewSet):
             Tour.objects.filter(pk=order.tour_id).update(vacants_number=F('vacants_number')-order.travelers_number)
         orders =  self.get_queryset()
         # return Response(OrderListSerializer(orders, many=True, context={'request':request}).data, status=200)
-        return HttpResponseRedirect(redirect_to='https://google.com')
+        return HttpResponseRedirect(redirect_to='https://traveler.market')
 
     @action(['patch'], detail=True)
     def remove(self, request, *args, **kwargs):
