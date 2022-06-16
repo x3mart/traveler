@@ -15,5 +15,5 @@ class OrderPermission(permissions.BasePermission):
         if view.action in ['aprove', 'decline']:
             return obj.expert_id == request.user.id or request.user.is_staff
         if view.action in ['cancel', 'retrieve']:
-            return obj.expert_id == request.user.id or obj.expert_id == request.user.id or request.user.is_staff
+            return obj.customer_id == request.user.id or obj.expert_id == request.user.id or request.user.is_staff
         return True

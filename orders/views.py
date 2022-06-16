@@ -75,7 +75,8 @@ class OrderViewSet(viewsets.ModelViewSet):
         order.save()
         Tour.objects.filter(pk=order.tour_id).update(vacants_number=F('vacants_number')-order.travelers_number)
         orders =  self.get_queryset()
-        return Response(OrderListSerializer(orders, many=True, context={'request':request}).data, status=200)
+        return HttpResponseRedirect(redirect_to='https://traveler.market/account/orders')
+        # return Response(OrderListSerializer(orders, many=True, context={'request':request}).data, status=200)
     
     @action(['post'], detail=True)
     def book(self, request, *args, **kwargs):
@@ -95,7 +96,8 @@ class OrderViewSet(viewsets.ModelViewSet):
         Tour.objects.filter(pk=order.tour_id).update(vacants_number=F('vacants_number')+order.travelers_number)
         order.delete()
         orders =  self.get_queryset()
-        return Response(OrderListSerializer(orders, many=True, context={'request':request}).data, status=200)
+        # return Response(OrderListSerializer(orders, many=True, context={'request':request}).data, status=200)
+        
     
     @action(['post'], detail=True)
     def aprove(self, request, *args, **kwargs):
@@ -103,7 +105,8 @@ class OrderViewSet(viewsets.ModelViewSet):
         order.status = 'pending_prepayment'
         order.save()
         orders =  self.get_queryset()
-        return Response(OrderListSerializer(orders, many=True, context={'request':request}).data, status=200)
+        # return Response(OrderListSerializer(orders, many=True, context={'request':request}).data, status=200)
+        return HttpResponseRedirect(redirect_to='https://traveler.market/account/orders')
     
     @action(['post'], detail=True)
     def decline(self, request, *args, **kwargs):
@@ -112,7 +115,8 @@ class OrderViewSet(viewsets.ModelViewSet):
         order.status = 'declined'
         order.save()
         orders =  self.get_queryset()
-        return Response(OrderListSerializer(orders, many=True, context={'request':request}).data, status=200)
+        # return Response(OrderListSerializer(orders, many=True, context={'request':request}).data, status=200)
+        return HttpResponseRedirect(redirect_to='https://traveler.market/account/orders')
     
     @action(['post'], detail=True)
     def cancel(self, request, *args, **kwargs):
@@ -124,7 +128,9 @@ class OrderViewSet(viewsets.ModelViewSet):
             order.status = 'cancelled_by_customer'
         order.save()
         orders =  self.get_queryset()
-        return Response(OrderListSerializer(orders, many=True, context={'request':request}).data, status=200)
+        # return Response(OrderListSerializer(orders, many=True, context={'request':request}).data, status=200)
+        return HttpResponseRedirect(redirect_to='https://traveler.market/account/orders')
+
     
     def update_order(self, request, *args, **kwargs):
         order = self.get_object()
@@ -143,6 +149,7 @@ class OrderViewSet(viewsets.ModelViewSet):
             if traveler_serializer.is_valid(raise_exception=True):
                 Traveler.objects.create(order=order, **traveler_serializer.validated_data)
         Order.objects.filter(pk=order.id).update(**data, **costs, **initial_params)
+        
         return order, data
     def get_initial_params(self, tour):
         return {
