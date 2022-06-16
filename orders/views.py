@@ -77,7 +77,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         self.check_form_fields(data, order)
         order.status = 'prepayment'
         order.save()
-        if order.instant_booking:
+        if order.tour.instant_booking:
             Tour.objects.filter(pk=order.tour_id).update(vacants_number=F('vacants_number')-order.travelers_number)
         orders =  self.get_queryset()
         return Response(OrderListSerializer(orders, many=True, context={'request':request}).data, status=200)
