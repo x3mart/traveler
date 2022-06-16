@@ -51,21 +51,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         return Response(OrderSerializer(order, many=False, context={'request':request}).data, status=201)
     
     def update(self, request, *args, **kwargs):
-        serializer =self.get_serializer(data=request.data)
-        travelers = request.data.get('travelers')
-        if serializer.is_valid(raise_exception=True):
-            data = serializer.validated_data
-        data['travelers_number'] = len(travelers)
-        order = self.get_object()
-        initial_params = self.get_initial_params(data['tour'])
-        costs = self.get_costs(data['travelers_number'], order.price, order.book_price, order.postpay)
-        order.travelers.all().delete()
-        for traveler in travelers:
-            traveler_serializer = TravelerSerializer(data=traveler)
-            if traveler_serializer.is_valid(raise_exception=True):
-                Traveler.objects.create(order=order, **traveler_serializer.validated_data)
-        # data['status'] = self.get_status(data, order)
-        Order.objects.filter(pk=order.id).update(**data, **costs, **initial_params)
+        order, data = self.update_order(self, request, *args, **kwargs)
         order.refresh_from_db()
         order.tour_dates = self.get_tour_dates(order.tour)
         return Response(OrderSerializer(order, many=False, context={'request':request}).data, status=200)
@@ -77,13 +63,71 @@ class OrderViewSet(viewsets.ModelViewSet):
     
     @action(['patch'], detail=True)
     def ask_confirmation(self, request, *args, **kwargs):
+        order, data = self.update_order(self, request, *args, **kwargs)
+        self.check_form_fields(data, order)
+        order.status = 'pending_confirmation'
+        order.save()
+        Tour.objects.filter(pk=order.tour_id).update(vacants_number=F('vacants_number')-order.travelers_number)
+        orders =  self.get_queryset()
+        return Response(OrderListSerializer(orders, many=True, context={'request':request}).data, status=200)
+    
+    @action(['patch'], detail=True)
+    def book(self, request, *args, **kwargs):
+        order, data = self.update_order(self, request, *args, **kwargs)
+        self.check_form_fields(data, order)
+        order.status = 'prepayment'
+        order.save()
+        if order.instant_booking:
+            Tour.objects.filter(pk=order.tour_id).update(vacants_number=F('vacants_number')-order.travelers_number)
+        orders =  self.get_queryset()
+        return Response(OrderListSerializer(orders, many=True, context={'request':request}).data, status=200)
+
+    @action(['patch'], detail=True)
+    def remove(self, request, *args, **kwargs):
+        order = self.get_object()
+        Tour.objects.filter(pk=order.tour_id).update(vacants_number=F('vacants_number')+order.travelers_number)
+        order.delete()
+        orders =  self.get_queryset()
+        return Response(OrderListSerializer(orders, many=True, context={'request':request}).data, status=200)
+    
+    @action(['patch'], detail=True)
+    def aprove(self, request, *args, **kwargs):
+        order = self.get_object()
+        order.status == 'pending_prepayment'
+        order.save()
+        orders =  self.get_queryset()
+        return Response(OrderListSerializer(orders, many=True, context={'request':request}).data, status=200)
+    
+    @action(['patch'], detail=True)
+    def decline(self, request, *args, **kwargs):
+        order = self.get_object()
+        Tour.objects.filter(pk=order.tour_id).update(vacants_number=F('vacants_number')+order.travelers_number)
+        order.status == 'declined'
+        order.save()
+        orders =  self.get_queryset()
+        return Response(OrderListSerializer(orders, many=True, context={'request':request}).data, status=200)
+    
+    @action(['patch'], detail=True)
+    def cancel(self, request, *args, **kwargs):
+        order = self.get_object()
+        Tour.objects.filter(pk=order.tour_id).update(vacants_number=F('vacants_number')+order.travelers_number)
+        if hasattr(request.user, 'expert'):
+            order.status == 'declined_by_expert'
+        if hasattr(request.user, 'customer'):
+            order.status == 'declined_by_customer'
+        order.save()
+        orders =  self.get_queryset()
+        return Response(OrderListSerializer(orders, many=True, context={'request':request}).data, status=200)
+    
+    def update_order(self, request, *args, **kwargs):
         order = self.get_object()
         serializer =self.get_serializer(data=request.data)
         travelers = request.data.get('travelers')
         if serializer.is_valid(raise_exception=True):
             data = serializer.validated_data
         data['travelers_number'] = len(travelers)
-        order = self.get_object()
+        if not data['travelers_number']:
+            data['travelers_number'] = order.travelers_number
         initial_params = self.get_initial_params(data['tour'])
         costs = self.get_costs(data['travelers_number'], order.price, order.book_price, order.postpay)
         order.travelers.all().delete()
@@ -92,13 +136,7 @@ class OrderViewSet(viewsets.ModelViewSet):
             if traveler_serializer.is_valid(raise_exception=True):
                 Traveler.objects.create(order=order, **traveler_serializer.validated_data)
         Order.objects.filter(pk=order.id).update(**data, **costs, **initial_params)
-        self.check_form_fields(data, order)
-        order.status = 'pending_confirmation'
-        order.save()
-        Tour.objects.filter(pk=order.tour_id).update(vacants_number=F('vacants_number')-order.travelers_number)
-        orders =  self.get_queryset()
-        return Response(OrderListSerializer(orders, many=True, context={'request':request}).data, status=200)
-
+        return order, data
     def get_initial_params(self, tour):
         return {
             'currency':tour.currency.sign,
