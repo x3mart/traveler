@@ -2,6 +2,7 @@ from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
+from django.http import HttpResponseRedirect
 from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
 import threading
@@ -80,7 +81,8 @@ class OrderViewSet(viewsets.ModelViewSet):
         if order.tour.instant_booking:
             Tour.objects.filter(pk=order.tour_id).update(vacants_number=F('vacants_number')-order.travelers_number)
         orders =  self.get_queryset()
-        return Response(OrderListSerializer(orders, many=True, context={'request':request}).data, status=200)
+        # return Response(OrderListSerializer(orders, many=True, context={'request':request}).data, status=200)
+        return HttpResponseRedirect(redirect_to='https://google.com')
 
     @action(['patch'], detail=True)
     def remove(self, request, *args, **kwargs):
