@@ -13,6 +13,7 @@ from django.db.models import F, Q
 from django.utils.translation import gettext_lazy as _
 
 from orders.models import Order, Traveler
+from orders.permissions import OrderPermission
 from orders.serializers import OrderListSerializer, OrderSerializer, TravelerSerializer
 from tours.models import Tour
 from utils.prices import get_tour_discounted_price
@@ -21,14 +22,18 @@ from utils.prices import get_tour_discounted_price
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.prefetch_related('tour', 'expert', 'customer', 'travelers')
     serializer_class = OrderSerializer
-    # permission_classes = [OrderPermission]
+    permission_classes = [OrderPermission]
     filter_backends = [filters.OrderingFilter, DjangoFilterBackend]
     ordering_fields = ['created_at', 'id', 'status']
     ordering = ['-start_date']
     # filterset_class = TourFilter
 
     def get_queryset(self):
-        return super().get_queryset()
+        qs = super().get_queryset()
+        if hasattr(self.request.user, 'customer'):
+            return qs.filter(customer_id=self.request.user.id)
+        if hasattr(self.request.user, 'expert'):
+            return qs.filter(expert_id=self.request.user.id)
     
     def get_serializer_class(self):
         if self.action == 'list':
@@ -62,7 +67,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         order.tour_dates = self.get_tour_dates(order.tour)
         return Response(OrderSerializer(order, many=False, context={'request':request}).data, status=200)
     
-    @action(['patch'], detail=True)
+    @action(['post'], detail=True)
     def ask_confirmation(self, request, *args, **kwargs):
         order, data = self.update_order(request, *args, **kwargs)
         self.check_form_fields(data, order)
@@ -82,9 +87,9 @@ class OrderViewSet(viewsets.ModelViewSet):
             Tour.objects.filter(pk=order.tour_id).update(vacants_number=F('vacants_number')-order.travelers_number)
         orders =  self.get_queryset()
         # return Response(OrderListSerializer(orders, many=True, context={'request':request}).data, status=200)
-        return HttpResponseRedirect(redirect_to='https://traveler.market')
+        return HttpResponseRedirect(redirect_to='https://traveler.market/account/orders')
 
-    @action(['patch'], detail=True)
+    @action(['post'], detail=True)
     def remove(self, request, *args, **kwargs):
         order = self.get_object()
         Tour.objects.filter(pk=order.tour_id).update(vacants_number=F('vacants_number')+order.travelers_number)
@@ -92,7 +97,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         orders =  self.get_queryset()
         return Response(OrderListSerializer(orders, many=True, context={'request':request}).data, status=200)
     
-    @action(['patch'], detail=True)
+    @action(['post'], detail=True)
     def aprove(self, request, *args, **kwargs):
         order = self.get_object()
         order.status = 'pending_prepayment'
@@ -100,7 +105,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         orders =  self.get_queryset()
         return Response(OrderListSerializer(orders, many=True, context={'request':request}).data, status=200)
     
-    @action(['patch'], detail=True)
+    @action(['post'], detail=True)
     def decline(self, request, *args, **kwargs):
         order = self.get_object()
         Tour.objects.filter(pk=order.tour_id).update(vacants_number=F('vacants_number')+order.travelers_number)
@@ -109,7 +114,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         orders =  self.get_queryset()
         return Response(OrderListSerializer(orders, many=True, context={'request':request}).data, status=200)
     
-    @action(['patch'], detail=True)
+    @action(['post'], detail=True)
     def cancel(self, request, *args, **kwargs):
         order = self.get_object()
         Tour.objects.filter(pk=order.tour_id).update(vacants_number=F('vacants_number')+order.travelers_number)
