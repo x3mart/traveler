@@ -51,7 +51,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         return Response(OrderSerializer(order, many=False, context={'request':request}).data, status=201)
     
     def update(self, request, *args, **kwargs):
-        order, data = self.update_order(self, request, *args, **kwargs)
+        order, data = self.update_order(request, *args, **kwargs)
         order.refresh_from_db()
         order.tour_dates = self.get_tour_dates(order.tour)
         return Response(OrderSerializer(order, many=False, context={'request':request}).data, status=200)
@@ -63,7 +63,7 @@ class OrderViewSet(viewsets.ModelViewSet):
     
     @action(['patch'], detail=True)
     def ask_confirmation(self, request, *args, **kwargs):
-        order, data = self.update_order(self, request, *args, **kwargs)
+        order, data = self.update_order(request, *args, **kwargs)
         self.check_form_fields(data, order)
         order.status = 'pending_confirmation'
         order.save()
@@ -73,7 +73,7 @@ class OrderViewSet(viewsets.ModelViewSet):
     
     @action(['patch'], detail=True)
     def book(self, request, *args, **kwargs):
-        order, data = self.update_order(self, request, *args, **kwargs)
+        order, data = self.update_order(request, *args, **kwargs)
         self.check_form_fields(data, order)
         order.status = 'prepayment'
         order.save()
@@ -121,7 +121,7 @@ class OrderViewSet(viewsets.ModelViewSet):
     
     def update_order(self, request, *args, **kwargs):
         order = self.get_object()
-        serializer =self.get_serializer(data=request.data)
+        serializer = self.get_serializer(data=request.data)
         travelers = request.data.get('travelers')
         if serializer.is_valid(raise_exception=True):
             data = serializer.validated_data
