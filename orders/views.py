@@ -64,19 +64,40 @@ class OrderViewSet(viewsets.ModelViewSet):
             traveler_serializer = TravelerSerializer(data=traveler)
             if traveler_serializer.is_valid(raise_exception=True):
                 Traveler.objects.create(order=order, **traveler_serializer.validated_data)
-        data['status'] = self.get_status(data, order)
+        # data['status'] = self.get_status(data, order)
         Order.objects.filter(pk=order.id).update(**data, **costs, **initial_params)
         order.refresh_from_db()
         order.tour_dates = self.get_tour_dates(order.tour)
-        # order.actions = self.get_actions(order)
         return Response(OrderSerializer(order, many=False, context={'request':request}).data, status=200)
     
     def retrieve(self, request, *args, **kwargs):
         order = self.get_object()
         order.tour_dates = self.get_tour_dates(order.tour)
-        # order.actions = self.get_actions(order)
         return Response(OrderSerializer(order, many=False, context={'request':request}).data, status=200)
     
+    @action(['patch'], detail=True)
+    def ask_confirmation(self, request, *args, **kwargs):
+        order = self.get_object()
+        serializer =self.get_serializer(data=request.data)
+        travelers = request.data.get('travelers')
+        if serializer.is_valid(raise_exception=True):
+            data = serializer.validated_data
+        data['travelers_number'] = len(travelers)
+        order = self.get_object()
+        initial_params = self.get_initial_params(data['tour'])
+        costs = self.get_costs(data['travelers_number'], order.price, order.book_price, order.postpay)
+        order.travelers.all().delete()
+        for traveler in travelers:
+            traveler_serializer = TravelerSerializer(data=traveler)
+            if traveler_serializer.is_valid(raise_exception=True):
+                Traveler.objects.create(order=order, **traveler_serializer.validated_data)
+        Order.objects.filter(pk=order.id).update(**data, **costs, **initial_params)
+        self.check_form_fields(data, order)
+        order.status = 'pending_confirmation'
+        order.save()
+        Tour.objects.filter(pk=order.tour_id).update(vacants_number=F('vacants_number')-order.travelers_number)
+        orders =  self.get_queryset()
+        return Response(OrderListSerializer(orders, many=True, context={'request':request}).data, status=200)
 
     def get_initial_params(self, tour):
         return {
@@ -107,7 +128,8 @@ class OrderViewSet(viewsets.ModelViewSet):
     def get_tour_dates(self, tour):
         return Tour.objects.filter(tour_basic_id=tour.tour_basic.id).filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start'))).only('id', 'start_date', 'finish_date')
 
-    def check_form_fields(self, data, order, errors):
+    def check_form_fields(self, data, order):
+        errors={}
         travelers_errors = []
         if not data.get('email'):
             errors.update({'email': [_('Обязательное поле')]})
@@ -120,7 +142,9 @@ class OrderViewSet(viewsets.ModelViewSet):
                 travelers_errors.append({'index_number':traveler.index_number, 'errors':traveler_errors})
         if travelers_errors:
             errors.update({'travelers':travelers_errors})
-        return errors
+        if errors:
+            raise ValidationError(errors)
+        return None
     
     def check_traveler_fields(self, traveler):
         traveler_errors = {}
@@ -130,60 +154,12 @@ class OrderViewSet(viewsets.ModelViewSet):
                 traveler_errors.update({field:[_('Обязательное поле')]})
         return traveler_errors
     
-    def get_status(self, data, order):
-        errors = {}
-        if data['status'] == 'form_completed':
-            errors.update(self.check_form_fields(data, order, errors))
-        if errors:
-            raise ValidationError(errors)
-        return data['status']
+    # def get_status(self, data, order):
+    #     errors = {}
+    #     if data['status'] == 'form_completed':
+    #         errors.update(self.check_form_fields(data, order, errors))
+    #     if errors:
+    #         raise ValidationError(errors)
+    #     return data['status']
     
-    # def get_actions(self, order):
-    #     user = self.request.user
-    #     if self.action == 'list' and hasattr(user, 'expert'):
-    #         return self.get_list_actions_for_expert(order)
-    #     if self.action == 'list' and hasattr(user, 'customer'):
-    #         return self.get_list_actions_for_customer(order)
-    #     if self.action == 'retrieve' and hasattr(user, 'expert'):
-    #         return self.get_retrieve_actions_for_expert(order)
-    #     if self.action == 'retrieve' and hasattr(user, 'customer'):
-    #         return self.get_retrieve_actions_for_customer(order)
-        
     
-    # def get_list_actions_for_customer(self, order):
-    #     if order.status == 'new':
-    #         return [{'action':'remove/', 'title': 'Отменить', 'color':'#404040'}]
-    #     if order.status == 'pending_confirmation':
-    #         return [{'action':'remove/', 'title': 'Отменить', 'color':'#404040'}]
-    #     if order.status == 'pending_prepayment':
-    #         return [{'action': 'book/', 'title': 'Забронировать', 'color':'#2aa2d6'}, {'action':'cancel/', 'title': 'Отменить', 'color':'#404040'}]
-    #     if order.status == 'prepayment':
-    #         return [{'action': 'fullpayment/', 'title': 'Оплатить все', 'color':'#2aa2d6'}, {'action':'cancel/', 'title': 'Отменить', 'color':'#404040'}]
-    #     return None
-        
-    
-    # def get_list_actions_for_expert(self, order):
-    #     if order.status == 'pending_confirmation':
-    #         return [{'action': 'aprove/', 'title': 'Подтвердить', 'color':'#2aa2d6'}, {'action':'decline/', 'title': 'Отказать', 'color':'#404040'}]
-    #     if order.status == 'pending_prepayment':
-    #         return [{'action':'fullpaymet/', 'title': 'Отменить', 'color':'#404040'}]
-    #     return None
-
-    # def get_retrieve_actions_for_customer(self, order):
-    #     if order.status == 'new' and not order.tour.instant_booking:
-    #         return [{'action':'ask_confirmation/', 'title': 'Хочу поехать!', 'color':'button-success'}]
-    #     if order.status == 'new' and order.tour.instant_booking:
-    #         return [{'action':'book/', 'title': 'Забронировать', 'color':'button-success'}]
-    #     if order.status == 'pending_confirmation':
-    #         return [{'action':'remove/', 'title': 'Отменить', 'color':'button-danger'}]
-    #     if order.status == 'pending_prepayment':
-    #         return [{'action': 'book/', 'title': 'Забронировать', 'color':'button-success'}, {'action':'cancel/', 'title': 'Отменить', 'color':'button-danger'}]
-    #     if order.status == 'prepayment':
-    #         return [{'action': 'fullpayment/', 'title': 'Оплатить все', 'color':'button-success'}]
-    #     return None
-        
-    
-    # def get_retrieve_actions_for_expert(self, order):
-    #     if order.status == 'pending_confirmation':
-    #         return [{'action': 'aprove/', 'title': 'Подтвердить', 'color':'button-success'}, {'action':'decline/', 'title': 'Отказать'}]
-    #     return None
