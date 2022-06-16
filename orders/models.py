@@ -59,7 +59,7 @@ class Traveler(models.Model):
     first_name = models.CharField(_('Имя'), max_length=50, null=True, blank=True)
     birth_date = models.DateField(_('Дата рождения'), null=True, blank=True)
     index_number = models.PositiveIntegerField(_('Порядковый номер'), null=True, blank=True)
-    order = models.ForeignKey('Order', on_delete=models.PROTECT, related_name='travelers', verbose_name=_('Заказ'))
+    order = models.ForeignKey('Order', on_delete=models.CASCADE, related_name='travelers', verbose_name=_('Заказ'))
 
     class Meta:
         verbose_name = _('Путешественник')
