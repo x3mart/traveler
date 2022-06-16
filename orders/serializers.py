@@ -132,7 +132,7 @@ class OrderListSerializer(serializers.ModelSerializer):
         if order.status == 'pending_prepayment':
             return [{'action': 'book_from_list/', 'title': 'Забронировать', 'color':'#2aa2d6', 'confirmation':False}, {'action':'cancel_from_list/', 'title': 'Отменить', 'color':'#404040', 'confirmation':True}]
         if order.status == 'prepayment':
-            return [{'action': 'fullpayment/', 'title': 'Оплатить все', 'color':'#2aa2d6', 'confirmation':False}, {'action':'cancel_from_list/', 'title': 'Отменить', 'color':'#404040', 'confirmation':True}]
+            return [{'action': 'fullpayment_from_list/', 'title': 'Оплатить все', 'color':'#2aa2d6', 'confirmation':False}, {'action':'cancel_from_list/', 'title': 'Отменить', 'color':'#404040', 'confirmation':True}]
         return None
         
     
