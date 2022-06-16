@@ -126,17 +126,17 @@ class OrderListSerializer(serializers.ModelSerializer):
     
     def get_list_actions_for_customer(self, order):
         if order.status == 'new':
-            return [{'action':'remove/', 'title': 'Отменить', 'color':'#404040', 'confirmation':True}]
+            return [{'action':'remove_from_list/', 'title': 'Отменить', 'color':'#404040', 'confirmation':True}]
         if order.status == 'pending_confirmation':
-            return [{'action':'remove/', 'title': 'Отменить', 'color':'#404040', 'confirmation':True}]
+            return [{'action':'remove_from_list/', 'title': 'Отменить', 'color':'#404040', 'confirmation':True}]
         if order.status == 'pending_prepayment':
-            return [{'action': 'book/', 'title': 'Забронировать', 'color':'#2aa2d6', 'confirmation':False}, {'action':'cancel/', 'title': 'Отменить', 'color':'#404040', 'confirmation':True}]
+            return [{'action': 'book_from_list/', 'title': 'Забронировать', 'color':'#2aa2d6', 'confirmation':False}, {'action':'cancel_from_list/', 'title': 'Отменить', 'color':'#404040', 'confirmation':True}]
         if order.status == 'prepayment':
-            return [{'action': 'fullpayment/', 'title': 'Оплатить все', 'color':'#2aa2d6', 'confirmation':False}, {'action':'cancel/', 'title': 'Отменить', 'color':'#404040', 'confirmation':True}]
+            return [{'action': 'fullpayment/', 'title': 'Оплатить все', 'color':'#2aa2d6', 'confirmation':False}, {'action':'cancel_from_list/', 'title': 'Отменить', 'color':'#404040', 'confirmation':True}]
         return None
         
     
     def get_list_actions_for_expert(self, order):
         if order.status == 'pending_confirmation':
-            return [{'action': 'aprove/', 'title': 'Подтвердить', 'color':'#2aa2d6', 'confirmation':False}, {'action':'decline/', 'title': 'Отказать', 'color':'#404040', 'confirmation':True}]
+            return [{'action': 'aprove_from_list/', 'title': 'Подтвердить', 'color':'#2aa2d6', 'confirmation':False}, {'action':'decline_from_list/', 'title': 'Отказать', 'color':'#404040', 'confirmation':True}]
         return None
