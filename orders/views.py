@@ -112,9 +112,9 @@ class OrderViewSet(viewsets.ModelViewSet):
         order = self.get_object()
         Tour.objects.filter(pk=order.tour_id).update(vacants_number=F('vacants_number')+order.travelers_number)
         if hasattr(request.user, 'expert'):
-            order.status = 'declined_by_expert'
+            order.status = 'cancelled_by_expert'
         if hasattr(request.user, 'customer'):
-            order.status = 'declined_by_customer'
+            order.status = 'cancelled_by_customer'
         order.save()
         orders =  self.get_queryset()
         return Response(OrderListSerializer(orders, many=True, context={'request':request}).data, status=200)
