@@ -36,7 +36,7 @@ class OrderViewSet(viewsets.ModelViewSet, OrderMixin):
             return qs
     
     def get_serializer_class(self):
-        if self.action == 'list':
+        if self.action in ['list', 'book_from_list', 'remove_from_list', 'aprove_from_list', 'decline_from_list', 'cancel_from_list']:
             return OrderListSerializer
         if hasattr(self.request.user, 'expert'):
             return OrderForExpertSerializer
