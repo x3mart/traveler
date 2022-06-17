@@ -141,6 +141,3 @@ class OrderListSerializer(serializers.ModelSerializer):
         if order.status == 'pending_confirmation':
             return [{'action': 'aprove_from_list/', 'title': 'Подтвердить', 'color':'#2aa2d6', 'confirmation':False}, {'action':'decline_from_list/', 'title': 'Отказать', 'color':'#404040', 'confirmation':True}]
         return None
-    
-    def get_status_list(self, obj):
-        return [{choice[0]:choice[1]} for choice in Order.OrderStatus.choices]

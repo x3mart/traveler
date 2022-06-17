@@ -22,7 +22,7 @@ class OrderViewSet(viewsets.ModelViewSet, OrderMixin):
     serializer_class = OrderSerializer
     permission_classes = [OrderPermission]
     filter_backends = [filters.OrderingFilter, DjangoFilterBackend]
-    ordering_fields = ['created_at', 'id', 'status']
+    ordering_fields = ['created_at', 'status']
     ordering = ['-start_date']
     filterset_class = OrderFilter
 
@@ -128,3 +128,9 @@ class OrderViewSet(viewsets.ModelViewSet, OrderMixin):
         self.perform_cancel(self, request, *args, **kwargs)
         return Response({'redirect_url':'https://traveler.market/account/orders'}, status=200)
     
+    @action(['get'], detail=False)
+    def status_list(self, request, *args, **kwargs):
+        if hasattr(self.request.user, 'customer') or request.user.is_staff:
+            return Response([{'status':choice[0], 'title':choice[1]} for choice in Order.OrderStatus.choices], status=200)
+        if hasattr(self.request.user, 'expert'):
+            return Response([{'status':choice[0], 'title':choice[1]} for choice in Order.OrderStatus.choices if choice[0] not in ['new']], status=200)
