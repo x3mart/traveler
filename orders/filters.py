@@ -5,7 +5,7 @@ from orders.models import Order
 
 
 class OrderFilter(filters.FilterSet):
-    status = MultipleChoiceFilter(choices=Order.OrderStatus)
+    status = MultipleChoiceFilter(choices=Order.OrderStatus.choices)
 
     class Meta:
         model = Order
