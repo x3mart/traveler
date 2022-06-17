@@ -1,4 +1,4 @@
-from orders.serializers import TravelerSerializer
+from orders.serializers import OrderForExpertSerializer, TravelerSerializer, OrderSerializer
 from tours.models import Tour
 from utils.prices import get_tour_discounted_price
 from django.db.models import F, Q
@@ -121,3 +121,9 @@ class OrderMixin():
             if not getattr(traveler, field):
                 traveler_errors.update({field:[_('Обязательное поле')]})
         return traveler_errors
+    
+    def get_order_response_data(self, order):
+        if hasattr(self.request.user, 'customer') or self.request.user.is_staff:
+            return OrderSerializer(order, many=False, context={'request':self.request}).data
+        if hasattr(self.request.user, 'expert'):
+            return OrderForExpertSerializer(order, many=False, context={'request':self.request}).data
