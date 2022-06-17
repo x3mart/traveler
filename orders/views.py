@@ -74,8 +74,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         order.status = 'pending_confirmation'
         order.save()
         Tour.objects.filter(pk=order.tour_id).update(vacants_number=F('vacants_number')-order.travelers_number)
-        orders =  self.get_queryset()
-        return HttpResponseRedirect(redirect_to='https://traveler.market/account/orders')
+        return HttpResponseRedirect(redirect_to='https://www.tinkoff.ru/invest/open-api/')
         # return Response(OrderListSerializer(orders, many=True, context={'request':request}).data, status=200)
     
     def perform_book(self, request, *args, **kwargs):
