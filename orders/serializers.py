@@ -102,7 +102,7 @@ class OrderSerializer(serializers.ModelSerializer):
     
 class OrderForExpertSerializer(OrderSerializer):
     class Meta(OrderSerializer.Meta):
-        exclude = ('phone', )
+        exclude = ('phone', 'email')
 
 class OrderListSerializer(serializers.ModelSerializer):
     expert = ExpertShortSerializer(many=False, read_only=True, required=False)
