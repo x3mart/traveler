@@ -88,7 +88,7 @@ class OrderViewSet(viewsets.ModelViewSet):
     @action(['post'], detail=True)
     def book(self, request, *args, **kwargs):
         self.perform_book(request, *args, **kwargs)
-        return HttpResponseRedirect(redirect_to='https://traveler.market/account/orders')
+        return HttpResponseRedirect('https://traveler.market/account/orders')
     
     @action(['post'], detail=True)
     def book_from_list(self, request, *args, **kwargs):
