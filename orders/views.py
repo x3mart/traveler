@@ -22,7 +22,7 @@ class OrderViewSet(viewsets.ModelViewSet, OrderMixin):
     serializer_class = OrderSerializer
     permission_classes = [OrderPermission]
     filter_backends = [filters.OrderingFilter, DjangoFilterBackend]
-    ordering_fields = ['created_at', 'status']
+    ordering_fields = ['created_at', 'start_date']
     ordering = ['-start_date']
     filterset_class = OrderFilter
 
