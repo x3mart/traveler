@@ -52,7 +52,7 @@ class OrderSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Order
-        fields = '__all__'
+        exclude = ()
         extra_kwargs = {
             'name':{'read_only': True, 'required': False},
             'tour':{'required': False},
