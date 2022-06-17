@@ -97,7 +97,7 @@ class OrderSerializer(serializers.ModelSerializer):
     
     def get_actions_for_expert(self, order):
         if order.status == 'pending_confirmation':
-            return [{'action': 'aprove/', 'title': 'Подтвердить', 'color':'button-success', 'confirmation':False}, {'action':'decline/', 'title': 'Отказать', 'confirmation':True}]
+            return [{'action': 'aprove/', 'title': 'Подтвердить', 'color':'button-success', 'confirmation':False}, {'action':'decline/', 'title': 'Отказать', 'color':'button-danger', 'confirmation':True}]
         return None
     
 class OrderForExpertSerializer(OrderSerializer):
