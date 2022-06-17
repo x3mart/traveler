@@ -143,4 +143,4 @@ class OrderListSerializer(serializers.ModelSerializer):
         return None
     
     def get_status_list(self, obj):
-        return Order.OrderStatus.choices
+        return [{choice[0]:choice[1]} for choice in Order.OrderStatus.choices]
