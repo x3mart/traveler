@@ -113,11 +113,10 @@ class OrderListSerializer(serializers.ModelSerializer):
     status = serializers.CharField(read_only=True, source='get_status_display')
     travelers = travelers = TravelerSerializer(many=True, read_only=True)
     actions = serializers.SerializerMethodField(read_only=True)
-    status_list = serializers.SerializerMethodField(read_only=True)
     
     class Meta:
         model = Order
-        fields = ('id', 'expert', 'customer', 'start_date', 'finish_date', 'postpay_final_date', 'status', 'name', 'travelers_number', 'currency', 'cost', 'book_cost', 'book_price', 'travelers', 'actions', 'status_list')
+        fields = ('id', 'expert', 'customer', 'start_date', 'finish_date', 'postpay_final_date', 'status', 'name', 'travelers_number', 'currency', 'cost', 'book_cost', 'book_price', 'travelers', 'actions')
 
     def get_actions(self, order):
         user = self.context['request'].user
