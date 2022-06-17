@@ -67,7 +67,7 @@ class OrderViewSet(viewsets.ModelViewSet, OrderMixin):
     def retrieve(self, request, *args, **kwargs):
         order = self.get_object()
         order.tour_dates = self.get_tour_dates(order.tour)
-        return Response(self.get_order_response_data(order), status=200)
+        return Response(self.get_serializer(order).data, status=200)
     
     @action(['patch'], detail=True)
     def ask_confirmation(self, request, *args, **kwargs):

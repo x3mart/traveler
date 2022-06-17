@@ -122,8 +122,8 @@ class OrderMixin():
                 traveler_errors.update({field:[_('Обязательное поле')]})
         return traveler_errors
     
-    def get_order_response_data(self, order):
+    def get_order_response_data(self, order, many=False):
         if hasattr(self.request.user, 'customer') or self.request.user.is_staff:
-            return OrderSerializer(order, many=False, context={'request':self.request}).data
+            return OrderSerializer(order, many=many, context={'request':self.request}).data
         if hasattr(self.request.user, 'expert'):
-            return OrderForExpertSerializer(order, many=False, context={'request':self.request}).data
+            return OrderForExpertSerializer(order, many=many, context={'request':self.request}).data
