@@ -67,15 +67,14 @@ class OrderViewSet(viewsets.ModelViewSet):
         order.tour_dates = self.get_tour_dates(order.tour)
         return Response(OrderSerializer(order, many=False, context={'request':request}).data, status=200)
     
-    @action(['post'], detail=True)
+    @action(['patch'], detail=True)
     def ask_confirmation(self, request, *args, **kwargs):
         order, data = self.update_order(request, *args, **kwargs)
         self.check_form_fields(data, order)
         order.status = 'pending_confirmation'
         order.save()
         Tour.objects.filter(pk=order.tour_id).update(vacants_number=F('vacants_number')-order.travelers_number)
-        return HttpResponseRedirect(redirect_to='https://www.tinkoff.ru/invest/open-api/')
-        # return Response(OrderListSerializer(orders, many=True, context={'request':request}).data, status=200)
+        return Response({'redirect_url':'https://traveler.market/account/orders'}, status=200)
     
     def perform_book(self, request, *args, **kwargs):
         order, data = self.update_order(request, *args, **kwargs)
@@ -84,66 +83,65 @@ class OrderViewSet(viewsets.ModelViewSet):
         order.save()
         if order.tour.instant_booking:
             Tour.objects.filter(pk=order.tour_id).update(vacants_number=F('vacants_number')-order.travelers_number)
+        return order
     
-    @action(['post'], detail=True)
+    @action(['patch'], detail=True)
     def book(self, request, *args, **kwargs):
         self.perform_book(request, *args, **kwargs)
-        return HttpResponsePermanentRedirect('https://traveler.market/account/orders')
+        return Response({'redirect_url':'https://www.tinkoff.ru/invest/open-api/'}, status=200)
     
-    @action(['post'], detail=True)
+    @action(['patch'], detail=True)
     def book_from_list(self, request, *args, **kwargs):
-        self.perform_book(request, *args, **kwargs)
-        orders =  self.get_queryset()
-        return Response(OrderListSerializer(orders, many=True, context={'request':request}).data, status=200)
+        order = self.perform_book(request, *args, **kwargs)
+        return Response({'redirect_url':'https://www.tinkoff.ru/invest/open-api/'}, status=200)
     
     def perform_remove(self, request, *args, **kwargs):
         order = self.get_object()
         Tour.objects.filter(pk=order.tour_id).update(vacants_number=F('vacants_number')+order.travelers_number)
         order.delete()
 
-    @action(['post'], detail=True)
-    def remove_from_list(self, request, *args, **kwargs):
-        self.perform_remove(request, *args, **kwargs)
-        orders =  self.get_queryset()
-        return Response(OrderListSerializer(orders, many=True, context={'request':request}).data, status=200)
-    
-    @action(['post'], detail=True)
+    @action(['patch'], detail=True)
     def remove(self, request, *args, **kwargs):
         self.perform_remove(request, *args, **kwargs)
-        return HttpResponseRedirect(redirect_to='https://traveler.market/account/orders')
+        return Response({'redirect_url':'https://traveler.market/account/orders'}, status=200)
+    
+    @action(['patch'], detail=True)
+    def remove_from_list(self, request, *args, **kwargs):
+        self.perform_remove(request, *args, **kwargs)
+        return Response({}, status=204)
         
     def perform_aprove(self, request, *args, **kwargs):
         order = self.get_object()
         order.status = 'pending_prepayment'
         order.save()  
+        return order
     
-    @action(['post'], detail=True)
+    @action(['patch'], detail=True)
     def aprove_from_list(self, request, *args, **kwargs):
-        self.perform_aprove(request, *args, **kwargs)
-        orders =  self.get_queryset()
-        return Response(OrderListSerializer(orders, many=True, context={'request':request}).data, status=200)
+        order = self.perform_aprove(request, *args, **kwargs)
+        return Response(OrderListSerializer(order, many=False, context={'request':request}).data, status=200)
     
-    @action(['post'], detail=True)
+    @action(['patch'], detail=True)
     def aprove(self, request, *args, **kwargs):
         self.perform_aprove(request, *args, **kwargs)
-        return HttpResponseRedirect(redirect_to='https://traveler.market/account/orders')
+        return Response({'redirect_url':'https://traveler.market/account/orders'}, status=200)
     
     def perform_decline(self, request, *args, **kwargs):
         order = self.get_object()
         Tour.objects.filter(pk=order.tour_id).update(vacants_number=F('vacants_number')+order.travelers_number)
         order.status = 'declined'
         order.save()
+        return order
     
-    @action(['post'], detail=True)
+    @action(['patch'], detail=True)
     def decline_from_list(self, request, *args, **kwargs):
-        self.perform_decline(request, *args, **kwargs)
-        orders =  self.get_queryset()
-        return Response(OrderListSerializer(orders, many=True, context={'request':request}).data, status=200)
+        order = self.perform_decline(request, *args, **kwargs)
+        return Response(OrderListSerializer(order, many=False, context={'request':request}).data, status=200)
     
-    @action(['post'], detail=True)
+    @action(['patch'], detail=True)
     def decline(self, request, *args, **kwargs):
         self.perform_decline(request, *args, **kwargs)
-        return HttpResponseRedirect(redirect_to='https://traveler.market/account/orders')
+        return Response({'redirect_url':'https://traveler.market/account/orders'}, status=200)
     
     def perform_cancel(self, request, *args, **kwargs):
         order = self.get_object()
@@ -153,17 +151,17 @@ class OrderViewSet(viewsets.ModelViewSet):
         if hasattr(request.user, 'customer'):
             order.status = 'cancelled_by_customer'
         order.save()
+        return order
 
-    @action(['post'], detail=True)
+    @action(['patch'], detail=True)
     def cancel_from_list(self, request, *args, **kwargs):
-        self.perform_cancel(self, request, *args, **kwargs)
-        orders =  self.get_queryset()
-        return Response(OrderListSerializer(orders, many=True, context={'request':request}).data, status=200)
+        order = self.perform_cancel(self, request, *args, **kwargs)
+        return Response(OrderListSerializer(order, many=False, context={'request':request}).data, status=200)
     
-    @action(['post'], detail=True)
+    @action(['patch'], detail=True)
     def cancel(self, request, *args, **kwargs):
         self.perform_cancel(self, request, *args, **kwargs)
-        return HttpResponseRedirect(redirect_to='https://traveler.market/account/orders')
+        return Response({'redirect_url':'https://traveler.market/account/orders'}, status=200)
     
     def update_order(self, request, *args, **kwargs):
         order = self.get_object()
