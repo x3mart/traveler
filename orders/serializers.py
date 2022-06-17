@@ -113,6 +113,7 @@ class OrderListSerializer(serializers.ModelSerializer):
     status = serializers.CharField(read_only=True, source='get_status_display')
     travelers = travelers = TravelerSerializer(many=True, read_only=True)
     actions = serializers.SerializerMethodField(read_only=True)
+    status_list = serializers.SerializerMethodField(read_only=True)
     
     class Meta:
         model = Order
@@ -140,3 +141,6 @@ class OrderListSerializer(serializers.ModelSerializer):
         if order.status == 'pending_confirmation':
             return [{'action': 'aprove_from_list/', 'title': 'Подтвердить', 'color':'#2aa2d6', 'confirmation':False}, {'action':'decline_from_list/', 'title': 'Отказать', 'color':'#404040', 'confirmation':True}]
         return None
+    
+    def get_status_list(self, obj):
+        return Order.OrderStatus.choices

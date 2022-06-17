@@ -10,10 +10,10 @@ class OrderPermission(permissions.BasePermission):
         return request.auth           
 
     def has_object_permission(self, request, view, obj):
-        if view.action in ['update', 'partial_update', 'ask_confirmation', 'book', 'remove']:
+        if view.action in ['update', 'partial_update', 'ask_confirmation', 'book', 'remove', 'book_from_list', 'remove_from_list']:
             return obj.customer_id == request.user.id or request.user.is_staff
-        if view.action in ['aprove', 'decline']:
+        if view.action in ['aprove', 'decline', 'aprove_from_list', 'decline_from_list']:
             return obj.expert_id == request.user.id or request.user.is_staff
-        if view.action in ['cancel', 'retrieve']:
+        if view.action in ['cancel', 'retrieve', 'cancel_from_list', 'retrieve_from_list']:
             return obj.customer_id == request.user.id or obj.expert_id == request.user.id or request.user.is_staff
         return True
