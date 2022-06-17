@@ -70,7 +70,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         order.tour_dates = self.get_tour_dates(order.tour)
         return Response(OrderSerializer(order, many=False, context={'request':request}).data, status=200)
     
-    @action(['patch'], detail=True)
+    @action(['post'], detail=True)
     def ask_confirmation(self, request, *args, **kwargs):
         order, data = self.update_order(request, *args, **kwargs)
         self.check_form_fields(data, order)
@@ -89,7 +89,7 @@ class OrderViewSet(viewsets.ModelViewSet):
             Tour.objects.filter(pk=order.tour_id).update(vacants_number=F('vacants_number')-order.travelers_number)
         return order
     
-    @action(['patch'], detail=True)
+    @action(['post'], detail=True)
     def book(self, request, *args, **kwargs):
         self.perform_book(request, *args, **kwargs)
         return HttpResponsePermanentRedirect('https://www.tinkoff.ru/invest/open-api/')
