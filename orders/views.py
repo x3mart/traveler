@@ -12,7 +12,7 @@ from orders.mixins import OrderMixin
 
 from orders.models import Order, Traveler
 from orders.permissions import OrderPermission
-from orders.serializers import OrderListSerializer, OrderSerializer
+from orders.serializers import OrderForExpertSerializer, OrderListSerializer, OrderSerializer
 from tours.models import Tour
 
 
@@ -38,6 +38,8 @@ class OrderViewSet(viewsets.ModelViewSet, OrderMixin):
     def get_serializer_class(self):
         if self.action == 'list':
             return OrderListSerializer
+        if hasattr(self.request.user, 'expert'):
+            return OrderForExpertSerializer
         return super().get_serializer_class()
     
 
@@ -65,7 +67,7 @@ class OrderViewSet(viewsets.ModelViewSet, OrderMixin):
     def retrieve(self, request, *args, **kwargs):
         order = self.get_object()
         order.tour_dates = self.get_tour_dates(order.tour)
-        return Response(OrderSerializer(order, many=False, context={'request':request}).data, status=200)
+        return Response(self.get_serializer(data=order, many=False).data, status=200)
     
     @action(['patch'], detail=True)
     def ask_confirmation(self, request, *args, **kwargs):

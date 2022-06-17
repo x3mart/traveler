@@ -99,7 +99,10 @@ class OrderSerializer(serializers.ModelSerializer):
         if order.status == 'pending_confirmation':
             return [{'action': 'aprove/', 'title': 'Подтвердить', 'color':'button-success', 'confirmation':False}, {'action':'decline/', 'title': 'Отказать', 'confirmation':True}]
         return None
-
+    
+class OrderForExpertSerializer(OrderSerializer):
+    class Meta(OrderSerializer.Meta):
+        exclude = ('phone', )
 
 class OrderListSerializer(serializers.ModelSerializer):
     expert = ExpertShortSerializer(many=False, read_only=True, required=False)
