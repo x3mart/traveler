@@ -56,13 +56,13 @@ class OrderViewSet(viewsets.ModelViewSet, OrderMixin):
         Traveler.objects.bulk_create(travelers)
         order.refresh_from_db()
         order.tour_dates = self.get_tour_dates(order.tour)
-        return Response(OrderSerializer(order, many=False, context={'request':request}).data, status=201)
+        return Response(self.get_serializer(order).data, status=201)
     
     def update(self, request, *args, **kwargs):
         order, data = self.update_order(request, *args, **kwargs)
         order.refresh_from_db()
         order.tour_dates = self.get_tour_dates(order.tour)
-        return Response(OrderSerializer(order, many=False, context={'request':request}).data, status=200)
+        return Response(self.get_serializer(order).data, status=200)
     
     def retrieve(self, request, *args, **kwargs):
         order = self.get_object()
@@ -101,7 +101,7 @@ class OrderViewSet(viewsets.ModelViewSet, OrderMixin):
     @action(['patch'], detail=True)
     def aprove_from_list(self, request, *args, **kwargs):
         order = self.perform_aprove(request, *args, **kwargs)
-        return Response(OrderListSerializer(order, many=False, context={'request':request}).data, status=200)
+        return Response(self.get_serializer(order).data, status=200)
     
     @action(['patch'], detail=True)
     def aprove(self, request, *args, **kwargs):
@@ -111,7 +111,7 @@ class OrderViewSet(viewsets.ModelViewSet, OrderMixin):
     @action(['patch'], detail=True)
     def decline_from_list(self, request, *args, **kwargs):
         order = self.perform_decline(request, *args, **kwargs)
-        return Response(OrderListSerializer(order, many=False, context={'request':request}).data, status=200)
+        return Response(self.get_serializer(order).data, status=200)
     
     @action(['patch'], detail=True)
     def decline(self, request, *args, **kwargs):
@@ -121,7 +121,7 @@ class OrderViewSet(viewsets.ModelViewSet, OrderMixin):
     @action(['patch'], detail=True)
     def cancel_from_list(self, request, *args, **kwargs):
         order = self.perform_cancel(self, request, *args, **kwargs)
-        return Response(OrderListSerializer(order, many=False, context={'request':request}).data, status=200)
+        return Response(self.get_serializer(order).data, status=200)
     
     @action(['patch'], detail=True)
     def cancel(self, request, *args, **kwargs):
