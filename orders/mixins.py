@@ -3,6 +3,7 @@ from tours.models import Tour
 from utils.prices import get_tour_discounted_price
 from django.db.models import F, Q
 import math
+from datetime import datetime
 from rest_framework.serializers import ValidationError
 from orders.models import Order, Traveler
 
