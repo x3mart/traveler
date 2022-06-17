@@ -87,7 +87,7 @@ class OrderSerializer(serializers.ModelSerializer):
         if order.status == 'new' and order.tour.instant_booking:
             return [{'action':'book/', 'title': 'Забронировать', 'color':'button-success', 'confirmation':False}]
         if order.status == 'pending_confirmation':
-            return [{'action':'remove/', 'title': 'Отменить', 'color':'button-danger', 'confirmation':True}]
+            return [{'action':'remove/', 'title': 'Удалить', 'color':'button-danger', 'confirmation':True}]
         if order.status == 'pending_prepayment':
             return [{'action': 'book/', 'title': 'Забронировать', 'color':'button-success', 'confirmation':False}, {'action':'cancel/', 'title': 'Отменить', 'color':'button-danger', 'confirmation':True}]
         if order.status == 'prepayment':
@@ -122,20 +122,17 @@ class OrderListSerializer(serializers.ModelSerializer):
         if hasattr(user, 'customer'):
             return self.get_list_actions_for_customer(order)
 
-        
-    
     def get_list_actions_for_customer(self, order):
         if order.status == 'new':
-            return [{'action':'remove_from_list/', 'title': 'Отменить', 'color':'#404040', 'confirmation':True}]
+            return [{'action':'remove_from_list/', 'title': 'Удалить', 'color':'#404040', 'confirmation':True}]
         if order.status == 'pending_confirmation':
-            return [{'action':'remove_from_list/', 'title': 'Отменить', 'color':'#404040', 'confirmation':True}]
+            return [{'action':'remove_from_list/', 'title': 'Удалить', 'color':'#404040', 'confirmation':True}]
         if order.status == 'pending_prepayment':
             return [{'action': 'book_from_list/', 'title': 'Забронировать', 'color':'#2aa2d6', 'confirmation':False}, {'action':'cancel_from_list/', 'title': 'Отменить', 'color':'#404040', 'confirmation':True}]
         if order.status == 'prepayment':
             return [{'action': 'fullpayment_from_list/', 'title': 'Оплатить все', 'color':'#2aa2d6', 'confirmation':False}, {'action':'cancel_from_list/', 'title': 'Отменить', 'color':'#404040', 'confirmation':True}]
         return None
         
-    
     def get_list_actions_for_expert(self, order):
         if order.status == 'pending_confirmation':
             return [{'action': 'aprove_from_list/', 'title': 'Подтвердить', 'color':'#2aa2d6', 'confirmation':False}, {'action':'decline_from_list/', 'title': 'Отказать', 'color':'#404040', 'confirmation':True}]

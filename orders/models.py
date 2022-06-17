@@ -14,7 +14,6 @@ class Order(models.Model):
         CANCELLED_BY_CUSTOMER = 'cancelled_by_customer', _('Отменен покупателем')
         CANCELLED_BY_EXPERT = 'cancelled_by_expert', _('Отменен экспертом')
         DECLINED = 'declined', _('Отказ в бронировании')
-        FORM_COMPLETED = 'form_completed', _('Форма заполнена')
         PENDING_CONFIRMATION = 'pending_confirmation', _('Ожидает подтверждения')
         PENDING_PREPAYMENT = 'pending_prepayment', _('Ожидает предоплаты')
         PREPAYMENT_OVERDUE = 'prepayment_overdue', _('Предоплата просрочена')

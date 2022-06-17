@@ -11,6 +11,7 @@ import math
 from datetime import datetime
 from django.db.models import F, Q
 from django.utils.translation import gettext_lazy as _
+from orders.filters import OrderFilter
 
 from orders.models import Order, Traveler
 from orders.permissions import OrderPermission
@@ -26,14 +27,16 @@ class OrderViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.OrderingFilter, DjangoFilterBackend]
     ordering_fields = ['created_at', 'id', 'status']
     ordering = ['-start_date']
-    # filterset_class = TourFilter
+    filterset_class = OrderFilter
 
     def get_queryset(self):
         qs = super().get_queryset()
         if hasattr(self.request.user, 'customer'):
             return qs.filter(customer_id=self.request.user.id)
         if hasattr(self.request.user, 'expert'):
-            return qs.filter(expert_id=self.request.user.id)
+            return qs.filter(expert_id=self.request.user.id).exclude(status__in=['new'])
+        if self.request.user.is_staff:
+            return qs
     
     def get_serializer_class(self):
         if self.action == 'list':
