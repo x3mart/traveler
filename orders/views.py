@@ -23,7 +23,7 @@ from utils.prices import get_tour_discounted_price
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.prefetch_related('tour', 'expert', 'customer', 'travelers')
     serializer_class = OrderSerializer
-    permission_classes = [OrderPermission]
+    # permission_classes = [OrderPermission]
     filter_backends = [filters.OrderingFilter, DjangoFilterBackend]
     ordering_fields = ['created_at', 'id', 'status']
     ordering = ['-start_date']
@@ -31,11 +31,11 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         qs = super().get_queryset()
-        if hasattr(self.request.user, 'customer'):
-            return qs.filter(customer_id=self.request.user.id)
-        if hasattr(self.request.user, 'expert'):
-            return qs.filter(expert_id=self.request.user.id).exclude(status__in=['new'])
-        if self.request.user.is_staff:
+        # if hasattr(self.request.user, 'customer'):
+        #     return qs.filter(customer_id=self.request.user.id)
+        # if hasattr(self.request.user, 'expert'):
+        #     return qs.filter(expert_id=self.request.user.id).exclude(status__in=['new'])
+        # if self.request.user.is_staff:
             return qs
     
     def get_serializer_class(self):
