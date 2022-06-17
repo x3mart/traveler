@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect
 from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
 import threading
@@ -88,7 +88,7 @@ class OrderViewSet(viewsets.ModelViewSet):
     @action(['post'], detail=True)
     def book(self, request, *args, **kwargs):
         self.perform_book(request, *args, **kwargs)
-        return HttpResponseRedirect('https://traveler.market/account/orders')
+        return HttpResponsePermanentRedirect('https://traveler.market/account/orders')
     
     @action(['post'], detail=True)
     def book_from_list(self, request, *args, **kwargs):
