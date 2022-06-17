@@ -77,7 +77,8 @@ class OrderViewSet(viewsets.ModelViewSet):
         order.status = 'pending_confirmation'
         order.save()
         Tour.objects.filter(pk=order.tour_id).update(vacants_number=F('vacants_number')-order.travelers_number)
-        return Response({'redirect_url':'https://traveler.market/account/orders'}, status=200)
+        return HttpResponsePermanentRedirect('https://www.tinkoff.ru/invest/open-api/')
+        # return Response({'redirect_url':'https://traveler.market/account/orders'}, status=200)
     
     def perform_book(self, request, *args, **kwargs):
         order, data = self.update_order(request, *args, **kwargs)
@@ -91,7 +92,8 @@ class OrderViewSet(viewsets.ModelViewSet):
     @action(['patch'], detail=True)
     def book(self, request, *args, **kwargs):
         self.perform_book(request, *args, **kwargs)
-        return Response({'redirect_url':'https://www.tinkoff.ru/invest/open-api/'}, status=200)
+        return HttpResponsePermanentRedirect('https://www.tinkoff.ru/invest/open-api/')
+        # return Response({'redirect_url':'https://www.tinkoff.ru/invest/open-api/'}, status=200)
     
     @action(['patch'], detail=True)
     def book_from_list(self, request, *args, **kwargs):
