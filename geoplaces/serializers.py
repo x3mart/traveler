@@ -35,7 +35,7 @@ class CountryRegionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class CountryShortRegionSerializer(serializers.ModelSerializer):
+class CountryRegionShortSerializer(serializers.ModelSerializer):
     class Meta:
         model = CountryRegion
         fields = ['id', 'name']
@@ -48,6 +48,13 @@ class CountrySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class CountryShortSerializer(serializers.ModelSerializer):
+    country_regions = CountryRegionShortSerializer(many=True)
+    class Meta:
+        model = Country
+        fields = ['id', 'name', 'country_regions']
+
+
 class RegionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Region
@@ -55,7 +62,7 @@ class RegionSerializer(serializers.ModelSerializer):
 
 
 class RegionShortSerializer(serializers.ModelSerializer):
-    countries = CountryShortRegionSerializer(many=True)
+    countries = CountryShortSerializer(many=True)
     class Meta:
         model = Region
         fields = ('id', 'name', 'countries')

@@ -17,7 +17,7 @@ from django.template.loader import render_to_string
 import threading
 from django.core.mail import send_mail
 from currencies.models import Currency
-from geoplaces.models import Region
+from geoplaces.models import Country, CountryRegion, Region
 from geoplaces.serializers import RegionShortSerializer
 from tours.filters import TourFilter
 from tours.mixins import TourMixin
@@ -255,9 +255,13 @@ class ActiveRegions(APIView):
     def get(self, request, format=None):
         tour_basic = TourBasic.objects.prefetch_related('expert')
         prefetch_tour_basic = Prefetch('tour_basic', tour_basic)
-        qs = Tour.objects.prefetch_related(prefetch_tour_basic, 'start_country', 'start_city', 'wallpaper', 'currency').only('id', 'name', 'start_date', 'start_country', 'start_city', 'price', 'discount', 'duration', 'tour_basic', 'wallpaper', 'vacants_number', 'currency').filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start')))
+        tours = Tour.objects.prefetch_related(prefetch_tour_basic, 'start_country', 'start_city', 'wallpaper', 'currency').only('id', 'name', 'start_date', 'start_country', 'start_city', 'price', 'discount', 'duration', 'tour_basic', 'wallpaper', 'vacants_number', 'currency').filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start')))
         # regions = Region.objects.filter(tours__in=qs).order_by('name').values('name', 'id').distinct()
-        regions = Region.objects.prefetch_related('countries')
+        country_regions = CountryRegion.objects.filter(tours_by_start_russian_region__in=tours)
+        prefethed_country_regions = Prefetch('country_regions', country_regions)
+        countries = Country.objects.prefetch_related(prefethed_country_regions).filter(tours_by_start_country__in=tours)
+        prefethed_countries = Prefetch('countries', countries)
+        regions = Region.objects.prefetch_related(prefethed_countries)
         return Response(RegionShortSerializer(regions, many=True).data, status=200)
 
 class ActiveCountryRegions(APIView):
