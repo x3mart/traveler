@@ -55,6 +55,7 @@ class RegionSerializer(serializers.ModelSerializer):
 
 
 class RegionShortSerializer(serializers.ModelSerializer):
+    countries = CountryShortRegionSerializer(many=True)
     class Meta:
         model = Region
-        fields = ('id', 'name')
+        fields = ('id', 'name', 'countries')

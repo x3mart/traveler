@@ -258,7 +258,7 @@ class ActiveRegions(APIView):
         qs = Tour.objects.prefetch_related(prefetch_tour_basic, 'start_country', 'start_city', 'wallpaper', 'currency').only('id', 'name', 'start_date', 'start_country', 'start_city', 'price', 'discount', 'duration', 'tour_basic', 'wallpaper', 'vacants_number', 'currency').filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start')))
         # regions = Region.objects.filter(tours__in=qs).order_by('name').values('name', 'id').distinct()
         regions = Region.objects.prefetch_related('countries')
-        return Response(RegionShortSerializer(regions, many=True), status=200)
+        return Response(RegionShortSerializer(regions, many=True).data, status=200)
 
 class ActiveCountryRegions(APIView):
     def get(self, request, format=None):
@@ -266,4 +266,4 @@ class ActiveCountryRegions(APIView):
         prefetch_tour_basic = Prefetch('tour_basic', tour_basic)
         qs = Tour.objects.prefetch_related(prefetch_tour_basic, 'start_country', 'start_city', 'wallpaper', 'currency').only('id', 'name', 'start_date', 'start_country', 'start_city', 'price', 'discount', 'duration', 'tour_basic', 'wallpaper', 'vacants_number', 'currency').filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start')))
         regions = Region.objects.filter(tours__in=qs).order_by('name').values('name', 'id').distinct()
-        return Response(RegionShortSerializer(regions, many=True), status=200)
+        return Response(RegionShortSerializer(regions, many=True).data, status=200)
