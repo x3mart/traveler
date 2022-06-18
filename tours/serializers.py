@@ -211,3 +211,4 @@ class TourSetSerializer(serializers.ModelSerializer, TourSerializerMixin):
 
 class FilterSerializer(serializers.Serializer):
     tour_types = TourTypeShortSerializer(many=True)
+    languages = LanguageSerializer(many=True)

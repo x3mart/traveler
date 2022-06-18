@@ -22,7 +22,8 @@ from tours.mixins import TourMixin
 from utils.constants import NOT_MODERATED_FIELDS
 from tours.models import DeclineReason, Tour, TourAccomodation, TourBasic, TourDayImage, TourGuestGuideImage, TourImage, TourPlanImage, TourPropertyImage, TourPropertyType, TourType, TourWallpaper
 from tours.permissions import TourPermission
-from tours.serializers import FilterSerializer, ImageSerializer, TourAccomodationSerializer, TourListSerializer, TourPreviewSerializer, TourPropertyTypeSerializer, TourSerializer, TourTypeSerializer, TourTypeShortSerializer, WallpaperSerializer, TourSetSerializer
+from tours.serializers import FilterSerializer, ImageSerializer, TourAccomodationSerializer, TourListSerializer, TourPreviewSerializer, TourPropertyTypeSerializer, TourSerializer, TourTypeSerializer, WallpaperSerializer, TourSetSerializer
+from languages.models import Language
 
 
 class ModerationResultEmailThread(threading.Thread):
@@ -236,5 +237,11 @@ class FilterView(APIView):
         prefetch_tour_basic = Prefetch('tour_basic', tour_basic)
         qs = Tour.objects.prefetch_related(prefetch_tour_basic, 'start_country', 'start_city', 'wallpaper', 'currency').only('id', 'name', 'start_date', 'start_country', 'start_city', 'price', 'discount', 'duration', 'tour_basic', 'wallpaper', 'vacants_number', 'currency').filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start')))
         tour_ids = qs.values_list('id', flat=True)
-        tour_types = TourType.objects.filter(Q(tours_by_basic_type__in=qs) | Q(tours_by_additional_types__in=qs)).order_by('name').values('name', 'id').distinct()      
-        return Response(FilterSerializer({'tour_types':tour_types}).data, status=200)
+        tour_types = TourType.objects.filter(tours__in=qs).order_by('name').values('name', 'id').distinct()      
+        languages = Language.objects.filter(Q(tours_by_basic_type__in=qs) | Q(tours_by_additional_types__in=qs)).order_by('name').values('name', 'id').distinct()
+
+        filter_data = {
+            'tour_types':tour_types,
+            'languages':languages
+        }      
+        return Response(FilterSerializer(filter_data).data, status=200)
