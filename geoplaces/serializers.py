@@ -9,6 +9,12 @@ class CitySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class CityShortSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = City
+        fields = '__all__'
+
+
 class CityFullNameSerializer(serializers.ModelSerializer):
     full_name = serializers.SerializerMethodField(read_only=True)
     # distance = serializers.FloatField(read_only=True)
@@ -29,6 +35,13 @@ class CountryRegionSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class CountryShortRegionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CountryRegion
+        fields = ['id', 'name']
+
+
+
 class CountrySerializer(serializers.ModelSerializer):
     class Meta:
         model = Country
@@ -39,3 +52,9 @@ class RegionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Region
         fields = '__all__'
+
+
+class RegionShortSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Region
+        fields = ('id', 'name')
