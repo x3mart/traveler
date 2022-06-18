@@ -235,7 +235,8 @@ class FilterView(APIView):
         tour_basic = TourBasic.objects.prefetch_related('expert')
         prefetch_tour_basic = Prefetch('tour_basic', tour_basic)
         qs = Tour.objects.prefetch_related(prefetch_tour_basic, 'start_country', 'start_city', 'wallpaper', 'currency').only('id', 'name', 'start_date', 'start_country', 'start_city', 'price', 'discount', 'duration', 'tour_basic', 'wallpaper', 'vacants_number', 'currency').filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start')))
-        types_basic = qs.values_list('basic_type__name', flat=True).distinct()
-        additional_types = qs.values_list('additional_types__name', flat=True).distinct()
-        tour_types = set(list(types_basic) + list(additional_types))
-        return Response(list(list(tour_types)), status=200)
+        types_basic = qs.values('basic_type__name', 'basic_type__id').distinct()
+        additional_types = qs.values('additional_types__name', 'additional_types__name').distinct()
+        tour_types = set(dict(types_basic) + dict(additional_types))
+        
+        return Response(list(tour_types), status=200)
