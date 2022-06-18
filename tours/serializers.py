@@ -210,4 +210,4 @@ class TourSetSerializer(serializers.ModelSerializer, TourSerializerMixin):
 
 
 class FilterSerializer(serializers.Serializer):
-    tour_type = TourTypeShortSerializer(many=True)
+    tour_types = TourTypeShortSerializer(many=True)
