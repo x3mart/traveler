@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect
 from rest_framework.decorators import action
 from django.db.models.query import Prefetch
 from rest_framework import viewsets
+from rest_framework.views import APIView
 from rest_framework import filters
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
@@ -228,3 +229,11 @@ class TourPropertyTypeViewSet(viewsets.ReadOnlyModelViewSet):
 class TourAccomodationTypeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = TourAccomodation.objects.all()
     serializer_class = TourAccomodationSerializer
+
+class FilterView(APIView):
+    def get(self, request, format=None):
+        tour_basic = TourBasic.objects.prefetch_related('expert')
+        prefetch_tour_basic = Prefetch('tour_basic', tour_basic)
+        qs = Tour.objects.prefetch_related(prefetch_tour_basic, 'start_country', 'start_city', 'wallpaper', 'currency').only('id', 'name', 'start_date', 'start_country', 'start_city', 'price', 'discount', 'duration', 'tour_basic', 'wallpaper', 'vacants_number', 'currency').filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start')))
+        tour_types = qs.values_list('basic_type', 'additional_types',flat=True).distinct()
+        return Response(tour_types, status=200)
