@@ -238,4 +238,4 @@ class FilterView(APIView):
         types_basic = qs.values_list('basic_type__name', flat=True).distinct()
         additional_types = qs.values_list('additional_types__name', flat=True).distinct()
         tour_types = set(list(types_basic) + list(additional_types))
-        return Response(list(tour_types).sort(), status=200)
+        return Response(list(list(tour_types)), status=200)
