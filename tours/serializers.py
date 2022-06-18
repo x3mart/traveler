@@ -206,3 +206,8 @@ class TourSetSerializer(serializers.ModelSerializer, TourSerializerMixin):
         if obj.wallpaper: 
             return get_tmb_image_uri(self, obj.wallpaper)
         return None
+
+
+
+class FilterSerializer(serializers.Serializer):
+    tour_type = TourTypeShortSerializer(many=True)
