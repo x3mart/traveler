@@ -240,7 +240,7 @@ class FilterView(APIView):
         tour_types = TourType.objects.filter(Q(tours_by_basic_type__in=qs) | Q(tours_by_additional_types__in=qs)).order_by('name').values('name', 'id').distinct()      
         languages = Language.objects.filter(tours__in=qs).order_by('name').values('name', 'id').distinct()
         property_type = TourPropertyType.objects.filter(tours__in=qs).order_by('name').values('name', 'id').distinct()
-        accomodation = TourAccomodation.filter(tours__in=qs).order_by('name').values('name', 'id').distinct()
+        accomodation = TourAccomodation.objects.filter(tours__in=qs).order_by('name').values('name', 'id').distinct()
 
         filter_data = {
             'tour_types':tour_types,
