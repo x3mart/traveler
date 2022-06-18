@@ -261,7 +261,7 @@ class ActiveRegions(APIView):
         prefethed_country_regions = Prefetch('country_regions', country_regions)
         countries = Country.objects.prefetch_related(prefethed_country_regions).filter(tours_by_start_country__in=tours).distinct()
         prefethed_countries = Prefetch('countries', countries)
-        regions = Region.objects.prefetch_related(prefethed_countries)
+        regions = Region.objects.prefetch_related(prefethed_countries).filter(tours_by_start_region__in=tours).distinct()
         return Response(RegionShortSerializer(regions, many=True).data, status=200)
 
 class ActiveCountryRegions(APIView):
