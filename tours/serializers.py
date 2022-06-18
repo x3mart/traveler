@@ -33,10 +33,22 @@ class TourPropertyTypeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class TourPropertyTypeShortSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TourPropertyType
+        fields = ['id', 'name']
+
+
 class TourAccomodationSerializer(serializers.ModelSerializer):
     class Meta:
         model = TourAccomodation
         fields = '__all__'
+
+
+class TourAccomodationShortSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TourAccomodation
+        fields = ['id', 'name']
 
 
 class TourTypeSerializer(serializers.ModelSerializer):
@@ -212,3 +224,5 @@ class TourSetSerializer(serializers.ModelSerializer, TourSerializerMixin):
 class FilterSerializer(serializers.Serializer):
     tour_types = TourTypeShortSerializer(many=True)
     languages = LanguageSerializer(many=True)
+    property_type =TourPropertyTypeShortSerializer(many=True)
+    accomodation = TourAccomodationShortSerializer(many=True)
