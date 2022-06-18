@@ -44,6 +44,11 @@ class TourTypeSerializer(serializers.ModelSerializer):
         model = TourType
         fields = '__all__'
 
+class TourTypeShortSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TourType
+        fields = ('id', 'name')
+
 
 class ImportantSerializer(serializers.ModelSerializer):
     class Meta:
