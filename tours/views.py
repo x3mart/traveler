@@ -238,8 +238,8 @@ class FilterView(APIView):
         types_basic = qs.values('basic_type__name', 'basic_type__id').distinct()
         additional_types = qs.values('additional_types__name', 'additional_types__name').distinct()
         print(dict(types_basic))
-        print(dict(additional_types))
+        # print(dict(additional_types))
         tour_types = {}
-        set(dict(types_basic).update(additional_type) for additional_type in dict(additional_types))
+        # set(dict(types_basic).update(additional_type) for additional_type in dict(additional_types))
         
         return Response(list(tour_types), status=200)
