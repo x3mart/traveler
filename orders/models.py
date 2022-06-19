@@ -34,6 +34,7 @@ class Order(models.Model):
     book_cost = models.PositiveIntegerField(_('Полная стоимость бронирования тура'), null=True, blank=True)
     postpay = models.PositiveIntegerField(_('Размер постоплаты за место'), null=True, blank=True)
     full_postpay = models.PositiveIntegerField(_('Полный размер постоплаты'), null=True, blank=True)
+    prepay_final_date = models.DateField(_('Дата предоплаты'), null=True, blank=True)
     postpay_final_date = models.DateField(_('Дата постоплаты'), null=True, blank=True)
     status = models.CharField(_('Статус'), max_length=25, choices=OrderStatus.choices, default=OrderStatus.NEW_ORDER)
     difficulty_level = models.PositiveIntegerField(_('Уровень сложности'), null=True, blank=True)

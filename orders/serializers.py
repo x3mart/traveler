@@ -110,8 +110,8 @@ class OrderListSerializer(serializers.ModelSerializer):
     start_date = DateWithVerboseMonth(read_only=True)
     finish_date = DateWithVerboseMonth(read_only=True)
     postpay_final_date = DateWithVerboseMonth(read_only=True)
-    status = serializers.CharField(read_only=True, source='get_status_display')
-    travelers = travelers = TravelerSerializer(many=True, read_only=True)
+    status = serializers.SerializerMethodField(read_only=True)
+    travelers = TravelerSerializer(many=True, read_only=True)
     actions = serializers.SerializerMethodField(read_only=True)
     
     class Meta:
@@ -140,3 +140,11 @@ class OrderListSerializer(serializers.ModelSerializer):
         if order.status == 'pending_confirmation':
             return [{'action': 'aprove_from_list/', 'title': 'Подтвердить', 'color':'#2aa2d6', 'confirmation':False}, {'action':'decline_from_list/', 'title': 'Отказать', 'color':'#404040', 'confirmation':True}]
         return None
+
+    def get_status(self, order):
+        if hasattr(self.context['request'].user, 'expert') or order in ['new', 'cancelled_by_customer', 'cancelled_by_expert', 'pending_confirmation', 'prepayment_overdue', 'fullpayment']:
+            return order.status.get_status_display()
+        if order.status == 'pending_prepayment':
+            return f'{order.status.get_status_display()} {order.book_price}{order.currency} до {order.prepay_final_date.strftime("%d %B %Y") if order.prepay_final_date else ""}'
+        if order.status == 'prepayment':
+            return f'{order.status.get_status_display()} постоплата {order.book_price}{order.currency}' + f' до {order.prepay_final_date.strftime("%d %B %Y")}' if order.postpay_final_date != order.start.date else 'в день старта'

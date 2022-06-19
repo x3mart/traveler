@@ -4,7 +4,7 @@ from utils.prices import get_tour_discounted_price
 from django.db.models import F, Q
 import math
 from django.utils.translation import gettext_lazy as _
-from datetime import datetime
+from datetime import datetime, timedelta
 from rest_framework.serializers import ValidationError
 from orders.models import Order, Traveler
 
@@ -27,6 +27,7 @@ class OrderMixin():
     def perform_aprove(self, request, *args, **kwargs):
         order = self.get_object()
         order.status = 'pending_prepayment'
+        order.prepay_final_date = datetime.today() + timedelta(days=3)
         order.save()  
         return order
     
@@ -80,6 +81,7 @@ class OrderMixin():
             'start_date': tour.start_date,
             'finish_date': tour.finish_date,
             'duration': tour.duration,
+            'prepay_final_date':None,
             'postpay_final_date': (tour.start_date - tour.postpay_days_before_start),
             'price': get_tour_discounted_price(tour) if get_tour_discounted_price(tour) else tour.price,
             'book_price': math.ceil(tour.price*tour.prepay_amount/100) if tour.prepay_in_prc else tour.prepay_amount,
