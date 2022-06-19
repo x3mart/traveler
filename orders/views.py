@@ -120,12 +120,12 @@ class OrderViewSet(viewsets.ModelViewSet, OrderMixin):
 
     @action(['patch'], detail=True)
     def cancel_from_list(self, request, *args, **kwargs):
-        order = self.perform_cancel(self, request, *args, **kwargs)
+        order = self.perform_cancel(request, *args, **kwargs)
         return Response(self.get_serializer(order).data, status=200)
     
     @action(['patch'], detail=True)
     def cancel(self, request, *args, **kwargs):
-        self.perform_cancel(self, request, *args, **kwargs)
+        self.perform_cancel(request, *args, **kwargs)
         return Response({'redirect_url':'https://traveler.market/account/orders'}, status=200)
     
     @action(['get'], detail=False)
