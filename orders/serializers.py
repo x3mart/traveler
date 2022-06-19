@@ -142,9 +142,9 @@ class OrderListSerializer(serializers.ModelSerializer):
         return None
 
     def get_status(self, order):
-        if hasattr(self.context['request'].user, 'expert') or order in ['new', 'cancelled_by_customer', 'cancelled_by_expert', 'pending_confirmation', 'prepayment_overdue', 'fullpayment']:
+        if hasattr(self.context['request'].user, 'expert') or order.status in ['new', 'cancelled_by_customer', 'cancelled_by_expert', 'pending_confirmation', 'prepayment_overdue', 'fullpayment']:
             return order.get_status_display()
         if order.status == 'pending_prepayment':
             return f'{order.get_status_display()} {order.book_price}{order.currency} до {order.prepay_final_date.strftime("%d %B %Y") if order.prepay_final_date else ""}'
         if order.status == 'prepayment':
-            return f'{order.get_status_display()} постоплата {order.book_price}{order.currency}' + f' до {order.postpay_final_date.strftime("%d %B %Y")}' if order.postpay_final_date != order.start_date else 'в день старта'
+            return f'{order.get_status_display()}. Постоплата {order.book_price}{order.currency}' + f' до {order.postpay_final_date.strftime("%d %B %Y")}' if order.postpay_final_date != order.start_date else 'в день старта'
