@@ -358,7 +358,7 @@ class CustomerViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         is_staff = self.request.auth and self.request.user.is_staff
-        if self.action in ['me', 'create', 'update', 'partial_update'] or (is_staff and self.action != 'list'):
+        if self.action in ['me', 'update', 'partial_update'] or (is_staff and self.action != 'list'):
             return CustomerMeSerializer
         return CustomerSerializer
     
