@@ -15,11 +15,12 @@ class OrderResultsSetPagination(PageNumberPagination):
                 'previous': self.get_previous_link()
             },
             'count': self.page.paginator.count,
-            'results': data
+            'results': data,
+            'status_list': self.status_list()
         })
     
-    def status_list(self, request):
-        if hasattr(self.request.user, 'customer') or request.user.is_staff:
+    def status_list(self):
+        if hasattr(self.request.user, 'customer') or self.request.user.is_staff:
             return [{'status':choice[0], 'title':choice[1]} for choice in Order.OrderStatus.choices]
         if hasattr(self.request.user, 'expert'):
             return [{'status':choice[0], 'title':choice[1]} for choice in Order.OrderStatus.choices if choice[0] not in ['new']]
