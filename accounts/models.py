@@ -56,6 +56,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     registration_date = models.DateField(_('Дата регистрации'), auto_now_add=True, null=True, blank=True,)
     last_visit = models.DateTimeField(_('Последнее посещение'), default=timezone.now)
     phone = PhoneNumberField(_('Телефон'), null=True, blank=True, )
+    referals_score = models.PositiveIntegerField(_('Реферальные баллы'), default=0)
 
     objects = AccountManager()
 

@@ -14,6 +14,7 @@ import django.contrib.auth.password_validation as validators
 from django.core import exceptions
 from utils.images import get_tmb_image_uri
 from djoser.serializers import UidAndTokenSerializer
+from djoser import utils
 
 
 
@@ -180,10 +181,11 @@ class ExpertMeSerializer(serializers.ModelSerializer):
     debet_card = DebetCardSerializer(many=False, read_only=True)
     bank_transaction = BankTransactionSerializer(many=False, read_only=True)
     verifications = VerificationRequestlSerializer(many=False, read_only=True)
+    referal_link = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Expert
-        fields = ('id', 'password', 'email', 'first_name', 'last_name', 'avatar', 'phone', 'tmb_avatar', 'country', 'city', 'languages', 'visited_countries', 'about', 'email_confirmed', 'phone_confirmed', 'docs_confirmed', 'status_confirmed', 'rating', 'tours_count', 'tours_rating', 'reviews_count', 'tour_reviews_count', 'video', 'commission', 'verifications', 'debet_card', 'bank_transaction', 'preferred_payment_method')
+        fields = ('id', 'password', 'email', 'first_name', 'last_name', 'avatar', 'phone', 'tmb_avatar', 'country', 'city', 'languages', 'visited_countries', 'about', 'email_confirmed', 'phone_confirmed', 'docs_confirmed', 'status_confirmed', 'rating', 'tours_count', 'tours_rating', 'reviews_count', 'tour_reviews_count', 'video', 'commission', 'verifications', 'debet_card', 'bank_transaction', 'preferred_payment_method', 'referal_link')
         extra_kwargs = {
             'password': {'write_only': True, 'required': False,},
             'avatar': {'read_only': True, 'required': False,},
@@ -201,6 +203,9 @@ class ExpertMeSerializer(serializers.ModelSerializer):
             instance.set_password(password)
             instance.save()    
         return super().update(instance, validated_data)
+        
+    def get_tmb_avatar(self, obj): 
+        return get_tmb_image_uri(self, obj)
 
 class AvatarSerializer(serializers.Serializer):
     tmb_avatar = serializers.SerializerMethodField(read_only=True)
@@ -211,9 +216,10 @@ class AvatarSerializer(serializers.Serializer):
 
 
 class CustomerMeSerializer(serializers.ModelSerializer):
+    referal_link = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Customer
-        fields = ('id', 'first_name', 'last_name', 'email', 'password', 'avatar', 'phone',)
+        fields = ('id', 'first_name', 'last_name', 'email', 'password', 'avatar', 'phone', 'referal_link')
         extra_kwargs = {
             'password': {'write_only': True, 'required': False,},
             'avatar': {'read_only': True, 'required': False,},
@@ -243,6 +249,9 @@ class CustomerMeSerializer(serializers.ModelSerializer):
             instance.save()  
         user = super().update(instance, validated_data)
         return user
+    
+    def get_referal_link(self, obj):
+        return  utils.encode_uid(obj.id)
 
 class CustomerSerializer(serializers.ModelSerializer):
     tmb_avatar = serializers.SerializerMethodField(read_only=True)
@@ -253,6 +262,3 @@ class CustomerSerializer(serializers.ModelSerializer):
             'password': {'write_only': True, 'required': False,},
             'email': {'write_only': True, 'required': True,}
         }
-    
-    def get_tmb_avatar(self, obj): 
-        return get_tmb_image_uri(self, obj)
