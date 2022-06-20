@@ -181,11 +181,11 @@ class ExpertMeSerializer(serializers.ModelSerializer):
     debet_card = DebetCardSerializer(many=False, read_only=True)
     bank_transaction = BankTransactionSerializer(many=False, read_only=True)
     verifications = VerificationRequestlSerializer(many=False, read_only=True)
-    referal_link = serializers.SerializerMethodField(read_only=True)
+    referral_link = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Expert
-        fields = ('id', 'password', 'email', 'first_name', 'last_name', 'avatar', 'phone', 'tmb_avatar', 'country', 'city', 'languages', 'visited_countries', 'about', 'email_confirmed', 'phone_confirmed', 'docs_confirmed', 'status_confirmed', 'rating', 'tours_count', 'tours_rating', 'reviews_count', 'tour_reviews_count', 'video', 'commission', 'verifications', 'debet_card', 'bank_transaction', 'preferred_payment_method', 'referal_link')
+        fields = ('id', 'password', 'email', 'first_name', 'last_name', 'avatar', 'phone', 'tmb_avatar', 'country', 'city', 'languages', 'visited_countries', 'about', 'email_confirmed', 'phone_confirmed', 'docs_confirmed', 'status_confirmed', 'rating', 'tours_count', 'tours_rating', 'reviews_count', 'tour_reviews_count', 'video', 'commission', 'verifications', 'debet_card', 'bank_transaction', 'preferred_payment_method', 'referral_link')
         extra_kwargs = {
             'password': {'write_only': True, 'required': False,},
             'avatar': {'read_only': True, 'required': False,},
@@ -216,10 +216,10 @@ class AvatarSerializer(serializers.Serializer):
 
 
 class CustomerMeSerializer(serializers.ModelSerializer):
-    referal_link = serializers.SerializerMethodField(read_only=True)
+    referral_link = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Customer
-        fields = ('id', 'first_name', 'last_name', 'email', 'password', 'avatar', 'phone', 'referal_link')
+        fields = ('id', 'first_name', 'last_name', 'email', 'password', 'avatar', 'phone', 'referral_link')
         extra_kwargs = {
             'password': {'write_only': True, 'required': False,},
             'avatar': {'read_only': True, 'required': False,},
@@ -250,7 +250,7 @@ class CustomerMeSerializer(serializers.ModelSerializer):
         user = super().update(instance, validated_data)
         return user
     
-    def get_referal_link(self, obj):
+    def get_referral_link(self, obj):
         return  utils.encode_uid(obj.id)
 
 class CustomerSerializer(serializers.ModelSerializer):

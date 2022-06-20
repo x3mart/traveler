@@ -176,6 +176,11 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
             return UserSerializer
         return super().get_serializer_class()
     
+    def perform_create(self, serializer):
+        if self.request.data.get('referral'):
+            pass
+        return super().perform_create(serializer)
+
     def perform_update(self, serializer):
         if self.request.data.get('languages'):
             expert = self.get_object()
