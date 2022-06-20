@@ -250,6 +250,7 @@ class CustomerSerializer(serializers.ModelSerializer):
             try:
                 beneficiary = User.objects.get(pk=utils.decode_uid(request.data.get('referral')))
                 Referral.objects.create(referral_id=customer.id, beneficiary_id=beneficiary.id)
+                Customer.objects.filter(pk=customer.id).update(referral_score=2200)
             except:
                 pass
         return customer        
