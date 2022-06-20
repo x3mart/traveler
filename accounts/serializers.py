@@ -2,6 +2,7 @@ from datetime import date
 from bankdetails.serializers import BankTransactionSerializer, DebetCardSerializer
 from dadata import Dadata
 from currencies.serializers import CurrencySerializer
+from referals.models import Referral
 from tours.models import Tour
 from traveler.settings import DADATA_API, DADATA_SECRET
 from django.utils import timezone
@@ -173,6 +174,12 @@ class ExpertSerializer(serializers.ModelSerializer):
         expert = Expert(**validated_data)
         expert.set_password(password)
         expert.save()
+        if request.data.get('referral'):
+            try:
+                beneficiary = User.objects.get(pk=utils.decode_uid(request.data.get('referral')))
+                Referral.objects.create(referral_id=expert.id, beneficiary_id=beneficiary.id)
+            except:
+                pass
         return expert
     
 class ExpertMeSerializer(serializers.ModelSerializer):
@@ -215,18 +222,18 @@ class AvatarSerializer(serializers.Serializer):
         return get_tmb_image_uri(self, obj)
 
 
-class CustomerMeSerializer(serializers.ModelSerializer):
-    referral_link = serializers.SerializerMethodField(read_only=True)
+class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
-        fields = ('id', 'first_name', 'last_name', 'email', 'password', 'avatar', 'phone', 'referral_link')
+        fields = ('id', 'first_name', 'last_name', 'email', 'password', 'avatar', 'phone')
         extra_kwargs = {
             'password': {'write_only': True, 'required': False,},
             'avatar': {'read_only': True, 'required': False,},
         }
     
     def create(self, validated_data):
-        name = self.context['request'].data.get('name')
+        request = self.context['request']
+        name = request.data.get('name')
         if not name:
             serializers.ValidationError({'name':[_('Пожалуйста представьтесь')]})
         password = check_password(self)
@@ -239,7 +246,25 @@ class CustomerMeSerializer(serializers.ModelSerializer):
         customer = Customer(**validated_data)
         customer.set_password(password)
         customer.save()
+        if request.data.get('referral'):
+            try:
+                beneficiary = User.objects.get(pk=utils.decode_uid(request.data.get('referral')))
+                Referral.objects.create(referral_id=customer.id, beneficiary_id=beneficiary.id)
+            except:
+                pass
         return customer        
+
+
+class CustomerMeSerializer(serializers.ModelSerializer):
+    referral_link = serializers.SerializerMethodField(read_only=True)
+    class Meta:
+        model = Customer
+        fields = ('id', 'first_name', 'last_name', 'email', 'password', 'avatar', 'phone', 'referral_link')
+        extra_kwargs = {
+            'password': {'write_only': True, 'required': False,},
+            'avatar': {'read_only': True, 'required': False,},
+        }
+          
  
     def update(self, instance, validated_data):
         if validated_data.get('password') is not None:            
@@ -252,13 +277,3 @@ class CustomerMeSerializer(serializers.ModelSerializer):
     
     def get_referral_link(self, obj):
         return  utils.encode_uid(obj.id)
-
-class CustomerSerializer(serializers.ModelSerializer):
-    tmb_avatar = serializers.SerializerMethodField(read_only=True)
-    class Meta:
-        model = Customer
-        fields = ('id', 'first_name', 'last_name', 'avatar', 'tmb_avatar', 'email', 'password')
-        extra_kwargs = {
-            'password': {'write_only': True, 'required': False,},
-            'email': {'write_only': True, 'required': True,}
-        }
