@@ -7,6 +7,7 @@ class OrderResultsSetPagination(PageNumberPagination):
     max_page_size = 1000
 
     def get_paginated_response(self, data):
+        print(self)
         return Response({
             'links': {
                 'next': self.get_next_link(),
@@ -15,4 +16,3 @@ class OrderResultsSetPagination(PageNumberPagination):
             'count': self.page.paginator.count,
             'results': data
         })
-        print(self)
