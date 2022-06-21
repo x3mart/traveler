@@ -86,9 +86,9 @@ class OrderViewSet(viewsets.ModelViewSet, OrderMixin):
         return Response({'redirect_url':'https://www.tinkoff.ru/invest/open-api/'}, status=200)
     
     @action(['patch'], detail=True)
-    def book_from_list(self, request, *args, **kwargs):
+    def book_from_list(self, request, *args, **kwargs): 
         order = self.perform_book(request, *args, **kwargs)
-        return Response({'redirect_url':'https://www.tinkoff.ru/invest/open-api/'}, status=200)
+        return Response(self.get_serializer(order).data, status=200)
     
     @action(['patch'], detail=True)
     def remove(self, request, *args, **kwargs):

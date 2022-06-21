@@ -11,8 +11,11 @@ from orders.models import Order, Traveler
 
 class OrderMixin():
     def perform_book(self, request, *args, **kwargs):
-        order, data = self.update_order(request, *args, **kwargs)
-        self.check_form_fields(data, order)
+        if not kwargs.get('checked'):
+            order, data = self.update_order(request, *args, **kwargs)
+            self.check_form_fields(data, order)
+        else:
+            order = self.get_object()
         order.status = 'prepayment'
         order.save()
         if order.tour.instant_booking:
