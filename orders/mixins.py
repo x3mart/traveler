@@ -10,8 +10,8 @@ from orders.models import Order, Traveler
 
 
 class OrderMixin():
-    def perform_book(self, request, *args, **kwargs):
-        if not kwargs.get('checked'):
+    def perform_book(self, request, checked=None,*args, **kwargs):
+        if checked:
             order, data = self.update_order(request, *args, **kwargs)
             self.check_form_fields(data, order)
         else:

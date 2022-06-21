@@ -87,8 +87,7 @@ class OrderViewSet(viewsets.ModelViewSet, OrderMixin):
     
     @action(['patch'], detail=True)
     def book_from_list(self, request, *args, **kwargs): 
-        kwargs['checked'] = True
-        order = self.perform_book(request, *args, **kwargs)
+        order = self.perform_book(request, checked=None, *args, **kwargs)
         return Response(self.get_serializer(order).data, status=200)
     
     @action(['patch'], detail=True)
