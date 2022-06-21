@@ -1,7 +1,8 @@
 from django_filters.filters import BaseInFilter, DurationFilter, BooleanFilter, DateFromToRangeFilter, NumberFilter
 from django_filters import rest_framework as filters
 from tours.models import Tour
-from django.db.models import Q
+from django.db.models import Q, F
+from datetime import datetime
 
 class NumberInFilter(BaseInFilter, NumberFilter):
     pass
@@ -15,7 +16,7 @@ class TourFilter(filters.FilterSet):
     types = NumberInFilter(method='types_filter', label='search_by_tour_types')
     cost_min = NumberFilter(field_name='cost', lookup_expr='gte')
     cost_max = NumberFilter(field_name='cost', lookup_expr='lte')
-    discount = BooleanFilter(field_name='discount', lookup_expr='isnull', exclude=True)
+    discount = BooleanFilter(field_name='discount')
     duration_min = NumberFilter(field_name='duration', lookup_expr='gte')
     duration_max = NumberFilter(field_name='duration', lookup_expr='lte')
     vacants_number = NumberFilter(field_name='vacants_number', lookup_expr='gte')
@@ -31,4 +32,5 @@ class TourFilter(filters.FilterSet):
         return queryset.filter(Q(basic_type__in=value) | Q(additional_types__in=value)).distinct()
     
     def discount_filter(self, queryset, name, value):
-        pass
+        queryset.filter(~Q(discount__isnull=True) and Q(discount__gt=0) and Q(discount_start_date__lte=datetime.today().date()) and Q(discount_finish_date__gte=datetime.today().date()))
+        
