@@ -16,7 +16,7 @@ class TourFilter(filters.FilterSet):
     types = NumberInFilter(method='types_filter', label='search_by_tour_types')
     cost_min = NumberFilter(field_name='cost', lookup_expr='gte')
     cost_max = NumberFilter(field_name='cost', lookup_expr='lte')
-    discount = BooleanFilter(field_name='discount')
+    discount = BooleanFilter(field_name='discount', method='discount_filter')
     duration_min = NumberFilter(field_name='duration', lookup_expr='gte')
     duration_max = NumberFilter(field_name='duration', lookup_expr='lte')
     vacants_number = NumberFilter(field_name='vacants_number', lookup_expr='gte')
