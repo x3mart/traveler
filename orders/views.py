@@ -83,10 +83,11 @@ class OrderViewSet(viewsets.ModelViewSet, OrderMixin):
     @action(['patch'], detail=True)
     def book(self, request, *args, **kwargs):
         self.perform_book(request, *args, **kwargs)
-        return Response({'redirect_url':'https://www.tinkoff.ru/invest/open-api/'}, status=200)
+        return Response({'redirect_url':'https://traveler.market/account/orders'}, status=200)
     
     @action(['patch'], detail=True)
     def book_from_list(self, request, *args, **kwargs): 
+        kwargs['checked'] = True
         order = self.perform_book(request, *args, **kwargs)
         return Response(self.get_serializer(order).data, status=200)
     
