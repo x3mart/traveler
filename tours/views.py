@@ -16,6 +16,7 @@ from rest_framework.serializers import ValidationError
 from django.template.loader import render_to_string
 import threading
 from django.core.mail import send_mail
+from accounts.models import Expert
 from currencies.models import Currency
 from geoplaces.models import Country, CountryRegion, Region
 from geoplaces.serializers import RegionShortSerializer
@@ -103,6 +104,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
             instance.is_active = False
             instance.on_moderation = True
         instance.save()
+        Expert.objects.filter(pk=instance.tour_basic.expert_id).update(tours_count=F('tours_count')-1)
         if instance.on_moderation and len(instance.completed_sections) < 8:
             instance.on_moderation = False
             instance.save()
@@ -205,6 +207,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         instance.is_active = True
         instance.is_draft = False
         instance.save()
+        Expert.objects.filter(pk=instance.tour_basic.expert_id).update(tours_count=F('tours_count')+1)
         ModerationResultEmailThread(instance).start()
         return Response({}, status=200)
     

@@ -24,22 +24,20 @@ def tour_pre_save(instance, **kwargs):
     if instance.finish_date and instance.start_date:
         instance.duration = (instance.finish_date - instance.start_date).days + 1
 
-@receiver(post_save, sender=Tour)
-def tour_post_save(instance, **kwargs):
-    expert = instance.tour_basic.expert
-    expert.tours_count = expert.tours.filter(tours__is_active=True).count()
-    expert.save()
+# @receiver(post_save, sender=Tour)
+# def tour_post_save(instance, **kwargs):
+#     pass
 
 @receiver(post_save, sender=TourWallpaper)
-def tour_basic_post_save(instance, created, **kwargs):
+def tour_wallpaper_post_save(instance, created, **kwargs):
     image_processing(instance.wallpaper, None, 1920, 480, 730, 280)
 
 
-@receiver(post_save, sender=TourBasic)
-def tour_basic_post_save(instance, created, **kwargs):
-    expert = instance.expert
-    expert.tours_count = Expert.objects.filter(pk=expert.id).aggregate(count=Count('tours', filter=Q(tours__is_active=True)))['count']
-    expert.save()
+# @receiver(post_save, sender=TourBasic)
+# def tour_basic_post_save(instance, created, **kwargs):
+#     expert = instance.expert
+#     expert.tours_count = Expert.objects.filter(pk=expert.id).aggregate(count=Count('tours', filter=Q(tours__is_active=True)))['count']
+#     expert.save()
     
 
 # @receiver(pre_save, sender=TourPropertyImage)

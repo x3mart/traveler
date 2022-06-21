@@ -214,6 +214,9 @@ class ExpertMeSerializer(serializers.ModelSerializer):
         
     def get_tmb_avatar(self, obj): 
         return get_tmb_image_uri(self, obj)
+    
+    def get_referral_link(self, obj):
+        return  utils.encode_uid(obj.id)
 
 class AvatarSerializer(serializers.Serializer):
     tmb_avatar = serializers.SerializerMethodField(read_only=True)
