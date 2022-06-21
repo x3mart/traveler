@@ -32,6 +32,7 @@ class TourFilter(filters.FilterSet):
         return queryset.filter(Q(basic_type__in=value) | Q(additional_types__in=value)).distinct()
     
     def discount_filter(self, queryset, name, value):
+        print(value)
         if value:
             discount = 0
         else:
