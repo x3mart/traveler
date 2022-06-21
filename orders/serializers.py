@@ -135,12 +135,12 @@ class OrderListSerializer(serializers.ModelSerializer):
             return [{'action': 'book_from_list/', 'title': 'Забронировать', 'color':'#2aa2d6', 'confirmation':False}, {'action':'cancel_from_list/', 'title': 'Отменить', 'color':'#404040', 'confirmation':True}]
         if order.status == 'prepayment':
             return [{'action': 'fullpayment_from_list/', 'title': 'Оплатить все', 'color':'#2aa2d6', 'confirmation':False}, {'action':'cancel_from_list/', 'title': 'Отменить', 'color':'#404040', 'confirmation':True}]
-        return None
+        return [{'action':'', 'title': 'Действий нет', 'color':'#404040', 'confirmation':False}]
         
     def get_list_actions_for_expert(self, order):
         if order.status == 'pending_confirmation':
             return [{'action': 'aprove_from_list/', 'title': 'Подтвердить', 'color':'#2aa2d6', 'confirmation':False}, {'action':'decline_from_list/', 'title': 'Отказать', 'color':'#404040', 'confirmation':True}]
-        return None
+        return [{'action':'', 'title': 'Действий нет', 'color':'#404040', 'confirmation':False}]
 
     def get_status(self, order):
         if hasattr(self.context['request'].user, 'expert') or order.status in ['new', 'cancelled_by_customer', 'cancelled_by_expert', 'pending_confirmation', 'prepayment_overdue', 'fullpayment']:
