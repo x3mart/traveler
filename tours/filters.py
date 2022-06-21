@@ -32,11 +32,9 @@ class TourFilter(filters.FilterSet):
         return queryset.filter(Q(basic_type__in=value) | Q(additional_types__in=value)).distinct()
     
     def discount_filter(self, queryset, name, value):
-        print(value)
         if value:
-            discount = 0
+            return queryset.filter(~Q(discount__isnull=True) and Q(discount__gt=0) and Q(discount_starts__lte=datetime.today().date()) and Q(discount_finish__gte=datetime.today().date()))
         else:
-            discount=1000000000000000000000
-        print(discount)
-        return queryset.filter(~Q(discount__isnull=True) and Q(discount__gt=discount) and Q(discount_starts__lte=datetime.today().date()) and Q(discount_finish__gte=datetime.today().date()))
+            queryset
+        
         
