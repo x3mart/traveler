@@ -72,7 +72,7 @@ class OrderSerializer(serializers.ModelSerializer):
             'full_postpay':{'read_only': True, 'required': False},
             'languages':{'read_only': True, 'required': False},
             'duration':{'read_only': True, 'required': False},
-            'prepay_finale_date':{'read_only': True, 'required': False}
+            'prepay_final_date':{'read_only': True, 'required': False}
         }
     
     def get_actions(self, order):
