@@ -36,5 +36,5 @@ class TourFilter(filters.FilterSet):
             discount = 0
         else:
             discount=100000
-        return queryset.filter(~Q(discount__isnull=True) and Q(discount__gt=discount) and Q(discount_start_date__lte=datetime.today().date()) and Q(discount_finish_date__gte=datetime.today().date()))
+        return queryset.filter(~Q(discount__isnull=True) and Q(discount__gt=discount) and Q(discount_starts__lte=datetime.today().date()) and Q(discount_finish__gte=datetime.today().date()))
         
