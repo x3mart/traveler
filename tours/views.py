@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseRedirect
 from rest_framework.decorators import action
 from django.db.models.query import Prefetch
+from django.db.models import Q, F, Case, Value, When
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework import filters
@@ -57,7 +58,13 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         if self.action in ['list',]:
             tour_basic = TourBasic.objects.prefetch_related('expert')
             prefetch_tour_basic = Prefetch('tour_basic', tour_basic)
-            qs = Tour.objects.prefetch_related(prefetch_tour_basic, 'start_country', 'start_city', 'wallpaper', 'currency').only('id', 'name', 'start_date', 'start_country', 'start_city', 'price', 'discount', 'duration', 'tour_basic', 'wallpaper', 'vacants_number', 'currency').filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start')))
+            qs = Tour.objects.prefetch_related(prefetch_tour_basic, 'start_country', 'start_city', 'wallpaper', 'currency').only('id', 'name', 'start_date', 'start_country', 'start_city', 'price', 'discount', 'duration', 'tour_basic', 'wallpaper', 'vacants_number', 'currency').filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start'))).annotate(
+                discounted_price = Case(
+                    When(Q(discount__isnull=True) | Q(discount=0), then=F('price')),
+                    When(~Q(discount__isnull=True) and Q(discount__gt=0) and Q(discount_starts__lte=datetime.today().date()) and Q(discount_finish__gte=datetime.today().date()) and Q(discount_in_prc=True), then=F('price') - F('price')*F('discount')/100),
+                    When(~Q(discount__isnull=True) and Q(discount__gt=0) and Q(discount_starts__lte=datetime.today().date()) and Q(discount_finish__gte=datetime.today().date()) and Q(discount_in_prc=False), then=F('price') - F('discount')),
+                )
+            )
         elif self.action in ['tour_set',]:
             qs = Tour.objects.prefetch_related('tour_basic', 'start_country', 'currency').only('id', 'name', 'start_date', 'finish_date', 'start_country', 'price', 'cost', 'discount', 'on_moderation', 'is_active', 'is_draft', 'duration', 'sold', 'watched', 'currency', 'tour_basic', 'wallpaper').filter(tour_basic__expert_id=self.request.user.id).order_by('-id')
         else:

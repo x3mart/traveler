@@ -191,10 +191,11 @@ class TourListSerializer(serializers.ModelSerializer, TourSerializerMixin):
     is_new = serializers.SerializerMethodField(read_only=True)
     is_recomended = serializers.SerializerMethodField(read_only=True)
     discount = serializers.SerializerMethodField(read_only=True)
+    discounted_price = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Tour
-        fields = ['id', 'name', 'start_date', 'start_country', 'start_city', 'price', 'discount', 'duration', 'currency', 'tmb_wallpaper', 'expert', 'vacants_number', 'is_favourite', 'is_new', 'is_recomended']
+        fields = ['id', 'name', 'start_date', 'start_country', 'start_city', 'price', 'discount', 'duration', 'currency', 'tmb_wallpaper', 'expert', 'vacants_number', 'is_favourite', 'is_new', 'is_recomended', 'discounted_price']
     
     def get_tmb_wallpaper(self, obj):
         if obj.wallpaper: 
