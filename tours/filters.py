@@ -24,8 +24,8 @@ class TourFilter(filters.FilterSet):
     expert = NumberFilter(field_name='tour_basic__expert', lookup_expr='gte')
     difficulty = NumberFilter(field_name='difficulty_level', lookup_expr='lte')
     comfort_level = NumberFilter(field_name='comfort_level', lookup_expr='gte')
-    age_starts = NumberFilter(field_name='cost', lookup_expr='lte')
-    age_ends = NumberFilter(field_name='cost', lookup_expr='gte')
+    age_starts = NumberFilter(field_name='age_starts', lookup_expr='lte')
+    age_ends = NumberFilter(field_name='age_ends', lookup_expr='gte')
 
     class Meta:
         model = Tour
