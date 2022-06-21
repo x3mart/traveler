@@ -21,7 +21,7 @@ class TourFilter(filters.FilterSet):
     vacants_number = NumberFilter(field_name='vacants_number', lookup_expr='gte')
     rating = NumberFilter(field_name='tour_basic__rating', lookup_expr='gte')
     difficulty = NumberFilter(field_name='difficulty_level', lookup_expr='lte')
-    comfort_level = NumberFilter(field_name='difficulty_level', lookup_expr='lte')
+    comfort_level = NumberFilter(field_name='comfort_level', lookup_expr='gte')
 
     class Meta:
         model = Tour
