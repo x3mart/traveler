@@ -148,4 +148,4 @@ class OrderListSerializer(serializers.ModelSerializer):
         if order.status == 'pending_prepayment':
             return f'{order.get_status_display()} {order.book_cost}{order.currency} до {order.prepay_final_date.strftime("%d %B %Y") if order.prepay_final_date else ""}.'
         if order.status == 'prepayment':
-            return f'{order.get_status_display()}. Постоплата {order.full_postpay}{order.currency}' + f' до {order.postpay_final_date.strftime("%d %B %Y")}' if order.postpay_final_date != order.start_date else "в день старта."
+            return f'{order.get_status_display()}. Постоплата {order.full_postpay}{order.currency} до {order.postpay_final_date.strftime("%d %B %Y")}'
