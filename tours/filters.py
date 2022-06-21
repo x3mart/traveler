@@ -35,6 +35,6 @@ class TourFilter(filters.FilterSet):
         if value:
             return queryset.filter(~Q(discount__isnull=True) and Q(discount__gt=0) and Q(discount_starts__lte=datetime.today().date()) and Q(discount_finish__gte=datetime.today().date()))
         else:
-            queryset.all()
+            return queryset
         
         
