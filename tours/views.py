@@ -254,7 +254,7 @@ class FilterView(APIView):
         accomodation = TourAccomodation.objects.filter(tours__in=qs).order_by('name').values('name', 'id').distinct()
 
         filter_data = [
-            {'title': 'Типы туров', 'type':'tour_types', 'data': tour_types},
+            {'title': 'Типы туров', 'type':'tour_type', 'data': tour_types},
             {'title': 'Языки тура', 'type':'languages', 'data': languages},
             {'title': 'Проживание', 'type':'property_type', 'data': property_type},
             {'title': 'Размещение', 'type':'accomodation', 'data': accomodation}
