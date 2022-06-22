@@ -4,7 +4,7 @@ from math import ceil
 
 
 def get_tour_discounted_price(obj):
-    if obj.price and obj.discount and obj.discount_starts and  obj.discount_finish and obj.discount_starts < datetime.today().date() and  obj.discount_finish > datetime.today().date():
+    if obj.price and obj.discount and obj.discount_starts and  obj.discount_finish and obj.discount_starts <= datetime.today().date() and  obj.discount_finish >= datetime.today().date():
         return round(obj.price - obj.price*(obj.discount/100)) if obj.discount_in_prc else obj.price - obj.discount
     else:
         return None
