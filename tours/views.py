@@ -253,12 +253,12 @@ class FilterView(APIView):
         property_type = TourPropertyType.objects.filter(tours__in=qs).order_by('name').values('name', 'id').distinct()
         accomodation = TourAccomodation.objects.filter(tours__in=qs).order_by('name').values('name', 'id').distinct()
 
-        filter_data = {
-            'tour_types':tour_types,
-            'languages':languages,
-            'property_type':property_type,
-            'accomodation':accomodation
-        }      
+        filter_data = [
+            { 'title': 'Типы туров', 'type':'tour_types': 'data': tour_types},
+            { 'title': 'Языки тура', 'type':'languages': 'data': languages},
+            { 'title': 'Проживание', 'type':'property_type': 'data': property_type},
+            { 'title': 'Размещение', 'type':'accomodation': 'data': accomodation}
+        ]      
         return Response(FilterSerializer(filter_data).data, status=200)
 
 class ActiveRegions(APIView):
