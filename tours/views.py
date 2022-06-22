@@ -46,7 +46,13 @@ class ModerationResultEmailThread(threading.Thread):
 
 # Create your views here.
 class TourViewSet(viewsets.ModelViewSet, TourMixin):
-    queryset = Tour.objects.all()
+    queryset = Tour.objects.annotate(
+                discounted_price = Case(
+                    When(Q(discount__isnull=True) or Q(discount=0), then=F('price')),
+                    When(~Q(discount__isnull=True) and ~Q(discount_starts__isnull=True) and Q(discount__gt=0) and Q(discount_starts__gte=datetime.today()) and Q(discount_finish__gte=datetime.today()) and Q(discount_in_prc=True), then=F('price') - F('price')*F('discount')/100),
+                    When(~Q(discount__isnull=True) and Q(discount__gt=0) and Q(discount_starts__lte=datetime.today()) and Q(discount_finish__gte=datetime.today()) and Q(discount_in_prc=False), then=F('price') - F('discount')),
+                )
+            ).all()
     serializer_class = TourSerializer
     permission_classes = [TourPermission]
     filter_backends = [filters.OrderingFilter, DjangoFilterBackend]
