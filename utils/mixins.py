@@ -87,8 +87,8 @@ class TourSerializerMixin():
         else:
             return None
     
-    def get_discounted_price(self, obj):
-        return get_tour_discounted_price(obj)
+    # def get_discounted_price(self, obj):
+    #     return get_tour_discounted_price(obj)
 
     def get_book_price(self, obj): 
         return get_tour_book_price(obj)
