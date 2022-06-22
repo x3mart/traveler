@@ -41,22 +41,10 @@ class TourFilter(filters.FilterSet):
             return queryset
     
     def price_min_filter(self, queryset, name, value):
-        return queryset.annotate(
-            discounted_price = Case(
-                When(Q(discount__isnull=True) | Q(discount=0), then=F('price')),
-                When(~Q(discount__isnull=True) and Q(discount__gt=0) and Q(discount_starts__lte=datetime.today().date()) and Q(discount_finish__gte=datetime.today().date()) and Q(discount_in_prc=True), then=F('price') - F('price')*F('discount')/100),
-                When(~Q(discount__isnull=True) and Q(discount__gt=0) and Q(discount_starts__lte=datetime.today().date()) and Q(discount_finish__gte=datetime.today().date()) and Q(discount_in_prc=False), then=F('price') - F('discount')),
-            )
-        ).filter(discounted_price__gte=value)
+        return queryset.filter(discounted_price__gte=value)
     
     def price_max_filter(self, queryset, name, value):
-        return queryset.annotate(
-            discounted_price = Case(
-                When(Q(discount__isnull=True) | Q(discount=0), then=F('price')),
-                When(~Q(discount__isnull=True) and Q(discount__gt=0) and Q(discount_starts__lte=datetime.today().date()) and Q(discount_finish__gte=datetime.today().date()) and Q(discount_in_prc=True), then=F('price') - F('price')*F('discount')/100),
-                When(~Q(discount__isnull=True) and Q(discount__gt=0) and Q(discount_starts__lte=datetime.today().date()) and Q(discount_finish__gte=datetime.today().date()) and Q(discount_in_prc=False), then=F('price') - F('discount')),
-            )
-        ).filter(discounted_price__lte=value)
+        return queryset.filter(discounted_price__lte=value)
 
 
         
