@@ -16,17 +16,17 @@ class OrderResultsSetPagination(PageNumberPagination):
             },
             'count': self.page.paginator.count,
             'results': data,
-            'status_list': self.status_list()
+            'status_list': self.statuses
         })
     
     def paginate_queryset(self, queryset, request, view=None):
-        print(self)
-        # self.statuses = self.status_list()
+        # print(self)
+        self.statuses = self.status_list(request)
         return super().paginate_queryset(queryset, request, view)
     
-    def status_list(self):
-        print(self)
-        if hasattr(self.request.user, 'customer') or self.request.user.is_staff:
+    def status_list(self, request):
+        # print(self)
+        if hasattr(request.user, 'customer') or self.request.user.is_staff:
             return [{'status':choice[0], 'title':choice[1]} for choice in Order.OrderStatus.choices]
-        if hasattr(self.request.user, 'expert'):
+        if hasattr(request.user, 'expert'):
             return [{'status':choice[0], 'title':choice[1]} for choice in Order.OrderStatus.choices if choice[0] not in ['new']]
