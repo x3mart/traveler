@@ -45,7 +45,7 @@ class TourResultsSetPagination(PageNumberPagination):
             {'title': 'Продолжительность от', 'type':'duration_min', 'data': aggregations['duration__min']},
             {'title': 'Продолжительность до', 'type':'duration_max', 'data': aggregations['duration__max']},
             {'title': 'Свободные места', 'type':'vacants_number', 'data': aggregations['vacants_number__max']},
-            {'title': 'Рейтинг', 'type':'rating', 'data': aggregations['rating__max']},
+            {'title': 'Рейтинг', 'type':'rating', 'data': aggregations['tour_basic__rating__max']},
             {'title': 'Сложность', 'type':'difficulty_level', 'data': aggregations['difficulty_level__max']},
             {'title': 'Комфорт', 'type':'comfort_level', 'data': aggregations['comfort_level__max']}
         ]
