@@ -38,8 +38,8 @@ class TourResultsSetPagination(PageNumberPagination):
             {'title': 'Языки тура', 'type':'languages', 'data': languages},
             {'title': 'Проживание', 'type':'property_type', 'data': property_type},
             {'title': 'Размещение', 'type':'accomodation', 'data': accomodation},
-            {'title': 'Цена от', 'type':'price_min', 'data': queryset.price_min},
-            {'title': 'Цена до', 'type':'price_max', 'data': queryset.price_max},
+            # {'title': 'Цена от', 'type':'price_min', 'data': queryset.price_min},
+            # {'title': 'Цена до', 'type':'price_max', 'data': queryset.price_max},
             {'title': 'Возраст от', 'type':'age_starts', 'data': queryset.age_min},
             {'title': 'Возраст до', 'type':'price_max', 'data': queryset.age_max},
         ]
