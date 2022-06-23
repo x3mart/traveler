@@ -23,10 +23,10 @@ class TourResultsSetPagination(PageNumberPagination):
         })
     
     def paginate_queryset(self, queryset, request, view=None):
-        self.filters = self.status_list(request)
+        self.filters = self.status_list(queryset, request)
         return super().paginate_queryset(queryset, request, view)
     
-    def status_list(self, queryset,request):
+    def status_list(self, queryset, request):
         tour_types = queryset.objects.filter(Q(tours_by_basic_type__in=queryset) | Q(tours_by_additional_types__in=queryset)).order_by('name').values('name', 'id').distinct()      
         languages = Language.objects.filter(tours__in=queryset).order_by('name').values('name', 'id').distinct()
         property_type = TourPropertyType.objects.filter(tours__in=queryset).order_by('name').values('name', 'id').distinct()
