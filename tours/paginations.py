@@ -28,7 +28,7 @@ class TourResultsSetPagination(PageNumberPagination):
     
     def get_filter_data(self, queryset, request):
         tour_ids = queryset.values_list('id', flat=True)
-        tour_types = TourType.objects.filter(Q(tour_id__in=queryset)).order_by('name').values('name', 'id').distinct()      
+        # tour_types = TourType.objects.filter(Q(tour_id__in=queryset)).order_by('name').values('name', 'id').distinct()      
         languages = Language.objects.filter(tour_id__in=tour_ids).order_by('name').values('name', 'id').distinct()
         property_type = TourPropertyType.objects.filter(tour_id__in=tour_ids).order_by('name').values('name', 'id').distinct()
         accomodation = TourAccomodation.objects.filter(tour_id__in=tour_ids).order_by('name').values('name', 'id').distinct()
