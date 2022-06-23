@@ -31,7 +31,7 @@ class TourResultsSetPagination(PageNumberPagination):
         languages = Language.objects.filter(tours__in=queryset).order_by('name').values('name', 'id').distinct()
         property_type = TourPropertyType.objects.filter(tours__in=queryset).order_by('name').values('name', 'id').distinct()
         accomodation = TourAccomodation.objects.filter(tours__in=queryset).order_by('name').values('name', 'id').distinct()
-        queryset.annotate(price_min=Min('discounted_price'), price_max=Max('discounted_price'), age_starts=Min('age_starts'), age_ends=Max('age_ends'))
+        queryset.annotate(price_min=Min('discounted_price'), price_max=Max('discounted_price'), age_min=Min('age_starts'), age_max=Max('age_ends'))
 
         filter_data = [
             {'title': 'Типы туров', 'type':'tour_types', 'data': tour_types},
@@ -40,8 +40,8 @@ class TourResultsSetPagination(PageNumberPagination):
             {'title': 'Размещение', 'type':'accomodation', 'data': accomodation},
             {'title': 'Цена от', 'type':'price_min', 'data': queryset.price_min},
             {'title': 'Цена до', 'type':'price_max', 'data': queryset.price_max},
-            {'title': 'Возраст от', 'type':'age_starts', 'data': queryset.age_starts},
-            {'title': 'Возраст до', 'type':'price_max', 'data': queryset.age_ends},
+            {'title': 'Возраст от', 'type':'age_starts', 'data': queryset.age_min},
+            {'title': 'Возраст до', 'type':'price_max', 'data': queryset.age_max},
         ]
             
         return filter_data
