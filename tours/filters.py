@@ -22,14 +22,14 @@ class TourFilter(filters.FilterSet):
     vacants_number = NumberFilter(field_name='vacants_number', lookup_expr='gte')
     rating = NumberFilter(field_name='tour_basic__rating', lookup_expr='gte')
     expert = NumberFilter(field_name='tour_basic__expert', lookup_expr='gte')
-    difficulty = NumberFilter(field_name='difficulty_level', lookup_expr='lte')
+    difficulty_level = NumberFilter(field_name='difficulty_level', lookup_expr='lte')
     comfort_level = NumberFilter(field_name='comfort_level', lookup_expr='gte')
     age_starts = NumberFilter(field_name='age_starts', lookup_expr='lte')
     age_ends = NumberFilter(field_name='age_ends', lookup_expr='gte')
 
     class Meta:
         model = Tour
-        fields = ['start_date', 'countries', 'regions', 'types', 'languages', 'price_min', 'price_max', 'discount', 'duration_min', 'duration_max', 'vacants_number', 'rating', 'difficulty', 'age_starts', 'age_ends']
+        fields = ['start_date', 'countries', 'regions', 'types', 'languages', 'price_min', 'price_max', 'discount', 'duration_min', 'duration_max', 'vacants_number', 'rating', 'difficulty_level', 'age_starts', 'age_ends']
     
     def types_filter(self, queryset, name, value):
         return queryset.filter(Q(basic_type__in=value) | Q(additional_types__in=value)).distinct()

@@ -31,7 +31,7 @@ class TourResultsSetPagination(PageNumberPagination):
         languages = Language.objects.filter(tours__in=queryset).order_by('name').values('name', 'id').distinct()
         property_type = TourPropertyType.objects.filter(tours__in=queryset).order_by('name').values('name', 'id').distinct()
         accomodation = TourAccomodation.objects.filter(tours__in=queryset).order_by('name').values('name', 'id').distinct()
-        aggregations = queryset.aggregate(Min('discounted_price'), Max('discounted_price'), Min('age_starts'), Max('age_ends'))
+        aggregations = queryset.aggregate(Min('discounted_price'), Max('discounted_price'), Min('age_starts'), Max('age_ends'), Min('duration'), Max('duration'),  Max('vacants_number'), Max('rating'), Max('difficulty_level'), Max('comfort_level'))
 
         filter_data = [
             {'title': 'Типы туров', 'type':'tour_types', 'data': tour_types},
@@ -41,7 +41,13 @@ class TourResultsSetPagination(PageNumberPagination):
             {'title': 'Цена от', 'type':'price_min', 'data': aggregations['discounted_price__min']},
             {'title': 'Цена до', 'type':'price_max', 'data': aggregations['discounted_price__max']},
             {'title': 'Возраст от', 'type':'age_starts', 'data': aggregations['age_starts__min']},
-            {'title': 'Возраст до', 'type':'price_max', 'data': aggregations['age_ends__max']},
+            {'title': 'Возраст до', 'type':'age_ends', 'data': aggregations['age_ends__max']},
+            {'title': 'Продолжительность от', 'type':'duration_min', 'data': aggregations['duration__min']},
+            {'title': 'Продолжительность до', 'type':'duration_max', 'data': aggregations['duration__max']},
+            {'title': 'Свободные места', 'type':'vacants_number', 'data': aggregations['vacants_number__max']},
+            {'title': 'Рейтинг', 'type':'rating', 'data': aggregations['rating__max']},
+            {'title': 'Сложность', 'type':'difficulty_level', 'data': aggregations['difficulty_level__max']},
+            {'title': 'Комфорт', 'type':'comfort_level', 'data': aggregations['comfort_level__max']}
         ]
             
         return filter_data
