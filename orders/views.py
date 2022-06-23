@@ -22,7 +22,7 @@ class OrderViewSet(viewsets.ModelViewSet, OrderMixin):
     queryset = Order.objects.prefetch_related('tour', 'expert', 'customer', 'travelers')
     serializer_class = OrderSerializer
     permission_classes = [OrderPermission]
-    # pagination_class = OrderResultsSetPagination
+    pagination_class = OrderResultsSetPagination
     filter_backends = [filters.OrderingFilter, DjangoFilterBackend]
     ordering_fields = ['created_at', 'start_date']
     ordering = ['-start_date']
