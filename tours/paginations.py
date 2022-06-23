@@ -34,7 +34,7 @@ class TourResultsSetPagination(PageNumberPagination):
         accomodation = TourAccomodation.objects.filter(tour_id__in=tour_ids).order_by('name').values('name', 'id').distinct()
 
         filter_data = [
-            {'title': 'Типы туров', 'type':'tour_types', 'data': tour_types},
+            # {'title': 'Типы туров', 'type':'tour_types', 'data': tour_types},
             {'title': 'Языки тура', 'type':'languages', 'data': languages},
             {'title': 'Проживание', 'type':'property_type', 'data': property_type},
             {'title': 'Размещение', 'type':'accomodation', 'data': accomodation}
