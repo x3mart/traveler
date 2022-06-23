@@ -33,6 +33,7 @@ class TourResultsSetPagination(PageNumberPagination):
         accomodation = TourAccomodation.objects.filter(tours__in=queryset).order_by('name').values('name', 'id').distinct()
         aggregations = queryset.aggregate(Min('discounted_price'), Max('discounted_price'), Min('age_starts'), Max('age_ends'), Min('duration'), Max('duration'),  Max('vacants_number'), Max('tour_basic__rating'), Max('difficulty_level'), Max('comfort_level'))
         TourBasic.objects.filter(tours__in=queryset).aggregate(Max('rating'))
+        print('WOOOOOOW')
         print(aggregations)
 
         filter_data = [
