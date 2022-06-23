@@ -1,6 +1,6 @@
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
-from django.db.models import F, Q
+from django.db.models import F, Q, Max, Min
 
 from languages.models import Language
 from orders.models import Order
@@ -31,12 +31,17 @@ class TourResultsSetPagination(PageNumberPagination):
         languages = Language.objects.filter(tours__in=queryset).order_by('name').values('name', 'id').distinct()
         property_type = TourPropertyType.objects.filter(tours__in=queryset).order_by('name').values('name', 'id').distinct()
         accomodation = TourAccomodation.objects.filter(tours__in=queryset).order_by('name').values('name', 'id').distinct()
+        queryset.annotate(price_min=Min('discounted_price'), price_max=Max('discounted_price'), age_starts=Min('age_starts'), age_ends=Max('age_ends'))
 
         filter_data = [
             {'title': 'Типы туров', 'type':'tour_types', 'data': tour_types},
             {'title': 'Языки тура', 'type':'languages', 'data': languages},
             {'title': 'Проживание', 'type':'property_type', 'data': property_type},
-            {'title': 'Размещение', 'type':'accomodation', 'data': accomodation}
+            {'title': 'Размещение', 'type':'accomodation', 'data': accomodation},
+            {'title': 'Цена от', 'type':'price_min', 'data': queryset.price_min},
+            {'title': 'Цена до', 'type':'price_max', 'data': queryset.price_max},
+            {'title': 'Возраст от', 'type':'age_starts', 'data': queryset.age_starts},
+            {'title': 'Возраст до', 'type':'price_max', 'data': queryset.age_ends},
         ]
             
         return filter_data
