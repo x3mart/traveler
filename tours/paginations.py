@@ -39,4 +39,4 @@ class TourResultsSetPagination(PageNumberPagination):
             {'title': 'Размещение', 'type':'accomodation', 'data': accomodation}
         ]
             
-        return Response(filter_data, status=200)
+        return filter_data
