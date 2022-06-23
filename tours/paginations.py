@@ -38,10 +38,10 @@ class TourResultsSetPagination(PageNumberPagination):
             {'title': 'Языки тура', 'type':'languages', 'data': languages},
             {'title': 'Проживание', 'type':'property_type', 'data': property_type},
             {'title': 'Размещение', 'type':'accomodation', 'data': accomodation},
-            {'title': 'Цена от', 'type':'price_min', 'data': aggregations.discounted_price__min},
-            {'title': 'Цена до', 'type':'price_max', 'data': aggregations.discounted_price__max},
-            {'title': 'Возраст от', 'type':'age_starts', 'data': aggregations.age_starts__min},
-            {'title': 'Возраст до', 'type':'price_max', 'data': aggregations.age_ends__max},
+            {'title': 'Цена от', 'type':'price_min', 'data': aggregations['discounted_price__min']},
+            {'title': 'Цена до', 'type':'price_max', 'data': aggregations['discounted_price__max']},
+            {'title': 'Возраст от', 'type':'age_starts', 'data': aggregations['age_starts__min']},
+            {'title': 'Возраст до', 'type':'price_max', 'data': aggregations['age_ends__max']},
         ]
             
         return filter_data
