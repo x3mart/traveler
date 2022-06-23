@@ -2,7 +2,6 @@ from django.db.models import F, Q
 from datetime import timedelta, datetime
 from django.forms import DurationField
 from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponseRedirect
 from rest_framework.decorators import action
 from django.db.models.query import Prefetch
 from django.db.models import Q, F, Case, Value, When
@@ -21,6 +20,7 @@ from accounts.models import Expert
 from currencies.models import Currency
 from geoplaces.models import Country, CountryRegion, Region
 from geoplaces.serializers import RegionShortSerializer
+from orders.paginations import OrderResultsSetPagination
 from tours.filters import TourFilter
 from tours.mixins import TourMixin
 from utils.constants import NOT_MODERATED_FIELDS
@@ -55,6 +55,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
             ).all()
     serializer_class = TourSerializer
     permission_classes = [TourPermission]
+    pagination_class = OrderResultsSetPagination
     filter_backends = [filters.OrderingFilter, DjangoFilterBackend]
     ordering_fields = ['rating', 'id']
     ordering = ['start_date']
