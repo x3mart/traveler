@@ -16,7 +16,7 @@ class OrderResultsSetPagination(PageNumberPagination):
             },
             'count': self.page.paginator.count,
             'results': data,
-            'status_list': self.statuses
+            'status_list': self.status_list()
         })
     
     def paginate_queryset(self, queryset, request, view=None):
