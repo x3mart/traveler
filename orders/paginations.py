@@ -20,10 +20,12 @@ class OrderResultsSetPagination(PageNumberPagination):
         })
     
     def paginate_queryset(self, queryset, request, view=None):
-        self.statuses = self.status_list()
+        print(self)
+        # self.statuses = self.status_list()
         return super().paginate_queryset(queryset, request, view)
     
     def status_list(self):
+        print(self)
         if hasattr(self.request.user, 'customer') or self.request.user.is_staff:
             return [{'status':choice[0], 'title':choice[1]} for choice in Order.OrderStatus.choices]
         if hasattr(self.request.user, 'expert'):
