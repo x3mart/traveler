@@ -20,9 +20,9 @@ from accounts.models import Expert
 from currencies.models import Currency
 from geoplaces.models import Country, CountryRegion, Region
 from geoplaces.serializers import RegionShortSerializer
-from orders.paginations import OrderResultsSetPagination
 from tours.filters import TourFilter
 from tours.mixins import TourMixin
+from tours.paginations import TourResultsSetPagination
 from utils.constants import NOT_MODERATED_FIELDS
 from tours.models import DeclineReason, Tour, TourAccomodation, TourBasic, TourDayImage, TourGuestGuideImage, TourImage, TourPlanImage, TourPropertyImage, TourPropertyType, TourType, TourWallpaper
 from tours.permissions import TourPermission
@@ -55,7 +55,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
             ).all()
     serializer_class = TourSerializer
     permission_classes = [TourPermission]
-    pagination_class = OrderResultsSetPagination
+    pagination_class = TourResultsSetPagination
     filter_backends = [filters.OrderingFilter, DjangoFilterBackend]
     ordering_fields = ['rating', 'id']
     ordering = ['start_date']
