@@ -13,7 +13,7 @@ class TourFilter(filters.FilterSet):
     countries = NumberInFilter(field_name="start_country", lookup_expr='in')
     regions = NumberInFilter(field_name="start_region", lookup_expr='in')
     languages = NumberInFilter(field_name="languages", lookup_expr='in')
-    types = NumberInFilter(method='types_filter', label='search_by_tour_types')
+    tour_types = NumberInFilter(method='tour_types_filter', label='search_by_tour_types')
     price_min = NumberFilter(method='price_min_filter', label='цена мин')
     price_max = NumberFilter(method='price_max_filter', label='цена макс')
     discount = BooleanFilter(field_name='discount', method='discount_filter')
@@ -31,7 +31,7 @@ class TourFilter(filters.FilterSet):
         model = Tour
         fields = ['start_date', 'countries', 'regions', 'types', 'languages', 'price_min', 'price_max', 'discount', 'duration_min', 'duration_max', 'vacants_number', 'rating', 'difficulty_level', 'age_starts', 'age_ends']
     
-    def types_filter(self, queryset, name, value):
+    def tour_types_filter(self, queryset, name, value):
         return queryset.filter(Q(basic_type__in=value) | Q(additional_types__in=value)).distinct()
     
     def discount_filter(self, queryset, name, value):
