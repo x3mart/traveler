@@ -47,6 +47,6 @@ class TourResultsSetPagination(PageNumberPagination):
             {'title': 'Сложность', 'type':'difficulty_level', 'data': aggregations['difficulty_level__max']},
             {'title': 'Комфорт', 'type':'comfort_level', 'data': aggregations['comfort_level__max']}
         ]
-        if len(request.query_params):
-            filter_data = [filter_data_element for filter_data_element in filter_data if filter_data_element['type'] != list(request.query_params)[-1]]   
+        # if len(request.query_params):
+        #     filter_data = [filter_data_element for filter_data_element in filter_data if filter_data_element['type'] != list(request.query_params)[-1]]   
         return filter_data
