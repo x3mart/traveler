@@ -28,7 +28,7 @@ class TourFilter(filters.FilterSet):
 
     class Meta:
         model = Tour
-        fields = ['start_date', 'countries', 'regions', 'tour_types', 'languages', 'price_min', 'price_max', 'discount', 'duration_min', 'duration_max', 'vacants_number', 'rating', 'difficulty_level', 'age_starts', 'age_ends']
+        fields = ['start_date', 'countries', 'regions', 'tour_types', 'languages', 'price', 'discount', 'duration_min', 'duration_max', 'vacants_number', 'rating', 'difficulty_level', 'age_starts', 'age_ends']
     
     def tour_types_filter(self, queryset, name, value):
         return queryset.filter(Q(basic_type__in=value) | Q(additional_types__in=value)).distinct()
