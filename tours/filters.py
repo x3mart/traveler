@@ -14,8 +14,7 @@ class TourFilter(filters.FilterSet):
     regions = NumberInFilter(field_name="start_region", lookup_expr='in')
     languages = NumberInFilter(field_name="languages", lookup_expr='in')
     tour_types = NumberInFilter(method='tour_types_filter', label='search_by_tour_types')
-    price_min = NumberFilter(method='price_min_filter', label='цена мин')
-    price_max = NumberFilter(method='price_max_filter', label='цена макс')
+    price = NumberInFilter(method='price_filter', label='Цена')
     discount = BooleanFilter(field_name='discount', method='discount_filter')
     duration_min = NumberFilter(field_name='duration', lookup_expr='gte')
     duration_max = NumberFilter(field_name='duration', lookup_expr='lte')
@@ -40,12 +39,9 @@ class TourFilter(filters.FilterSet):
         else:
             return queryset
     
-    def price_min_filter(self, queryset, name, value):
-        return queryset.filter(discounted_price__gte=value)
-    
-    def price_max_filter(self, queryset, name, value):
-        return queryset.filter(discounted_price__lte=value)
-
-
-        
+    def price_filter(self, queryset, name, value):
+        if len(value) < 2:
+            return queryset
+        return queryset.filter(discounted_price__gte=value[0]).filter(discounted_price__lte=value[1])
+     
         
