@@ -33,7 +33,6 @@ class TourResultsSetPagination(PageNumberPagination):
         accomodation = TourAccomodation.objects.filter(tours__in=queryset).order_by('name').values('name', 'id').distinct()
         aggregations = queryset.aggregate(Min('discounted_price'), Max('discounted_price'), Min('age_starts'), Max('age_ends'), Min('duration'), Max('duration'),  Max('vacants_number'), Max('tour_basic__rating'), Max('difficulty_level'), Max('comfort_level'))
         TourBasic.objects.filter(tours__in=queryset).aggregate(Max('rating'))
-        print(request.query_params)
         filter_data = [
             {'title': 'Тип тура', 'type':'tour_types', 'data': tour_types},
             {'title': 'Языки группы', 'type':'languages', 'data': languages},
@@ -48,5 +47,5 @@ class TourResultsSetPagination(PageNumberPagination):
             {'title': 'Сложность', 'type':'difficulty_level', 'data': aggregations['difficulty_level__max']},
             {'title': 'Комфорт', 'type':'comfort_level', 'data': aggregations['comfort_level__max']}
         ]
-            
+        filter_data = [filter_data_element for filter_data_element in filter_data if filter_data_element['type'] != list(request.query_params)[-1]]   
         return filter_data
