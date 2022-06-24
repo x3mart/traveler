@@ -33,7 +33,7 @@ class TourResultsSetPagination(PageNumberPagination):
         accomodation = TourAccomodation.objects.filter(tours__in=queryset).order_by('name').values('name', 'id').distinct()
         aggregations = queryset.aggregate(Min('discounted_price'), Max('discounted_price'), Min('age_starts'), Max('age_ends'), Min('duration'), Max('duration'),  Max('vacants_number'), Max('tour_basic__rating'), Max('difficulty_level'), Max('comfort_level'))
         TourBasic.objects.filter(tours__in=queryset).aggregate(Max('rating'))
-
+        print(request.query_params)
         filter_data = [
             {'title': 'Тип тура', 'type':'tour_types', 'data': tour_types},
             {'title': 'Языки группы', 'type':'languages', 'data': languages},
@@ -42,7 +42,7 @@ class TourResultsSetPagination(PageNumberPagination):
             {'title': 'Цена', 'type':'price', 'filter_type': 'range', 'data': [aggregations['discounted_price__min'], aggregations['discounted_price__max']]},
             {'title': 'Допустимый возраст', 'type':'age', 'filter_type': 'range', 'data': [aggregations['age_starts__min'], aggregations['age_ends__max']]},
             {'title': 'Продолжительность тура', 'type':'duration_min', 'filter_type': 'range', 'data': [aggregations['duration__min'],aggregations['duration__max']]},
-            
+
             {'title': 'Свободные места', 'type':'vacants_number', 'data': aggregations['vacants_number__max']},
             {'title': 'Рейтинг', 'type':'rating', 'data': aggregations['tour_basic__rating__max']},
             {'title': 'Сложность', 'type':'difficulty_level', 'data': aggregations['difficulty_level__max']},
