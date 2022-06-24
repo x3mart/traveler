@@ -16,19 +16,17 @@ class TourFilter(filters.FilterSet):
     tour_types = NumberInFilter(method='tour_types_filter', label='search_by_tour_types')
     price = NumberInFilter(method='price_filter', label='Цена')
     discount = BooleanFilter(field_name='discount', method='discount_filter')
-    duration_min = NumberFilter(field_name='duration', lookup_expr='gte')
-    duration_max = NumberFilter(field_name='duration', lookup_expr='lte')
+    duration = NumberInFilter(method='duration_filter', label='Продолжительность')
     vacants_number = NumberFilter(field_name='vacants_number', lookup_expr='gte')
     rating = NumberFilter(field_name='tour_basic__rating', lookup_expr='gte')
     expert = NumberFilter(field_name='tour_basic__expert', lookup_expr='gte')
     difficulty_level = NumberFilter(field_name='difficulty_level', lookup_expr='lte')
     comfort_level = NumberFilter(field_name='comfort_level', lookup_expr='gte')
-    age_starts = NumberFilter(field_name='age_starts', lookup_expr='lte')
-    age_ends = NumberFilter(field_name='age_ends', lookup_expr='gte')
+    age = NumberInFilter(method='age_filter', label='Допустимый возраст')
 
     class Meta:
         model = Tour
-        fields = ['start_date', 'countries', 'regions', 'tour_types', 'languages', 'price', 'discount', 'duration_min', 'duration_max', 'vacants_number', 'rating', 'difficulty_level', 'age_starts', 'age_ends']
+        fields = ['start_date', 'countries', 'regions', 'tour_types', 'languages', 'price', 'discount', 'duration',  'vacants_number', 'rating', 'difficulty_level', 'age']
     
     def tour_types_filter(self, queryset, name, value):
         return queryset.filter(Q(basic_type__in=value) | Q(additional_types__in=value)).distinct()
@@ -43,5 +41,15 @@ class TourFilter(filters.FilterSet):
         if len(value) < 2:
             return queryset
         return queryset.filter(discounted_price__gte=value[0]).filter(discounted_price__lte=value[1])
+    
+    def age_filter(self, queryset, name, value):
+        if len(value) < 2:
+            return queryset
+        return queryset.filter(age_starts__lte=value[0]).filter(age_ends__gte=value[1])
+    
+    def duration_filter(self, queryset, name, value):
+        if len(value) < 2:
+            return queryset
+        return queryset.filter(duration__gte=value[0]).filter(duration__lte=value[1])
      
         

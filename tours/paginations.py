@@ -35,15 +35,14 @@ class TourResultsSetPagination(PageNumberPagination):
         TourBasic.objects.filter(tours__in=queryset).aggregate(Max('rating'))
 
         filter_data = [
-            {'title': 'Типы туров', 'type':'tour_types', 'data': tour_types},
-            {'title': 'Языки тура', 'type':'languages', 'data': languages},
+            {'title': 'Тип тура', 'type':'tour_types', 'data': tour_types},
+            {'title': 'Языки группы', 'type':'languages', 'data': languages},
             {'title': 'Проживание', 'type':'property_type', 'data': property_type},
             {'title': 'Размещение', 'type':'accomodation', 'data': accomodation},
-            {'title': 'Цена', 'type':'price', 'filter_type': 'range', 'data': {'min':aggregations['discounted_price__min'], 'max':aggregations['discounted_price__max']}},
-            {'title': 'Возраст от', 'type':'age_starts', 'data': aggregations['age_starts__min']},
-            {'title': 'Возраст до', 'type':'age_ends', 'data': aggregations['age_ends__max']},
-            {'title': 'Продолжительность от', 'type':'duration_min', 'data': aggregations['duration__min']},
-            {'title': 'Продолжительность до', 'type':'duration_max', 'data': aggregations['duration__max']},
+            {'title': 'Цена', 'type':'price', 'filter_type': 'range', 'data': [aggregations['discounted_price__min'], aggregations['discounted_price__max']]},
+            {'title': 'Допустимый возраст', 'type':'age', 'filter_type': 'range', 'data': [aggregations['age_starts__min'], aggregations['age_ends__max']]},
+            {'title': 'Продолжительность тура', 'type':'duration_min', 'filter_type': 'range', 'data': [aggregations['duration__min'],aggregations['duration__max']]},
+            
             {'title': 'Свободные места', 'type':'vacants_number', 'data': aggregations['vacants_number__max']},
             {'title': 'Рейтинг', 'type':'rating', 'data': aggregations['tour_basic__rating__max']},
             {'title': 'Сложность', 'type':'difficulty_level', 'data': aggregations['difficulty_level__max']},
