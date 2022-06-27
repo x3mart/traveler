@@ -33,6 +33,7 @@ class TourResultsSetPagination(PageNumberPagination):
         for filter in filters:
             if filter != field:
                 filter_set.update(filters[filter])
+        print (filter_set)
         return filter_set
     
     def get_filter_data(self, queryset, request):
