@@ -54,7 +54,7 @@ class TourResultsSetPagination(PageNumberPagination):
                 filters.update({'price':{'discounted_price__gte':value[0], 'discounted_price__lte':value[1]}})
             elif type == 'languages':
                 value = params[type][0].split(',')
-                filters.update({'languages':{'languages_in':value}})
+                filters.update({'languages':{'languages__in':value}})
             elif type == 'age':
                 value = params[type][0].split(',')
                 filters.update({'age':{'age_starts__lte':value[0], 'age_ends__gte':value[1]}})
