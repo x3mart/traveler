@@ -50,16 +50,16 @@ class TourResultsSetPagination(PageNumberPagination):
         for type in params:
             if type == 'price':
                 value = params[type][0].split(',')
-                filters.append({'price':{'discounted_price__gte':value[0], 'discounted_price__lte':value[1]}})
+                filters.upgrade({'price':{'discounted_price__gte':value[0], 'discounted_price__lte':value[1]}})
             elif type == 'price':
                 value = params[type][0].split(',')
-                filters.append({'languages':{'languages_in':value}})
+                filters.upgrade({'languages':{'languages_in':value}})
             elif type == 'age':
                 value = params[type][0].split(',')
-                filters.append({'age':{'age_starts__lte':value[0], 'age_ends__gte':value[1]}})
+                filters.upgrade({'age':{'age_starts__lte':value[0], 'age_ends__gte':value[1]}})
             elif type == 'duration':
                 value = params[type][0].split(',')
-                filters.append({'duration':{'duration__gte':value[0], 'duration__lte':value[1]}})
+                filters.upgrade({'duration':{'duration__gte':value[0], 'duration__lte':value[1]}})
                 
         qs_tour_types = active_tours.filter(**self.get_field_filter(filters, 'tour_types'))
         tour_types = TourType.objects.filter(Q(tours_by_basic_type__in=qs_tour_types) | Q(tours_by_additional_types__in=qs_tour_types)).order_by('name').values('name', 'id').distinct()
