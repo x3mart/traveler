@@ -68,6 +68,15 @@ class OrderViewSet(viewsets.ModelViewSet, OrderMixin):
         Traveler.objects.bulk_create(travelers)
         order.refresh_from_db()
         order.tour_dates = self.get_tour_dates(order.tour)
+        tour = Order.objects.annotate(
+                discounted_price = Case(
+                    When(Q(discount__isnull=True) or Q(discount=0), then=F('price')),
+                    When(~Q(discount__isnull=True) and ~Q(discount_starts__isnull=True) and Q(discount__gt=0) and Q(discount_starts__gte=datetime.today()) and Q(discount_finish__gte=datetime.today()) and Q(discount_in_prc=True), then=F('price') - F('price')*F('discount')/100),
+                    When(~Q(discount__isnull=True) and Q(discount__gt=0) and Q(discount_starts__lte=datetime.today()) and Q(discount_finish__gte=datetime.today()) and Q(discount_in_prc=False), then=F('price') - F('discount')),
+                )
+            ).all()
+        prefetched_tours = Prefetch('tour', tour)
+        order.prefetch_related(prefetched_tours, 'expert', 'customer', 'travelers')
         return Response(self.get_serializer(order).data, status=201)
     
     def update(self, request, *args, **kwargs):
