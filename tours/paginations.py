@@ -60,6 +60,9 @@ class TourResultsSetPagination(PageNumberPagination):
             elif type == 'duration':
                 value = params[type][0].split(',')
                 filters.update({'duration':{'duration__gte':value[0], 'duration__lte':value[1]}})
+            elif type == 'vacants_number':
+                value = params[type][0].split(',')
+                filters.update({'vacants_number':{'vacants_number__gte':value[0], 'vacants_number__lte':value[1]}})
             elif type == 'tour_types':
                 value = params[type][0].split(',')
                 filters.update({'tour_types': Q(basic_type__in=value) | Q(additional_types__in=value)})
