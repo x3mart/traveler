@@ -76,7 +76,7 @@ class TourResultsSetPagination(PageNumberPagination):
         age = qs.aggregate(Min('age_starts'), Max('age_ends'))
         qs = active_tours.filter(**self.get_field_filter(filters, 'duration'))
         duration = qs.aggregate(Min('duration'), Max('duration'))
-        qs = active_tours.filter(**self.get_field_filter(filters, 'duration'))
+        qs = active_tours.filter(**self.get_field_filter(filters, 'vacants_number'))
         vacants_number = qs.aggregate(Min('vacants_number'), Max('vacants_number'))
         aggregations = queryset.aggregate( Max('vacants_number'), Max('tour_basic__rating'), Max('difficulty_level'), Max('comfort_level'))
         TourBasic.objects.filter(tours__in=queryset).aggregate(Max('rating'))
