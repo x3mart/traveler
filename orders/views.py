@@ -31,7 +31,7 @@ class OrderViewSet(viewsets.ModelViewSet, OrderMixin):
     filterset_class = OrderFilter
 
     def get_queryset(self):
-        tour = Tour.objects.annotate(
+        tour = super().get_queryset().annotate(
                 discounted_price = Case(
                     When(Q(discount__isnull=True) or Q(discount=0), then=F('price')),
                     When(~Q(discount__isnull=True) and ~Q(discount_starts__isnull=True) and Q(discount__gt=0) and Q(discount_starts__gte=datetime.today()) and Q(discount_finish__gte=datetime.today()) and Q(discount_in_prc=True), then=F('price') - F('price')*F('discount')/100),
