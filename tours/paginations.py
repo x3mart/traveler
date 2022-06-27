@@ -48,7 +48,7 @@ class TourResultsSetPagination(PageNumberPagination):
         filters={}
         params = dict(request.query_params)
         for type in params:
-            if params['type'][0] and type == 'price':
+            if type == 'price':
                 value = params[type][0].split(',')
                 filters.append({'price':{'discounted_price__gte':value[0], 'discounted_price__lte':value[1]}})
             elif type == 'price':
