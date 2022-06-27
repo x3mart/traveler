@@ -61,6 +61,9 @@ class TourResultsSetPagination(PageNumberPagination):
             elif type == 'duration':
                 value = params[type][0].split(',')
                 filters.update({'duration':{'duration__gte':value[0], 'duration__lte':value[1]}})
+            elif type == 'tour_types':
+                value = params[type][0].split(',')
+                filters.update({'tour_types': Q(basic_type__in=value) | Q(additional_types__in=value)})
                 
         qs_tour_types = active_tours.filter(**self.get_field_filter(filters, 'tour_types'))
         tour_types = TourType.objects.filter(Q(tours_by_basic_type__in=qs_tour_types) | Q(tours_by_additional_types__in=qs_tour_types)).order_by('name').values('name', 'id').distinct()
