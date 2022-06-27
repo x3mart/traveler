@@ -28,12 +28,11 @@ class TourResultsSetPagination(PageNumberPagination):
         self.filter_data = self.get_filter_data(queryset, request)
         return super().paginate_queryset(queryset, request, view)
     
-    def get_field_filter(self, filters, field):
+    def get_field_filter(self, filters, field, type):
         filter_set = {}
         for filter in filters:
             if filter != field:
                 filter_set.update(filters[filter])
-        print (filter_set)
         return filter_set
     
     def get_filter_data(self, queryset, request):
@@ -77,6 +76,8 @@ class TourResultsSetPagination(PageNumberPagination):
         age = qs.aggregate(Min('age_starts'), Max('age_ends'))
         qs = active_tours.filter(**self.get_field_filter(filters, 'duration'))
         duration = qs.aggregate(Min('duration'), Max('duration'))
+        qs = active_tours.filter(**self.get_field_filter(filters, 'duration'))
+        vacants_number = qs.aggregate(Min('vacants_number'), Max('vacants_number'))
         aggregations = queryset.aggregate( Max('vacants_number'), Max('tour_basic__rating'), Max('difficulty_level'), Max('comfort_level'))
         TourBasic.objects.filter(tours__in=queryset).aggregate(Max('rating'))
         
@@ -89,10 +90,10 @@ class TourResultsSetPagination(PageNumberPagination):
             {'title': 'Допустимый возраст', 'type':'age', 'filter_type': 'range', 'data': [age['age_starts__min'], age['age_ends__max']]},
             {'title': 'Продолжительность тура', 'type':'duration_min', 'filter_type': 'range', 'data': [duration['duration__min'],duration['duration__max']]},
 
-            {'title': 'Свободные места', 'type':'vacants_number', 'data': aggregations['vacants_number__max']},
-            {'title': 'Рейтинг', 'type':'rating', 'data': aggregations['tour_basic__rating__max']},
-            {'title': 'Сложность', 'type':'difficulty_level', 'data': aggregations['difficulty_level__max']},
-            {'title': 'Комфорт', 'type':'comfort_level', 'data': aggregations['comfort_level__max']}
+            {'title': 'Свободные места', 'type':'vacants_number', 'data': [vacants_number['vacants_number__min'],vacants_number['vacants_number__max']]},
+            {'title': 'Рейтинг', 'type':'rating', 'filter_type': 'rating', 'data': aggregations['tour_basic__rating__max']},
+            {'title': 'Сложность', 'type':'difficulty_level', 'filter_type': 'radio', 'data': aggregations['difficulty_level__max']},
+            {'title': 'Комфорт', 'type':'comfort_level', 'filter_type': 'radio', 'data': aggregations['comfort_level__max']}
         ]
         # if len(request.query_params):
         #     params = dict(request.query_params)
