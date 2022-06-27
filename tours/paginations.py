@@ -38,7 +38,7 @@ class TourResultsSetPagination(PageNumberPagination):
     def get_filter_data(self, queryset, request):
         tour_basic = TourBasic.objects.prefetch_related('expert')
         prefetch_tour_basic = Prefetch('tour_basic', tour_basic)
-        active_tours = super().get_queryset().prefetch_related(prefetch_tour_basic, 'start_country', 'start_city', 'wallpaper', 'currency').filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start')))
+        active_tours = Tour.objects.prefetch_related(prefetch_tour_basic, 'start_country', 'start_city', 'wallpaper', 'currency').filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start')))
         filters={}
         params = dict(request.query_params)
         for type in params:
