@@ -28,7 +28,7 @@ class TourResultsSetPagination(PageNumberPagination):
         self.filter_data = self.get_filter_data(queryset, request)
         return super().paginate_queryset(queryset, request, view)
     
-    def get_field_filter(self, filters, field, type):
+    def get_field_filter(self, filters, field, type=None):
         filter_set = {}
         for filter in filters:
             if filter != field:
