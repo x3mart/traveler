@@ -37,15 +37,15 @@ class OrderViewSet(viewsets.ModelViewSet, OrderMixin):
                     When(~Q(discount__isnull=True) and ~Q(discount_starts__isnull=True) and Q(discount__gt=0) and Q(discount_starts__gte=datetime.today()) and Q(discount_finish__gte=datetime.today()) and Q(discount_in_prc=True), then=F('price') - F('price')*F('discount')/100),
                     When(~Q(discount__isnull=True) and Q(discount__gt=0) and Q(discount_starts__lte=datetime.today()) and Q(discount_finish__gte=datetime.today()) and Q(discount_in_prc=False), then=F('price') - F('discount')),
                 )
-            )
+            ).all()
         prefetched_tours = Prefetch('tour', tour)
-        qs = Order.objects.prefetch_related(prefetched_tours, 'expert', 'customer', 'travelers')
+        qs = Order.objects.all()
         if hasattr(self.request.user, 'customer'):
             return qs.filter(customer_id=self.request.user.id)
         if hasattr(self.request.user, 'expert'):
             return qs.filter(expert_id=self.request.user.id).exclude(status__in=['new'])
         if self.request.user.is_staff:
-            return qs
+            return qs.prefetch_related(prefetched_tours, 'expert', 'customer', 'travelers')
     
     def get_serializer_class(self):
         if self.action in ['list', 'book_from_list', 'remove_from_list', 'aprove_from_list', 'decline_from_list', 'cancel_from_list']:
