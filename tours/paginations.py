@@ -90,7 +90,7 @@ class TourResultsSetPagination(PageNumberPagination):
             {'title': 'Допустимый возраст', 'type':'age', 'filter_type': 'range', 'data': [age['age_starts__min'], age['age_ends__max']]},
             {'title': 'Продолжительность тура', 'type':'duration_min', 'filter_type': 'range', 'data': [duration['duration__min'],duration['duration__max']]},
 
-            {'title': 'Свободные места', 'type':'vacants_number', 'data': [vacants_number['vacants_number__min'],vacants_number['vacants_number__max']]},
+            {'title': 'Свободные места', 'type':'vacants_number', 'filter_type': 'range', 'data': [vacants_number['vacants_number__min'],vacants_number['vacants_number__max']]},
             {'title': 'Рейтинг', 'type':'rating', 'filter_type': 'rating', 'data': aggregations['tour_basic__rating__max']},
             {'title': 'Сложность', 'type':'difficulty_level', 'filter_type': 'radio', 'data': aggregations['difficulty_level__max']},
             {'title': 'Комфорт', 'type':'comfort_level', 'filter_type': 'radio', 'data': aggregations['comfort_level__max']}
