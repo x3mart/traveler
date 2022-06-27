@@ -1,6 +1,6 @@
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
-from django.db.models import F, Q, Max, Min
+from django.db.models import F, Q, Max, Min, When, Case
 from datetime import timedelta, datetime
 from django.db.models.query import Prefetch
 
@@ -38,7 +38,13 @@ class TourResultsSetPagination(PageNumberPagination):
     def get_filter_data(self, queryset, request):
         tour_basic = TourBasic.objects.prefetch_related('expert')
         prefetch_tour_basic = Prefetch('tour_basic', tour_basic)
-        active_tours = Tour.objects.prefetch_related(prefetch_tour_basic, 'start_country', 'start_city', 'wallpaper', 'currency').filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start')))
+        active_tours = Tour.objects.prefetch_related(prefetch_tour_basic, 'start_country', 'start_city', 'wallpaper', 'currency').filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start'))).annotate(
+                discounted_price = Case(
+                    When(Q(discount__isnull=True) or Q(discount=0), then=F('price')),
+                    When(~Q(discount__isnull=True) and ~Q(discount_starts__isnull=True) and Q(discount__gt=0) and Q(discount_starts__gte=datetime.today()) and Q(discount_finish__gte=datetime.today()) and Q(discount_in_prc=True), then=F('price') - F('price')*F('discount')/100),
+                    When(~Q(discount__isnull=True) and Q(discount__gt=0) and Q(discount_starts__lte=datetime.today()) and Q(discount_finish__gte=datetime.today()) and Q(discount_in_prc=False), then=F('price') - F('discount')),
+                )
+            )
         filters={}
         params = dict(request.query_params)
         for type in params:
