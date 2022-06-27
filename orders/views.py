@@ -5,10 +5,12 @@ from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
 import threading
 from django.core.mail import send_mail
-from django.db.models import F
+from django.db.models import F, Q, Case, When
+from datetime import timedelta, datetime
 from django.utils.translation import gettext_lazy as _
 from orders.filters import OrderFilter
 from orders.mixins import OrderMixin
+from django.db.models.query import Prefetch
 
 from orders.models import Order, Traveler
 from orders.paginations import OrderResultsSetPagination
@@ -19,7 +21,7 @@ from tours.models import Tour
 
 # Create your views here.
 class OrderViewSet(viewsets.ModelViewSet, OrderMixin):
-    queryset = Order.objects.prefetch_related('tour', 'expert', 'customer', 'travelers')
+    queryset = Order.objects.prefetch_related('expert', 'customer', 'travelers')
     serializer_class = OrderSerializer
     permission_classes = [OrderPermission]
     pagination_class = OrderResultsSetPagination
@@ -29,7 +31,15 @@ class OrderViewSet(viewsets.ModelViewSet, OrderMixin):
     filterset_class = OrderFilter
 
     def get_queryset(self):
-        qs = super().get_queryset()
+        tour = Tour.objects.annotate(
+                discounted_price = Case(
+                    When(Q(discount__isnull=True) or Q(discount=0), then=F('price')),
+                    When(~Q(discount__isnull=True) and ~Q(discount_starts__isnull=True) and Q(discount__gt=0) and Q(discount_starts__gte=datetime.today()) and Q(discount_finish__gte=datetime.today()) and Q(discount_in_prc=True), then=F('price') - F('price')*F('discount')/100),
+                    When(~Q(discount__isnull=True) and Q(discount__gt=0) and Q(discount_starts__lte=datetime.today()) and Q(discount_finish__gte=datetime.today()) and Q(discount_in_prc=False), then=F('price') - F('discount')),
+                )
+            )
+        prefetched_tours = Prefetch('tour', tour)
+        qs = super().get_queryset().prefetch_related(prefetched_tours)
         if hasattr(self.request.user, 'customer'):
             return qs.filter(customer_id=self.request.user.id)
         if hasattr(self.request.user, 'expert'):
