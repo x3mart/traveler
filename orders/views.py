@@ -39,7 +39,7 @@ class OrderViewSet(viewsets.ModelViewSet, OrderMixin):
                 )
             )
         prefetched_tours = Prefetch('tour', tour)
-        qs = super().get_queryset().prefetch_related(prefetched_tours, 'expert', 'customer', 'travelers')
+        qs = Order.objects.prefetch_related(prefetched_tours, 'expert', 'customer', 'travelers')
         if hasattr(self.request.user, 'customer'):
             return qs.filter(customer_id=self.request.user.id)
         if hasattr(self.request.user, 'expert'):
