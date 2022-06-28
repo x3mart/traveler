@@ -17,7 +17,7 @@ class TourFilter(filters.FilterSet):
     price = NumberInFilter(method='price_filter', label='Цена')
     discount = BooleanFilter(field_name='discount', method='discount_filter')
     duration = NumberInFilter(method='duration_filter', label='Продолжительность')
-    vacants_number = NumberFilter(fmethod='vacants_number_filter', label='Свободные места')
+    vacants_number = NumberFilter(method='vacants_number_filter', label='Свободные места')
     rating = NumberFilter(field_name='tour_basic__rating', lookup_expr='gte')
     expert = NumberFilter(field_name='tour_basic__expert', lookup_expr='gte')
     difficulty_level = NumberFilter(field_name='difficulty_level', lookup_expr='lte')
