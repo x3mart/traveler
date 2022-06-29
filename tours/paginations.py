@@ -31,14 +31,14 @@ class TourResultsSetPagination(PageNumberPagination):
     def get_q_filters(self, filters, field, type=None):
         q_filter = Q()
         for filter in filters:
-            if filter != field and field == 'tour_types':
+            if filter != field and filter == 'tour_types':
                 q_filter = filters[filter]
         return q_filter
     
     def get_field_filter(self, filters, field, type=None):
         filter_set = {}
         for filter in filters:
-            if filter != field and field != 'tour_types':
+            if filter != field and filter != 'tour_types':
                 filter_set.update(filters[filter])
             
         return filter_set
