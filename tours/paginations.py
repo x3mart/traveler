@@ -28,23 +28,25 @@ class TourResultsSetPagination(PageNumberPagination):
         self.filter_data = self.get_filter_data(queryset, request)
         return super().paginate_queryset(queryset, request, view)
     
+    def get_q_filters(self, filters, field, type=None):
+        q_filter = Q()
+        for filter in filters:
+            if filter != field and field == 'tour_types':
+                q_filter = filters[filter]
+        return q_filter
+    
     def get_field_filter(self, filters, field, type=None):
         filter_set = {}
         for filter in filters:
-            if filter != field:
+            if filter != field and field != 'tour_types':
                 filter_set.update(filters[filter])
+            
         return filter_set
     
     def get_filter_data(self, queryset, request):
         tour_basic = TourBasic.objects.prefetch_related('expert')
         prefetch_tour_basic = Prefetch('tour_basic', tour_basic)
-        active_tours = Tour.objects.prefetch_related(prefetch_tour_basic, 'start_country', 'start_city', 'wallpaper', 'currency').filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start'))).annotate(
-                discounted_price = Case(
-                    When(Q(discount__isnull=True) or Q(discount=0), then=F('price')),
-                    When(~Q(discount__isnull=True) and ~Q(discount_starts__isnull=True) and Q(discount__gt=0) and Q(discount_starts__gte=datetime.today()) and Q(discount_finish__gte=datetime.today()) and Q(discount_in_prc=True), then=F('price') - F('price')*F('discount')/100),
-                    When(~Q(discount__isnull=True) and Q(discount__gt=0) and Q(discount_starts__lte=datetime.today()) and Q(discount_finish__gte=datetime.today()) and Q(discount_in_prc=False), then=F('price') - F('discount')),
-                )
-            )
+        active_tours = Tour.objects.prefetch_related(prefetch_tour_basic, 'start_country', 'start_city', 'wallpaper', 'currency').filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start')))
         filters={}
         params = dict(request.query_params)
         for type in params:
@@ -67,19 +69,19 @@ class TourResultsSetPagination(PageNumberPagination):
                 value = params[type][0].split(',')
                 filters.update({'tour_types': Q(basic_type__in=value) | Q(additional_types__in=value)})
                 
-        qs_tour_types = active_tours.filter(**self.get_field_filter(filters, 'tour_types'))
+        qs_tour_types = active_tours.filter(**self.get_field_filter(filters, 'tour_types')).filter(self.get_q_filters(filters, 'tour_types'))
         tour_types = TourType.objects.filter(Q(tours_by_basic_type__in=qs_tour_types) | Q(tours_by_additional_types__in=qs_tour_types)).order_by('name').values('name', 'id').distinct()
-        qs = active_tours.filter(**self.get_field_filter(filters, 'languages'))
+        qs = active_tours.filter(**self.get_field_filter(filters, 'languages')).filter(self.get_q_filters(filters, 'languages'))
         languages = Language.objects.filter(tours__in=qs).order_by('name').values('name', 'id').distinct()
         property_type = TourPropertyType.objects.filter(tours__in=queryset).order_by('name').values('name', 'id').distinct()
         accomodation = TourAccomodation.objects.filter(tours__in=queryset).order_by('name').values('name', 'id').distinct()
-        qs = active_tours.filter(**self.get_field_filter(filters, 'price'))
+        qs = active_tours.filter(**self.get_field_filter(filters, 'price')).filter(self.get_q_filters(filters, 'price'))
         price = qs.aggregate(Min('discounted_price'), Max('discounted_price'))
-        qs = active_tours.filter(**self.get_field_filter(filters, 'age'))
+        qs = active_tours.filter(**self.get_field_filter(filters, 'age')).filter(self.get_q_filters(filters, 'age'))
         age = qs.aggregate(Min('age_starts'), Max('age_ends'))
-        qs = active_tours.filter(**self.get_field_filter(filters, 'duration'))
+        qs = active_tours.filter(**self.get_field_filter(filters, 'duration')).filter(self.get_q_filters(filters, 'duration'))
         duration = qs.aggregate(Min('duration'), Max('duration'))
-        qs = active_tours.filter(**self.get_field_filter(filters, 'vacants_number'))
+        qs = active_tours.filter(**self.get_field_filter(filters, 'vacants_number')).filter(self.get_q_filters(filters, 'vacants_number'))
         vacants_number = qs.aggregate(Min('vacants_number'), Max('vacants_number'))
         aggregations = queryset.aggregate( Max('vacants_number'), Max('tour_basic__rating'), Max('difficulty_level'), Max('comfort_level'))
         TourBasic.objects.filter(tours__in=queryset).aggregate(Max('rating'))
