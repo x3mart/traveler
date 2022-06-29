@@ -37,7 +37,7 @@ class OrderViewSet(viewsets.ModelViewSet, OrderMixin):
         if hasattr(self.request.user, 'expert'):
             return qs.filter(expert_id=self.request.user.id).exclude(status__in=['new'])
         if self.request.user.is_staff:
-            return qs.prefetch_related(prefetched_tours, 'expert', 'customer', 'travelers')
+            return qs
     
     def get_serializer_class(self):
         if self.action in ['list', 'book_from_list', 'remove_from_list', 'aprove_from_list', 'decline_from_list', 'cancel_from_list']:
