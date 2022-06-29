@@ -59,7 +59,7 @@ class OrderViewSet(viewsets.ModelViewSet, OrderMixin):
         serializer =self.get_serializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             data = serializer.validated_data
-        tour = Tour.filter(pk=data['tour'].id).annotate(
+        tour = Tour.objects.filter(pk=data['tour'].id).annotate(
                 discounted_price = Case(
                     When(Q(discount__isnull=True) or Q(discount=0), then=F('price')),
                     When(~Q(discount__isnull=True) and ~Q(discount_starts__isnull=True) and Q(discount__gt=0) and Q(discount_starts__gte=datetime.today()) and Q(discount_finish__gte=datetime.today()) and Q(discount_in_prc=True), then=F('price') - F('price')*F('discount')/100),
