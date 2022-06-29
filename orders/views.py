@@ -75,9 +75,6 @@ class OrderViewSet(viewsets.ModelViewSet, OrderMixin):
         Traveler.objects.bulk_create(travelers)
         order.refresh_from_db()
         order.tour_dates = self.get_tour_dates(order.tour)
-        tour = Tour.objects.all()
-        prefetched_tours = Prefetch('tour', tour)
-        order.prefetch_related(prefetched_tours, 'expert', 'customer', 'travelers')
         return Response(self.get_serializer(order).data, status=201)
     
     def update(self, request, *args, **kwargs):
