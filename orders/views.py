@@ -66,7 +66,7 @@ class OrderViewSet(viewsets.ModelViewSet, OrderMixin):
                     When(~Q(discount__isnull=True) and Q(discount__gt=0) and Q(discount_starts__lte=datetime.today()) and Q(discount_finish__gte=datetime.today()) and Q(discount_in_prc=False), then=F('price') - F('discount')),
                 )
             ).first()
-        initial_params = self.get_initial_params(data['tour'])
+        initial_params = self.get_initial_params(tour)
         costs = self.get_costs(data['travelers_number'], **initial_params)
         order = Order.objects.create(email=request.user.email, tour=data['tour'], travelers_number=data['travelers_number'], customer_id=request.user.id, **initial_params, **costs)
         travelers = []
