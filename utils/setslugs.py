@@ -19,8 +19,9 @@ def set_slug():
         obj.slug = slugify(unidecode(obj.name))
         obj.save()
     for obj in Tour.objects.all():
-        obj.slug = slugify(unidecode(obj.name))
-        obj.save()
+        if obj.name:
+            obj.slug = slugify(unidecode(obj.name))
+            obj.save()
     for obj in TourType.objects.all():
         obj.slug = slugify(unidecode(obj.name))
         obj.save()
