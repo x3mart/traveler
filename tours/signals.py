@@ -1,5 +1,9 @@
 from django.dispatch import receiver
 from django.db.models.signals import post_delete, post_save, pre_save
+from django.template.defaultfilters import slugify
+from unidecode import unidecode
+from rest_framework.serializers import ValidationError
+from django.utils.translation import gettext_lazy as _
 from accounts.models import Expert
 from tours.models import Tour, TourBasic, TourDayImage, TourGuestGuideImage, TourImage, TourPlanImage, TourPropertyImage, TourType, TourWallpaper
 from utils.images import delete_image, image_processing, get_current_img
@@ -23,6 +27,11 @@ def tour_type_post_delete(instance, **kwargs):
 def tour_pre_save(instance, **kwargs):
     if instance.finish_date and instance.start_date:
         instance.duration = (instance.finish_date - instance.start_date).days + 1
+    if instance.name:
+        if Tour.objects.exclude(expert=instance.expert).filter(name=instance.name).filter(name='', name__isnull=True).exists():
+            raise ValidationError({'name':[_('Кто то уже создал тур с таким именем.')]})
+        instance.slug = slugify(unidecode(instance.name))
+
 
 # @receiver(post_save, sender=Tour)
 # def tour_post_save(instance, **kwargs):
