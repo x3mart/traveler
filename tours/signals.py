@@ -28,7 +28,7 @@ def tour_pre_save(instance, **kwargs):
     if instance.finish_date and instance.start_date:
         instance.duration = (instance.finish_date - instance.start_date).days + 1
     if instance.name:
-        if Tour.objects.exclude(expert=instance.expert).filter(name=instance.name).filter(name='', name__isnull=True).exists():
+        if Tour.objects.exclude(tour_basic=instance.tour_basic).filter(name=instance.name).filter(name='', name__isnull=True).exists():
             raise ValidationError({'name':[_('Кто то уже создал тур с таким именем.')]})
         instance.slug = slugify(unidecode(instance.name))
 
