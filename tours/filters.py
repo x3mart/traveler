@@ -18,7 +18,7 @@ class TourFilter(filters.FilterSet):
     discount = BooleanFilter(field_name='discount', method='discount_filter')
     duration = NumberInFilter(method='duration_filter', label='Продолжительность')
     vacants_number = NumberInFilter(method='vacants_number_filter', label='Свободные места')
-    rating = NumberFilter(field_name='tour_basic__rating', lookup_expr='gte')
+    rating = NumberFilter(method='rating_filter', label='Рейтинг')
     expert = NumberFilter(field_name='tour_basic__expert', lookup_expr='gte')
     difficulty_level = NumberFilter(field_name='difficulty_level', lookup_expr='lte')
     comfort_level = NumberFilter(field_name='comfort_level', lookup_expr='gte')
@@ -56,4 +56,9 @@ class TourFilter(filters.FilterSet):
         if len(value) < 2:
             return queryset
         return queryset.filter(vacants_number__gte=value[0]).filter(vacants_number__lte=value[1])
+    
+    def rating_filter(self, queryset, name, value):
+        if len(value) < 1:
+            return queryset
+        return queryset.filter(vacants_number__gte=value[0])
         

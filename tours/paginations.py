@@ -76,6 +76,10 @@ class TourResultsSetPagination(PageNumberPagination):
                 value = params[type][0].split(',')
                 if value[0]:
                     filters.update({'vacants_number':{'vacants_number__gte':value[0], 'vacants_number__lte':value[1]}})
+            elif type == 'rating':
+                value = params[type][0].split(',')
+                if value[0]:
+                    filters.update({'rating':{'rating__gte':value[0]}})
             elif type == 'tour_types':
                 value = params[type][0].split(',')
                 if value[0]:
