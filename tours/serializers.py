@@ -68,7 +68,7 @@ class ImportantSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-TOUR_FIELDS = ('id', 'rating', 'reviews_count', 'name', 'wallpaper', 'tmb_wallpaper', 'basic_type', 'additional_types', 'start_region', 'finish_region', 'start_country', 'finish_country', 'start_russian_region', 'finish_russian_region', 'start_city', 'finish_city', 'description', 'plan', 'cancellation_terms', 'difficulty_level', 'difficulty_description', 'tour_property_types', 'accomodation', 'tour_property_images', 'comfort_level', 'babies_alowed', 'animals_not_exploited', 'start_date', 'finish_date', 'start_time', 'finish_time', 'direct_link', 'instant_booking', 'members_number', 'team_member', 'guest_guide', 'price_comment', 'prepay_amount', 'prepay_in_prc', 'prepay_currency', 'postpay_on_start_day', 'postpay_days_before_start', 'currency', 'price', 'cost', 'discount_starts', 'discount_finish', 'discount_in_prc', 'discount', 'languages', 'is_guaranteed', 'flight_included', 'scouting', 'tour_images', 'tour_days', 'main_impressions', 'tour_included_services', 'tour_excluded_services', 'tour_addetional_services','hotel_name', 'age_starts', 'age_ends', 'media_link', 'week_recurrent', 'month_recurrent', 'vacants_number', 'on_moderation', 'is_active', 'is_draft', 'air_tickets', 'duration', 'sold', 'watched', 'guest_requirements', 'take_with', 'key_features', 'new_to_see', 'map') 
+TOUR_FIELDS = ('id', 'rating', 'reviews_count', 'name', 'wallpaper', 'tmb_wallpaper', 'basic_type', 'additional_types', 'start_region', 'finish_region', 'start_country', 'finish_country', 'start_russian_region', 'finish_russian_region', 'start_city', 'finish_city', 'description', 'plan', 'cancellation_terms', 'difficulty_level', 'difficulty_description', 'tour_property_types', 'accomodation', 'tour_property_images', 'comfort_level', 'babies_alowed', 'animals_not_exploited', 'start_date', 'finish_date', 'start_time', 'finish_time', 'direct_link', 'instant_booking', 'members_number', 'team_member', 'guest_guide', 'price_comment', 'prepay_amount', 'prepay_in_prc', 'prepay_currency', 'postpay_on_start_day', 'postpay_days_before_start', 'currency', 'price', 'cost', 'discount_starts', 'discount_finish', 'discount_in_prc', 'discount', 'languages', 'is_guaranteed', 'flight_included', 'scouting', 'tour_images', 'tour_days', 'main_impressions', 'tour_included_services', 'tour_excluded_services', 'tour_addetional_services','hotel_name', 'age_starts', 'age_ends', 'media_link', 'week_recurrent', 'month_recurrent', 'vacants_number', 'on_moderation', 'is_active', 'is_draft', 'air_tickets', 'duration', 'sold', 'watched', 'guest_requirements', 'take_with', 'key_features', 'new_to_see', 'map', 'slug') 
 
 
 class TourPreviewSerializer(serializers.ModelSerializer, TourSerializerMixin):
@@ -104,7 +104,7 @@ class TourPreviewSerializer(serializers.ModelSerializer, TourSerializerMixin):
 
     class Meta:
         model = Tour
-        fields = TOUR_FIELDS + ('expert', 'cost', 'discounted_price', 'book_price', 'daily_price', 'decline_reasons', 'postpay_final_date')
+        fields = TOUR_FIELDS + ('expert', 'cost', 'discounted_price', 'book_price', 'daily_price', 'decline_reasons', 'postpay_final_date', 'slug')
 
     def get_tmb_wallpaper(self, obj):
         if obj.wallpaper: 
@@ -162,6 +162,7 @@ class TourSerializer(serializers.ModelSerializer, TourSerializerMixin):
             'is_draft': {'required': False,},
             'flight_included': {'required': False,},
             'duration': {'required': False, 'read_only':True},
+            'slug': {'required': False, 'read_only':True},
         }
 
     def get_tmb_wallpaper(self, obj):
@@ -178,6 +179,7 @@ class TourSerializer(serializers.ModelSerializer, TourSerializerMixin):
         if not obj.is_active and obj.decline_reasons.all().exists():
             return obj.decline_reasons.last().reason
         return None
+    
 
 
 class TourListSerializer(serializers.ModelSerializer, TourSerializerMixin):
@@ -192,16 +194,28 @@ class TourListSerializer(serializers.ModelSerializer, TourSerializerMixin):
     is_recomended = serializers.SerializerMethodField(read_only=True)
     discount = serializers.SerializerMethodField(read_only=True)
     discounted_price = serializers.IntegerField(read_only=True)
+    api_url = serializers.SerializerMethodField(read_only=True)
+    public_url = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Tour
-        fields = ['id', 'name', 'start_date', 'start_country', 'start_city', 'price', 'discount', 'duration', 'currency', 'tmb_wallpaper', 'expert', 'vacants_number', 'is_favourite', 'is_new', 'is_recomended', 'discounted_price']
+        fields = ['id', 'name', 'start_date', 'start_country', 'start_city', 'price', 'discount', 'duration', 'currency', 'tmb_wallpaper', 'expert', 'vacants_number', 'is_favourite', 'is_new', 'is_recomended', 'discounted_price', 'slug']
     
     def get_tmb_wallpaper(self, obj):
         if obj.wallpaper: 
             return get_tmb_image_uri(self, obj.wallpaper)
         return None
+    
+    def get_public_url(self, obj):
+        if obj.start_region.slug == 'rossiia':
+            return f'{obj.start_region.slug}/{obj.start_russian_region.slug}/{obj.slug}/?date_id={obj.id}'
+        return f'{obj.start_region.slug}/{obj.start_country.slug}/{obj.slug}/?date_id={obj.id}'
 
+    def get_api_url(self, obj):
+        request = self.context.get('request')
+        if obj.start_region.slug == 'rossiia':
+            return request.build_absolute_uri(f'{obj.slug}/?date_id={obj.id}')
+        return request.build_absolute_uri(f'{obj.slug}/?date_id={obj.id}')
 
 
 class TourSetSerializer(serializers.ModelSerializer, TourSerializerMixin):
@@ -213,7 +227,7 @@ class TourSetSerializer(serializers.ModelSerializer, TourSerializerMixin):
 
     class Meta:
         model = Tour
-        fields = ['id', 'rating', 'reviews_count', 'name', 'tmb_wallpaper', 'start_date', 'finish_date', 'start_country', 'price', 'cost', 'discount', 'on_moderation', 'is_active', 'is_draft', 'duration', 'sold', 'watched', 'currency']
+        fields = ['id', 'rating', 'reviews_count', 'name', 'tmb_wallpaper', 'start_date', 'finish_date', 'start_country', 'price', 'cost', 'discount', 'on_moderation', 'is_active', 'is_draft', 'duration', 'sold', 'watched', 'currency', 'slug']
     
     def get_tmb_wallpaper(self, obj):
         if obj.wallpaper: 

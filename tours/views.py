@@ -201,7 +201,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
     @action(['get'], detail=True, lookup_url_kwarg=['slug'])
     def preview(self, request, *args, **kwargs):
         slug = kwargs.get('slug')
-        id = request.query_params.get('data_id')
+        id = request.query_params.get('date_id')
         if id:
             tour = Tour.objects.get(pk=id)
         else:
