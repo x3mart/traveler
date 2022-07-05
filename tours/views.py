@@ -246,7 +246,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
     @action(['get'], detail=False, pagination_class=TourResultsSetPagination)
     def types(self, request, *args, **kwargs):
         qs = self.get_queryset()
-        return Response(TourListSerializer(qs, context={'request':request}).data, status=200)
+        return Response(TourListSerializer(qs, many=True, context={'request':request}).data, status=200)
 
 
 class TourTypeViewSet(viewsets.ReadOnlyModelViewSet):
