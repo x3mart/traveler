@@ -26,7 +26,7 @@ class TourResultsSetPagination(PageNumberPagination):
     
     def paginate_queryset(self, queryset, request, view=None):
         print('WOW')
-        print(view)
+        print(view.action)
         self.filter_data = self.get_filter_data(queryset, request)
         return super().paginate_queryset(queryset, request, view)
     
