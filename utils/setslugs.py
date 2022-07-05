@@ -6,9 +6,9 @@ from tours.models import Tour, TourType
 
 
 def set_slug():
-    for obj in City.objects.all():
-        obj.slug = slugify(unidecode(obj.name))
-        obj.save()
+    # for obj in City.objects.all():
+    #     obj.slug = slugify(unidecode(obj.name))
+    #     obj.save()
     for obj in Country.objects.all():
         obj.slug = slugify(unidecode(obj.name))
         obj.save()
