@@ -14,6 +14,7 @@ def geo_path(instance, filename):
 
 class Region(models.Model):
     name = models.CharField(_('Название'), max_length=255)
+    slug = models.SlugField(max_length = 255, null=True, blank=True)
     image = models.ImageField(_("Фото"), upload_to=geo_path, max_length=255, null=True, blank=True)
     alt =  models.CharField(_('alt текст'), max_length=255, null=True, blank=True)
 
@@ -26,6 +27,7 @@ class Region(models.Model):
 
 class Country(models.Model):
     name = models.CharField(_('Название'), max_length=255)
+    slug = models.SlugField(max_length = 255, null=True, blank=True)
     counry_code = models.CharField(_('Краткое название'), null=True, blank=True, max_length=20)
     region = models.ForeignKey('Region', on_delete=models.CASCADE, related_name='countries', verbose_name=_('Регион Мира'), null=True, blank=True)
     image = models.ImageField(_("Фото"), upload_to=geo_path, max_length=255, null=True, blank=True)
@@ -40,6 +42,7 @@ class Country(models.Model):
 
 class City(models.Model):
     name = models.CharField(_('Название'), max_length=255)
+    slug = models.SlugField(max_length = 255, null=True, blank=True)
     foreign_id = models.IntegerField(_('Сторонний ключ'), null=True, blank=True)
     country = models.ForeignKey('Country', on_delete=models.CASCADE, related_name='cities', verbose_name=_('Страна'), null=True, blank=True)
     country_region = models.ForeignKey('CountryRegion', on_delete=models.CASCADE, related_name='cities', verbose_name=_('Регион Страны'), null=True, blank=True)
@@ -55,6 +58,7 @@ class City(models.Model):
 
 class CountryRegion(models.Model):
     name = models.CharField(_('Название'), max_length=255)
+    slug = models.SlugField(max_length = 255, null=True, blank=True)
     foreign_id = models.IntegerField(_('Сторонний ключ'), null=True, blank=True)
     image = models.ImageField(_("Фото"), upload_to=geo_path, max_length=255, null=True, blank=True)
     alt =  models.CharField(_('alt текст'), max_length=255, null=True, blank=True)

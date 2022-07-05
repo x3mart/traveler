@@ -43,6 +43,7 @@ def tour_types_path(instance, filename):
 
 class TourType(models.Model):
     name = models.CharField(_('Название'), max_length=255)
+    slug = models.SlugField(max_length = 255, null=True, blank=True)
     image = models.ImageField(_("Фото"), upload_to=tour_types_path, max_length=255, null=True, blank=True)
     alt =  models.CharField(_('alt текст'), max_length=255, null=True, blank=True)
 
@@ -207,7 +208,8 @@ class Important(models.Model):
 
 class Tour(models.Model):
     tour_basic = models.ForeignKey("TourBasic", verbose_name=_('Основа тура'), on_delete=models.CASCADE, related_name='tours', null=True, blank=True)
-    name = models.CharField(_('Название'), max_length=255, null=True, blank=True)
+    name = models.CharField(_('Название'), max_length=180, null=True, blank=True)
+    slug = models.SlugField(max_length = 255, null=True, blank=True)
     is_draft = models.BooleanField(_('Черновик'), default=True)
     is_active = models.BooleanField(default=False)
     on_moderation = models.BooleanField(_('На модерации'), default=False)
