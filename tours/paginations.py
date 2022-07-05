@@ -105,7 +105,7 @@ class TourResultsSetPagination(PageNumberPagination):
             {'title': 'Размещение', 'type':'accomodation', 'data': accomodation},
             {'title': 'Цена', 'type':'price', 'filter_type': 'range', 'data': [price['discounted_price__min'], price['discounted_price__max']]},
             {'title': 'Допустимый возраст', 'type':'age', 'filter_type': 'range', 'data': [age['age_starts__min'], age['age_ends__max']]},
-            {'title': 'Продолжительность тура', 'type':'duration_min', 'filter_type': 'range', 'data': [duration['duration__min'],duration['duration__max']]},
+            {'title': 'Продолжительность тура', 'type':'duration', 'filter_type': 'range', 'data': [duration['duration__min'],duration['duration__max']]},
 
             {'title': 'Свободные места', 'type':'vacants_number', 'filter_type': 'range', 'data': [vacants_number['vacants_number__min'],vacants_number['vacants_number__max']]},
             {'title': 'Рейтинг', 'type':'rating', 'filter_type': 'rating', 'data': aggregations['tour_basic__rating__max']},
