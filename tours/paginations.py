@@ -63,6 +63,8 @@ class TourResultsSetPagination(PageNumberPagination):
             elif type == 'languages':
                 value = params[type][0].split(',')
                 if len(value) > 0:
+                    print('WOW')
+                    print(value)
                     filters.update({'languages':{'languages__in':value}})
             elif type == 'age':
                 value = params[type][0].split(',')
