@@ -210,8 +210,8 @@ class TourListSerializer(serializers.ModelSerializer, TourSerializerMixin):
         print(obj)
         print(obj.slug)
         if obj.start_region.slug == 'rossiia':
-            return f'{obj.start_region.slug}/{obj.start_russian_region.slug}/{obj.slug}/?date_id={obj.id}'
-        return f'{obj.start_region.slug}/{obj.start_country.slug}/{obj.slug}/?date_id={obj.id}'
+            return f'{obj.start_region.slug}/{obj.start_russian_region.slug}/?date_id={obj.id}'
+        return f'{obj.start_region.slug}/{obj.start_country.slug}/?date_id={obj.id}'
 
     def get_api_url(self, obj):
         request = self.context.get('request')
