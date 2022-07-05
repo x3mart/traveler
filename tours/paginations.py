@@ -99,8 +99,11 @@ class TourResultsSetPagination(PageNumberPagination):
         duration = qs.aggregate(Min('duration'), Max('duration'))
         qs = active_tours.filter(**self.get_field_filter(filters, 'vacants_number')).filter(self.get_q_filters(filters, 'vacants_number'))
         vacants_number = qs.aggregate(Min('vacants_number'), Max('vacants_number'))
-        aggregations = queryset.aggregate( Max('vacants_number'), Max('tour_basic__rating'), Max('difficulty_level'), Max('comfort_level'))
-        TourBasic.objects.filter(tours__in=queryset).aggregate(Max('rating'))
+        qs = active_tours.filter(**self.get_field_filter(filters, 'difficulty_level')).filter(self.get_q_filters(filters, 'difficulty_level'))
+        difficulty_level = qs.aggregate(Max('difficulty_level'))
+        qs = active_tours.filter(**self.get_field_filter(filters, 'comfort_level')).filter(self.get_q_filters(filters, 'comfort_level'))
+        comfort_level = qs.aggregate(Max('comfort_level'))
+        rating = TourBasic.objects.filter(tours__in=queryset).aggregate(Max('rating'))
         
         filter_data = [
             {'title': 'Тип тура', 'type':'tour_types', 'data': tour_types},
@@ -112,9 +115,9 @@ class TourResultsSetPagination(PageNumberPagination):
             {'title': 'Продолжительность тура', 'type':'duration', 'filter_type': 'range', 'data': [duration['duration__min'],duration['duration__max']]},
 
             {'title': 'Свободные места', 'type':'vacants_number', 'filter_type': 'range', 'data': [vacants_number['vacants_number__min'],vacants_number['vacants_number__max']]},
-            {'title': 'Рейтинг', 'type':'rating', 'filter_type': 'rating', 'data': aggregations['tour_basic__rating__max']},
-            {'title': 'Сложность', 'type':'difficulty_level', 'filter_type': 'radio', 'data': aggregations['difficulty_level__max']},
-            {'title': 'Комфорт', 'type':'comfort_level', 'filter_type': 'radio', 'data': aggregations['comfort_level__max']}
+            {'title': 'Рейтинг', 'type':'rating', 'filter_type': 'rating', 'data': rating['rating__max']},
+            {'title': 'Сложность', 'type':'difficulty_level', 'filter_type': 'radio', 'data': difficulty_level['difficulty_level__max']},
+            {'title': 'Комфорт', 'type':'comfort_level', 'filter_type': 'radio', 'data': comfort_level['comfort_level__max']}
         ]
         # if len(request.query_params):
         #     params = dict(request.query_params)
