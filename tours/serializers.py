@@ -216,7 +216,7 @@ class TourListSerializer(serializers.ModelSerializer, TourSerializerMixin):
 
     def get_api_url(self, obj):
         request = self.context.get('request')
-        return request.build_absolute_uri(f'/{obj.slug}?date_id={obj.id}')
+        return request.build_absolute_uri(f'/{obj.slug}/?date_id={obj.id}')
 
 
 
