@@ -207,11 +207,12 @@ class TourListSerializer(serializers.ModelSerializer, TourSerializerMixin):
         return None
     
     def get_public_url(self, obj):
-        print(obj)
-        print(obj.slug)
-        if obj.start_region.slug == 'rossiia':
-            return f'{obj.start_region.slug}/{obj.start_russian_region.slug}/?date_id={obj.id}'
-        return f'{obj.start_region.slug}/{obj.start_country.slug}/?date_id={obj.id}'
+        # print(obj)
+        # print(obj.slug)
+        # if obj.start_region.slug == 'rossiia':
+        #     return f'{obj.start_region.slug}/{obj.start_russian_region.slug}/?date_id={obj.id}'
+        # return f'{obj.start_region.slug}/{obj.start_country.slug}/?date_id={obj.id}'
+        return None
 
     def get_api_url(self, obj):
         request = self.context.get('request')
