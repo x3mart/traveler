@@ -200,17 +200,18 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
     
     @action(['get'], detail=True, lookup_url_kwarg=['slug'])
     def preview(self, request, *args, **kwargs):
+        qs = self.get_queryset()
         slug = kwargs.get('slug')
         id = request.query_params.get('date_id')
         if id:
-            tour = Tour.objects.get(pk=id)
+            tour = qs.get(pk=id)
         else:
-            tours = Tour.objects.filter(slug=slug).filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start'))).only('id', 'start_date', 'finish_date').order_by('start_date')
+            tours = qs.filter(slug=slug).filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start'))).only('id', 'start_date', 'finish_date').order_by('start_date')
             if tours.exists():
                 tour = tours.first()
                 tour.archive = False
             else:
-                tour = Tour.objects.filter(slug=slug).filter(is_active=True).order_by('-start_date').first()
+                tour = qs.filter(slug=slug).filter(is_active=True).order_by('-start_date').first()
                 tour.archive = True
         tour.tour_dates = Tour.objects.filter(tour_basic=tour.tour_basic).filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start'))).only('id', 'start_date', 'finish_date')
         return Response(TourPreviewSerializer(tour, context={'request': request}, many=False).data, status=200)
