@@ -77,7 +77,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
             return TourSetSerializer
         elif self.action in ['preview',]:
             return TourPreviewSerializer
-        elif  self.action in ['list',]:
+        elif  self.action in ['list', 'types']:
             return TourListSerializer
         return super().get_serializer_class()
     
@@ -243,10 +243,16 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         DeclineReason.objects.create(tour=instance, reason=request.data.get('reason'), staff=request.user)
         return Response({}, status=200)
     
-    @action(['get'], detail=False, pagination_class=TourResultsSetPagination)
+    @action(['get'], detail=False)
     def types(self, request, *args, **kwargs):
-        qs = self.get_queryset()
-        return Response(TourListSerializer(qs, many=True, context={'request':request}).data, status=200)
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class TourTypeViewSet(viewsets.ReadOnlyModelViewSet):
