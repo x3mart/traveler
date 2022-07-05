@@ -10,6 +10,7 @@ class TourAdmin(admin.ModelAdmin):
     list_display = ('name', 'expert', 'start_country', 'start_city', 'start_date', 'is_active', 'on_moderation', 'is_draft', 'direct_link')
     # list_editable =('is_active', 'on_moderation', 'is_draft')
     list_filter = ('is_active', 'on_moderation', 'is_draft', 'tour_basic__expert')
+    prepopulated_fields = {"slug": ("name",)}
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
@@ -44,12 +45,14 @@ class ModeratedTourAdmin(admin.ModelAdmin):
     @admin.display(description='Эксперт')
     def expert(self, obj):
         return obj.tour_basic.expert.full_name
-    
+
+class TourTypeAdmin(admin.ModelAdmin):
+    prepopulated_fields = {"slug": ("name",)}
 
 
 admin.site.register(Tour, TourAdmin)
 admin.site.register(ModeratedTour, ModeratedTourAdmin)
-admin.site.register(TourType)
+admin.site.register(TourType, TourTypeAdmin)
 admin.site.register(TourPropertyType)
 admin.site.register(TourAccomodation)
 admin.site.register(ImportantTitle)
