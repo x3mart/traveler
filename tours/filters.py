@@ -60,5 +60,5 @@ class TourFilter(filters.FilterSet):
     def rating_filter(self, queryset, name, value):
         if not value:
             return queryset
-        return queryset.filter(basic_tour__rating__gte=value[0])
+        return queryset.filter(basic_tour__rating__gte=value)
         
