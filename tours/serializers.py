@@ -102,10 +102,11 @@ class TourPreviewSerializer(serializers.ModelSerializer, TourSerializerMixin):
     daily_price = serializers.SerializerMethodField(read_only=True)
     decline_reasons = serializers.SerializerMethodField(read_only=True)
     postpay_final_date = serializers.SerializerMethodField(read_only=True)
+    tour_dates = TourDatesSerializer(many=True, read_only=True)
 
     class Meta:
         model = Tour
-        fields = TOUR_FIELDS + ('expert', 'cost', 'discounted_price', 'book_price', 'daily_price', 'decline_reasons', 'postpay_final_date', 'slug')
+        fields = TOUR_FIELDS + ('expert', 'cost', 'discounted_price', 'book_price', 'daily_price', 'decline_reasons', 'postpay_final_date', 'slug', 'tour_dates')
 
     def get_tmb_wallpaper(self, obj):
         if obj.wallpaper: 
@@ -197,11 +198,11 @@ class TourListSerializer(serializers.ModelSerializer, TourSerializerMixin):
     discounted_price = serializers.IntegerField(read_only=True)
     api_url = serializers.SerializerMethodField(read_only=True)
     public_url = serializers.SerializerMethodField(read_only=True)
-    tour_dates = TourDatesSerializer(many=True, read_only=True)
+    rating = serializers.DecimalField(max_digits=2,decimal_places=1, source='tour_basic.rating',read_only=True)
 
     class Meta:
         model = Tour
-        fields = ['id', 'name', 'start_date', 'start_country', 'start_city', 'price', 'discount', 'duration', 'currency', 'tmb_wallpaper', 'expert', 'vacants_number', 'is_favourite', 'is_new', 'is_recomended', 'discounted_price', 'slug', 'api_url', 'public_url', 'tour_dates']
+        fields = ['id', 'name', 'start_date', 'start_country', 'start_city', 'price', 'discount', 'duration', 'currency', 'tmb_wallpaper', 'expert', 'vacants_number', 'is_favourite', 'is_new', 'is_recomended', 'discounted_price', 'slug', 'api_url', 'public_url', 'rating']
     
     def get_tmb_wallpaper(self, obj):
         if obj.wallpaper: 
