@@ -2,6 +2,7 @@ from datetime import date
 from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
 from geoplaces.serializers import CityFullNameSerializer, CitySerializer, CountrySerializer, RegionSerializer, CountryRegionSerializer
+from orders.serializers import TourDatesSerializer
 from utils.mixins import TourSerializerMixin
 from .models import Important, Tour, TourAccomodation, TourPropertyType, TourType
 from currencies.serializers import CurrencySerializer
@@ -196,10 +197,11 @@ class TourListSerializer(serializers.ModelSerializer, TourSerializerMixin):
     discounted_price = serializers.IntegerField(read_only=True)
     api_url = serializers.SerializerMethodField(read_only=True)
     public_url = serializers.SerializerMethodField(read_only=True)
+    tour_dates = TourDatesSerializer(many=True, read_only=True)
 
     class Meta:
         model = Tour
-        fields = ['id', 'name', 'start_date', 'start_country', 'start_city', 'price', 'discount', 'duration', 'currency', 'tmb_wallpaper', 'expert', 'vacants_number', 'is_favourite', 'is_new', 'is_recomended', 'discounted_price', 'slug', 'api_url', 'public_url']
+        fields = ['id', 'name', 'start_date', 'start_country', 'start_city', 'price', 'discount', 'duration', 'currency', 'tmb_wallpaper', 'expert', 'vacants_number', 'is_favourite', 'is_new', 'is_recomended', 'discounted_price', 'slug', 'api_url', 'public_url', 'tour_dates']
     
     def get_tmb_wallpaper(self, obj):
         if obj.wallpaper: 
@@ -208,8 +210,8 @@ class TourListSerializer(serializers.ModelSerializer, TourSerializerMixin):
     
     def get_public_url(self, obj):
         if obj.start_region.slug == 'rossiia':
-            return f'{obj.start_region.slug}/{obj.start_russian_region.slug}/{obj.slug}/?date_id={obj.id}'
-        return f'{obj.start_region.slug}/{obj.start_country.slug}/{obj.slug}/?date_id={obj.id}'
+            return f'tours/{obj.start_region.slug}/{obj.start_russian_region.slug}/{obj.slug}/?date_id={obj.id}'
+        return f'tours/{obj.start_region.slug}/{obj.start_country.slug}/{obj.slug}/?date_id={obj.id}'
 
     def get_api_url(self, obj):
         request = self.context.get('request')
