@@ -58,7 +58,7 @@ class TourType(models.Model):
 class TourBasic(models.Model):
     expert = models.ForeignKey("accounts.Expert", verbose_name=_('Эксперт'), on_delete=models.CASCADE, related_name='tours')
     reviews_count = models.IntegerField(_('Кол-во отзывов'), default=0)
-    rating = models.DecimalField(_('Рейтинг'), decimal_places=1, max_digits=2, null=True, blank=True)
+    rating = models.DecimalField(_('Рейтинг'), decimal_places=1, max_digits=2, default=0)
     created_at = models.DateTimeField(_('Создан'), auto_now_add=True)
     is_active = models.BooleanField(default=False)
 
