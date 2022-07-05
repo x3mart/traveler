@@ -198,7 +198,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         tour = Tour.objects.get(pk=instance.id)
         return Response(TourListSerializer(tour, context={'request': request}, many=False).data, status=201)
     
-    @action(['get'], detail=True, lookup_url_kwarg=['slug'])
+    @action(['get'], detail=True, lookup_field='slug')
     def preview(self, request, *args, **kwargs):
         qs = self.get_queryset()
         slug = kwargs.get('pk')
