@@ -31,14 +31,14 @@ class TourResultsSetPagination(PageNumberPagination):
     def get_q_filters(self, filters, field, type=None):
         q_filter = Q()
         for filter in filters:
-            if filter != field and filter == 'tour_types' and filters[filter]:
+            if filter != field and filter == 'tour_types':
                 q_filter = filters[filter]
         return q_filter
     
     def get_field_filter(self, filters, field, type=None):
         filter_set = {}
         for filter in filters:
-            if filter != field and filter != 'tour_types' and filters[filter]:
+            if filter != field and filter != 'tour_types':
                 filter_set.update(filters[filter])
             
         return filter_set
@@ -58,22 +58,28 @@ class TourResultsSetPagination(PageNumberPagination):
         for type in params:
             if type == 'price':
                 value = params[type][0].split(',')
-                filters.update({'price':{'discounted_price__gte':value[0], 'discounted_price__lte':value[1]}})
+                if value:
+                    filters.update({'price':{'discounted_price__gte':value[0], 'discounted_price__lte':value[1]}})
             elif type == 'languages':
                 value = params[type][0].split(',')
-                filters.update({'languages':{'languages__in':value}})
+                if value:
+                    filters.update({'languages':{'languages__in':value}})
             elif type == 'age':
                 value = params[type][0].split(',')
-                filters.update({'age':{'age_starts__lte':value[0], 'age_ends__gte':value[1]}})
+                if value:
+                    filters.update({'age':{'age_starts__lte':value[0], 'age_ends__gte':value[1]}})
             elif type == 'duration':
                 value = params[type][0].split(',')
-                filters.update({'duration':{'duration__gte':value[0], 'duration__lte':value[1]}})
+                if value:
+                    filters.update({'duration':{'duration__gte':value[0], 'duration__lte':value[1]}})
             elif type == 'vacants_number':
                 value = params[type][0].split(',')
-                filters.update({'vacants_number':{'vacants_number__gte':value[0], 'vacants_number__lte':value[1]}})
+                if value:
+                    filters.update({'vacants_number':{'vacants_number__gte':value[0], 'vacants_number__lte':value[1]}})
             elif type == 'tour_types':
                 value = params[type][0].split(',')
-                filters.update({'tour_types': Q(basic_type__in=value) | Q(additional_types__in=value)})
+                if value:
+                    filters.update({'tour_types': Q(basic_type__in=value) | Q(additional_types__in=value)})
                 
         qs_tour_types = active_tours.filter(**self.get_field_filter(filters, 'tour_types')).filter(self.get_q_filters(filters, 'tour_types'))
         tour_types = TourType.objects.filter(Q(tours_by_basic_type__in=qs_tour_types) | Q(tours_by_additional_types__in=qs_tour_types)).order_by('name').values('name', 'id').distinct()
