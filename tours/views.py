@@ -242,6 +242,11 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         ModerationResultEmailThread(instance, reason=request.data.get('reason')).start()
         DeclineReason.objects.create(tour=instance, reason=request.data.get('reason'), staff=request.user)
         return Response({}, status=200)
+    
+    @action(['get'], detail=False, pagination_class=TourResultsSetPagination)
+    def types(self, request, *args, **kwargs):
+        qs = self.get_queryset()
+        return Response(TourListSerializer(qs, context={'request':request}))
 
 
 class TourTypeViewSet(viewsets.ReadOnlyModelViewSet):
