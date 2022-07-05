@@ -58,7 +58,7 @@ class TourFilter(filters.FilterSet):
         return queryset.filter(vacants_number__gte=value[0]).filter(vacants_number__lte=value[1])
     
     def rating_filter(self, queryset, name, value):
-        if len(value) < 1:
+        if not value:
             return queryset
         return queryset.filter(basic_tour__rating__gte=value[0])
         
