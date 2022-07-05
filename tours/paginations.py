@@ -103,7 +103,8 @@ class TourResultsSetPagination(PageNumberPagination):
         difficulty_level = qs.aggregate(Max('difficulty_level'))
         qs = active_tours.filter(**self.get_field_filter(filters, 'comfort_level')).filter(self.get_q_filters(filters, 'comfort_level'))
         comfort_level = qs.aggregate(Max('comfort_level'))
-        rating = TourBasic.objects.filter(tours__in=queryset).aggregate(Max('rating'))
+        qs = active_tours.filter(**self.get_field_filter(filters, 'rating')).filter(self.get_q_filters(filters, 'rating'))
+        rating = qs.aggregate(Max('tour_basic__rating'))
         
         filter_data = [
             {'title': 'Тип тура', 'type':'tour_types', 'data': tour_types},
@@ -115,7 +116,7 @@ class TourResultsSetPagination(PageNumberPagination):
             {'title': 'Продолжительность тура', 'type':'duration', 'filter_type': 'range', 'data': [duration['duration__min'],duration['duration__max']]},
 
             {'title': 'Свободные места', 'type':'vacants_number', 'filter_type': 'range', 'data': [vacants_number['vacants_number__min'],vacants_number['vacants_number__max']]},
-            {'title': 'Рейтинг', 'type':'rating', 'filter_type': 'rating', 'data': rating['rating__max']},
+            {'title': 'Рейтинг', 'type':'rating', 'filter_type': 'rating', 'data': rating['tour_basic__rating__max']},
             {'title': 'Сложность', 'type':'difficulty_level', 'filter_type': 'radio', 'data': difficulty_level['difficulty_level__max']},
             {'title': 'Комфорт', 'type':'comfort_level', 'filter_type': 'radio', 'data': comfort_level['comfort_level__max']}
         ]
