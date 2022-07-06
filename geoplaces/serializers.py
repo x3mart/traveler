@@ -75,7 +75,7 @@ class DestinationSerializer(serializers.ModelSerializer):
     tours_count = serializers.IntegerField(read_only=True)
     class Meta:
         model = Destination
-        fields = ['id', 'name', 'tours_count', 'public_url', 'image']
+        fields = ['id', 'name', 'tours_count', 'public_url', 'image', 'view']
     
     def get_name(self, obj):
         return obj.country.name if obj.country else obj.country_region.name
