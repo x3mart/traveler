@@ -56,10 +56,14 @@ class CountryShortSerializer(serializers.ModelSerializer):
 
 
 class RegionSerializer(serializers.ModelSerializer):
+    public_url = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = Region
-        fields = ['id', 'name', 'slug', 'image', 'alt']
+        fields = ['id', 'name', 'slug', 'image', 'alt', 'public_url']
 
+    def get_public_url(self, obj):
+        return f'tours/{obj.slug}'
 
 class RegionShortSerializer(serializers.ModelSerializer):
     countries = CountryShortSerializer(many=True)
