@@ -51,7 +51,7 @@ class DestinationViewUpdate(threading.Thread):
         threading.Thread.__init__(self)
     
     def run(self):
-        Destination.objects.filter(pk=self.tour.destination).update(view=F('view')+1)
+        Destination.objects.filter(pk=self.tour.destination.id).update(view=F('view')+1)
 
 # Create your views here.
 class TourViewSet(viewsets.ModelViewSet, TourMixin):
