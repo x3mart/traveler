@@ -335,7 +335,7 @@ class StartPage(APIView):
         country_region = CountryRegion.objects.prefetch_related(prefetch_country)
         prefetch_country_region = Prefetch('country_region', country_region)
         popular = Destination.objects.filter(tours__in=queryset).distinct().prefetch_related(prefetch_country, prefetch_country_region).annotate(tours_count=Count('tours')).order_by('-view')[:12]
-        regions = Region.objects.filter(tours_by_start_region__in=queryset)
+        regions = Region.objects.filter(tours_by_start_region__in=queryset).distinct()
         start_page = {
             'new':TourListSerializer(new, many=True, context={'request':request}).data,
             'popular':DestinationSerializer(popular, many=True, context={'request':request}).data,

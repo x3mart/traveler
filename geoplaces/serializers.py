@@ -58,7 +58,7 @@ class CountryShortSerializer(serializers.ModelSerializer):
 class RegionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Region
-        fields = '__all__'
+        fields = ['id', 'name', 'slug', 'image', 'alt']
 
 
 class RegionShortSerializer(serializers.ModelSerializer):
