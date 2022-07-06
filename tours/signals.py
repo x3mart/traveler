@@ -28,7 +28,7 @@ def tour_pre_save(instance, **kwargs):
     if instance.start_russian_region:
         instance.destination = instance.start_russian_region.destination
     elif instance.start_country:
-         instance.destination = instance.country.destination
+         instance.destination = instance.start_country.destination
     if instance.finish_date and instance.start_date:
         instance.duration = (instance.finish_date - instance.start_date).days + 1
     if instance.name:
