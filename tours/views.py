@@ -19,7 +19,7 @@ from django.core.mail import send_mail
 from accounts.models import Expert
 from currencies.models import Currency
 from geoplaces.models import Country, CountryRegion, Destination, Region
-from geoplaces.serializers import RegionShortSerializer
+from geoplaces.serializers import DestinationSerializer, RegionShortSerializer
 from tours.filters import TourFilter
 from tours.mixins import TourMixin
 from tours.paginations import TourResultsSetPagination
@@ -330,9 +330,9 @@ class StartPage(APIView):
                 )
             ).filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start'))).prefetch_related(prefetch_tour_basic, 'start_country', 'start_city', 'wallpaper', 'currency')
         new = queryset.order_by('tour_basic__created_at', 'start_date').distinct('tour_basic__created_at')
-
+        popular = Destination.objects.filter(tours__in=queryset).distinct().order_by('-view')
         start_page = {
-            'new':TourListSerializer(new, many=True, context={'request':request}).data
-            # 'popular':TourListSerializer(new, many=True, context={'request':request}).data
+            'new':TourListSerializer(new, many=True, context={'request':request}).data,
+            'popular':DestinationSerializer(popular, many=True, context={'request':request}).data
         }
         return Response(start_page, status=200) 
