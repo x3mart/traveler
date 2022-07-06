@@ -19,7 +19,7 @@ from django.core.mail import send_mail
 from accounts.models import Expert
 from currencies.models import Currency
 from geoplaces.models import Country, CountryRegion, Destination, Region
-from geoplaces.serializers import DestinationSerializer, RegionShortSerializer
+from geoplaces.serializers import DestinationSerializer, RegionSerializer, RegionShortSerializer
 from tours.filters import TourFilter
 from tours.mixins import TourMixin
 from tours.paginations import TourResultsSetPagination
@@ -335,8 +335,10 @@ class StartPage(APIView):
         country_region = CountryRegion.objects.prefetch_related(prefetch_country)
         prefetch_country_region = Prefetch('country_region', country_region)
         popular = Destination.objects.filter(tours__in=queryset).distinct().prefetch_related(prefetch_country, prefetch_country_region).annotate(tours_count=Count('tours')).order_by('-view')[:12]
+        regions = Region.objects.filter(tours__in=queryset)
         start_page = {
             'new':TourListSerializer(new, many=True, context={'request':request}).data,
-            'popular':DestinationSerializer(popular, many=True, context={'request':request}).data
+            'popular':DestinationSerializer(popular, many=True, context={'request':request}).data,
+            'regions':RegionSerializer(regions, many=True, context={'request':request}).data
         }
         return Response(start_page, status=200) 
