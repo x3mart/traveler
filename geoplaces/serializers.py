@@ -72,6 +72,7 @@ class DestinationSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField(read_only=True)
     public_url = serializers.SerializerMethodField(read_only=True)
     image = serializers.SerializerMethodField(read_only=True)
+    tours_count = serializers.IntegerField(read_only=True)
     class Meta:
         model = Destination
         fields = ['id', 'name', 'tours_count', 'public_url', 'image']
