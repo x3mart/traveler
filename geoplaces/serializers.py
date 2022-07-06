@@ -78,5 +78,5 @@ class DestinationSerializer(serializers.ModelSerializer):
     def get_name(self, obj):
         return obj.country.name if obj.country else obj.country_region.name
     
-    def public_url(self, obj):
+    def get_public_url(self, obj):
         return f'{obj.country.region.slug}/{obj.country.slug}' if obj.country else f'{obj.country_region.country.region.slug}/{obj.country_region.slug}'
