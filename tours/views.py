@@ -341,6 +341,6 @@ class StartPage(APIView):
             'new':TourListSerializer(new, many=True, context={'request':request}).data,
             'popular':DestinationSerializer(popular, many=True, context={'request':request}).data,
             'regions':RegionSerializer(regions, many=True, context={'request':request}).data,
-            'types':TourTypeShortSerializer(regions, many=True, context={'request':request}).data
+            'types':TourTypeSerializer(regions, many=True, context={'request':request}).data
         }
         return Response(start_page, status=200) 
