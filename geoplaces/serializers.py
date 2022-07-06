@@ -83,5 +83,8 @@ class DestinationSerializer(serializers.ModelSerializer):
         return f'{obj.country.region.slug}/{obj.country.slug}' if obj.country else f'{obj.country_region.country.region.slug}/{obj.country_region.slug}'
     
     def get_image(self, obj):
-        return obj.country.image if obj.country else obj.country_region.image
+        image = obj.country.image if obj.country else obj.country_region.image
+        if image:
+            return image
+        return None
     
