@@ -54,6 +54,7 @@ class TourAccomodationShortSerializer(serializers.ModelSerializer):
 
 class TourTypeSerializer(serializers.ModelSerializer):
     public_url = serializers.SerializerMethodField(read_only=True)
+    tours_count = serializers.IntegerField(read_only=True)
     class Meta:
         model = TourType
         fields = '__all__'
