@@ -320,7 +320,7 @@ class StartPage(APIView):
                     When(~Q(discount__isnull=True) and Q(discount__gt=0) and Q(discount_starts__lte=datetime.today()) and Q(discount_finish__gte=datetime.today()) and Q(discount_in_prc=False), then=F('price') - F('discount')),
                 )
             ).filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start'))).prefetch_related(prefetch_tour_basic, 'start_country', 'start_city', 'wallpaper', 'currency')
-        new = queryset.order_by('tour_basic__created_at', 'start_date').distinct('tour_basic__created_at', 'start_date')
+        new = queryset.order_by('tour_basic__created_at', 'start_date').distinct('tour_basic__created_at')
         start_page = {
             'new':TourListSerializer(new, many=True, context={'request':request}).data
         }
