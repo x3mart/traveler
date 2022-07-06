@@ -26,7 +26,7 @@ from tours.paginations import TourResultsSetPagination
 from utils.constants import NOT_MODERATED_FIELDS
 from tours.models import DeclineReason, Tour, TourAccomodation, TourBasic, TourDayImage, TourGuestGuideImage, TourImage, TourPlanImage, TourPropertyImage, TourPropertyType, TourType, TourWallpaper
 from tours.permissions import TourPermission
-from tours.serializers import FilterSerializer, ImageSerializer, TourAccomodationSerializer, TourListSerializer, TourPreviewSerializer, TourPropertyTypeSerializer, TourSerializer, TourTypeSerializer, WallpaperSerializer, TourSetSerializer
+from tours.serializers import FilterSerializer, ImageSerializer, TourAccomodationSerializer, TourListSerializer, TourPreviewSerializer, TourPropertyTypeSerializer, TourSerializer, TourTypeSerializer, TourTypeShortSerializer, WallpaperSerializer, TourSetSerializer
 from languages.models import Language
 
 
@@ -336,9 +336,11 @@ class StartPage(APIView):
         prefetch_country_region = Prefetch('country_region', country_region)
         popular = Destination.objects.filter(tours__in=queryset).distinct().prefetch_related(prefetch_country, prefetch_country_region).annotate(tours_count=Count('tours')).order_by('-view')[:12]
         regions = Region.objects.filter(tours_by_start_region__in=queryset).distinct()
+        types = TourType.objects.filter(Q(tours_by_basic_type__in=queryset) or Q(tours_by_additional_types__in=queryset)).distinct()[:6]
         start_page = {
             'new':TourListSerializer(new, many=True, context={'request':request}).data,
             'popular':DestinationSerializer(popular, many=True, context={'request':request}).data,
-            'regions':RegionSerializer(regions, many=True, context={'request':request}).data
+            'regions':RegionSerializer(regions, many=True, context={'request':request}).data,
+            'types':TourTypeShortSerializer(regions, many=True, context={'request':request}).data
         }
         return Response(start_page, status=200) 
