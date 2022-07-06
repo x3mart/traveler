@@ -330,7 +330,11 @@ class StartPage(APIView):
                 )
             ).filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start'))).prefetch_related(prefetch_tour_basic, 'start_country', 'start_city', 'wallpaper', 'currency')
         new = queryset.order_by('tour_basic__created_at', 'start_date').distinct('tour_basic__created_at')
-        popular = Destination.objects.filter(tours__in=queryset).distinct().order_by('-view')
+        country = Country.objects.prefetch_related('region')
+        prefetch_country = Prefetch('country', country)
+        country_region = CountryRegion.objects.prefetch_related(prefetch_country)
+        prefetch_country_region = Prefetch('country_region', country_region)
+        popular = Destination.objects.filter(tours__in=queryset).distinct().prefetch_related(prefetch_country, prefetch_country_region).order_by('-view')
         start_page = {
             'new':TourListSerializer(new, many=True, context={'request':request}).data,
             'popular':DestinationSerializer(popular, many=True, context={'request':request}).data

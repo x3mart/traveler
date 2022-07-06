@@ -90,3 +90,4 @@ class DestinationSerializer(serializers.ModelSerializer):
             return request.build_absolute_uri(obj.country_region.image.url)
         return None
     
+    
