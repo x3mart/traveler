@@ -1,4 +1,4 @@
-from django.db.models import F, Q
+from django.db.models import F, Q, Count
 from datetime import timedelta, datetime
 from django.forms import DurationField
 from django.views.decorators.csrf import csrf_exempt
@@ -334,7 +334,7 @@ class StartPage(APIView):
         prefetch_country = Prefetch('country', country)
         country_region = CountryRegion.objects.prefetch_related(prefetch_country)
         prefetch_country_region = Prefetch('country_region', country_region)
-        popular = Destination.objects.filter(tours__in=queryset).distinct().prefetch_related(prefetch_country, prefetch_country_region).order_by('-view')
+        popular = Destination.objects.filter(tours__in=queryset).distinct().prefetch_related(prefetch_country, prefetch_country_region).annotate(tours_count=Count('tours')).order_by('-view')
         start_page = {
             'new':TourListSerializer(new, many=True, context={'request':request}).data,
             'popular':DestinationSerializer(popular, many=True, context={'request':request}).data

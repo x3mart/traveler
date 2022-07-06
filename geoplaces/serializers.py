@@ -74,7 +74,7 @@ class DestinationSerializer(serializers.ModelSerializer):
     image = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Destination
-        fields = '__all__'
+        fields = ['id', 'name', 'tours_count', 'public_url', 'image']
     
     def get_name(self, obj):
         return obj.country.name if obj.country else obj.country_region.name
@@ -90,4 +90,4 @@ class DestinationSerializer(serializers.ModelSerializer):
             return request.build_absolute_uri(obj.country_region.image.url)
         return None
     
-    
+
