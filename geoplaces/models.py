@@ -72,6 +72,19 @@ class CountryRegion(models.Model):
         verbose_name_plural = _('Регионы Страны')
 
 
+class Destination(models.Model):
+    country = models.OneToOneField('Country', on_delete=models.CASCADE, related_name='destination', verbose_name=_('Страна'), null=True, blank=True)
+    country_region = models.OneToOneField('CountryRegion', on_delete=models.CASCADE, related_name='destination', verbose_name=_('Регион страны'), null=True, blank=True)
+    view = models.PositiveIntegerField(_('Просмотры'), default=0)
+
+    def __str__(self):
+        return self.country.name if self.country else self.country_region.name
+    
+    class Meta:
+        verbose_name = _('Направление')
+        verbose_name_plural = _('Направления')
+
+
 class VKCity(models.Model):
     name = models.CharField(_('Название'), max_length=255)
     foreign_id = models.IntegerField(_('Сторонний ключ'), null=True, blank=True)

@@ -285,6 +285,7 @@ class Tour(models.Model):
     booking_delay = models.DurationField(default=get_booking_delay)
     direct_link = models.BooleanField(_('Доступ по прямой ссылке'), default=False)
     map = models.JSONField(_('Карта'), null=True, blank=True)
+    destination = models.ForeignKey('geoplaces.Destination', verbose_name=_("Направление"), on_delete=models.CASCADE, related_name='tours', null=True, blank=True)
 
     class Meta:
         verbose_name = _('Тур')

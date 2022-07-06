@@ -18,7 +18,7 @@ import threading
 from django.core.mail import send_mail
 from accounts.models import Expert
 from currencies.models import Currency
-from geoplaces.models import Country, CountryRegion, Region
+from geoplaces.models import Country, CountryRegion, Destination, Region
 from geoplaces.serializers import RegionShortSerializer
 from tours.filters import TourFilter
 from tours.mixins import TourMixin
@@ -43,6 +43,15 @@ class ModerationResultEmailThread(threading.Thread):
         else:
             send_mail('Ваш тур не прошел проверку', f'Ваш тур "{self.tour.name}" (старт {self.tour.start_date.strftime("%d-%m-%Y")}) не прошел проверку по следующей причине: \n \n{self.reason}', 'info@traveler.market', [self.user.email,])
 
+
+class DestinationViewUpdate(threading.Thread):
+    def __init__(self, tour):
+        self.user = tour.tour_basic.expert
+        self.tour = tour
+        threading.Thread.__init__(self)
+    
+    def run(self):
+        Destination.objects.filter(pk=self.tour.destination).update(view=F('view')+1)
 
 # Create your views here.
 class TourViewSet(viewsets.ModelViewSet, TourMixin):
@@ -202,7 +211,6 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
     def preview(self, request, *args, **kwargs):
         qs = self.get_queryset()
         slug = kwargs.get('pk')
-        print(kwargs)
         id = request.query_params.get('date_id')
         if id:
             tour = qs.get(pk=id)
@@ -215,6 +223,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
                 tour = qs.filter(slug=slug).filter(is_active=True).order_by('-start_date').first()
                 tour.archive = True
         tour.tour_dates = Tour.objects.filter(tour_basic=tour.tour_basic).filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start'))).only('id', 'start_date', 'finish_date')
+        DestinationViewUpdate(tour).start()
         return Response(TourPreviewSerializer(tour, context={'request': request}, many=False).data, status=200)
     
     @action(['get'], detail=False)
@@ -243,16 +252,16 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         DeclineReason.objects.create(tour=instance, reason=request.data.get('reason'), staff=request.user)
         return Response({}, status=200)
     
-    @action(['get'], detail=False)
-    def types(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
+    # @action(['get'], detail=False)
+    # def types(self, request, *args, **kwargs):
+    #     queryset = self.filter_queryset(self.get_queryset())
 
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+    #     page = self.paginate_queryset(queryset)
+    #     if page is not None:
+    #         serializer = self.get_serializer(page, many=True)
+    #         return self.get_paginated_response(serializer.data)
+    #     serializer = self.get_serializer(queryset, many=True)
+    #     return Response(serializer.data)
 
 
 class TourTypeViewSet(viewsets.ReadOnlyModelViewSet):
@@ -321,7 +330,9 @@ class StartPage(APIView):
                 )
             ).filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start'))).prefetch_related(prefetch_tour_basic, 'start_country', 'start_city', 'wallpaper', 'currency')
         new = queryset.order_by('tour_basic__created_at', 'start_date').distinct('tour_basic__created_at')
+
         start_page = {
             'new':TourListSerializer(new, many=True, context={'request':request}).data
+            # 'popular':TourListSerializer(new, many=True, context={'request':request}).data
         }
         return Response(start_page, status=200) 

@@ -215,7 +215,6 @@ def parse_country_json():
         countries_wo_region = [Country(name=country['name'], name_en=country['english'], counry_code=country['id']) for country in countries if country["location"] == '' and country["id"] != 'RU' and country["id"] != 'UA']
         countries = countries_w_region + countries_wo_region
         Country.objects.bulk_create(countries)
-        print(Country.objects.count())
 
 def parse_city_json():
     with open('pb_city.json', 'r') as data:
@@ -226,16 +225,11 @@ def parse_city_json():
             cities_w_country = list({city['name']:city for city in cities if city["country"] == country.counry_code}.values()) 
             cities_w_country = [City(country=country, name=city['name'], name_en=city['english'], foreign_id=city['id']) for city in cities_w_country]
             City.objects.bulk_create(cities_w_country)
-            print(len(cities_w_country))
-            print(country.name)
+
 
 def set_distinct_city():
     for city in City.objects.all():
         cs = City.objects.filter(name=city.name).filter(country=city.country).filter(country_region=city.country_region)
         if cs.count() > 1:
             cs.exclude(pk=city.id).delete()
-            print(city.name)
-            print(cs.count())
-
-
 
