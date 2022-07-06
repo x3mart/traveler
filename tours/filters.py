@@ -11,6 +11,7 @@ class NumberInFilter(BaseInFilter, NumberFilter):
 class TourFilter(filters.FilterSet):
     start_date = DateFromToRangeFilter(field_name='start_date')
     countries = NumberInFilter(field_name="start_country", lookup_expr='in')
+    destination = NumberInFilter(field_name="destination", lookup_expr='in')
     regions = NumberInFilter(field_name="start_region", lookup_expr='in')
     languages = NumberInFilter(field_name="languages", lookup_expr='in')
     tour_types = NumberInFilter(method='tour_types_filter', label='search_by_tour_types')
@@ -26,7 +27,7 @@ class TourFilter(filters.FilterSet):
 
     class Meta:
         model = Tour
-        fields = ['start_date', 'countries', 'regions', 'tour_types', 'languages', 'price', 'discount', 'duration',  'vacants_number', 'rating', 'difficulty_level', 'age']
+        fields = ['start_date', 'countries', 'regions', 'tour_types', 'languages', 'price', 'discount', 'duration',  'vacants_number', 'rating', 'difficulty_level', 'age', 'destination']
     
     def tour_types_filter(self, queryset, name, value):
         return queryset.filter(Q(basic_type__in=value) | Q(additional_types__in=value)).distinct()
