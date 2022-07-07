@@ -21,6 +21,6 @@ class DestinationAdmin(admin.ModelAdmin):
 
 admin.site.register(Region)
 admin.site.register(Country)
-admin.site.register(Destination, DestinationAdmin)
+admin.site.register(Destination)
 admin.site.register(City)
 # admin.site.register(VKCity)
