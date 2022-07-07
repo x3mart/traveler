@@ -43,7 +43,7 @@ class DestinationSerializer(serializers.ModelSerializer):
         fields = '__all__'
     
     def get_public_url(self, obj):
-        return f'{obj.destination.region.slug}/{obj.destination.slug}'
+        return f'{obj.region.slug}/{obj.slug}'
 
 
 class DestinationShortSerializer(serializers.ModelSerializer):
