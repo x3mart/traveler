@@ -84,8 +84,6 @@ class TourPreviewSerializer(serializers.ModelSerializer, TourSerializerMixin):
     finish_region = serializers.StringRelatedField(many=False, read_only=True)
     start_destination = serializers.StringRelatedField(many=False, read_only=True)
     finish_destination = serializers.StringRelatedField(many=False, read_only=True)
-    start_russian_region = serializers.StringRelatedField(many=False, read_only=True)
-    finish_russian_region = serializers.StringRelatedField(many=False, read_only=True)
     start_city = serializers.StringRelatedField(many=False, read_only=True)
     finish_city = serializers.StringRelatedField(many=False, read_only=True)
     tour_property_types = serializers.StringRelatedField(many=True, read_only=True)
