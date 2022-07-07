@@ -42,7 +42,7 @@ class EmailActivationSerializer(UidAndTokenSerializer):
 class ExpertTourListSerializer(serializers.ModelSerializer):
     tmb_wallpaper = serializers.SerializerMethodField(read_only=True)
     currency = CurrencySerializer(many=False)
-    start_country = serializers.StringRelatedField(many=False,)
+    start_destination = serializers.StringRelatedField(many=False,)
     start_city = serializers.StringRelatedField(many=False,)
     vacants_number = serializers.SerializerMethodField(read_only=True)
     is_favourite = serializers.SerializerMethodField(read_only=True)
@@ -52,7 +52,7 @@ class ExpertTourListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tour
-        fields = ['id', 'name', 'start_date', 'start_country', 'start_city', 'price', 'discount', 'duration', 'currency', 'tmb_wallpaper', 'vacants_number', 'is_favourite', 'is_new', 'is_recomended']
+        fields = ['id', 'name', 'start_date', 'start_destination', 'start_city', 'price', 'discount', 'duration', 'currency', 'tmb_wallpaper', 'vacants_number', 'is_favourite', 'is_new', 'is_recomended']
     
     def get_tmb_wallpaper(self, obj):
         if obj.wallpaper: 

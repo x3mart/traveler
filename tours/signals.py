@@ -25,10 +25,6 @@ def tour_type_post_delete(instance, **kwargs):
 
 @receiver(pre_save, sender=Tour)
 def tour_pre_save(instance, **kwargs):
-    if instance.start_russian_region:
-        instance.destination = instance.start_russian_region.destination
-    elif instance.start_country and instance.start_country.name not in ['Россия', 'Россия2']:
-         instance.destination = instance.start_country.destination
     if instance.finish_date and instance.start_date:
         instance.duration = (instance.finish_date - instance.start_date).days + 1
     if instance.name:

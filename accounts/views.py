@@ -29,7 +29,7 @@ from django.contrib.auth.tokens import default_token_generator
 from bankdetails.models import BankTransaction, DebetCard, Scan
 from bankdetails.serializers import BankTransactionSerializer, DebetCardSerializer, ScanSerializer
 from django.utils.translation import gettext_lazy as _
-from geoplaces.models import Country
+from geoplaces.models import Destination
 from tours.models import Tour, TourBasic
 from tours.mixins import TourMixin
 import random
@@ -317,7 +317,7 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
         if request.data.get('tours_countries'):
             tours_countries = request.data.pop('tours_countries')
             ids = map(lambda tour_country: tour_country.get('id'), tours_countries)
-            objects = TourMixin().get_mtm_objects(Country, ids)
+            objects = TourMixin().get_mtm_objects(Destination, ids)
             verification.tours_countries.set(objects)
         verification = VerificationRequest.objects.get(expert_id=instance.id)
         if not verification.residency:

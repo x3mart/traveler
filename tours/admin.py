@@ -7,7 +7,7 @@ from tours.models import ImportantTitle, ModeratedTour, TourAccomodation, TourPr
 # Register your models here.
 class TourAdmin(admin.ModelAdmin):
     readonly_fields=('start_city', 'finish_city')
-    list_display = ('name', 'expert', 'start_country', 'start_city', 'start_date', 'is_active', 'on_moderation', 'is_draft', 'direct_link')
+    list_display = ('name', 'expert', 'start_destination', 'start_city', 'start_date', 'is_active', 'on_moderation', 'is_draft', 'direct_link')
     # list_editable =('is_active', 'on_moderation', 'is_draft')
     list_filter = ('is_active', 'on_moderation', 'is_draft', 'tour_basic__expert')
     prepopulated_fields = {"slug": ("name",)}
@@ -16,7 +16,7 @@ class TourAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         tour_basic = TourBasic.objects.prefetch_related('expert')
         prefetch_tour_basic = Prefetch('tour_basic', tour_basic)
-        qs = qs.prefetch_related(prefetch_tour_basic, 'start_country', 'start_city')
+        qs = qs.prefetch_related(prefetch_tour_basic, 'start_destination', 'start_city')
         return qs
     
     @admin.display(description='Эксперт')
@@ -25,7 +25,7 @@ class TourAdmin(admin.ModelAdmin):
 
 class ModeratedTourAdmin(admin.ModelAdmin):
     readonly_fields=('start_city', 'finish_city')
-    list_display = ('linked_name', 'expert', 'start_country', 'start_city', 'start_date',)
+    list_display = ('linked_name', 'expert', 'start_destination', 'start_city', 'start_date',)
     # list_editable =('is_active', 'on_moderation', 'is_draft')
     list_filter = ('tour_basic__expert',)
     list_display_links = None
@@ -35,7 +35,7 @@ class ModeratedTourAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         tour_basic = TourBasic.objects.prefetch_related('expert')
         prefetch_tour_basic = Prefetch('tour_basic', tour_basic)
-        qs = qs.prefetch_related(prefetch_tour_basic, 'start_country', 'start_city').filter(on_moderation=True)
+        qs = qs.prefetch_related(prefetch_tour_basic, 'start_destination', 'start_city').filter(on_moderation=True)
         return qs
     
     @admin.display(description='Название')
