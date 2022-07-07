@@ -214,8 +214,6 @@ class TourListSerializer(serializers.ModelSerializer, TourSerializerMixin):
         return None
     
     def get_public_url(self, obj):
-        if obj.start_region.slug == 'rossiia':
-            return f'tours/{obj.start_region.slug}/{obj.start_russian_region.slug}/{obj.slug}/?date_id={obj.id}'
         return f'tours/{obj.start_region.slug}/{obj.start_destination.slug}/{obj.slug}/?date_id={obj.id}'
 
     def get_api_url(self, obj):
