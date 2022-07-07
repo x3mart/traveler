@@ -78,7 +78,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         elif self.action in ['tour_set',]:
             qs = super().get_queryset().prefetch_related('tour_basic', 'start_destination', 'currency').only('id', 'name', 'start_date', 'finish_date', 'start_destination', 'price', 'cost', 'discount', 'on_moderation', 'is_active', 'is_draft', 'duration', 'sold', 'watched', 'currency', 'tour_basic', 'wallpaper').filter(tour_basic__expert_id=self.request.user.id).order_by('-id')
         else:
-            qs = super().get_queryset().prefetch_related('tour_basic', 'start_destination', 'start_city', 'start_region', 'start_russian_region', 'finish_russian_region', 'finish_destination', 'finish_city', 'finish_region', 'basic_type', 'additional_types', 'tour_property_types', 'tour_property_images', 'tour_images', 'languages', 'currency', 'prepay_currency', 'accomodation',)  
+            qs = super().get_queryset().prefetch_related('tour_basic', 'start_destination', 'start_city', 'start_region', 'finish_destination', 'finish_city', 'finish_region', 'basic_type', 'additional_types', 'tour_property_types', 'tour_property_images', 'tour_images', 'languages', 'currency', 'prepay_currency', 'accomodation',)  
         return qs
     
     def get_serializer_class(self):
