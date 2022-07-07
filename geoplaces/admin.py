@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from geoplaces.models import City, Destination, Region
+from geoplaces.models import City, Country, Destination, Region
 
 # Register your models here.
 class DestinationAdmin(admin.ModelAdmin):
@@ -20,7 +20,7 @@ class DestinationAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Region)
-# admin.site.register(Country)
+admin.site.register(Country)
 admin.site.register(Destination, DestinationAdmin)
 admin.site.register(City)
 # admin.site.register(VKCity)
