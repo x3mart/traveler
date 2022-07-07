@@ -16,6 +16,7 @@ class Region(models.Model):
     name = models.CharField(_('Название'), max_length=255)
     slug = models.SlugField(max_length = 255, null=True, blank=True)
     image = models.ImageField(_("Фото"), upload_to=geo_path, max_length=255, null=True, blank=True)
+    # map_icon = models.FileField(_("Изображение карты"), upload_to=geo_path, max_length=255, null=True, blank=True)
     alt =  models.CharField(_('alt текст'), max_length=255, null=True, blank=True)
 
     def __str__(self):
