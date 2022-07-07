@@ -19,10 +19,17 @@ from tours.models import Tour
 #         country = Country.objects.create(name=country_region.name, slug=country_region.slug, region=russia)
 #         City.objects.filter(country_region_id=country_region.id).update(country_id=country.id)
 
+def set_destinations():
+    Destination.objects.all().delete()
+    for country in Country.objects.exclude(name__in=['Россия', 'Россия2']):
+        destination = Destination.objects.create(name=country.name, slug=country.slug, region=country.region)
+        City.objects.filter(country=country).update(destination=destination)
 
-
-
-
+def set_tour_destination():
+    for tour in Tour.objects.all():
+        start_destination = tour.start_city.destination if tour.start_city else None
+        finish_destination = tour.finish_city.destination if tour.finish_city else None
+        Tour.objects.filter(id=tour.id).update(start_destination=start_destination, finish_destination=finish_destination)
 
 
 # def get_vk_countries():
