@@ -62,6 +62,7 @@ class City(models.Model):
     slug = models.SlugField(max_length = 255, null=True, blank=True)
     foreign_id = models.IntegerField(_('Сторонний ключ'), null=True, blank=True)
     country = models.ForeignKey('Country', on_delete=models.CASCADE, related_name='cities', verbose_name=_('Страна'), null=True, blank=True)
+    destination = models.ForeignKey('Destination', on_delete=models.CASCADE, related_name='cities', verbose_name=_('Страна'), null=True, blank=True)
     image = models.ImageField(_("Фото"), upload_to=geo_path, max_length=255, null=True, blank=True)
     alt =  models.CharField(_('alt текст'), max_length=255, null=True, blank=True)
 

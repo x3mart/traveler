@@ -1,12 +1,12 @@
 from rest_framework import serializers
 
-from geoplaces.models import City, Destination, Destination, Region
+from geoplaces.models import City, Destination, Destination, Region, Country
 
 
-# class CountrySerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Country
-#         fields = '__all__'
+class CountrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Country
+        fields = '__all__'
 
 
 class CitySerializer(serializers.ModelSerializer):
