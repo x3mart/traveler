@@ -16,7 +16,7 @@ def tour_type_pre_save(instance, sender, **kwargs):
 
 @receiver(post_save, sender=TourType)
 def tour_type_post_save(instance, **kwargs):
-    image_processing(instance.image, instance._current_img, 350, 240)
+    image_processing(instance.image, instance._current_img, 1920, 480, 350, 240)
 
 @receiver(post_delete, sender=TourType)
 def tour_type_post_delete(instance, **kwargs):

@@ -10,7 +10,7 @@ def tour_type_post_init(instance, **kwargs):
 
 @receiver(post_save, sender=Region)
 def tour_type_post_save(instance, **kwargs):
-    image_processing(instance.image, instance._current_img, 350, 240)
+    image_processing(instance.image, instance._current_img, 1920, 480, 350, 240)
 
 @receiver(post_delete, sender=Region)
 def tour_type_post_delete(instance, **kwargs):
@@ -23,7 +23,7 @@ def tour_type_post_init(instance, **kwargs):
 
 @receiver(post_save, sender=Destination)
 def tour_type_post_save(instance, **kwargs):
-    image_processing(instance.image, instance._current_img, 350, 240)
+    image_processing(instance.image, instance._current_img, 1920, 480, 350, 240)
 
 @receiver(post_delete, sender=Destination)
 def tour_type_post_delete(instance, **kwargs):
@@ -36,7 +36,7 @@ def tour_type_post_init(instance, **kwargs):
 
 @receiver(post_save, sender=City)
 def tour_type_post_save(instance, **kwargs):
-    image_processing(instance.image, instance._current_img, 350, 240)
+    image_processing(instance.image, instance._current_img, 1920, 480, 350, 240)
 
 @receiver(post_delete, sender=City)
 def tour_type_post_delete(instance, **kwargs):

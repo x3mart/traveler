@@ -291,22 +291,26 @@ class TourAccomodationTypeViewSet(viewsets.ReadOnlyModelViewSet):
             
 #         return Response(filter_data, status=200)
 
-class ActiveRegions(APIView):
+class ActiveRegion(APIView):
     def get(self, request, format=None):
         tours = Tour.objects.in_sale()
         # regions = Region.objects.filter(tours__in=qs).order_by('name').values('name', 'id').distinct()
         destinations = Destination.objects.filter(tours_by_start_destination__in=tours).distinct()
         prefethed_destinations = Prefetch('destinations', destinations)
-        regions = Region.objects.prefetch_related(prefethed_destinations).filter(tours_by_start_region__in=tours).distinct()
-        return Response(RegionShortSerializer(regions, many=True).data, status=200)
+        regions = Region.objects.prefetch_related(prefethed_destinations).filter(tours_by_start_region__in=tours).annotate(tours_count=Count('tours_by_start_region')).order_by('name').distinct()
+        return Response(RegionSerializer(regions, many=True).data, status=200)
 
-# class ActiveDestinationRegions(APIView):
-#     def get(self, request, format=None):
-#         tour_basic = TourBasic.objects.prefetch_related('expert')
-#         prefetch_tour_basic = Prefetch('tour_basic', tour_basic)
-#         qs = Tour.objects.prefetch_related(prefetch_tour_basic, 'start_destination', 'start_city', 'wallpaper', 'currency').only('id', 'name', 'start_date', 'start_destination', 'start_city', 'price', 'discount', 'duration', 'tour_basic', 'wallpaper', 'vacants_number', 'currency').filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start')))
-#         regions = Region.objects.filter(tours__in=qs).order_by('name').values('name', 'id').distinct()
-#         return Response(RegionShortSerializer(regions, many=True).data, status=200)
+class ActiveDestination(APIView):
+    def get(self, request, format=None):
+        tours = Tour.objects.in_sale()
+        destinations = Destination.objects.filter(tours_by_start_destination__in=tours).distinct().prefetch_related('region').annotate(tours_count=Count('tours_by_start_destination')).order_by('name').distinct()
+        return Response(DestinationSerializer(destinations, many=True, context={'request':request}).data, status=200)
+
+class ActiveType(APIView):
+    def get(self, request, format=None):
+        tours = Tour.objects.in_sale()
+        types = TourType.objects.filter(Q(tours_by_basic_type__in=tours) | Q(tours_by_additional_types__in=tours)).annotate(tours_count=Count('tours_by_basic_type', filter=Q(tours_by_basic_type__in=tours), distinct=True) + Count('tours_by_additional_types', filter=Q(tours_by_additional_types__in=tours), distinct=True)).distinct()
+        return Response(TourTypeSerializer(types, many=True, context={'request':request}).data, status=200)
 
 
 class StartPage(APIView):
@@ -315,21 +319,20 @@ class StartPage(APIView):
         new = queryset.prefetched().with_discounted_price().order_by('tour_basic__created_at', 'start_date').distinct('tour_basic__created_at')[:5]
         popular = Destination.objects.filter(tours_by_start_destination__in=queryset).distinct().prefetch_related('region').annotate(tours_count=Count('tours_by_start_destination')).order_by('-view')[:12]
         regions = Region.objects.filter(tours_by_start_region__in=queryset).distinct()
-        types = TourType.objects.filter(Q(tours_by_basic_type__in=queryset) | Q(tours_by_additional_types__in=queryset)).annotate(tours_count=Count('tours_by_basic_type', filter=Q(tours_by_basic_type__in=queryset), distinct=True) + Count('tours_by_additional_types', filter=Q(tours_by_additional_types__in=queryset), distinct=True)).distinct()[:6]
+        types = TourType.objects.filter(Q(tours_by_basic_type__in=queryset) | Q(tours_by_additional_types__in=queryset)).annotate(tours_count=Count('tours_by_basic_type', filter=Q(tours_by_basic_type__in=queryset), distinct=True) + Count('tours_by_additional_types', filter=Q(tours_by_additional_types__in=queryset), distinct=True)).distinct()
         rated = queryset.prefetched().with_discounted_price().order_by('-tour_basic__rating', 'start_date').distinct('tour_basic__rating')[:5]
         experts = Expert.objects.annotate(active_tours = Count('tours__tours', filter=(Q(tours__tours__booking_delay__lte=F('tours__tours__start_date') - datetime.today().date() - F('tours__tours__postpay_days_before_start'))))).filter(active_tours__gt=0).order_by('-rating')[:6]
         discounted = queryset.prefetched().with_discounted_price().annotate(d = (F('price') - F('discounted_price'))).filter(d__gt=0).order_by('-d')[:5]
         reviews = TourReview.objects.all().order_by('-id')[:4]
-        types_all = TourType.objects.all()
         start_page = {
             'new':TourListSerializer(new, many=True, context={'request':request}).data,
             'popular':DestinationSerializer(popular, many=True, context={'request':request}).data,
             'regions':RegionSerializer(regions, many=True, context={'request':request}).data,
-            'types':TourTypeSerializer(types, many=True, context={'request':request}).data,
+            'types':TourTypeSerializer(types[:6], many=True, context={'request':request}).data,
             'rated':TourListSerializer(rated, many=True, context={'request':request}).data,
             'discounted':TourListSerializer(discounted, many=True, context={'request':request}).data,
             'experts':ExpertListSerializer(experts, many=True, context={'request':request}).data,
             'reviews':TourReviewSerializer(reviews, many=True, context={'request':request}).data,
-            'types_all':TourTypeSerializer(types_all, many=True, context={'request':request}).data
+            'types_all':TourTypeSerializer(types, many=True, context={'request':request}).data
         }
         return Response(start_page, status=200) 
