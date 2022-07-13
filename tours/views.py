@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import action
 from django.db.models.query import Prefetch
 from django.db.models import Q, F, Case, Value, When
+from django.db.models.lookups import GreaterThan
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework import filters
@@ -21,6 +22,8 @@ from accounts.serializers import ExpertListSerializer
 from currencies.models import Currency
 from geoplaces.models import Destination, Destination, Region
 from geoplaces.serializers import DestinationSerializer, RegionSerializer, RegionShortSerializer
+from reviews.models import TourReview
+from reviews.serializers import TourReviewSerializer
 from tours.filters import TourFilter
 from tours.mixins import TourMixin
 from tours.paginations import TourResultsSetPagination
@@ -334,12 +337,18 @@ class StartPage(APIView):
         types = TourType.objects.filter(Q(tours_by_basic_type__in=queryset) | Q(tours_by_additional_types__in=queryset)).annotate(tours_count=Count('tours_by_basic_type', filter=Q(tours_by_basic_type__in=queryset), distinct=True) + Count('tours_by_additional_types', filter=Q(tours_by_additional_types__in=queryset), distinct=True)).distinct()[:6]
         rated = queryset.order_by('-tour_basic__rating', 'start_date').distinct('tour_basic__rating')[:5]
         experts = Expert.objects.annotate(active_tours = Count('tours__tours', filter=(Q(tours__tours__booking_delay__lte=F('tours__tours__start_date') - datetime.today().date() - F('tours__tours__postpay_days_before_start'))))).filter(active_tours__gt=0).order_by('-rating')[:6]
+        discounted = queryset.annotate(d = (F('price') - F('discounted_price'))).filter(d__gt=0).order_by('-d')[:5]
+        reviews = TourReview.objects.all().order_by('-id')[:4]
+        types_all = TourType.objects.all()
         start_page = {
             'new':TourListSerializer(new, many=True, context={'request':request}).data,
             'popular':DestinationSerializer(popular, many=True, context={'request':request}).data,
             'regions':RegionSerializer(regions, many=True, context={'request':request}).data,
             'types':TourTypeSerializer(types, many=True, context={'request':request}).data,
             'rated':TourListSerializer(rated, many=True, context={'request':request}).data,
-            'experts':ExpertListSerializer(experts, many=True, context={'request':request}).data
+            'discounted':TourListSerializer(discounted, many=True, context={'request':request}).data,
+            'experts':ExpertListSerializer(experts, many=True, context={'request':request}).data,
+            'reviews':TourReviewSerializer(reviews, many=True, context={'request':request}).data,
+            'types_all':TourTypeSerializer(types_all, many=True, context={'request':request}).data
         }
         return Response(start_page, status=200) 
