@@ -57,7 +57,7 @@ class RegionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Region
-        fields = ['id', 'name', 'slug', 'image', 'alt', 'public_url']
+        fields = ['id', 'name', 'slug', 'image', 'alt', 'public_url', 'map_icon']
 
     def get_public_url(self, obj):
         return f'tours/{obj.slug}'
