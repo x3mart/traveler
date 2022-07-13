@@ -120,9 +120,10 @@ class UserSerializer(serializers.ModelSerializer):
 
 class ExpertListSerializer(serializers.ModelSerializer):
     tmb_avatar = serializers.SerializerMethodField(read_only=True)
+    active_tours = serializers.IntegerField(read_only=True)
     class Meta:
         model = Expert
-        fields = ('id', 'first_name', 'last_name', 'tmb_avatar', 'rating', 'tours_count', 'tours_rating', 'reviews_count', 'tour_reviews_count', 'about')
+        fields = ('id', 'first_name', 'last_name', 'tmb_avatar', 'rating', 'active_tours', 'tours_count', 'tours_rating', 'reviews_count', 'tour_reviews_count', 'about')
             
     def get_tmb_avatar(self, obj): 
         return get_tmb_image_uri(self, obj) 
