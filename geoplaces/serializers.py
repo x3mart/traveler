@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from utils.images import get_tmb_image_uri
 
 from geoplaces.models import City, Destination, Destination, Region, Country
 
@@ -38,12 +39,17 @@ class CityFullNameSerializer(serializers.ModelSerializer):
 class DestinationSerializer(serializers.ModelSerializer):
     public_url = serializers.SerializerMethodField(read_only=True)
     tours_count = serializers.IntegerField(read_only=True)
+    tmb_image = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = Destination
         fields = '__all__'
     
     def get_public_url(self, obj):
         return f'{obj.region.slug}/{obj.slug}'
+    
+    def get_tmb_image(self, obj): 
+        return get_tmb_image_uri(self, obj)
 
 
 class DestinationShortSerializer(serializers.ModelSerializer):
@@ -56,13 +62,17 @@ class RegionSerializer(serializers.ModelSerializer):
     public_url = serializers.SerializerMethodField(read_only=True)
     tours_count = serializers.IntegerField(read_only=True)
     destinations = DestinationShortSerializer(many=True)
+    tmb_image = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Region
-        fields = ['id', 'name', 'slug', 'image', 'alt', 'public_url', 'map_icon', 'tours_count', 'destinations']
+        fields = ['id', 'name', 'slug', 'image', 'alt', 'public_url', 'map_icon', 'tours_count', 'destinations', 'tmb_image']
 
     def get_public_url(self, obj):
         return f'tours/{obj.slug}'
+    
+    def get_tmb_image(self, obj): 
+        return get_tmb_image_uri(self, obj)
 
 class RegionShortSerializer(serializers.ModelSerializer):
     destinations = DestinationShortSerializer(many=True)

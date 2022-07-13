@@ -55,12 +55,17 @@ class TourAccomodationShortSerializer(serializers.ModelSerializer):
 class TourTypeSerializer(serializers.ModelSerializer):
     public_url = serializers.SerializerMethodField(read_only=True)
     tours_count = serializers.IntegerField(read_only=True)
+    tmb_image = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = TourType
         fields = '__all__'
     
     def get_public_url(self, obj):
         return f'types/{obj.slug}'
+    
+    def get_tmb_image(self, obj): 
+        return get_tmb_image_uri(self, obj)
 
 class TourTypeShortSerializer(serializers.ModelSerializer):
     class Meta:

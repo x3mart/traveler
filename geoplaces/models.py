@@ -3,6 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from django.template.defaultfilters import slugify
 from unidecode import unidecode
 import os
+from utils.images import get_tmb_path
 from django.contrib.postgres.indexes import GinIndex
 from django.contrib.postgres.search import SearchVector, SearchVectorField
 
@@ -25,6 +26,10 @@ class Region(models.Model):
     class Meta:
         verbose_name = _('Регион Мира')
         verbose_name_plural = _('Регионы Мира')
+    
+    @property
+    def tmb_image(self):
+        return get_tmb_path(self.image.url) if self.image else None
 
 class Destination(models.Model):
     name = models.CharField(_('Название'), max_length=255)
@@ -41,6 +46,10 @@ class Destination(models.Model):
     class Meta: 
         verbose_name = _('Тур направление')
         verbose_name_plural = _('Тур направления')
+    
+    @property
+    def tmb_image(self):
+        return get_tmb_path(self.image.url) if self.image else None
 
 class Country(models.Model):
     name = models.CharField(_('Название'), max_length=255)
@@ -56,6 +65,10 @@ class Country(models.Model):
     class Meta: 
         verbose_name = _('Страна')
         verbose_name_plural = _('Страны')
+    
+    @property
+    def tmb_image(self):
+        return get_tmb_path(self.image.url) if self.image else None
 
 class City(models.Model):
     name = models.CharField(_('Название'), max_length=255)
@@ -72,3 +85,7 @@ class City(models.Model):
     class Meta:
         verbose_name = _('Город')
         verbose_name_plural = _('Города')
+    
+    @property
+    def tmb_image(self):
+        return get_tmb_path(self.image.url) if self.image else None

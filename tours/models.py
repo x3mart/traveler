@@ -55,6 +55,10 @@ class TourType(models.Model):
     class Meta:
         verbose_name = _('Тип тура')
         verbose_name_plural = _('Типы туров')
+    
+    @property
+    def tmb_image(self):
+        return get_tmb_path(self.image.url) if self.image else None
 
 
 class TourBasic(models.Model):
