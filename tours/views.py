@@ -17,6 +17,7 @@ from django.template.loader import render_to_string
 import threading
 from django.core.mail import send_mail
 from accounts.models import Expert
+from accounts.serializers import ExpertListSerializer
 from currencies.models import Currency
 from geoplaces.models import Destination, Destination, Region
 from geoplaces.serializers import DestinationSerializer, RegionSerializer, RegionShortSerializer
@@ -331,10 +332,14 @@ class StartPage(APIView):
         popular = Destination.objects.filter(tours_by_start_destination__in=queryset).distinct().prefetch_related('region').annotate(tours_count=Count('tours_by_start_destination')).order_by('-view')[:12]
         regions = Region.objects.filter(tours_by_start_region__in=queryset).distinct()
         types = TourType.objects.filter(Q(tours_by_basic_type__in=queryset) | Q(tours_by_additional_types__in=queryset)).annotate(tours_count=Count('tours_by_basic_type', filter=Q(tours_by_basic_type__in=queryset), distinct=True) + Count('tours_by_additional_types', filter=Q(tours_by_additional_types__in=queryset), distinct=True)).distinct()[:6]
+        rated = queryset.order_by('-tour_basic__rating', 'start_date').distinct('tour_basic__rating')[:5]
+        experts = Expert.objects.annotate(active_tours = Count('tours__tours', filter=(Q(tours__tours__booking_delay__lte=F('tours__tours__start_date') - datetime.today().date() - F('tours__tours__postpay_days_before_start'))))).filter(active_tours__gt=0).order_by('-rating')[:6]
         start_page = {
             'new':TourListSerializer(new, many=True, context={'request':request}).data,
             'popular':DestinationSerializer(popular, many=True, context={'request':request}).data,
             'regions':RegionSerializer(regions, many=True, context={'request':request}).data,
-            'types':TourTypeSerializer(types, many=True, context={'request':request}).data
+            'types':TourTypeSerializer(types, many=True, context={'request':request}).data,
+            'rated':TourListSerializer(rated, many=True, context={'request':request}).data,
+            'experts':ExpertListSerializer(experts, many=True, context={'request':request}).data
         }
         return Response(start_page, status=200) 
