@@ -3,10 +3,12 @@ from django.utils.translation import gettext_lazy as _
 from django.template.defaultfilters import default, slugify
 from unidecode import unidecode
 import os
-from datetime import timedelta
+from datetime import timedelta, datetime
+from django.db.models.query import Prefetch
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.contrib.postgres.fields import ArrayField
 from ckeditor.fields import RichTextField
+from geoplaces.models import Destination
 from utils.images import get_tmb_path
 
 
@@ -206,6 +208,35 @@ class Important(models.Model):
     class Meta:
         ordering = ['id']
 
+
+
+class TourManager(models.Manager):
+    pass
+
+
+class TourQuerySet(models.QuerySet):
+    def actives(self):
+        return self.filter(is_active=True)
+    
+    def prefetched(self):
+        tour_basic = TourBasic.objects.prefetch_related('expert')
+        prefetch_tour_basic = Prefetch('tour_basic', tour_basic)
+        start_destination = Destination.objects.prefetch_related('region')
+        prefetch_start_destination = Prefetch('start_destination', start_destination)
+        return self.prefetch_related(prefetch_tour_basic, prefetch_start_destination, 'start_city', 'start_region', 'finish_destination', 'finish_city', 'finish_region', 'basic_type', 'additional_types', 'tour_property_types', 'tour_property_images', 'tour_images', 'languages', 'currency', 'prepay_currency', 'accomodation',)
+    
+    def in_sale(self): 
+        return self.filter(is_active=True).filter(direct_link=False).filter(models.Q(booking_delay__lte=models.F('start_date') - datetime.today().date() - models.F('postpay_days_before_start')))
+    
+    def with_discounted_price(self):
+        return self.in_sale().annotate(
+                discounted_price = models.Case(
+                    models.When(models.Q(discount__isnull=True) or models.Q(discount=0), then=models.F('price')),
+                    models.When(~models.Q(discount__isnull=True) and ~models.Q(discount_starts__isnull=True) and models.Q(discount__gt=0) and models.Q(discount_starts__gte=datetime.today()) and models.Q(discount_finish__gte=datetime.today()) and models.Q(discount_in_prc=True), then=models.F('price') - models.F('price')*models.F('discount')/100),
+                    models.When(~models.Q(discount__isnull=True) and models.Q(discount__gt=0) and models.Q(discount_starts__lte=datetime.today()) and models.Q(discount_finish__gte=datetime.today()) and models.Q(discount_in_prc=False), then=models.F('price') - models.F('discount')),
+                )
+            )
+
 class Tour(models.Model):
     tour_basic = models.ForeignKey("TourBasic", verbose_name=_('Основа тура'), on_delete=models.CASCADE, related_name='tours', null=True, blank=True)
     name = models.CharField(_('Название'), max_length=180, null=True, blank=True)
@@ -283,6 +314,8 @@ class Tour(models.Model):
     booking_delay = models.DurationField(default=get_booking_delay)
     direct_link = models.BooleanField(_('Доступ по прямой ссылке'), default=False)
     map = models.JSONField(_('Карта'), null=True, blank=True)
+
+    objects = TourManager.from_queryset(TourQuerySet)()
 
     class Meta:
         verbose_name = _('Тур')

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<yml_catalog date={% now  "Y-m-d H:m" %}>
+    <shop>
+        <categories>
+        {% for destination in destinations %}
+            <category id="{{ destination.id }}">{{ destination.name }}</category>
+        {% endfor %}    
+        </categories>
+        <offers>
+            <offer id="1637" available="true">
+                <url>http://example.com/product/id1637</url>
+                <price>226.50</price>
+                <oldprice>250</oldprice>
+                <categoryId>1293</categoryId>
+                <categoryId>1345</categoryId>
+                <picture>http://example.com/images/1637_1.jpg</picture>
+                <name>Товар 1</name>
+                <param name="Диагональ">6</param>
+                <description>Описание товара 1637</description>
+                <vendor>Название производителя</vendor>
+                <model>Модель товарного предложения</model>
+            </offer>
+            <offer id="1638" available="false">
+                <url>http://example.com/product/id1638</url>
+                <price>545.30</price>
+                <categoryId>1293</categoryId>
+                <categoryId>1345</categoryId>
+                <picture>http://example.com/images/1638_1.jpg</picture>
+                <name>Товар 2</name>
+                <param name="Цвет">Белый</param>
+                <description>Описание товара 1638</description>
+                <vendor>Название производителя</vendor>
+                <model>Модель товарного предложения</model>
+            </offer>
+        </offers>
+    </shop>
+</yml_catalog>

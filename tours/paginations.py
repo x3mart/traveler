@@ -25,9 +25,8 @@ class TourResultsSetPagination(PageNumberPagination):
         })
     
     def paginate_queryset(self, queryset, request, view=None):
-        print('WOW')
-        print(view.action)
-        self.filter_data = self.get_filter_data(queryset, request)
+        if view.action == 'list':
+            self.filter_data = self.get_filter_data(queryset, request)
         return super().paginate_queryset(queryset, request, view)
     
     def get_q_filters(self, filters, field, type=None):
@@ -46,15 +45,7 @@ class TourResultsSetPagination(PageNumberPagination):
         return filter_set
     
     def get_filter_data(self, queryset, request):
-        tour_basic = TourBasic.objects.prefetch_related('expert')
-        prefetch_tour_basic = Prefetch('tour_basic', tour_basic)
-        active_tours = Tour.objects.prefetch_related(prefetch_tour_basic, 'start_destination', 'start_city', 'wallpaper', 'currency').filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start'))).annotate(
-                discounted_price = Case(
-                    When(Q(discount__isnull=True) or Q(discount=0), then=F('price')),
-                    When(~Q(discount__isnull=True) and ~Q(discount_starts__isnull=True) and Q(discount__gt=0) and Q(discount_starts__gte=datetime.today()) and Q(discount_finish__gte=datetime.today()) and Q(discount_in_prc=True), then=F('price') - F('price')*F('discount')/100),
-                    When(~Q(discount__isnull=True) and Q(discount__gt=0) and Q(discount_starts__lte=datetime.today()) and Q(discount_finish__gte=datetime.today()) and Q(discount_in_prc=False), then=F('price') - F('discount')),
-                )
-            )
+        active_tours = Tour.objects.prefetched().in_sale().with_discounted_price()
         filters={}
         params = dict(request.query_params)
         for type in params:
