@@ -87,7 +87,17 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
                 )
             else:
                 qs = qs.annotate(is_favorite = Value(False))
-            
+        elif self.action in ['preview',]:
+            qs = super().get_queryset()
+            if self.request.auth:
+                favorite_tours_ids = self.request.user.favorite_tours.values_list('id', flat=True)
+                qs = qs.annotate(is_favorite=Case(
+                    When(Q(id__in=favorite_tours_ids), then=Value(True)),
+                    default=Value(False),
+                    output_field=BooleanField())
+                )
+            else:
+                qs = qs.annotate(is_favorite = Value(False))            
         elif self.action in ['tour_set',]:
             qs = super().get_queryset().filter(tour_basic__expert_id=self.request.user.id).order_by('-id')
         else:

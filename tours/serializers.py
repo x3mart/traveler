@@ -112,10 +112,12 @@ class TourPreviewSerializer(serializers.ModelSerializer, TourSerializerMixin):
     postpay_final_date = serializers.SerializerMethodField(read_only=True)
     tour_dates = TourDatesSerializer(many=True, read_only=True)
     archive = serializers.BooleanField(read_only=True)
+    is_favorite = serializers.BooleanField(read_only=True)
+
 
     class Meta:
         model = Tour
-        fields = TOUR_FIELDS + ('expert', 'cost', 'discounted_price', 'book_price', 'daily_price', 'decline_reasons', 'postpay_final_date', 'slug', 'archive', 'tour_dates')
+        fields = TOUR_FIELDS + ('expert', 'cost', 'discounted_price', 'book_price', 'daily_price', 'decline_reasons', 'postpay_final_date', 'slug', 'archive', 'tour_dates', 'is_favorite')
 
     def get_tmb_wallpaper(self, obj):
         if obj.wallpaper: 
