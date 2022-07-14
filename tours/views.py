@@ -354,7 +354,7 @@ class StartPage(APIView):
     def get(self, request, format=None):
         queryset = Tour.objects.in_sale()
         new = queryset.prefetched().with_discounted_price().order_by('tour_basic__created_at', 'start_date').distinct('tour_basic__created_at')[:5]
-        popular = Destination.objects.filter(tours_by_start_destination__in=queryset).distinct().prefetch_related('region').annotate(tours_count=Count('tours_by_start_destination')).order_by('-view')[:12]
+        popular = Destination.objects.filter(tours_by_start_destination__in=queryset).distinct().prefetch_related('region').annotate(tours_count=Count('tours_by_start_destination')).order_by('-views_count')[:12]
         regions = Region.objects.filter(tours_by_start_region__in=queryset).distinct()
         types = TourType.objects.filter(Q(tours_by_basic_type__in=queryset) | Q(tours_by_additional_types__in=queryset)).annotate(tours_count=Count('tours_by_basic_type', filter=Q(tours_by_basic_type__in=queryset), distinct=True) + Count('tours_by_additional_types', filter=Q(tours_by_additional_types__in=queryset), distinct=True)).distinct()
         rated = queryset.prefetched().with_discounted_price().order_by('-tour_basic__rating', 'start_date').distinct('tour_basic__rating')[:5]
