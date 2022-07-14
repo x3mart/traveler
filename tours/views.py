@@ -3,7 +3,7 @@ from django.forms import DurationField
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import action
 from django.db.models.query import Prefetch
-from django.db.models import Q, F, Case, Count, When
+from django.db.models import Q, F, Case, Count, When, Value, BooleanField
 from django.db.models.lookups import GreaterThan
 from rest_framework import viewsets
 from rest_framework.views import APIView
@@ -16,7 +16,7 @@ from rest_framework.serializers import ValidationError
 from django.template.loader import render_to_string
 import threading
 from django.core.mail import send_mail
-from accounts.models import Expert
+from accounts.models import Expert, Identifier, RecentlyViewedTour
 from accounts.serializers import ExpertListSerializer
 from currencies.models import Currency
 from geoplaces.models import Destination, Destination, Region
@@ -47,14 +47,22 @@ class ModerationResultEmailThread(threading.Thread):
             send_mail('Ваш тур не прошел проверку', f'Ваш тур "{self.tour.name}" (старт {self.tour.start_date.strftime("%d-%m-%Y")}) не прошел проверку по следующей причине: \n \n{self.reason}', 'info@traveler.market', [self.user.email,])
 
 
-class DestinationViewUpdate(threading.Thread):
-    def __init__(self, tour):
+class TourViewUpdate(threading.Thread):
+    def __init__(self, tour, ident):
         self.user = tour.tour_basic.expert
         self.tour = tour
+        self.ident = ident
         threading.Thread.__init__(self)
     
     def run(self):
-        Destination.objects.filter(pk=self.tour.start_destination.id).update(view=F('view')+1)
+        identifier = Identifier.objects.get(pk=self.ident)
+        recently, created = RecentlyViewedTour.objects.get_or_create(tour_id=self.tour.id, user_uuid_id=self.ident)
+        recently.viewed_at = datetime.now()
+        recently.save()
+        if created:
+            Tour.objects.filter(pk=self.tour.id).update(views_count=F('views_count')+1)
+        if self.tour.start_destination not in identifier.viewed_destinations.all():
+            Destination.objects.filter(pk=self.tour.start_destination.id).update(views_count=F('views_count')+1)
 
 # Create your views here.
 class TourViewSet(viewsets.ModelViewSet, TourMixin):
@@ -70,6 +78,16 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
     def get_queryset(self):
         if self.action in ['list',]:
             qs = super().get_queryset().in_sale()
+            if self.request.auth:
+                favorite_tours_ids = self.request.user.favorite_tours.values_list('id', flat=True)
+                qs = qs.annotate(is_favorite=Case(
+                    When(Q(id__in=favorite_tours_ids), then=Value(True)),
+                    default=Value(False),
+                    output_field=BooleanField())
+                )
+            else:
+                qs = qs.annotate(is_favorite = Value(False))
+            
         elif self.action in ['tour_set',]:
             qs = super().get_queryset().filter(tour_basic__expert_id=self.request.user.id).order_by('-id')
         else:
@@ -196,7 +214,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
             instance.start_date = datetime.strptime(request.data.get('start_date'), "%Y-%m-%d").date()
             instance.finish_date = instance.start_date + timedelta(days=instance.duration - 1)
         instance.sold = None
-        instance.watched = None
+        instance.views_count = None
         instance.save()
         self.copy_tour_mtm(old_instance, instance)
         tour = Tour.objects.get(pk=instance.id)
@@ -215,10 +233,12 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
                 tour = tours.first()
                 tour.archive = False
             else:
-                tour = qs.filter(slug=slug).is_active().order_by('-start_date').first()
+                tour = qs.filter(slug=slug).actives().order_by('-start_date').first()
                 tour.archive = True
         tour.tour_dates = Tour.objects.in_sale().only('id', 'start_date', 'finish_date')
-        DestinationViewUpdate(tour).start()
+        ident = request.query_params.get('ident')
+        # if ident:
+        #     TourViewUpdate(tour, ident).start()
         return Response(TourPreviewSerializer(tour, context={'request': request}, many=False).data, status=200)
     
     @action(['get'], detail=False)
@@ -247,16 +267,23 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         DeclineReason.objects.create(tour=instance, reason=request.data.get('reason'), staff=request.user)
         return Response({}, status=200)
     
-    # @action(['get'], detail=False)
-    # def types(self, request, *args, **kwargs):
-    #     queryset = self.filter_queryset(self.get_queryset())
+    @action(['patch', 'delete'], detail=True)
+    def favorite(self, request, *args, **kwargs):
+        tour = self.get_object()
+        if request.method == 'PATCH':
+            if not (hasattr(request.user, 'favorite_tours') and request.user.favorite_tours.filter(id = tour.id).exists()):
+                request.user.favorite_tours.add(tour)
+            return Response({}, status=204)
+        if request.method == 'DELETE':
+            if hasattr(request.user, 'favorite_tours'):
+                request.user.favorite_tours.remove(tour)
+            return Response({}, status=204)
 
-    #     page = self.paginate_queryset(queryset)
-    #     if page is not None:
-    #         serializer = self.get_serializer(page, many=True)
-    #         return self.get_paginated_response(serializer.data)
-    #     serializer = self.get_serializer(queryset, many=True)
-    #     return Response(serializer.data)
+    @action(['get'], detail=False)
+    def favorites(self, request, *args, **kwargs):
+        tours = request.user.favorite_tours.prefetched().with_discounted_price().annotate(is_favorite = Value(True)).all()
+        return Response(TourListSerializer(tours, many=True, context={'request':request}).data, status=200)
+
 
 
 class TourTypeViewSet(viewsets.ReadOnlyModelViewSet):

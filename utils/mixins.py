@@ -98,9 +98,6 @@ class TourSerializerMixin():
 
     def get_vacants_number(self, obj):
             return obj.vacants_number if obj.vacants_number < 5 else None
-        
-    def get_is_favourite(self, obj):
-        return  None
 
     def get_is_new(self, obj):
         return  None

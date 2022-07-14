@@ -4,9 +4,9 @@ from rest_framework.serializers import ValidationError
 from django.shortcuts import redirect
 from rest_framework.decorators import action
 from accounts.permissions import TeamMemberPermission, UserPermission, CustomerPermission, ExpertPermission
-from accounts.serializers import AvatarSerializer, CustomerMeSerializer, EmailActivationSerializer, ExpertListSerializer, ExpertMeSerializer, ExpertSerializer, TeamMemberSerializer, UserSerializer, CustomerSerializer
-from rest_framework import viewsets, status
-from accounts.models import Expert, PhoneConfirm, TeamMember, User, Customer
+from accounts.serializers import AvatarSerializer, CustomerMeSerializer, EmailActivationSerializer, ExpertListSerializer, ExpertMeSerializer, ExpertSerializer, IdentifierSerializer, TeamMemberSerializer, UserSerializer, CustomerSerializer
+from rest_framework import viewsets, status, mixins
+from accounts.models import Expert, Identifier, PhoneConfirm, TeamMember, User, Customer
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -416,3 +416,13 @@ class TeamMemberViewSet(viewsets.ModelViewSet, TourMixin):
             team_member.avatar = None
             team_member.save()
         return Response(TeamMemberSerializer(team_member, context={'request':request}).data, status=status.HTTP_200_OK)
+
+
+class IdentifierViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin):
+    queryset = Identifier.objects.all()
+    serializer_class = IdentifierSerializer
+
+    def create(self, request, *args, **kwargs):
+        user = request.user if request.auth else None
+        identifier = Identifier.objects.create(user=user)   
+        return Response({'ident':identifier.id}, status=201)

@@ -297,7 +297,7 @@ class Tour(models.Model):
     age_ends = models.PositiveIntegerField(_('Макс возраст участника тура'), default=85, null=True, blank=True)
     media_link = models.URLField(_('Ссылка на видео тура'), max_length=255, null=True, blank=True)
     air_tickets = models.TextField(_('Авиабилеты'), null=True, blank=True)
-    watched = models.PositiveIntegerField(_('Просмотры'), null=True, blank=True)
+    views_count = models.PositiveIntegerField(_('Просмотры'), null=True, blank=True, default=0)
     sold = models.PositiveIntegerField(_('Продажи'), null=True, blank=True)
     tour_property_types = models.ManyToManyField('TourPropertyType', related_name='tours', verbose_name=_("Типы размещения"), blank=True)
     accomodation = models.ManyToManyField('TourAccomodation', related_name='tours', verbose_name=_("Размещения"), blank=True)
@@ -318,7 +318,7 @@ class Tour(models.Model):
     booking_delay = models.DurationField(default=get_booking_delay)
     direct_link = models.BooleanField(_('Доступ по прямой ссылке'), default=False)
     map = models.JSONField(_('Карта'), null=True, blank=True)
-
+   
     objects = TourManager.from_queryset(TourQuerySet)()
 
     class Meta:

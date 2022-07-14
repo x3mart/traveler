@@ -8,7 +8,7 @@ from traveler.settings import DADATA_API, DADATA_SECRET
 from django.utils import timezone
 from languages.serializers import LanguageSerializer
 from verificationrequests.serializers import VerificationRequestlSerializer
-from .models import Customer, Expert, TeamMember, User
+from .models import Customer, Expert, Identifier, TeamMember, User
 from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
 import django.contrib.auth.password_validation as validators
@@ -45,14 +45,13 @@ class ExpertTourListSerializer(serializers.ModelSerializer):
     start_destination = serializers.StringRelatedField(many=False,)
     start_city = serializers.StringRelatedField(many=False,)
     vacants_number = serializers.SerializerMethodField(read_only=True)
-    is_favourite = serializers.SerializerMethodField(read_only=True)
     is_new = serializers.SerializerMethodField(read_only=True)
     is_recomended = serializers.SerializerMethodField(read_only=True)
     discount = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Tour
-        fields = ['id', 'name', 'start_date', 'start_destination', 'start_city', 'price', 'discount', 'duration', 'currency', 'tmb_wallpaper', 'vacants_number', 'is_favourite', 'is_new', 'is_recomended']
+        fields = ['id', 'name', 'start_date', 'start_destination', 'start_city', 'price', 'discount', 'duration', 'currency', 'tmb_wallpaper', 'vacants_number', 'is_new', 'is_recomended']
     
     def get_tmb_wallpaper(self, obj):
         if obj.wallpaper: 
@@ -61,9 +60,6 @@ class ExpertTourListSerializer(serializers.ModelSerializer):
     
     def get_vacants_number(self, obj):
             return obj.vacants_number if obj.vacants_number < 5 else None
-        
-    def get_is_favourite(self, obj):
-        return  None
 
     def get_is_new(self, obj):
         return  None
@@ -284,3 +280,7 @@ class CustomerMeSerializer(serializers.ModelSerializer):
     
     def get_referral_link(self, obj):
         return  utils.encode_uid(obj.id)
+
+
+class IdentifierSerializer(serializers.Serializer):
+    ident = serializers.UUIDField(read_only=True)

@@ -38,7 +38,7 @@ class Destination(models.Model):
     region = models.ForeignKey('Region', on_delete=models.CASCADE, related_name='destinations', verbose_name=_('Регион Мира'), null=True, blank=True)
     image = models.ImageField(_("Фото"), upload_to=geo_path, max_length=255, null=True, blank=True)
     alt =  models.CharField(_('alt текст'), max_length=255, null=True, blank=True)
-    view =  models.PositiveIntegerField(_('Просмотры'), default=0)
+    views_count = models.PositiveIntegerField(_('Просмотры'), null=True, blank=True, default=0)
 
     def __str__(self):
         return self.name

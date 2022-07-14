@@ -5,6 +5,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 from django.template.defaultfilters import slugify
 from unidecode import unidecode
 import os
+import uuid
 from traveler.settings import BASE_DIR
 from ckeditor.fields import RichTextField
 from utils.images import get_tmb_path
@@ -14,6 +15,7 @@ from django.utils import timezone
 def user_avatar_path(instance, filename):
     name, extension = os.path.splitext(filename)
     return 'avatars/{0}/{1}{2}'.format(slugify(unidecode(instance.full_name)), slugify(unidecode(name)), '.jpg')
+
 
 class AccountManager(BaseUserManager):
     def create_user(self, email, password=None, is_staff=False):
@@ -57,6 +59,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     last_visit = models.DateTimeField(_('Последнее посещение'), default=timezone.now)
     phone = PhoneNumberField(_('Телефон'), null=True, blank=True, )
     referrals_score = models.PositiveIntegerField(_('Реферальные баллы'), default=0)
+    favorite_tours = models.ManyToManyField('tours.Tour', verbose_name=_('Избранные туры'), related_name='users')
+    
 
     objects = AccountManager()
 
@@ -152,3 +156,16 @@ class Customer(User):
 class PhoneConfirm(models.Model):
     user = models.ForeignKey('accounts.User', on_delete=models.CASCADE, related_name='phone_confirms')
     code = models.CharField(max_length=4)
+
+
+class RecentlyViewedTour(models.Model):
+    user_uuid = models.ForeignKey('accounts.Identifier', on_delete=models.CASCADE, related_name='recently_viewed')
+    tour = models.ForeignKey('tours.Tour', on_delete=models.CASCADE, related_name='recently_viewed')
+    viewed_at = models.DateTimeField(null=True, blank=True,)
+
+
+class Identifier(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey('accounts.User', on_delete=models.CASCADE, related_name='user_uuids', null=True, blank=True)
+    viewed_destinations = models.ManyToManyField('geoplaces.Destination', verbose_name=_('Просмотренные направления'), related_name='uuid_by_destinations')
+    recently_viewed_tours = models.ManyToManyField('tours.Tour', verbose_name=_('Просмотренные направления'), related_name='uuid_by_tours', through='RecentlyViewedTour')

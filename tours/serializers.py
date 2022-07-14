@@ -79,7 +79,7 @@ class ImportantSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-TOUR_FIELDS = ('id', 'rating', 'reviews_count', 'name', 'wallpaper', 'tmb_wallpaper', 'basic_type', 'additional_types', 'start_region', 'finish_region', 'start_destination', 'finish_destination', 'start_city', 'finish_city', 'description', 'plan', 'cancellation_terms', 'difficulty_level', 'difficulty_description', 'tour_property_types', 'accomodation', 'tour_property_images', 'comfort_level', 'babies_alowed', 'animals_not_exploited', 'start_date', 'finish_date', 'start_time', 'finish_time', 'direct_link', 'instant_booking', 'members_number', 'team_member', 'guest_guide', 'price_comment', 'prepay_amount', 'prepay_in_prc', 'prepay_currency', 'postpay_on_start_day', 'postpay_days_before_start', 'currency', 'price', 'cost', 'discount_starts', 'discount_finish', 'discount_in_prc', 'discount', 'languages', 'is_guaranteed', 'flight_included', 'scouting', 'tour_images', 'tour_days', 'main_impressions', 'tour_included_services', 'tour_excluded_services', 'tour_addetional_services','hotel_name', 'age_starts', 'age_ends', 'media_link', 'week_recurrent', 'month_recurrent', 'vacants_number', 'on_moderation', 'is_active', 'is_draft', 'air_tickets', 'duration', 'sold', 'watched', 'guest_requirements', 'take_with', 'key_features', 'new_to_see', 'map', 'slug') 
+TOUR_FIELDS = ('id', 'rating', 'reviews_count', 'name', 'wallpaper', 'tmb_wallpaper', 'basic_type', 'additional_types', 'start_region', 'finish_region', 'start_destination', 'finish_destination', 'start_city', 'finish_city', 'description', 'plan', 'cancellation_terms', 'difficulty_level', 'difficulty_description', 'tour_property_types', 'accomodation', 'tour_property_images', 'comfort_level', 'babies_alowed', 'animals_not_exploited', 'start_date', 'finish_date', 'start_time', 'finish_time', 'direct_link', 'instant_booking', 'members_number', 'team_member', 'guest_guide', 'price_comment', 'prepay_amount', 'prepay_in_prc', 'prepay_currency', 'postpay_on_start_day', 'postpay_days_before_start', 'currency', 'price', 'cost', 'discount_starts', 'discount_finish', 'discount_in_prc', 'discount', 'languages', 'is_guaranteed', 'flight_included', 'scouting', 'tour_images', 'tour_days', 'main_impressions', 'tour_included_services', 'tour_excluded_services', 'tour_addetional_services','hotel_name', 'age_starts', 'age_ends', 'media_link', 'week_recurrent', 'month_recurrent', 'vacants_number', 'on_moderation', 'is_active', 'is_draft', 'air_tickets', 'duration', 'sold', 'views_count', 'guest_requirements', 'take_with', 'key_features', 'new_to_see', 'map', 'slug') 
 
 
 class TourPreviewSerializer(serializers.ModelSerializer, TourSerializerMixin):
@@ -188,8 +188,6 @@ class TourSerializer(serializers.ModelSerializer, TourSerializerMixin):
         if not obj.is_active and obj.decline_reasons.all().exists():
             return obj.decline_reasons.last().reason
         return None
-    
-
 
 class TourListSerializer(serializers.ModelSerializer, TourSerializerMixin):
     tmb_wallpaper = serializers.SerializerMethodField(read_only=True)
@@ -198,7 +196,6 @@ class TourListSerializer(serializers.ModelSerializer, TourSerializerMixin):
     start_city = serializers.StringRelatedField(many=False,)
     expert = ExpertListSerializer(many=False, source='tour_basic.expert')
     vacants_number = serializers.SerializerMethodField(read_only=True)
-    is_favourite = serializers.SerializerMethodField(read_only=True)
     is_new = serializers.SerializerMethodField(read_only=True)
     is_recomended = serializers.SerializerMethodField(read_only=True)
     discount = serializers.SerializerMethodField(read_only=True)
@@ -206,10 +203,11 @@ class TourListSerializer(serializers.ModelSerializer, TourSerializerMixin):
     api_url = serializers.SerializerMethodField(read_only=True)
     public_url = serializers.SerializerMethodField(read_only=True)
     rating = serializers.DecimalField(max_digits=2,decimal_places=1, source='tour_basic.rating',read_only=True)
+    is_favorite = serializers.BooleanField(read_only=True)
 
     class Meta:
         model = Tour
-        fields = ['id', 'name', 'start_date', 'start_destination', 'start_city', 'price', 'discount', 'duration', 'currency', 'tmb_wallpaper', 'expert', 'vacants_number', 'is_favourite', 'is_new', 'is_recomended', 'discounted_price', 'slug', 'api_url', 'public_url', 'rating']
+        fields = ['id', 'name', 'start_date', 'start_destination', 'start_city', 'price', 'discount', 'duration', 'currency', 'tmb_wallpaper', 'expert', 'vacants_number', 'is_favorite', 'is_new', 'is_recomended', 'discounted_price', 'slug', 'api_url', 'public_url', 'rating']
     
     def get_tmb_wallpaper(self, obj):
         if obj.wallpaper: 
@@ -224,7 +222,6 @@ class TourListSerializer(serializers.ModelSerializer, TourSerializerMixin):
         return request.build_absolute_uri(f'/api/tours/{obj.slug}/preview/?date_id={obj.id}')
 
 
-
 class TourSetSerializer(serializers.ModelSerializer, TourSerializerMixin):
     tmb_wallpaper = serializers.SerializerMethodField(read_only=True)
     currency = CurrencySerializer(many=False)
@@ -234,7 +231,7 @@ class TourSetSerializer(serializers.ModelSerializer, TourSerializerMixin):
 
     class Meta:
         model = Tour
-        fields = ['id', 'rating', 'reviews_count', 'name', 'tmb_wallpaper', 'start_date', 'finish_date', 'start_destination', 'price', 'cost', 'discount', 'on_moderation', 'is_active', 'is_draft', 'duration', 'sold', 'watched', 'currency', 'slug']
+        fields = ['id', 'rating', 'reviews_count', 'name', 'tmb_wallpaper', 'start_date', 'finish_date', 'start_destination', 'price', 'cost', 'discount', 'on_moderation', 'is_active', 'is_draft', 'duration', 'sold', 'currency', 'slug', 'views_count']
     
     def get_tmb_wallpaper(self, obj):
         if obj.wallpaper: 
