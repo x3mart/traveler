@@ -25,8 +25,9 @@ class TourResultsSetPagination(PageNumberPagination):
         })
     
     def paginate_queryset(self, queryset, request, view=None):
-        # if view.action == 'list':
-        self.filter_data = self.get_filter_data(queryset, request)
+        self.filter_data = []
+        if view.action == 'list':
+            self.filter_data = self.get_filter_data(queryset, request)
         return super().paginate_queryset(queryset, request, view)
     
     def get_q_filters(self, filters, field, type=None):
