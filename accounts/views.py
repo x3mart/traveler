@@ -1,4 +1,4 @@
-from django.db.models import F, Q
+from django.db.models import Q, F, Case, Count, When, Value, BooleanField
 from datetime import timedelta, datetime
 from rest_framework.serializers import ValidationError
 from django.shortcuts import redirect
@@ -186,9 +186,16 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
     @action(["get"], detail=True)
     def details(self, request, *args, **kwargs):
         expert = self.get_object()
-        tour_basic = TourBasic.objects.all()
-        prefetch_tour_basic = Prefetch('tour_basic', tour_basic)
-        expert_tours = Tour.objects.prefetch_related(prefetch_tour_basic, 'start_country', 'start_city', 'wallpaper', 'currency').only('id', 'name', 'start_date', 'start_country', 'start_city', 'price', 'discount', 'duration', 'tour_basic', 'wallpaper', 'vacants_number', 'currency').filter(is_active=True).filter(direct_link=False).filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start'))).filter(tour_basic__expert=expert)[:3]
+        expert_tours = Tour.objects.in_sale().with_discounted_price().prefetched()[:3]
+        if self.request.auth:
+            favorite_tours_ids = self.request.user.favorite_tours.values_list('id', flat=True)
+            expert_tours = expert_tours.annotate(is_favorite=Case(
+                When(Q(id__in=favorite_tours_ids), then=Value(True)),
+                default=Value(False),
+                output_field=BooleanField())
+            )
+        else:
+            expert_tours = expert_tours.annotate(is_favorite = Value(False))
         expert.expert_tours = expert_tours
         return Response(ExpertSerializer(expert, many=False, context={'request':request}).data, status=200)
 
