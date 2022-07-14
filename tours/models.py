@@ -233,7 +233,7 @@ class TourQuerySet(models.QuerySet):
         return self.filter(is_active=True).filter(direct_link=False).filter(models.Q(booking_delay__lte=models.F('start_date') - datetime.today().date() - models.F('postpay_days_before_start')))
     
     def with_discounted_price(self):
-        return self.in_sale().annotate(
+        return self.annotate(
                 discounted_price = models.Case(
                     models.When(models.Q(discount__isnull=True) or models.Q(discount=0), then=models.F('price')),
                     models.When(~models.Q(discount__isnull=True) and ~models.Q(discount_starts__isnull=True) and models.Q(discount__gt=0) and models.Q(discount_starts__gte=datetime.today()) and models.Q(discount_finish__gte=datetime.today()) and models.Q(discount_in_prc=True), then=models.F('price') - models.F('price')*models.F('discount')/100),
