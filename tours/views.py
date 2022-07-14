@@ -69,7 +69,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
 
     def get_queryset(self):
         if self.action in ['list',]:
-            qs = super().get_queryset().prefetched().in_sale()
+            qs = super().get_queryset()
         elif self.action in ['tour_set',]:
             qs = super().get_queryset().prefetch_related('tour_basic', 'start_destination', 'currency').only('id', 'name', 'start_date', 'finish_date', 'start_destination', 'price', 'cost', 'discount', 'on_moderation', 'is_active', 'is_draft', 'duration', 'sold', 'watched', 'currency', 'tour_basic', 'wallpaper').filter(tour_basic__expert_id=self.request.user.id).order_by('-id')
         else:
