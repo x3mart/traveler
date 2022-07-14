@@ -186,7 +186,7 @@ class ExpertViewSet(viewsets.ModelViewSet, TourMixin):
     @action(["get"], detail=True)
     def details(self, request, *args, **kwargs):
         expert = self.get_object()
-        expert_tours = Tour.objects.in_sale().with_discounted_price().prefetched()[:3]
+        expert_tours = Tour.objects.in_sale().with_discounted_price().prefetched().filter(tour_basic__expert=expert)[:3]
         if self.request.auth:
             favorite_tours_ids = self.request.user.favorite_tours.values_list('id', flat=True)
             expert_tours = expert_tours.annotate(is_favorite=Case(
