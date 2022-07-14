@@ -4,7 +4,7 @@ from dadata import Dadata
 from currencies.serializers import CurrencySerializer
 from referals.models import Referral
 # from tours.models import Tour
-from tours.serializers import TourListSerializer
+from tours.serializers import TourListSerializer, TourListWOExpertSerializer
 from traveler.settings import DADATA_API, DADATA_SECRET
 from django.utils import timezone
 from languages.serializers import LanguageSerializer
@@ -95,7 +95,7 @@ class ExpertSerializer(serializers.ModelSerializer):
     tmb_avatar = serializers.SerializerMethodField(read_only=True)
     languages = LanguageSerializer(many=True, read_only=True)
     team_members = serializers.SerializerMethodField(read_only=True)
-    expert_tours = TourListSerializer(many=True, read_only=True)
+    expert_tours = TourListWOExpertSerializer(many=True, read_only=True)
     last_visit = serializers.SerializerMethodField(read_only=True)
     registration_date = serializers.SerializerMethodField(read_only=True)
     
