@@ -3,7 +3,7 @@ from bankdetails.serializers import BankTransactionSerializer, DebetCardSerializ
 from dadata import Dadata
 from currencies.serializers import CurrencySerializer
 from referals.models import Referral
-# from tours.models import Tour
+from tours.models import Tour
 from traveler.settings import DADATA_API, DADATA_SECRET
 from django.utils import timezone
 from languages.serializers import LanguageSerializer
