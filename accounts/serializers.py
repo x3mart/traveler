@@ -3,7 +3,7 @@ from bankdetails.serializers import BankTransactionSerializer, DebetCardSerializ
 from dadata import Dadata
 from currencies.serializers import CurrencySerializer
 from referals.models import Referral
-from tours.models import Tour
+# from tours.models import Tour
 from tours.serializers import TourListSerializer
 from traveler.settings import DADATA_API, DADATA_SECRET
 from django.utils import timezone
@@ -38,41 +38,6 @@ class EmailActivationSerializer(UidAndTokenSerializer):
     def validate(self, attrs):
         attrs = super().validate(attrs)
         return attrs
-
-
-class ExpertTourListSerializer(serializers.ModelSerializer):
-    tmb_wallpaper = serializers.SerializerMethodField(read_only=True)
-    currency = CurrencySerializer(many=False)
-    start_destination = serializers.StringRelatedField(many=False,)
-    start_city = serializers.StringRelatedField(many=False,)
-    vacants_number = serializers.SerializerMethodField(read_only=True)
-    is_new = serializers.SerializerMethodField(read_only=True)
-    is_recomended = serializers.SerializerMethodField(read_only=True)
-    discount = serializers.SerializerMethodField(read_only=True)
-
-    class Meta:
-        model = Tour
-        fields = ['id', 'name', 'start_date', 'start_destination', 'start_city', 'price', 'discount', 'duration', 'currency', 'tmb_wallpaper', 'vacants_number', 'is_new', 'is_recomended']
-    
-    def get_tmb_wallpaper(self, obj):
-        if obj.wallpaper: 
-            return get_tmb_image_uri(self, obj.wallpaper)
-        return None
-    
-    def get_vacants_number(self, obj):
-            return obj.vacants_number if obj.vacants_number < 5 else None
-
-    def get_is_new(self, obj):
-        return  None
-
-    def get_is_recomended(self, obj):
-        return  None
-
-    def get_discount(self, obj):
-        if obj.price and obj.discount and obj.discount_starts and  obj.discount_finish and obj.discount_starts < date.today() and  obj.discount_finish > date.today():
-            return round(obj.price - obj.price*(obj.discount/100)) if obj.prepay_in_prc else obj.price - obj.discount
-        else:
-            return None
 
 
 class TeamMemberSerializer(serializers.ModelSerializer):

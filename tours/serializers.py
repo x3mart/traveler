@@ -191,12 +191,11 @@ class TourSerializer(serializers.ModelSerializer, TourSerializerMixin):
             return obj.decline_reasons.last().reason
         return None
 
-class TourListSerializer(serializers.ModelSerializer, TourSerializerMixin):
+class TourListWOExpertSerializer(serializers.ModelSerializer, TourSerializerMixin):
     tmb_wallpaper = serializers.SerializerMethodField(read_only=True)
     currency = CurrencySerializer(many=False)
     start_destination = serializers.StringRelatedField(many=False,)
     start_city = serializers.StringRelatedField(many=False,)
-    expert = ExpertListSerializer(many=False, source='tour_basic.expert')
     vacants_number = serializers.SerializerMethodField(read_only=True)
     is_new = serializers.SerializerMethodField(read_only=True)
     is_recomended = serializers.SerializerMethodField(read_only=True)
@@ -222,6 +221,10 @@ class TourListSerializer(serializers.ModelSerializer, TourSerializerMixin):
     def get_api_url(self, obj):
         request = self.context.get('request')
         return request.build_absolute_uri(f'/api/tours/{obj.slug}/preview/?date_id={obj.id}')
+
+
+class TourListSerializer(TourListWOExpertSerializer):
+    expert = ExpertListSerializer(many=False, source='tour_basic.expert')
 
 
 class TourSetSerializer(serializers.ModelSerializer, TourSerializerMixin):
