@@ -4,10 +4,10 @@ from dadata import Dadata
 from currencies.serializers import CurrencySerializer
 from referals.models import Referral
 # from tours.models import Tour
-from tours.serializers import TourListWOExpertSerializer
 from traveler.settings import DADATA_API, DADATA_SECRET
 from django.utils import timezone
 from languages.serializers import LanguageSerializer
+from utils.mixins import TourSerializerMixin
 from verificationrequests.serializers import VerificationRequestlSerializer
 from .models import Customer, Expert, Identifier, TeamMember, User
 from rest_framework import serializers
@@ -17,6 +17,38 @@ from django.core import exceptions
 from utils.images import get_tmb_image_uri
 from djoser.serializers import UidAndTokenSerializer
 from djoser import utils
+
+
+class TourListExpertSerializer(serializers.ModelSerializer, TourSerializerMixin):
+    tmb_wallpaper = serializers.SerializerMethodField(read_only=True)
+    currency = CurrencySerializer(many=False)
+    start_destination = serializers.StringRelatedField(many=False,)
+    start_city = serializers.StringRelatedField(many=False,)
+    vacants_number = serializers.SerializerMethodField(read_only=True)
+    is_new = serializers.SerializerMethodField(read_only=True)
+    is_recomended = serializers.SerializerMethodField(read_only=True)
+    discount = serializers.SerializerMethodField(read_only=True)
+    discounted_price = serializers.IntegerField(read_only=True)
+    api_url = serializers.SerializerMethodField(read_only=True)
+    public_url = serializers.SerializerMethodField(read_only=True)
+    rating = serializers.DecimalField(max_digits=2,decimal_places=1, source='tour_basic.rating',read_only=True)
+    is_favorite = serializers.BooleanField(read_only=True)
+
+    class Meta:
+        model = Tour
+        fields = ['id', 'name', 'start_date', 'start_destination', 'start_city', 'price', 'discount', 'duration', 'currency', 'tmb_wallpaper', 'expert', 'vacants_number', 'is_favorite', 'is_new', 'is_recomended', 'discounted_price', 'slug', 'api_url', 'public_url', 'rating']
+    
+    def get_tmb_wallpaper(self, obj):
+        if obj.wallpaper: 
+            return get_tmb_image_uri(self, obj.wallpaper)
+        return None
+    
+    def get_public_url(self, obj):
+        return f'tours/{obj.start_region.slug}/{obj.start_destination.slug}/{obj.slug}/?date_id={obj.id}'
+
+    def get_api_url(self, obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(f'/api/tours/{obj.slug}/preview/?date_id={obj.id}')
 
 
 
@@ -95,7 +127,7 @@ class ExpertSerializer(serializers.ModelSerializer):
     tmb_avatar = serializers.SerializerMethodField(read_only=True)
     languages = LanguageSerializer(many=True, read_only=True)
     team_members = serializers.SerializerMethodField(read_only=True)
-    expert_tours = TourListWOExpertSerializer(many=True, read_only=True)
+    expert_tours = TourListExpertSerializer(many=True, read_only=True)
     last_visit = serializers.SerializerMethodField(read_only=True)
     registration_date = serializers.SerializerMethodField(read_only=True)
     
