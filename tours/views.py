@@ -349,7 +349,6 @@ class ActiveType(APIView):
         types = TourType.objects.filter(Q(tours_by_basic_type__in=tours) | Q(tours_by_additional_types__in=tours)).annotate(tours_count=Count('tours_by_basic_type', filter=Q(tours_by_basic_type__in=tours), distinct=True) + Count('tours_by_additional_types', filter=Q(tours_by_additional_types__in=tours), distinct=True)).distinct()
         return Response(TourTypeSerializer(types, many=True, context={'request':request}).data, status=200)
 
-
 class StartPage(APIView):
     def get(self, request, format=None):
         queryset = Tour.objects.in_sale()

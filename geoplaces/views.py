@@ -11,8 +11,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
-from geoplaces.models import City, Destination, Region
-from .serializers import CityFullNameSerializer, CitySerializer, DestinationSerializer, RegionSerializer
+from geoplaces.models import City, Country, Destination, Region
+from .serializers import CityFullNameSerializer, CitySerializer, CountrySerializer, DestinationSerializer, RegionSerializer
 
 
 class RegionViewSet(viewsets.ModelViewSet):
@@ -70,3 +70,8 @@ class CityViewSet(viewsets.ModelViewSet):
     
     def filter_queryset(self, queryset):
         return super().filter_queryset(queryset)[:200]
+
+
+class CountryViewSet(viewsets.ModelViewSet):
+    queryset = Country.objects.all()
+    serializer_class = CountrySerializer
