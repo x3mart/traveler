@@ -27,7 +27,6 @@ from drf_yasg import openapi
 from django.conf.urls.i18n import i18n_patterns
 import debug_toolbar
 from accounts.views import RedirectSocial
-from utils.retailrocket import make_retailrocket_yml
 
 
 urlpatterns = [
