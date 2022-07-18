@@ -11,4 +11,4 @@ def make_retailrocket_yml(request):
     content = render_to_string('traveler.yml', {'tours':tours, 'destinations':destinations})
     with open(f'{BASE_DIR}/django-media/traveler.yml', 'w', encoding='UTF-8') as static_file:
         static_file.write(content)
-    return FileResponse(open(f'{BASE_DIR}/django-media/traveler.yml'), as_attachment=True)
+    return FileResponse(open(f'{BASE_DIR}/django-media/traveler.yml'),)
