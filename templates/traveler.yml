@@ -7,31 +7,25 @@
         {% endfor %}    
         </categories>
         <offers>
-            <offer id="1637" available="true">
-                <url>http://example.com/product/id1637</url>
-                <price>226.50</price>
-                <oldprice>250</oldprice>
-                <categoryId>1293</categoryId>
-                <categoryId>1345</categoryId>
-                <picture>http://example.com/images/1637_1.jpg</picture>
-                <name>Товар 1</name>
-                <param name="Диагональ">6</param>
-                <description>Описание товара 1637</description>
-                <vendor>Название производителя</vendor>
-                <model>Модель товарного предложения</model>
+            {% for tour in tours %}
+            <offer id="{{ tour.id }}" available="true">
+                <url>https://traveler.market/tours/{{ tour.start_region.slug }}/{{ tour.start_destination.slug }}/{{ tour.slug }}/?date_id={{ tour.id }}</url>
+                <price>{{ tour.discounted_price }}</price>
+                <oldprice>{{ tour.price }}</oldprice>
+                <categoryId>{{ tour.start_destination.id }}</categoryId>
+                <picture>https://traveler.market{{ tour.wallpaper.tmb_wallpaper }}</picture>
+                <name>{{ tour.name }}</name>
+                <param name="Тип тура">{{ tour.basic_type.name }}{% for type in tour.additional_types.all %}, {{ type.name }}{% endfor %}</param>
+                <param name="Язык тура">{% for language in tour.languages.all %}{{ language.name }}, {% endfor %}</param>
+                <param name="Проживание">{% for tour_property_type in tour.tour_property_types.all %}{{ tour_property_type.name }}, {% endfor %}</param>
+                <param name="Размещение">{% for accomodation in tour.accomodation.all %}{{ accomodation.name }}, {% endfor %}</param>
+                <param name="Сложность">{{ tour.difficulty_level }}</param>
+                <param name="Комфорт">{{ tour.comfort_level }}</param>
+                <description><![CDATA[{{ tour.description|truncatechars_html:150|safe }}]]></description>
+                <vendor>{{ tour.tour_basic.expert.full_name }}</vendor>
+                <model>{{ tour.name }}</model>
             </offer>
-            <offer id="1638" available="false">
-                <url>http://example.com/product/id1638</url>
-                <price>545.30</price>
-                <categoryId>1293</categoryId>
-                <categoryId>1345</categoryId>
-                <picture>http://example.com/images/1638_1.jpg</picture>
-                <name>Товар 2</name>
-                <param name="Цвет">Белый</param>
-                <description>Описание товара 1638</description>
-                <vendor>Название производителя</vendor>
-                <model>Модель товарного предложения</model>
-            </offer>
+            {% endfor %}
         </offers>
     </shop>
 </yml_catalog>
