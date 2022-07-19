@@ -372,3 +372,27 @@ class StartPage(APIView):
             'types_all':TourTypeSerializer(types, many=True, context={'request':request}).data
         }
         return Response(start_page, status=200) 
+
+
+class MainMenu(APIView):
+    def get(self, request, format=None):
+        menu = [
+            {
+                'title': 'Путешествия',
+                'submenu': [
+                    {'title': 'Все путешествия', 'url':'/tours'},
+                    {'title': 'Все регионы', 'url':'/regions'},
+                    {'title': 'Все направления', 'url':'/destinations'},
+                    {'title': 'Все типы туров', 'url':'/destinations'},
+                    {'title': 'Статьи о путешествиях', 'url':'/articles'},
+                    {'title': 'Блоги о путешествиях', 'url':'/blogs'},
+                ]
+            },
+            {
+                'title': 'Поддержка',
+                'submenu': [
+                    {'title': 'ЧаВо', 'url':'/faqs'},
+                    {'title': 'Чат с тех поддержкой', 'url':'/account/support'},
+                ]
+            }
+        ]
