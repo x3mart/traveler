@@ -359,7 +359,7 @@ class StartPage(APIView):
         rated = queryset.prefetched().with_discounted_price().order_by('-tour_basic__rating', 'start_date').distinct()[:5]
         experts = Expert.objects.annotate(active_tours = Count('tours__tours', filter=(Q(tours__tours__booking_delay__lte=F('tours__tours__start_date') - datetime.today().date() - F('tours__tours__postpay_days_before_start'))))).filter(active_tours__gt=0).order_by('-rating')[:6]
         discounted = queryset.prefetched().with_discounted_price().annotate(d = (F('price') - F('discounted_price'))).filter(d__gt=0).order_by('-d')[:5]
-        reviews = TourReview.objects.all().order_by('-id')[:4]
+        reviews = TourReview.objects.filter(is_active=True).order_by('-id')[:4]
         start_page = {
             'new':TourListSerializer(new, many=True, context={'request':request}).data,
             'popular':DestinationSerializer(popular, many=True, context={'request':request}).data,

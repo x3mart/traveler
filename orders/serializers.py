@@ -26,7 +26,7 @@ class ExpertShortSerializer(serializers.ModelSerializer):
 class CustomerShortSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
-        fields = ('full_name', 'id')
+        fields = ('full_name', 'id', 'avatar', )
 
 
 class DateWithVerboseMonthAndWeekday(serializers.Field):
