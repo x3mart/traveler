@@ -17,4 +17,4 @@ class TourReviewSerializer(serializers.ModelSerializer):
     def get_tour(self, obj):
         request = self.context['request']
         tour = obj.tour.tours.filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start'))).first()
-        return TourListSerializer(tour, many=False, context={'request':request})
+        return TourListSerializer(tour, many=False, context={'request':request}).data
