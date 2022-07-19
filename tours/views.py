@@ -383,7 +383,6 @@ class MainMenu(APIView):
                     {'title': 'Все путешествия', 'url':'/tours'},
                     {'title': 'Все регионы', 'url':'/regions'},
                     {'title': 'Все направления', 'url':'/destinations'},
-                    {'title': 'Все типы туров', 'url':'/destinations'},
                     {'title': 'Статьи о путешествиях', 'url':'/articles'},
                     {'title': 'Отзывы путешественников', 'url':'/reviews'},
                 ]
