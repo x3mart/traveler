@@ -396,3 +396,5 @@ class MainMenu(APIView):
                 ]
             }
         ]
+    
+        return Response(menu, status=200)
