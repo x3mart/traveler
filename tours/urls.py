@@ -13,7 +13,7 @@ urlpatterns = [
     path('active_regions/', ActiveRegion.as_view()),
     path('active_destinations/', ActiveDestination.as_view()),
     path('active_types/', ActiveType.as_view()),
-    path('start_page/', StartPage.as_view())
+    path('start_page/', StartPage.as_view()),
     path('main_menu/', MainMenu.as_view())
 ]
 
