@@ -15,4 +15,4 @@ class TourReviewSerializer(serializers.ModelSerializer):
         fields = '__all__'
     
     def get_tour(self, obj):
-        return obj.tour.tours.filter(Q(tours__tours__booking_delay__lte=F('tours__tours__start_date') - datetime.today().date() - F('tours__tours__postpay_days_before_start'))).first().name
+        return obj.tour.tours.filter(Q(booking_delay__lte=F('start_date') - datetime.today().date() - F('postpay_days_before_start'))).first().name
