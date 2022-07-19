@@ -356,7 +356,7 @@ class StartPage(APIView):
         popular = Destination.objects.filter(tours_by_start_destination__in=queryset).distinct().prefetch_related('region').annotate(tours_count=Count('tours_by_start_destination')).order_by('-views_count')[:12]
         regions = Region.objects.filter(tours_by_start_region__in=queryset).distinct()
         types = TourType.objects.filter(Q(tours_by_basic_type__in=queryset) | Q(tours_by_additional_types__in=queryset)).annotate(tours_count=Count('tours_by_basic_type', filter=Q(tours_by_basic_type__in=queryset), distinct=True) + Count('tours_by_additional_types', filter=Q(tours_by_additional_types__in=queryset), distinct=True)).distinct()
-        rated = queryset.prefetched().with_discounted_price().order_by('-tour_basic__rating', 'start_date').distinct('tour_basic__rating')[:5]
+        rated = queryset.prefetched().with_discounted_price().order_by('-tour_basic__rating', 'start_date').distinct()[:5]
         experts = Expert.objects.annotate(active_tours = Count('tours__tours', filter=(Q(tours__tours__booking_delay__lte=F('tours__tours__start_date') - datetime.today().date() - F('tours__tours__postpay_days_before_start'))))).filter(active_tours__gt=0).order_by('-rating')[:6]
         discounted = queryset.prefetched().with_discounted_price().annotate(d = (F('price') - F('discounted_price'))).filter(d__gt=0).order_by('-d')[:5]
         reviews = TourReview.objects.all().order_by('-id')[:4]
