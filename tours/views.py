@@ -247,8 +247,8 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
                 tour.archive = True
         tour.tour_dates = Tour.objects.in_sale().only('id', 'start_date', 'finish_date')
         ident = request.query_params.get('ident')
-        # if ident:
-        #     TourViewUpdate(tour, ident).start()
+        if ident:
+            TourViewUpdate(tour, ident).start()
         return Response(TourPreviewSerializer(tour, context={'request': request}, many=False).data, status=200)
     
     @action(['get'], detail=False)
@@ -360,6 +360,9 @@ class StartPage(APIView):
         experts = Expert.objects.annotate(active_tours = Count('tours__tours', filter=(Q(tours__tours__booking_delay__lte=F('tours__tours__start_date') - datetime.today().date() - F('tours__tours__postpay_days_before_start'))))).filter(active_tours__gt=0).order_by('-rating')[:6]
         discounted = queryset.prefetched().with_discounted_price().annotate(d = (F('price') - F('discounted_price'))).filter(d__gt=0).order_by('-d')[:5]
         reviews = TourReview.objects.filter(is_active=True).order_by('-id')[:4]
+        ident = request.query_params.get('ident')
+        if ident:
+            recently = Tour.objects.prefetched().with_discounted_price().prefetch_related('recently_viewed').filter(recently_viewed__user_uuid=ident).order_by('recently_viewed__viewed_at')
         start_page = {
             'new':TourListSerializer(new, many=True, context={'request':request}).data,
             'popular':DestinationSerializer(popular, many=True, context={'request':request}).data,
