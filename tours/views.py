@@ -374,7 +374,7 @@ class StartPage(APIView):
             'experts':ExpertListSerializer(experts, many=True, context={'request':request}).data,
             'reviews':TourReviewSerializer(reviews, many=True, context={'request':request}).data,
             'types_all':TourTypeSerializer(types, many=True, context={'request':request}).data,
-            'recently':TourListSerializer(recently, many=True, context={'request':request}).data,
+            'recent':TourListSerializer(recently, many=True, context={'request':request}).data,
         }
         return Response(start_page, status=200) 
 
