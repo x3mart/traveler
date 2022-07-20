@@ -48,15 +48,15 @@ class ModerationResultEmailThread(threading.Thread):
 
 
 class TourViewUpdate(threading.Thread):
-    def __init__(self, tour, ident):
+    def __init__(self, ident, tour):
+        self.user_uuid = ident
         self.user = tour.tour_basic.expert
         self.tour = tour
-        self.ident = ident
         threading.Thread.__init__(self)
     
     def run(self):
-        identifier = Identifier.objects.get(pk=self.ident)
-        recently, created = RecentlyViewedTour.objects.get_or_create(tour_id=self.tour.id, user_uuid_id=self.ident)
+        identifier = Identifier.objects.get(pk=self.user_uuid)
+        recently, created = RecentlyViewedTour.objects.get_or_create(tour_id=self.tour.id, user_uuid_id=self.user_uuid)
         recently.viewed_at = datetime.now()
         recently.save()
         if created:
@@ -248,7 +248,7 @@ class TourViewSet(viewsets.ModelViewSet, TourMixin):
         tour.tour_dates = Tour.objects.in_sale().only('id', 'start_date', 'finish_date')
         ident = request.query_params.get('ident')
         if ident:
-            TourViewUpdate(tour, ident).start()
+            TourViewUpdate(ident, tour,).start()
         return Response(TourPreviewSerializer(tour, context={'request': request}, many=False).data, status=200)
     
     @action(['get'], detail=False)
@@ -361,8 +361,9 @@ class StartPage(APIView):
         discounted = queryset.prefetched().with_discounted_price().annotate(d = (F('price') - F('discounted_price'))).filter(d__gt=0).order_by('-d')[:5]
         reviews = TourReview.objects.filter(is_active=True).order_by('-id')[:4]
         ident = request.query_params.get('ident')
+        recently =[]
         if ident:
-            recently = Tour.objects.prefetched().with_discounted_price().prefetch_related('recently_viewed').filter(recently_viewed__user_uuid=ident).order_by('recently_viewed__viewed_at')
+            recently = Tour.objects.prefetched().with_discounted_price().prefetch_related('recently_viewed').filter(recently_viewed__user_uuid=ident).order_by('recently_viewed__viewed_at')[:5]
         start_page = {
             'new':TourListSerializer(new, many=True, context={'request':request}).data,
             'popular':DestinationSerializer(popular, many=True, context={'request':request}).data,
@@ -372,7 +373,8 @@ class StartPage(APIView):
             'discounted':TourListSerializer(discounted, many=True, context={'request':request}).data,
             'experts':ExpertListSerializer(experts, many=True, context={'request':request}).data,
             'reviews':TourReviewSerializer(reviews, many=True, context={'request':request}).data,
-            'types_all':TourTypeSerializer(types, many=True, context={'request':request}).data
+            'types_all':TourTypeSerializer(types, many=True, context={'request':request}).data,
+            'recently':TourListSerializer(recently, many=True, context={'request':request}).data,
         }
         return Response(start_page, status=200) 
 
