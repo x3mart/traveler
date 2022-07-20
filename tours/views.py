@@ -363,7 +363,7 @@ class StartPage(APIView):
         ident = request.query_params.get('ident')
         recently =[]
         if ident:
-            recently = Tour.objects.prefetched().with_discounted_price().prefetch_related('recently_viewed').filter(recently_viewed__user_uuid=ident).order_by('recently_viewed__viewed_at')[:5]
+            recently = Tour.objects.prefetched().with_discounted_price().prefetch_related('recently_viewed').filter(recently_viewed__user_uuid=ident).order_by('-recently_viewed__viewed_at')[:5]
         start_page = {
             'new':TourListSerializer(new, many=True, context={'request':request}).data,
             'popular':DestinationSerializer(popular, many=True, context={'request':request}).data,
