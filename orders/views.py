@@ -91,8 +91,8 @@ class OrderViewSet(viewsets.ModelViewSet, OrderMixin):
     
     @action(['patch'], detail=True)
     def book(self, request, *args, **kwargs):
-        self.perform_book(request, *args, **kwargs)
-        return Response({'redirect_url':'https://traveler.market/account/orders'}, status=200)
+        order = self.perform_book(request, *args, **kwargs)
+        return Response({'redirect_url':f'https://traveler.market/account/orders/{order.id}/success'}, status=200)
     
     @action(['patch'], detail=True)
     def book_from_list(self, request, *args, **kwargs): 
