@@ -10,6 +10,7 @@ urlpatterns = [
 
 router.register(r'regions', RegionViewSet, basename='region')
 router.register(r'destinations', DestinationViewSet, basename='destination')
+
 router.register(r'countries', CountryViewSet, basename='country')
 router.register(r'cities', CityViewSet, basename='city')
 

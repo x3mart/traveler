@@ -4,7 +4,9 @@ from rest_framework import viewsets
 import requests
 import time
 from django.db.models.query import Prefetch
+from django.db.models import Q, Count
 from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector, TrigramSimilarity, TrigramDistance
+from tours.models import Tour
 from traveler.settings import VK_ACCESS_TOKEN
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -12,7 +14,7 @@ from rest_framework.permissions import AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from geoplaces.models import City, Country, Destination, Region
-from .serializers import CityFullNameSerializer, CitySerializer, CountrySerializer, DestinationSerializer, RegionSerializer
+from .serializers import CityFullNameSerializer, CitySerializer, CountrySerializer, DestinationListSerializer, RegionSerializer
 
 
 class RegionViewSet(viewsets.ModelViewSet):
@@ -32,7 +34,7 @@ class RegionViewSet(viewsets.ModelViewSet):
 
 class DestinationViewSet(viewsets.ModelViewSet):
     queryset = Destination.objects.all().order_by('name')
-    serializer_class = DestinationSerializer
+    serializer_class = DestinationListSerializer
     permission_classes = [AllowAny]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ['region',]
@@ -45,7 +47,7 @@ class DestinationViewSet(viewsets.ModelViewSet):
         else:
             return Response(serializer.errors, status=400)
         instance, created = Destination.objects.get_or_create(**data)
-        return Response(DestinationSerializer(instance).data, status=201)
+        return Response(DestinationListSerializer(instance).data, status=201)
 
 class CityViewSet(viewsets.ModelViewSet):
     queryset = City.objects.all()

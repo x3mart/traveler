@@ -36,7 +36,7 @@ class CityFullNameSerializer(serializers.ModelSerializer):
 
 
 
-class DestinationSerializer(serializers.ModelSerializer):
+class DestinationListSerializer(serializers.ModelSerializer):
     public_url = serializers.SerializerMethodField(read_only=True)
     tours_count = serializers.IntegerField(read_only=True)
     tmb_image = serializers.SerializerMethodField(read_only=True)
@@ -46,10 +46,11 @@ class DestinationSerializer(serializers.ModelSerializer):
         fields = '__all__'
     
     def get_public_url(self, obj):
-        return f'{obj.region.slug}/{obj.slug}'
+        return f'tours/{obj.region.slug}/{obj.slug}'
     
     def get_tmb_image(self, obj): 
         return get_tmb_image_uri(self, obj)
+
 
 
 class DestinationShortSerializer(serializers.ModelSerializer):

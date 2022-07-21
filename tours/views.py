@@ -20,7 +20,7 @@ from accounts.models import Expert, Identifier, RecentlyViewedTour
 from accounts.serializers import ExpertListSerializer
 from currencies.models import Currency
 from geoplaces.models import Destination, Destination, Region
-from geoplaces.serializers import DestinationSerializer, RegionSerializer, RegionShortSerializer
+from geoplaces.serializers import DestinationListSerializer, RegionSerializer
 from reviews.models import TourReview
 from reviews.serializers import TourReviewSerializer
 from tours.filters import TourFilter
@@ -29,7 +29,7 @@ from tours.paginations import TourResultsSetPagination
 from utils.constants import NOT_MODERATED_FIELDS
 from tours.models import DeclineReason, Tour, TourAccomodation, TourBasic, TourDayImage, TourGuestGuideImage, TourImage, TourPlanImage, TourPropertyImage, TourPropertyType, TourType, TourWallpaper
 from tours.permissions import TourPermission
-from tours.serializers import FilterSerializer, ImageSerializer, TourAccomodationSerializer, TourListSerializer, TourPreviewSerializer, TourPropertyTypeSerializer, TourSerializer, TourTypeSerializer, TourTypeShortSerializer, WallpaperSerializer, TourSetSerializer
+from tours.serializers import DestinationSerializer, FilterSerializer, ImageSerializer, TourAccomodationSerializer, TourListSerializer, TourPreviewSerializer, TourPropertyTypeSerializer, TourSerializer, TourTypeSerializer, TourTypeShortSerializer, WallpaperSerializer, TourSetSerializer
 from languages.models import Language
 
 
@@ -337,11 +337,29 @@ class ActiveRegion(APIView):
         regions = Region.objects.prefetch_related(prefethed_destinations).filter(tours_by_start_region__in=tours).annotate(tours_count=Count('tours_by_start_region')).order_by('name').distinct()
         return Response(RegionSerializer(regions, many=True).data, status=200)
 
-class ActiveDestination(APIView):
-    def get(self, request, format=None):
-        tours = Tour.objects.in_sale()
-        destinations = Destination.objects.filter(tours_by_start_destination__in=tours).distinct().prefetch_related('region').annotate(tours_count=Count('tours_by_start_destination')).order_by('name').distinct()
-        return Response(DestinationSerializer(destinations, many=True, context={'request':request}).data, status=200)
+
+class ActiveDestinationViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Destination.objects.all()
+    serializer_class = DestinationSerializer
+    lookup_field = 'slug'
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if self.action == 'list':
+            tours = Tour.objects.in_sale()
+            return qs.filter(tours_by_start_destination__in=tours).distinct().prefetch_related('region').annotate(tours_count=Count('tours_by_start_destination')).order_by('name').distinct()
+        if self.action == 'retrieve':
+            tours_by_start_destination = Tour.objects.prefetched().with_discounted_price().in_sale()
+            prefetched_tours = Prefetch('tours_by_start_destination', tours_by_start_destination)
+            return qs.prefetch_related('region').prefetch_related(prefetched_tours).annotate(tours_count=Count('tours_by_start_destination'))
+        return qs
+    
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return DestinationListSerializer
+        return super().get_serializer_class()
+
+    
 
 class ActiveType(APIView):
     def get(self, request, format=None):
@@ -366,7 +384,7 @@ class StartPage(APIView):
             recently = Tour.objects.prefetched().with_discounted_price().prefetch_related('recently_viewed').filter(recently_viewed__user_uuid=ident).order_by('-recently_viewed__viewed_at')[:5]
         start_page = {
             'new':TourListSerializer(new, many=True, context={'request':request}).data,
-            'popular':DestinationSerializer(popular, many=True, context={'request':request}).data,
+            'popular':DestinationListSerializer(popular, many=True, context={'request':request}).data,
             'regions':RegionSerializer(regions, many=True, context={'request':request}).data,
             'types':TourTypeSerializer(types[:6], many=True, context={'request':request}).data,
             'rated':TourListSerializer(rated, many=True, context={'request':request}).data,

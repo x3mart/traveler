@@ -1,7 +1,7 @@
 from datetime import date
 from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
-from geoplaces.serializers import CityFullNameSerializer, CitySerializer, DestinationSerializer, RegionSerializer
+from geoplaces.serializers import CityFullNameSerializer, CitySerializer, DestinationListSerializer, RegionSerializer
 from orders.serializers import TourDatesSerializer
 from utils.mixins import TourSerializerMixin
 from .models import Important, Tour, TourAccomodation, TourPropertyType, TourType
@@ -155,8 +155,8 @@ class TourSerializer(serializers.ModelSerializer, TourSerializerMixin):
     reviews_count = serializers.IntegerField(source='tour_basic.reviews_count',read_only=True)
     start_region = RegionSerializer(many=False, read_only=True)
     finish_region = RegionSerializer(many=False, read_only=True)
-    start_destination = DestinationSerializer(many=False, read_only=True)
-    finish_destination = DestinationSerializer(many=False, read_only=True)
+    start_destination = DestinationListSerializer(many=False, read_only=True)
+    finish_destination = DestinationListSerializer(many=False, read_only=True)
     start_city = CityFullNameSerializer(many=False, read_only=True)
     finish_city = CityFullNameSerializer(many=False, read_only=True)
     postpay_days_before_start = serializers.SerializerMethodField(read_only=True)
@@ -250,3 +250,7 @@ class FilterSerializer(serializers.Serializer):
     languages = LanguageSerializer(many=True)
     property_type =TourPropertyTypeShortSerializer(many=True)
     accomodation = TourAccomodationShortSerializer(many=True)
+
+
+class DestinationSerializer(DestinationListSerializer):
+    tours_by_start_destination = TourListSerializer(many=True, read_only=True)
