@@ -60,7 +60,8 @@ class OrderMixin():
         data['travelers_number'] = len(travelers)
         if not data['travelers_number']:
             data['travelers_number'] = order.travelers_number
-        initial_params = self.get_initial_params(data['tour'].prefetched().with_discounted_price())
+        tour = Tour.objects..prefetched().with_discounted_price().get(pk=data['tour'].id)
+        initial_params = self.get_initial_params(tour)
         costs = self.get_costs(data['travelers_number'], order.price, order.book_price, order.postpay)
         order.travelers.all().delete()
         for traveler in travelers:
