@@ -1,6 +1,7 @@
 from datetime import date
 from rest_framework import serializers
 from django.utils.translation import gettext_lazy as _
+from geoplaces.models import Region
 from geoplaces.serializers import CityFullNameSerializer, CitySerializer, DestinationListSerializer, RegionSerializer
 from orders.serializers import TourDatesSerializer
 from utils.mixins import TourSerializerMixin
@@ -254,3 +255,6 @@ class FilterSerializer(serializers.Serializer):
 
 class DestinationSerializer(DestinationListSerializer):
     tours_by_start_destination = TourListSerializer(many=True, read_only=True)
+
+class RegionRetrieveSerializer(RegionSerializer):
+    destinations = DestinationListSerializer(many=True, read_only=True)

@@ -64,10 +64,11 @@ class RegionSerializer(serializers.ModelSerializer):
     tours_count = serializers.IntegerField(read_only=True)
     destinations = DestinationShortSerializer(many=True)
     tmb_image = serializers.SerializerMethodField(read_only=True)
+    destinations_count = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Region
-        fields = ['id', 'name', 'slug', 'image', 'alt', 'public_url', 'map_icon', 'tours_count', 'destinations', 'tmb_image']
+        fields = ['id', 'name', 'slug', 'image', 'alt', 'public_url', 'map_icon', 'tours_count', 'destinations', 'tmb_image', 'destinations_count']
 
     def get_public_url(self, obj):
         return f'tours/{obj.slug}'

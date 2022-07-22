@@ -29,7 +29,7 @@ from tours.paginations import TourResultsSetPagination
 from utils.constants import NOT_MODERATED_FIELDS
 from tours.models import DeclineReason, Tour, TourAccomodation, TourBasic, TourDayImage, TourGuestGuideImage, TourImage, TourPlanImage, TourPropertyImage, TourPropertyType, TourType, TourWallpaper
 from tours.permissions import TourPermission
-from tours.serializers import DestinationSerializer, FilterSerializer, ImageSerializer, TourAccomodationSerializer, TourListSerializer, TourPreviewSerializer, TourPropertyTypeSerializer, TourSerializer, TourTypeSerializer, TourTypeShortSerializer, WallpaperSerializer, TourSetSerializer
+from tours.serializers import DestinationSerializer, FilterSerializer, ImageSerializer, RegionRetrieveSerializer, TourAccomodationSerializer, TourListSerializer, TourPreviewSerializer, TourPropertyTypeSerializer, TourSerializer, TourTypeSerializer, TourTypeShortSerializer, WallpaperSerializer, TourSetSerializer
 from languages.models import Language
 
 
@@ -336,6 +336,30 @@ class ActiveRegion(APIView):
         prefethed_destinations = Prefetch('destinations', destinations)
         regions = Region.objects.prefetch_related(prefethed_destinations).filter(tours_by_start_region__in=tours).annotate(tours_count=Count('tours_by_start_region')).order_by('name').distinct()
         return Response(RegionSerializer(regions, many=True).data, status=200)
+
+
+class ActiveRegionViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Region.objects.all()
+    serializer_class = RegionSerializer
+    lookup_field = 'slug'
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        tours = Tour.objects.in_sale().distinct()
+        if self.action == 'list':
+            destinations = Destination.objects.filter(tours_by_start_destination__in=tours).distinct()
+            prefethed_destinations = Prefetch('destinations', destinations)
+            return qs.prefetch_related(prefethed_destinations).filter(tours_by_start_region__in=tours).annotate(tours_count=Count('tours_by_start_region')).order_by('name').distinct()
+        if self.action == 'retrieve':
+            destinations = Destination.objects.filter(tours_by_start_destination__in=tours).distinct().prefetch_related('region').annotate(tours_count=Count('tours_by_start_destination'))
+            prefethed_destinations = Prefetch('destinations', destinations)
+            return qs.prefetch_related(prefethed_destinations).filter(tours_by_start_region__in=tours).annotate(destinations_count=Count('destinations', filter=Q(destinations__tours_by_start_destination__in=tours))).order_by('name').distinct()
+        return qs
+    
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return RegionRetrieveSerializer
+        return super().get_serializer_class()
 
 
 class ActiveDestinationViewSet(viewsets.ReadOnlyModelViewSet):
