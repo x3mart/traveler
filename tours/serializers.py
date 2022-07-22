@@ -52,28 +52,6 @@ class TourAccomodationShortSerializer(serializers.ModelSerializer):
         model = TourAccomodation
         fields = ['id', 'name']
 
-
-class TourTypeSerializer(serializers.ModelSerializer):
-    public_url = serializers.SerializerMethodField(read_only=True)
-    tours_count = serializers.IntegerField(read_only=True)
-    tmb_image = serializers.SerializerMethodField(read_only=True)
-
-    class Meta:
-        model = TourType
-        fields = '__all__'
-    
-    def get_public_url(self, obj):
-        return f'types/{obj.slug}'
-    
-    def get_tmb_image(self, obj): 
-        return get_tmb_image_uri(self, obj)
-
-class TourTypeShortSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TourType
-        fields = ('id', 'name')
-
-
 class ImportantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Important
@@ -136,6 +114,81 @@ class TourPreviewSerializer(serializers.ModelSerializer, TourSerializerMixin):
         return None
             
 
+class TourListWOExpertSerializer(serializers.ModelSerializer, TourSerializerMixin):
+    tmb_wallpaper = serializers.SerializerMethodField(read_only=True)
+    currency = CurrencySerializer(many=False)
+    start_destination = serializers.StringRelatedField(many=False,)
+    start_city = serializers.StringRelatedField(many=False,)
+    vacants_number = serializers.SerializerMethodField(read_only=True)
+    is_new = serializers.SerializerMethodField(read_only=True)
+    is_recomended = serializers.SerializerMethodField(read_only=True)
+    discount = serializers.SerializerMethodField(read_only=True)
+    discounted_price = serializers.IntegerField(read_only=True)
+    api_url = serializers.SerializerMethodField(read_only=True)
+    public_url = serializers.SerializerMethodField(read_only=True)
+    rating = serializers.DecimalField(max_digits=2,decimal_places=1, source='tour_basic.rating',read_only=True)
+    is_favorite = serializers.BooleanField(read_only=True)
+
+    class Meta:
+        model = Tour
+        fields = ['id', 'name', 'start_date', 'start_destination', 'start_city', 'price', 'discount', 'duration', 'currency', 'tmb_wallpaper', 'expert', 'vacants_number', 'is_favorite', 'is_new', 'is_recomended', 'discounted_price', 'slug', 'api_url', 'public_url', 'rating']
+    
+    def get_tmb_wallpaper(self, obj):
+        if obj.wallpaper: 
+            return get_tmb_image_uri(self, obj.wallpaper)
+        return None
+    
+    def get_public_url(self, obj):
+        return f'tours/{obj.start_region.slug}/{obj.start_destination.slug}/{obj.slug}/?date_id={obj.id}'
+
+    def get_api_url(self, obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(f'/api/tours/{obj.slug}/preview/?date_id={obj.id}')
+
+
+class TourListSerializer(TourListWOExpertSerializer):
+    expert = ExpertListSerializer(many=False, source='tour_basic.expert')
+
+
+class TourSetSerializer(serializers.ModelSerializer, TourSerializerMixin):
+    tmb_wallpaper = serializers.SerializerMethodField(read_only=True)
+    currency = CurrencySerializer(many=False)
+    start_destination = serializers.StringRelatedField(many=False,)
+    rating = serializers.DecimalField(max_digits=2,decimal_places=1, source='tour_basic.rating')
+    reviews_count = serializers.IntegerField(source='tour_basic.reviews_count')
+
+    class Meta:
+        model = Tour
+        fields = ['id', 'rating', 'reviews_count', 'name', 'tmb_wallpaper', 'start_date', 'finish_date', 'start_destination', 'price', 'cost', 'discount', 'on_moderation', 'is_active', 'is_draft', 'duration', 'sold', 'currency', 'slug', 'views_count']
+    
+    def get_tmb_wallpaper(self, obj):
+        if obj.wallpaper: 
+            return get_tmb_image_uri(self, obj.wallpaper)
+        return None
+
+
+class TourTypeSerializer(serializers.ModelSerializer):
+    public_url = serializers.SerializerMethodField(read_only=True)
+    tours_count = serializers.IntegerField(read_only=True)
+    tmb_image = serializers.SerializerMethodField(read_only=True)
+    tours_by_type = TourListSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = TourType
+        fields = '__all__'
+    
+    def get_public_url(self, obj):
+        return f'types/{obj.slug}'
+    
+    def get_tmb_image(self, obj): 
+        return get_tmb_image_uri(self, obj)
+
+class TourTypeShortSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TourType
+        fields = ('id', 'name')
+
+
 class TourSerializer(serializers.ModelSerializer, TourSerializerMixin):
     basic_type = TourTypeSerializer(many=False, read_only=True)
     team_member = TeamMemberSerializer(many=False, read_only=True)
@@ -191,59 +244,6 @@ class TourSerializer(serializers.ModelSerializer, TourSerializerMixin):
         if not obj.is_active and obj.decline_reasons.all().exists():
             return obj.decline_reasons.last().reason
         return None
-
-class TourListWOExpertSerializer(serializers.ModelSerializer, TourSerializerMixin):
-    tmb_wallpaper = serializers.SerializerMethodField(read_only=True)
-    currency = CurrencySerializer(many=False)
-    start_destination = serializers.StringRelatedField(many=False,)
-    start_city = serializers.StringRelatedField(many=False,)
-    vacants_number = serializers.SerializerMethodField(read_only=True)
-    is_new = serializers.SerializerMethodField(read_only=True)
-    is_recomended = serializers.SerializerMethodField(read_only=True)
-    discount = serializers.SerializerMethodField(read_only=True)
-    discounted_price = serializers.IntegerField(read_only=True)
-    api_url = serializers.SerializerMethodField(read_only=True)
-    public_url = serializers.SerializerMethodField(read_only=True)
-    rating = serializers.DecimalField(max_digits=2,decimal_places=1, source='tour_basic.rating',read_only=True)
-    is_favorite = serializers.BooleanField(read_only=True)
-
-    class Meta:
-        model = Tour
-        fields = ['id', 'name', 'start_date', 'start_destination', 'start_city', 'price', 'discount', 'duration', 'currency', 'tmb_wallpaper', 'expert', 'vacants_number', 'is_favorite', 'is_new', 'is_recomended', 'discounted_price', 'slug', 'api_url', 'public_url', 'rating']
-    
-    def get_tmb_wallpaper(self, obj):
-        if obj.wallpaper: 
-            return get_tmb_image_uri(self, obj.wallpaper)
-        return None
-    
-    def get_public_url(self, obj):
-        return f'tours/{obj.start_region.slug}/{obj.start_destination.slug}/{obj.slug}/?date_id={obj.id}'
-
-    def get_api_url(self, obj):
-        request = self.context.get('request')
-        return request.build_absolute_uri(f'/api/tours/{obj.slug}/preview/?date_id={obj.id}')
-
-
-class TourListSerializer(TourListWOExpertSerializer):
-    expert = ExpertListSerializer(many=False, source='tour_basic.expert')
-
-
-class TourSetSerializer(serializers.ModelSerializer, TourSerializerMixin):
-    tmb_wallpaper = serializers.SerializerMethodField(read_only=True)
-    currency = CurrencySerializer(many=False)
-    start_destination = serializers.StringRelatedField(many=False,)
-    rating = serializers.DecimalField(max_digits=2,decimal_places=1, source='tour_basic.rating')
-    reviews_count = serializers.IntegerField(source='tour_basic.reviews_count')
-
-    class Meta:
-        model = Tour
-        fields = ['id', 'rating', 'reviews_count', 'name', 'tmb_wallpaper', 'start_date', 'finish_date', 'start_destination', 'price', 'cost', 'discount', 'on_moderation', 'is_active', 'is_draft', 'duration', 'sold', 'currency', 'slug', 'views_count']
-    
-    def get_tmb_wallpaper(self, obj):
-        if obj.wallpaper: 
-            return get_tmb_image_uri(self, obj.wallpaper)
-        return None
-
 
 
 class FilterSerializer(serializers.Serializer):

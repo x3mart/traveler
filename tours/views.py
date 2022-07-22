@@ -353,7 +353,7 @@ class ActiveRegionViewSet(viewsets.ReadOnlyModelViewSet):
         if self.action == 'retrieve':
             destinations = Destination.objects.filter(tours_by_start_destination__in=tours).distinct().prefetch_related('region').annotate(tours_count=Count('tours_by_start_destination'))
             prefethed_destinations = Prefetch('destinations', destinations)
-            return qs.prefetch_related(prefethed_destinations).filter(tours_by_start_region__in=tours).annotate(destinations_count=Count('destinations', filter=Q(destinations__tours_by_start_destination__in=tours))).order_by('name').distinct()
+            return qs.prefetch_related(prefethed_destinations).filter(tours_by_start_region__in=tours).annotate(destinations_count=Count('destinations', filter=Q(destinations__tours_by_start_destination__in=tours), distinct=True)).order_by('name').distinct()
         return qs
     
     def get_serializer_class(self):
@@ -390,6 +390,28 @@ class ActiveType(APIView):
         tours = Tour.objects.in_sale()
         types = TourType.objects.filter(Q(tours_by_basic_type__in=tours) | Q(tours_by_additional_types__in=tours)).annotate(tours_count=Count('tours_by_basic_type', filter=Q(tours_by_basic_type__in=tours), distinct=True) + Count('tours_by_additional_types', filter=Q(tours_by_additional_types__in=tours), distinct=True)).distinct()
         return Response(TourTypeSerializer(types, many=True, context={'request':request}).data, status=200)
+
+class ActiveTypeViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = TourType.objects.all()
+    serializer_class = TourTypeSerializer
+    lookup_field = 'slug'
+
+    def get_queryset(self):
+        tours = Tour.objects.in_sale()
+        qs = super().get_queryset().annotate(tours_count=Count('tours_by_basic_type', filter=Q(tours_by_basic_type__in=tours), distinct=True) + Count('tours_by_additional_types', filter=Q(tours_by_additional_types__in=tours), distinct=True))
+        if self.action == 'list':    
+            return qs.filter(Q(tours_by_basic_type__in=tours) | Q(tours_by_additional_types__in=tours)).distinct()
+        return qs
+
+    def retrieve(self, request, *args, **kwargs):
+        tour_type = self.get_object()
+        tour_type.tours_by_type = Tour.objects.in_sale().prefetched().with_discounted_price().filter(Q(basic_type=tour_type) | Q(additional_types=tour_type))
+        return Response(TourTypeSerializer(tour_type, many=False, context={'request':request}).data, status=200)
+    
+    # def get_serializer_class(self):
+    #     if self.action == 'list':
+    #         return DestinationListSerializer
+    #     return super().get_serializer_class()    
 
 class StartPage(APIView):
     def get(self, request, format=None):
