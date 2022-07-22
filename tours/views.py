@@ -405,7 +405,7 @@ class ActiveTypeViewSet(viewsets.ReadOnlyModelViewSet):
 
     def retrieve(self, request, *args, **kwargs):
         tour_type = self.get_object()
-        tour_type.tours_by_type = Tour.objects.in_sale().prefetched().with_discounted_price().filter(Q(basic_type=tour_type) | Q(additional_types=tour_type))
+        tour_type.tours_by_type = Tour.objects.in_sale().prefetched().with_discounted_price().filter(Q(basic_type=tour_type) | Q(additional_types=tour_type)).distinct()
         return Response(TourTypeSerializer(tour_type, many=False, context={'request':request}).data, status=200)
     
     # def get_serializer_class(self):
